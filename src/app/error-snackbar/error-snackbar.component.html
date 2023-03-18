@@ -1,0 +1,5 @@
+<span class="container">
+    <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="error"></mat-icon>
+    <span *ngIf="message; else default">{{ message }}</span>
+    <ng-template #default>Error occured!</ng-template>
+</span>

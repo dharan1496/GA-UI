@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ErrorSnackbarComponent } from 'src/app/error-snackbar/error-snackbar.component';
+import { ErrorService } from 'src/app/error-snackbar/error.service';
 import { MaterialModule } from 'src/app/material.module';
 
 @Component({
@@ -14,7 +16,7 @@ import { MaterialModule } from 'src/app/material.module';
 export class OrderDetailsDialogComponent implements OnInit {
   form!: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private dialogRef: MatDialogRef<void>, @Inject(MAT_DIALOG_DATA) private data: any) {}
+  constructor(private formBuilder: FormBuilder, private dialogRef: MatDialogRef<void>, @Inject(MAT_DIALOG_DATA) private data: any, private errorService: ErrorService) {}
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
@@ -32,6 +34,7 @@ export class OrderDetailsDialogComponent implements OnInit {
   onSubmit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      this.errorService.showError('Error occured in order details!');
       return;
     }
     this.dialogRef.close(this.form.getRawValue());

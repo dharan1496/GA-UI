@@ -2,7 +2,8 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatTable } from '@angular/material/table';
+import { ErrorService } from 'src/app/error-snackbar/error.service';
 import { OrderDetailsDialogComponent } from './order-details-dialog/order-details-dialog.component';
 
 
@@ -18,7 +19,7 @@ export class FibrePurchaseOrderComponent implements OnInit {
   @ViewChild(MatTable) table!: MatTable<any>;
   selection = new SelectionModel<any>(true, []);
 
-  constructor(private formBuilder: FormBuilder, private dialog: MatDialog) {}
+  constructor(private formBuilder: FormBuilder, private dialog: MatDialog, private errorService: ErrorService) {}
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
@@ -31,6 +32,11 @@ export class FibrePurchaseOrderComponent implements OnInit {
   submitOrder() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      this.errorService.showError('Error occured in party details!');
+      return;
+    }
+    if (!this.dataSource.length) {
+      this.errorService.showError('Please add the order details!');
       return;
     }
   }
@@ -39,7 +45,6 @@ export class FibrePurchaseOrderComponent implements OnInit {
     const dialogRef = this.dialog.open(OrderDetailsDialogComponent, { data: this.dataSource.length });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result)
       if (result) {
         this.dataSource.push(result as never);
         this.table.renderRows();
@@ -94,4 +99,3 @@ export class FibrePurchaseOrderComponent implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
 }
-
