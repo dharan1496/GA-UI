@@ -1,0 +1,47 @@
+.container {
+    margin: 24px;
+}
+
+.party-card {
+    margin-bottom: 32px;
+}
+
+.form-container {
+    padding: 24px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+mat-form-field {
+    width: 25%;
+}
+
+.table {
+    width: 100%;
+  }
+  
+.button-container {
+    padding-bottom: 16px;
+}
+  
+.button + .button {
+    margin-left: 8px;
+}
+
+
+.summary-card {
+    margin-top: 32px;
+    width: 50%;
+
+    .summary-content {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+.submit-order-btn {
+    margin-top: 32px;
+    display: flex;
+    justify-content: flex-end;
+}

@@ -6,5 +6,15 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'Record-manager';
+
+  isShowing!: boolean;
+
+  toggleSidenav() {
+    this.isShowing = !this.isShowing;
+  }
+
+  callMethods() {
+      this.toggleSidenav();
+  }
+
 }

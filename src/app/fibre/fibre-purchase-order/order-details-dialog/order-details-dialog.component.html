@@ -1,0 +1,56 @@
+<h1 mat-dialog-title>Order details</h1>
+<form [formGroup]="form" class="form">
+    <div mat-dialog-content>
+        <div class="flex-container">
+            <mat-form-field appearance="fill">
+                <mat-label>Fibre</mat-label>
+                <mat-select formControlName="fibre">
+                  <mat-option value="test1">test 1</mat-option>
+                  <mat-option value="test2">test 2</mat-option>
+                  <mat-option value="test3">test 3</mat-option>
+                </mat-select>
+                <mat-error>This field is required.</mat-error>
+              </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>KGs</mat-label>
+                <input type="number" matInput formControlName="kgs">
+                <mat-error>This field is required.</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="flex-container">
+            <mat-form-field appearance="fill">
+                <mat-label>Bales</mat-label>
+                <input type="number" matInput formControlName="bales">
+                <mat-error>This field is required.</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Rate</mat-label>
+                <input type="number" matInput formControlName="rate">
+                <mat-error>This field is required.</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="flex-container">
+            <mat-form-field appearance="fill">
+                <mat-label>Amount</mat-label>
+                <input type="number" min="0.00" step="0.01" matInput formControlName="amount">
+                <mat-error>This field is required.</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>GST%</mat-label>
+                <input type="number" min="1" max="100" matInput formControlName="gst">
+                <mat-error>This field is required.</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="flex-container">
+            <mat-form-field appearance="fill">
+                <mat-label>Total Amount</mat-label>
+                <input type="number" matInput formControlName="totalAmount">
+            </mat-form-field>
+        </div>
+          
+      </div>
+      <div mat-dialog-actions class="footer">
+        <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+        <button mat-button (click)="onCancel()">Cancel</button>
+      </div>
+</form>
