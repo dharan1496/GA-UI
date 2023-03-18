@@ -22,8 +22,12 @@ export class NavigationComponent implements OnInit {
   }
 
   setFocus(id: string) {
+    this.removeFocus();
+    document.querySelector(`#${id}`)?.classList.add('item-selected');   
+  }
+
+  removeFocus() {
     document.querySelectorAll('button')?.forEach(element => element?.classList.remove('item-selected'));
-    document.querySelector(`#${id}`)?.classList.add('item-selected');
   }
 
   selectSection(section: string) {
@@ -40,6 +44,7 @@ export class NavigationComponent implements OnInit {
   onDashboard() {
     this.isSidenavOpened = false;
     this.menu = null;
+    this.removeFocus();
   }
 
   routeTo(route: string) {

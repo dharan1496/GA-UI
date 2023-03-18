@@ -12,6 +12,10 @@
 .app-container {
     height: 90%;
     margin: 0;
+
+    .app-sidenav {
+        padding-left: 12px;
+    }
 }
 
 .item-selected {
@@ -20,4 +24,11 @@
 
 .sidenav-content {
     position: relative;
+}
+
+.dashboard-btn {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding-right: 32px;
 }
