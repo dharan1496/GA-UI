@@ -34,6 +34,7 @@ export class NavigationComponent implements OnInit {
       this.menu = null;
     }
     this.isSidenavOpened = true;
+    this.router.navigateByUrl(section);
   }
 
   onDashboard() {

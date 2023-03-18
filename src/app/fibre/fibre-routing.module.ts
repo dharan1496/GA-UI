@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FibrePurchaseOrderComponent } from './fibre-purchase-order.component';
+import { FibrePurchaseOrderComponent } from './fibre-purchase-order/fibre-purchase-order.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'fibre-new-purchase-order',
     component: FibrePurchaseOrderComponent,
   }
 ];
@@ -13,4 +13,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class FibrePurchaseOrderRoutingModule { }
+export class FibreRoutingModule { }

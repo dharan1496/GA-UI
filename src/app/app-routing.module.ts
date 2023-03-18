@@ -4,9 +4,13 @@ import { AppComponent } from './app.component';
 
 const routes: Routes = [
   {
-    path: 'fibre-new-purchase-order',
-    loadChildren: () => import('./fibre/fibre-purchase-order/fibre-purchase-order.module')
-    .then(m => m.FibrePurchaseOrderModule)
+    path: 'fibre',
+    loadChildren: () => import('./fibre/fibre.module')
+    .then(m => m.FibreModule)
+   },
+   {
+    path: '**',
+    redirectTo: '/'
    }
    
 ];

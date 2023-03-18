@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FibrePurchaseOrderComponent } from './fibre-purchase-order.component';
 import { MaterialModule } from 'src/app/material.module';
-import { FibrePurchaseOrderRoutingModule } from './fibre-purchase-order-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FibrePurchaseOrderComponent } from './fibre-purchase-order/fibre-purchase-order.component';
+import { FibreRoutingModule } from './fibre-routing.module';
 
 
 @NgModule({
   declarations: [FibrePurchaseOrderComponent],
   imports: [
     CommonModule,
-    FibrePurchaseOrderRoutingModule,
+    FibreRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
   ]
 })
-export class FibrePurchaseOrderModule { }
+export class FibreModule { }
