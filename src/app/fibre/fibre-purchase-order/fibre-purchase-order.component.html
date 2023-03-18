@@ -1,4 +1,5 @@
 <section class="container">
+  <h1 class="header">Fibre new purchase order</h1>
   <mat-card class="party-card">
     <mat-card-header>
       <mat-card-title>Party details</mat-card-title>
@@ -51,6 +52,7 @@
           <mat-checkbox (change)="$event ? toggleAllRows() : null"
                         [checked]="selection.hasValue() && isAllSelected()"
                         [indeterminate]="selection.hasValue() && !isAllSelected()"
+                        [disabled]="dataSource.length ? null : true"
                         [aria-label]="checkboxLabel()">
           </mat-checkbox>
         </th>

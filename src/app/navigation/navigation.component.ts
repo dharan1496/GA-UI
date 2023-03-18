@@ -14,8 +14,12 @@ export class NavigationComponent implements OnInit {
   constructor(private router: Router) {}
 
   ngOnInit(): void {
+    this.onPageLoad();
+  }
+
+  onPageLoad() {
     const path = window.location.pathname;
-    if (path.includes('fibre-new-purchase-order')) {
+    if (path.includes('fibre-new-purchase-order') || path.includes('fibre-receive-purchase-order')) {
       this.menu = PURCHASE;
       this.setFocus('purchase');
     }

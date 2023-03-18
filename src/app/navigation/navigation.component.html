@@ -1,8 +1,9 @@
 <mat-toolbar color="primary">
     <button mat-icon-button (click)="sidenav.toggle()" matTooltip="Menu">
-        <mat-icon>menu</mat-icon>
+        <mat-icon *ngIf="sidenav.opened">close</mat-icon>
+        <mat-icon *ngIf="!sidenav.opened">menu</mat-icon>
     </button>
-    <span>[Placeholder]</span>
+    <span class="ml-16 font-size-22">[Company Name]</span>
     <div class="nav-btn py-32">
       <button id="purchase" mat-button (click)="selectSection('purchase')">Purchase</button>
       <button id="production" mat-button (click)="selectSection('production')">Production</button>
@@ -34,7 +35,7 @@
           <ng-container *ngFor="let item of menu">
             <mat-expansion-panel [class.mat-elevation-z0]="true" expanded="true">
                 <mat-expansion-panel-header>
-                    {{ item?.title }}
+                   <span class="font-size-16"> {{ item?.title }}</span>
                 </mat-expansion-panel-header>
                   <mat-nav-list>
                       <ng-container *ngFor="let submenu of item?.submenu">

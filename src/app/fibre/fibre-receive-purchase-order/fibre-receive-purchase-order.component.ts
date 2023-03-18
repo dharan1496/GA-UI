@@ -1,20 +1,19 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable } from '@angular/material/table';
 import { ErrorService } from 'src/app/error-snackbar/error.service';
-import { OrderDetailsDialogComponent } from './order-details-dialog/order-details-dialog.component';
-
+import { ReceiveOrderDetailsComponent } from './receive-order-details/receive-order-details.component';
 
 @Component({
-  selector: 'app-fibre-purchase-order',
-  templateUrl: './fibre-purchase-order.component.html',
-  styleUrls: ['./fibre-purchase-order.component.scss']
+  selector: 'app-fibre-receive-purchase-order',
+  templateUrl: './fibre-receive-purchase-order.component.html',
+  styleUrls: ['./fibre-receive-purchase-order.component.scss']
 })
-export class FibrePurchaseOrderComponent implements OnInit {
+export class FibreReceivePurchaseOrderComponent {
   form!: FormGroup;
-  displayedColumns: string[] = ['select', 'fibre', 'kgs', 'bales', 'rate', 'amount', 'gst', 'totalAmount'];
+  displayedColumns: string[] = ['select', 'fibre', 'hsnCode', 'orderQty', 'pendingQty', 'receivedQty', 'receivedBales', 'lot', 'rate', 'amount', 'gst', 'totalAmount'];
   dataSource = [];
   @ViewChild(MatTable) table!: MatTable<any>;
   selection = new SelectionModel<any>(true, []);
@@ -26,23 +25,25 @@ export class FibrePurchaseOrderComponent implements OnInit {
       poNo: [{ value: '123456789', disabled: true }],
       party: ['', Validators.required],
       poDate: ['', Validators.required],
+      invoiceNo: ['', Validators.required],
+      invoiceDate: ['', Validators.required],
     });
   }
 
   submitOrder() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.errorService.showError('Error occured in party details!');
+      this.errorService.showError('Error occured in invoice details!');
       return;
     }
     if (!this.dataSource.length) {
-      this.errorService.showError('Please add the order details!');
+      this.errorService.showError('Please add the receive order details!');
       return;
     }
   }
 
   addData(): void {
-    const dialogRef = this.dialog.open(OrderDetailsDialogComponent, { data: this.dataSource.length });
+    const dialogRef = this.dialog.open(ReceiveOrderDetailsComponent, { data: this.dataSource.length });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {

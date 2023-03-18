@@ -10,8 +10,10 @@
     padding: 32px;
     display: flex;
     gap: 48px;
+    flex-wrap: wrap;
     align-items: center;
 }
+
 
 h1 {
     margin: 48px 0;
