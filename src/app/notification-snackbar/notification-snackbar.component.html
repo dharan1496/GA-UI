@@ -1,0 +1,17 @@
+<span class="container">
+    <ng-container *ngIf="notify.type === 'error'">
+        <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="error"></mat-icon>
+        <span>{{ notify.message }}</span>
+    </ng-container>
+
+    <ng-container *ngIf="notify.type === 'warn'">
+        <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="warn"></mat-icon>
+        <span>{{ notify.message }}</span>
+    </ng-container>
+
+    <ng-container *ngIf="notify.type === 'success'">
+        <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="success"></mat-icon>
+        <span>{{ notify.message }}</span>
+    </ng-container>
+    
+</span>

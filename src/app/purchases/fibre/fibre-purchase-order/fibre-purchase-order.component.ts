@@ -4,7 +4,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable } from '@angular/material/table';
 import { AppSharedService } from 'src/app/app-shared.service';
-import { ErrorService } from 'src/app/error-snackbar/error.service';
+import { NotifyType } from 'src/app/models/notify';
+import { NavigationService } from 'src/app/navigation/navigation.service';
+import { NotificationService } from 'src/app/notification-snackbar/notification.service';
+import { PURCHASE } from 'src/constants/purchase-menu-values.const';
 import { OrderDetailsDialogComponent } from './order-details-dialog/order-details-dialog.component';
 
 
@@ -24,7 +27,17 @@ export class FibrePurchaseOrderComponent implements OnInit {
   taxAmount!: any;
   amountAfterTax!: any;
 
-  constructor(private formBuilder: FormBuilder, private dialog: MatDialog, private errorService: ErrorService, private appSharedService: AppSharedService) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private dialog: MatDialog,
+    private notificationService: NotificationService,
+    private appSharedService: AppSharedService,
+    private navigationService: NavigationService,
+  ) {
+    this.navigationService.isSidenavOpened = false;
+    this.navigationService.setFocus('purchases');
+    this.navigationService.menu = PURCHASE;
+  }
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
@@ -37,11 +50,11 @@ export class FibrePurchaseOrderComponent implements OnInit {
   submitOrder() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.errorService.showError('Error occured in party details!');
+      this.notificationService.notify('Error occured in party details!', NotifyType.ERROR);
       return;
     }
     if (!this.dataSource.length) {
-      this.errorService.showError('Please add the order details!');
+      this.notificationService.notify('Please add the order details!', NotifyType.ERROR);
       return;
     }
   }
@@ -88,7 +101,7 @@ export class FibrePurchaseOrderComponent implements OnInit {
       }
       this.table.renderRows();
     } else {
-      this.errorService.showError('Please select atleast one row to remove');
+      this.notificationService.notify('Please select atleast one row to remove', NotifyType.ERROR);
     }
   }
 

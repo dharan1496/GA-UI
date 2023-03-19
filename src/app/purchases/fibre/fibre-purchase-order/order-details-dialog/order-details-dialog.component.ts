@@ -3,8 +3,9 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { combineLatest, filter, startWith, Subscription } from 'rxjs';
-import { ErrorService } from 'src/app/error-snackbar/error.service';
 import { MaterialModule } from 'src/app/material.module';
+import { NotifyType } from 'src/app/models/notify';
+import { NotificationService } from 'src/app/notification-snackbar/notification.service';
 
 @Component({
   selector: 'app-order-details-dialog',
@@ -18,7 +19,12 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
 
   subscription = new Subscription();
 
-  constructor(private formBuilder: FormBuilder, private dialogRef: MatDialogRef<void>, @Inject(MAT_DIALOG_DATA) private data: any, private errorService: ErrorService) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private dialogRef: MatDialogRef<void>,
+    @Inject(MAT_DIALOG_DATA) private data: any,
+    private notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
@@ -63,7 +69,7 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
   onSubmit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.errorService.showError('Error occured in order details!');
+      this.notificationService.notify('Error occured in order details!', NotifyType.ERROR);
       return;
     }
     this.dialogRef.close(this.form.getRawValue());

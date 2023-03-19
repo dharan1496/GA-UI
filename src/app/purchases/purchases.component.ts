@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { PURCHASE } from 'src/constants/purchase-menu-values.const';
+import { NavigationService } from '../navigation/navigation.service';
 
 @Component({
   selector: 'app-purchases',
@@ -6,5 +8,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./purchases.component.scss']
 })
 export class PurchasesComponent {
+
+  constructor(private navigationService: NavigationService) {
+    this.navigationService.menu = PURCHASE;
+    this.navigationService.isSidenavOpened = true;
+    this.navigationService.setFocus('purchases');
+  }
 
 }

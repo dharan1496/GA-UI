@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
+import { NavigationService } from '../navigation/navigation.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -9,7 +10,10 @@ import { FormGroup, FormBuilder, Validators, AbstractControl, ValidatorFn } from
 export class ResetPasswordComponent implements OnInit {
   form!: FormGroup;
  
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private navigationService: NavigationService) {
+    this.navigationService.isSidenavOpened = false;
+    this.navigationService.menu = null;
+  }
 
   get password() { return this.form.get('password'); }
   get confirmPassword() { return this.form.get('confirmPassword'); }
@@ -37,7 +41,6 @@ export class ResetPasswordComponent implements OnInit {
       this.form.markAllAsTouched();
       return;
     }
-    console.log(this.form.value)
   }
 
 }
