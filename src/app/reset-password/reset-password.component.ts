@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
+import { NotifyType } from '../models/notify';
 import { NavigationService } from '../navigation/navigation.service';
+import { NotificationService } from '../notification-snackbar/notification.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -10,7 +12,11 @@ import { NavigationService } from '../navigation/navigation.service';
 export class ResetPasswordComponent implements OnInit {
   form!: FormGroup;
  
-  constructor(private formBuilder: FormBuilder, private navigationService: NavigationService) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private navigationService: NavigationService,
+    private notificationService: NotificationService,
+  ) {
     this.navigationService.isSidenavOpened = false;
     this.navigationService.menu = null;
   }
@@ -25,15 +31,14 @@ export class ResetPasswordComponent implements OnInit {
         Validators.minLength(8),
       ]],
       confirmPassword: ['', [Validators.required]]
-    },{ 
-      validators: this.matchPassword.bind(this)
+    },
+    { 
+      validators: (formGroup: FormGroup) => {
+        const password = formGroup.get('password')?.value;
+        const confirmPassword = formGroup.get('confirmPassword')?.value;
+        return password === confirmPassword ? null : { passwordNotMatch: true };
+      }
     });
-  }
-
-  matchPassword(formGroup: FormGroup) {
-    const password = formGroup.get('password')?.value;
-    const confirmPassword = formGroup.get('confirmPassword')?.value;
-    return password === confirmPassword ? null : { passwordNotMatch: true };
   }
 
   onReset() {
@@ -41,6 +46,7 @@ export class ResetPasswordComponent implements OnInit {
       this.form.markAllAsTouched();
       return;
     }
+    this.notificationService.notify('Password changed successfully!', NotifyType.SUCCESS);
   }
 
 }
