@@ -6,13 +6,26 @@
 }
 
 .header {
-    padding: 100px 200px;
-    border: 15px solid #3f51b5f1;
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    padding: 150px;
+    border-radius: 50px;
+    box-shadow: 2px 2px 5px 3px rgba(0, 0, 0, 0.05);
+    background-color: #fff;
     color: #3f51b5f1;
 }
 
 h1 {
-    font-size: 62px;
+    font-size: 60px;
     font-weight: 600;
-    letter-spacing: 3px;
+    letter-spacing: 5px;
+}
+
+.shopping-cart {
+    background: url('../../assets/images/shopping-cart.png');
+    filter: grayscale(0.3);
+    width: 200px;
+    height: 200px;
+    background-size: cover;
 }
