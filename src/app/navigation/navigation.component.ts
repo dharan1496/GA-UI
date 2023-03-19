@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import { PURCHASE } from 'src/constants/purchase-menu-values.const';
@@ -12,6 +12,7 @@ export class NavigationComponent implements OnInit {
   isSidenavOpened = false;
   menu!: any[] | null;
   @ViewChild('sidenav') sidenav!: MatSidenav;
+  username = 'name';
 
   constructor(private router: Router) {}
 
@@ -27,7 +28,16 @@ export class NavigationComponent implements OnInit {
       }
       this.menu = PURCHASE;
       this.setFocus('purchases');
+    } else if (path.includes('reset-password')) {
+      this.isSidenavOpened = false;
+      this.menu = null;
     }
+  }
+
+  onResetPassword() {
+    this.removeFocus();
+    this.isSidenavOpened = false;
+    this.menu = null;
   }
 
   setFocus(id: string) {

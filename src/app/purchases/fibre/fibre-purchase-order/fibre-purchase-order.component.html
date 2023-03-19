@@ -113,21 +113,21 @@
             <mat-list-item>
               <div class="summary-content">
                 <span>Total amount before tax</span>
-                <span>{{ '120000' | currency:'INR' }}</span>
+                <span>{{ amountBeforeTax | currency:'INR' }}</span>
               </div>
             </mat-list-item>
             <mat-divider></mat-divider>
             <mat-list-item>
               <div class="summary-content">
                 <span>Tax amount</span>
-                <span>{{ '20000' | currency:'INR' }}</span>
+                <span>{{ taxAmount | currency:'INR' }}</span>
               </div>
             </mat-list-item>
             <mat-divider></mat-divider>
             <mat-list-item>
               <div class="summary-content">
                 <span>Total amount after tax</span>
-                <span>{{ '100000' | currency:'INR' }}</span>
+                <span>{{ amountAfterTax | currency:'INR' }}</span>
               </div>
             </mat-list-item>
           </mat-list>

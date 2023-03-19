@@ -3,6 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable } from '@angular/material/table';
+import { AppSharedService } from 'src/app/app-shared.service';
 import { ErrorService } from 'src/app/error-snackbar/error.service';
 import { OrderDetailsDialogComponent } from './order-details-dialog/order-details-dialog.component';
 
@@ -18,12 +19,16 @@ export class FibrePurchaseOrderComponent implements OnInit {
   dataSource = [];
   @ViewChild(MatTable) table!: MatTable<any>;
   selection = new SelectionModel<any>(true, []);
+  orderDetails!: any[];
+  amountBeforeTax!: any;
+  taxAmount!: any;
+  amountAfterTax!: any;
 
-  constructor(private formBuilder: FormBuilder, private dialog: MatDialog, private errorService: ErrorService) {}
+  constructor(private formBuilder: FormBuilder, private dialog: MatDialog, private errorService: ErrorService, private appSharedService: AppSharedService) {}
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
-      poNo: [{ value: '123456789', disabled: true }],
+      poNo: [{ value: this.appSharedService.genUniqueId(), disabled: true }],
       party: ['', Validators.required],
       poDate: ['', Validators.required],
     });
@@ -46,10 +51,20 @@ export class FibrePurchaseOrderComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.orderDetails.push(result);
+        this.calculateSummary();
         this.dataSource.push(result as never);
         this.table.renderRows();
       }
     });
+  }
+
+  calculateSummary() {
+    this.orderDetails.forEach(order => {
+      this.amountBeforeTax += order?.amount;
+      this.taxAmount += (order?.amount * order?.gst)/100;
+      this.amountAfterTax += order?.amount - ((order?.amount * order?.gst)/100);
+    })
   }
 
   removeData() {

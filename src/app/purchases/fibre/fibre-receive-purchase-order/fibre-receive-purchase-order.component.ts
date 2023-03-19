@@ -3,6 +3,7 @@ import { Component, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable } from '@angular/material/table';
+import { AppSharedService } from 'src/app/app-shared.service';
 import { ErrorService } from 'src/app/error-snackbar/error.service';
 import { ReceiveOrderDetailsComponent } from './receive-order-details/receive-order-details.component';
 
@@ -17,12 +18,13 @@ export class FibreReceivePurchaseOrderComponent {
   dataSource = [];
   @ViewChild(MatTable) table!: MatTable<any>;
   selection = new SelectionModel<any>(true, []);
+  orderDetails!: any;
 
-  constructor(private formBuilder: FormBuilder, private dialog: MatDialog, private errorService: ErrorService) {}
+  constructor(private formBuilder: FormBuilder, private dialog: MatDialog, private errorService: ErrorService, private appSharedService: AppSharedService) {}
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
-      poNo: [{ value: '123456789', disabled: true }],
+      poNo: [{ value: this.appSharedService.genUniqueId(), disabled: true }],
       party: ['', Validators.required],
       poDate: ['', Validators.required],
       invoiceNo: ['', Validators.required],
@@ -47,6 +49,7 @@ export class FibreReceivePurchaseOrderComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.orderDetails = result;
         this.dataSource.push(result as never);
         this.table.renderRows();
       }

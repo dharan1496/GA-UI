@@ -10,15 +10,16 @@
       <button id="sales" mat-button (click)="selectSection('sales')">Sales</button>
     </div>
     <span class="toolbar-item-spacer"></span>
+    <span class="font-weight-normal">Welcome, {{ username }}</span>
     <button mat-icon-button matTooltip="My Account" [matMenuTriggerFor]="userAccountMenu">
         <mat-icon>account_circle</mat-icon>
     </button>
     <mat-menu #userAccountMenu [overlapTrigger]="false" yPosition="below">
-        <button mat-menu-item routerLink="#">
-            <mat-icon>person</mat-icon><span>My Account</span>
+        <button mat-menu-item routerLink="/reset-password" (click)="onResetPassword()">
+            <mat-icon>person</mat-icon><span>Reset password</span>
         </button>
         <mat-divider></mat-divider>
-        <button mat-menu-item routerLink="#">
+        <button mat-menu-item>
             <mat-icon>exit_to_app</mat-icon>Logout
         </button>
     </mat-menu>
