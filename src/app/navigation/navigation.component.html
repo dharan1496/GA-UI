@@ -1,11 +1,11 @@
 <mat-toolbar color="primary">
-    <button mat-icon-button (click)="sidenav.toggle()" matTooltip="Menu">
-        <mat-icon *ngIf="sidenav.opened">close</mat-icon>
-        <mat-icon *ngIf="!sidenav.opened">menu</mat-icon>
+    <button mat-icon-button (click)="toggleSidenav()" matTooltip="Menu">
+        <mat-icon *ngIf="isSidenavOpened">close</mat-icon>
+        <mat-icon *ngIf="!isSidenavOpened">menu</mat-icon>
     </button>
     <span class="ml-16 font-size-22">[Company Name]</span>
     <div class="nav-btn py-32">
-      <button id="purchase" mat-button (click)="selectSection('purchase')">Purchase</button>
+      <button id="purchases" mat-button (click)="selectSection('purchases')">Purchases</button>
       <button id="production" mat-button (click)="selectSection('production')">Production</button>
       <button id="sales" mat-button (click)="selectSection('sales')">Sales</button>
     </div>
