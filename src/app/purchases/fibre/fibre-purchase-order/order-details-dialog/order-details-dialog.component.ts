@@ -30,8 +30,8 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       orderNo: +this.data + 1,
       fibre: ['', Validators.required],
+      shadeName: ['', Validators.required],
       kgs: ['', Validators.required],
-      bales: ['', Validators.required],
       rate: ['', Validators.required],
       amount: ['', Validators.required],
       gst: ['', Validators.required],
@@ -78,9 +78,4 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
   onCancel() {
     this.dialogRef.close();
   }
-
-  setAmount() {
-    
-  }
-
 }

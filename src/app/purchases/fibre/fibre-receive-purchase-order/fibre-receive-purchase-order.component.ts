@@ -21,7 +21,9 @@ export class FibreReceivePurchaseOrderComponent {
   dataSource = [];
   @ViewChild(MatTable) table!: MatTable<any>;
   selection = new SelectionModel<any>(true, []);
-  orderDetails!: any;
+  amountBeforeTax!: number;
+  taxAmount!: number;
+  amountAfterTax!: number;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -62,11 +64,22 @@ export class FibreReceivePurchaseOrderComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.orderDetails = result;
         this.dataSource.push(result as never);
+        this.calculateSummary();
         this.table.renderRows();
       }
     });
+  }
+
+  calculateSummary() {
+    this.amountBeforeTax = 0;
+    this.taxAmount = 0;
+    this.amountAfterTax = 0;
+    this.dataSource.forEach((order: any) => {
+      this.amountBeforeTax += order.amount;
+      this.taxAmount += (order.amount * order.gst)/100;
+      this.amountAfterTax += order.totalAmount;
+    })
   }
 
   removeData() {
@@ -88,6 +101,7 @@ export class FibreReceivePurchaseOrderComponent {
         ));
         this.dataSource = newList;
       }
+      this.calculateSummary();
       this.table.renderRows();
     } else {
       this.notificationService.notify('Please select atleast one row to remove', NotifyType.ERROR);

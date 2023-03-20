@@ -18,14 +18,13 @@ import { OrderDetailsDialogComponent } from './order-details-dialog/order-detail
 })
 export class FibrePurchaseOrderComponent implements OnInit {
   form!: FormGroup;
-  displayedColumns: string[] = ['select', 'fibre', 'kgs', 'bales', 'rate', 'amount', 'gst', 'totalAmount'];
+  displayedColumns: string[] = ['select', 'fibre', 'shadeName', 'kgs', 'rate', 'amount', 'gst', 'totalAmount'];
   dataSource = [];
   @ViewChild(MatTable) table!: MatTable<any>;
   selection = new SelectionModel<any>(true, []);
-  orderDetails!: any[];
-  amountBeforeTax!: any;
-  taxAmount!: any;
-  amountAfterTax!: any;
+  amountBeforeTax!: number;
+  taxAmount!: number;
+  amountAfterTax!: number;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -64,19 +63,21 @@ export class FibrePurchaseOrderComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.orderDetails.push(result);
-        this.calculateSummary();
         this.dataSource.push(result as never);
+        this.calculateSummary();
         this.table.renderRows();
       }
     });
   }
 
   calculateSummary() {
-    this.orderDetails.forEach(order => {
-      this.amountBeforeTax += order?.amount;
-      this.taxAmount += (order?.amount * order?.gst)/100;
-      this.amountAfterTax += order?.amount - ((order?.amount * order?.gst)/100);
+    this.amountBeforeTax = 0;
+    this.taxAmount = 0;
+    this.amountAfterTax = 0;
+    this.dataSource.forEach((order: any) => {
+      this.amountBeforeTax += order.amount;
+      this.taxAmount += (order.amount * order.gst)/100;
+      this.amountAfterTax += order.totalAmount;
     })
   }
 
@@ -99,6 +100,7 @@ export class FibrePurchaseOrderComponent implements OnInit {
         ));
         this.dataSource = newList;
       }
+      this.calculateSummary();
       this.table.renderRows();
     } else {
       this.notificationService.notify('Please select atleast one row to remove', NotifyType.ERROR);
