@@ -27,7 +27,7 @@ export class ReceiveOrderDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
-      orderNo: +this.data + 1,
+      orderNo: typeof(this.data) === 'number' ? +this.data + 1 : '',
       fibre: ['', Validators.required],
       hsnCode: ['', Validators.required],
       orderQty: ['', Validators.required],
@@ -36,16 +36,20 @@ export class ReceiveOrderDetailsComponent implements OnInit, OnDestroy {
       receivedBales: ['', Validators.required],
       lot: ['', Validators.required],
       rate: ['', Validators.required],
-      amount: ['', Validators.required],
+      amount: [{value: '', disabled: true}],
       gst: ['', Validators.required],
       totalAmount: [{ value: '', disabled: true}],
     });
+
+    if (typeof(this.data) === 'object') {
+      this.form.patchValue(this.data);
+    }
 
     // TODO: Replace combineLatest with any other approach
     const observable1$ = combineLatest([
       this.form.get('receivedQty')?.valueChanges.pipe(startWith(this.form.get('receivedQty')?.value)),
       this.form.get('rate')?.valueChanges.pipe(startWith(this.form.get('rate')?.value))
-    ]).pipe(filter((data: any[]) => data[0] && data[1])).subscribe(
+    ]).subscribe(
       (value: any[]) => {
         this.form.get('amount')?.setValue(value[0] * value[1]);
       }
@@ -56,7 +60,7 @@ export class ReceiveOrderDetailsComponent implements OnInit, OnDestroy {
     const observable2$ = combineLatest([
       this.form.get('amount')?.valueChanges.pipe(startWith(this.form.get('amount')?.value)),
       this.form.get('gst')?.valueChanges.pipe(startWith(this.form.get('gst')?.value))
-    ]).pipe(filter((data: any[]) => data[0] && data[1])).subscribe(
+    ]).subscribe(
       (value: any[]) => {
         this.form.get('totalAmount')?.setValue(value[0] - (value[0] * value[1]) / 100);
       }

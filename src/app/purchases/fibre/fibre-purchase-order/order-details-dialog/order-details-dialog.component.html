@@ -20,7 +20,7 @@
         <div class="flex-container">
             <mat-form-field appearance="fill">
                 <mat-label>KGS</mat-label>
-                <input type="number" matInput formControlName="kgs">
+                <input type="number" min="1" matInput formControlName="kgs">
                 <mat-error>This field is required.</mat-error>
             </mat-form-field>
             <mat-form-field appearance="fill">
@@ -44,8 +44,9 @@
                 <mat-error *ngIf="form.get('gst')?.hasError('max')">Value should be between 1 and 100</mat-error>
             </mat-form-field>
         </div>
-        <div class="flex-container">
+        <div class="flex-container text-black">
             <mat-form-field appearance="fill">
+                <span matPrefix>&nbsp;&#x20B9;&nbsp;</span>
                 <mat-label>Total Amount</mat-label>
                 <input type="number" matInput formControlName="totalAmount">
             </mat-form-field>

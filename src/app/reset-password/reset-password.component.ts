@@ -44,6 +44,7 @@ export class ResetPasswordComponent implements OnInit {
   onReset() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      this.notificationService.notify('Error occured!', NotifyType.ERROR);
       return;
     }
     this.notificationService.notify('Password changed successfully!', NotifyType.SUCCESS);

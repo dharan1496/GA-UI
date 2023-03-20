@@ -81,6 +81,28 @@ export class FibrePurchaseOrderComponent implements OnInit {
     })
   }
 
+  updateData() {
+    const selectedRow = this.selection.selected;
+    if (selectedRow && selectedRow?.length === 1) {
+      this.selection.deselect(selectedRow[0]);
+      const dialogRef = this.dialog.open(OrderDetailsDialogComponent, { data: selectedRow[0] });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.dataSource.forEach((data: any, index: number) => {
+              if (data?.orderNo === result?.orderNo) {
+                this.dataSource[index] = result as never;
+              }
+            });
+        }
+        this.calculateSummary();
+        this.table.renderRows();
+      });
+    } else {
+      this.notificationService.notify('Please select one row to update', NotifyType.WARN);
+    }
+  }
+
   removeData() {
     const selectedRow = this.selection.selected;
     if (selectedRow && selectedRow?.length) {

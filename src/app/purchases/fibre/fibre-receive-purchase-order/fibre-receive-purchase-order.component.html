@@ -55,6 +55,13 @@
         <button
           mat-raised-button
           [disabled]="!dataSource.length"
+          (click)="updateData()"
+          class="button">
+          Update order
+        </button>
+        <button
+          mat-raised-button
+          [disabled]="!dataSource.length"
           (click)="removeData()"
           class="button">
           Remove order
