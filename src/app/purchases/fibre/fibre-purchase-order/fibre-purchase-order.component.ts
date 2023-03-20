@@ -9,6 +9,7 @@ import { NavigationService } from 'src/app/navigation/navigation.service';
 import { NotificationService } from 'src/app/notification-snackbar/notification.service';
 import { PURCHASE } from 'src/constants/purchase-menu-values.const';
 import { OrderDetailsDialogComponent } from './order-details-dialog/order-details-dialog.component';
+import { PrintFibrePOService } from './print-fibre-po/print.fibre-po.service';
 
 
 @Component({
@@ -32,6 +33,7 @@ export class FibrePurchaseOrderComponent implements OnInit {
     private notificationService: NotificationService,
     private appSharedService: AppSharedService,
     private navigationService: NavigationService,
+    private printFibrePOService: PrintFibrePOService
   ) {
     this.navigationService.isSidenavOpened = false;
     this.navigationService.setFocus('purchases');
@@ -44,6 +46,8 @@ export class FibrePurchaseOrderComponent implements OnInit {
       party: ['', Validators.required],
       poDate: ['', Validators.required],
     });
+
+    window.onafterprint = () => this.printFibrePOService.print = false;
   }
 
   submitOrder() {
@@ -55,6 +59,21 @@ export class FibrePurchaseOrderComponent implements OnInit {
     if (!this.dataSource.length) {
       this.notificationService.notify('Please add the order details!', NotifyType.ERROR);
       return;
+    }
+  }
+
+  submitAndPrint() {
+    this.submitOrder();
+    if (this.form.valid && this.dataSource.length) {
+      this.printFibrePOService.fibrePOData = {
+        ...this.form.getRawValue(),
+        orders: [...this.dataSource],
+        amountBeforeTax: this.amountBeforeTax,
+        taxAmount: this.taxAmount,
+        amountAfterTax: this.amountAfterTax,
+      };
+      this.printFibrePOService.print = true;
+      setTimeout(() => window.print());
     }
   }
 

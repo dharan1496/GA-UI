@@ -1,0 +1,58 @@
+<section class="print" *ngIf="printFibreService.print">
+  <section id="header">
+    <span>SREE GOMATHI AMMAN SPINNING MILLS PVT LTD</span>
+    <span>GOBICETTIPALAYAM</span>
+    <span>GSTNO : 33AAKCS5785R1ZC</span>
+  </section>
+  <section id="po-details">
+    <div id="po">
+      <span><span class="font-weight-bold">PO NO</span>&nbsp;&nbsp;&nbsp;{{ printFibreService.fibrePOData?.poNo}}</span>
+      <span><span class="font-weight-bold">PO DATE</span>&nbsp;&nbsp;&nbsp;{{ printFibreService.fibrePOData?.poDate | date: 'dd/MM/yy' }}</span>
+    </div>
+    <div id="party-details">
+      <div>ABC POLYMERS PVT LTD</div>
+      <div>123 AVINASI ROAD</div>
+      <div>PELAMEDU</div>
+      <div>GSTNO : 33AAKCS5785R1ZC</div>
+    </div>
+    <table>
+      <thead>
+        <th>Fibre</th>
+        <th>Shade Name</th>
+        <th>KGs</th>
+        <th>Rate</th>
+        <th>Amount</th>
+        <th>GST%</th>
+        <th>TotalAmount</th>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let order of printFibreService.fibrePOData?.orders">
+          <tr>
+            <td>{{ order?.fibre }}</td>
+            <td>{{ order?.shadeName }}</td>
+            <td>{{ order?.kgs }}</td>
+            <td>{{ order?.rate | currency: 'INR' }}</td>
+            <td>{{ order?.amount | currency: 'INR' }}</td>
+            <td>{{ order?.gst | number: '1.2-2' }}%</td>
+            <td>{{ order?.totalAmount | currency: 'INR' }}</td>
+          </tr>
+        </ng-container>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>{{ printFibreService.fibrePOData?.amountBeforeTax | currency: 'INR' }}</td>
+          <td>{{ printFibreService.fibrePOData?.taxAmount | currency: 'INR' }}</td>
+          <td>{{ printFibreService.fibrePOData?.amountAfterTax | currency: 'INR'}}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </section>
+  <section id="footer">
+    <div>Please mention our GST NO and PO Ref NO in your Invoice.</div>
+    <div>Thanking You,</div>
+  </section>
+</section>
