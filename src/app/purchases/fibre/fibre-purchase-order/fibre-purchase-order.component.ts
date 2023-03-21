@@ -144,7 +144,7 @@ export class FibrePurchaseOrderComponent implements OnInit {
       this.calculateSummary();
       this.table.renderRows();
     } else {
-      this.notificationService.notify('Please select atleast one row to remove', NotifyType.ERROR);
+      this.notificationService.notify('Please select atleast one row to remove', NotifyType.WARN);
     }
   }
 
