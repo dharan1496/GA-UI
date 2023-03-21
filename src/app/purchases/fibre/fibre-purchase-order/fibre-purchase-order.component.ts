@@ -47,24 +47,20 @@ export class FibrePurchaseOrderComponent implements OnInit {
       poDate: ['', Validators.required],
     });
 
-    window.onafterprint = () => this.printFibrePOService.print = false;
+    window.onafterprint = () => {
+      this.printFibrePOService.print = false;
+      this.notificationService.notify('Order submitted!', NotifyType.SUCCESS);
+    }
   }
 
   submitOrder() {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      this.notificationService.notify('Error occured in party details!', NotifyType.ERROR);
-      return;
-    }
-    if (!this.dataSource.length) {
-      this.notificationService.notify('Please add the order details!', NotifyType.ERROR);
-      return;
+    if (!this.hasError()) {
+      this.notificationService.notify('Order submitted!', NotifyType.SUCCESS);
     }
   }
 
   submitAndPrint() {
-    this.submitOrder();
-    if (this.form.valid && this.dataSource.length) {
+    if (!this.hasError() && this.dataSource.length) {
       this.printFibrePOService.fibrePOData = {
         ...this.form.getRawValue(),
         orders: [...this.dataSource],
@@ -75,6 +71,26 @@ export class FibrePurchaseOrderComponent implements OnInit {
       this.printFibrePOService.print = true;
       setTimeout(() => window.print());
     }
+  }
+
+  hasError() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.notificationService.notify('Error occured in party details!', NotifyType.ERROR);
+      return true;
+    }
+    if (!this.dataSource.length) {
+      this.notificationService.notify('Please add the order details!', NotifyType.ERROR);
+      return true;
+    }
+    return false;
+  }
+
+  resetData() {
+    this.form.reset();
+    this.dataSource = [];
+    this.table.renderRows();
+    this.form.patchValue({ poNo: this.appSharedService.genUniqueId() });
   }
 
   addData(): void {

@@ -1,13 +1,32 @@
 /* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: #fafafa; }
 
 // Spacing
+
+// letter spacing
+
+.letter-spacing-2 {
+    letter-spacing: 2px;
+}
+
+
+//padding
 
 .py-32 {
     padding: 0 32px;
 }
+
+.pt-16 {
+    padding-top: 16px;
+}
+
+.pr-4 {
+    padding-right: 4px;
+}
+
+// margin
 
 .ml-16 {
     margin-left: 8px;
@@ -23,6 +42,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .mr-8 {
     margin-right: 8px;
+}
+
+.mr-16 {
+    margin-right: 16px;
 }
 
 // font weight
@@ -47,6 +70,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .font-size-20 {
     font-size: 20px;
+}
+
+.font-size-24 {
+    font-size: 24px;
 }
 
 

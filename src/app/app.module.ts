@@ -7,6 +7,8 @@ import { MaterialModule } from './material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavigationComponent } from './navigation/navigation.component';
 import { PrintFibrePOComponent } from './purchases/fibre/fibre-purchase-order/print-fibre-po/print-fibre-po.component';
+import { LoginComponent } from './login/login.component';
+import { AuthGuard } from './shared/auth.guard';
 
 @NgModule({
   declarations: [
@@ -18,8 +20,9 @@ import { PrintFibrePOComponent } from './purchases/fibre/fibre-purchase-order/pr
     MaterialModule,
     BrowserAnimationsModule,
     PrintFibrePOComponent,
+    LoginComponent,
   ],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

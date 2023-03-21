@@ -3,41 +3,39 @@
     height: 100%;
     display: flex;
     justify-content: center;
-    background: linear-gradient(to right, rgba(225, 216, 216, 0.8), rgba(225, 217, 217, 0.8)), url("../../assets/images/textile-industry.jpg");
+    background: linear-gradient(to right, rgba(225, 216, 216, 0.8), rgba(225, 217, 217, 0.8)),
+    url("../../assets/images/textile-industry.jpg");
     background-size: cover;
 
    .home {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding: 150px 20px 0 20px;
-
-    .home-img {
-        width: 75px;
-        height: 90px;
-        background: url("../../assets/images/Gomathi\ Amman.jpg");
-        background-size: contain;
-        background-repeat: no-repeat;
-    }
-
-    .company-name {
         display: flex;
-        align-items: center;
-        gap: 25px;
         flex-direction: column;
-        font-weight: 900;
-    }
+        gap: 28px;
+        align-items: center;
+        padding: 150px 20px 0 20px;
 
-    .letter-spacing-2 {
-        letter-spacing: 2px;
-    }
+        .home-img {
+            width: 150px;
+            height: 250px;
+            background: url("../../assets/images/Gomathi\ Amman.jpg");
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
 
-    .font-size-40 {
-        font-size: 40px;
-    }
+        .company-name {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            flex-direction: column;
+            font-weight: 900;
+        }
 
-    .line-height-lg {
-        line-height: 50px;
-    }
+        .font-size-40 {
+            font-size: 40px;
+        }
+
+        .line-height-lg {
+            line-height: 50px;
+        }
    }
 }

@@ -4,6 +4,8 @@ import { Injectable } from "@angular/core";
     providedIn: 'root',
 })
 export class AppSharedService {
+    logout = false;
+    username = localStorage.getItem('username') || '';
 
     genUniqueId(): string {
         const dateStr = Date

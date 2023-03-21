@@ -1,3 +1,7 @@
+mat-toolbar {
+    padding-right: 24px;
+}
+
 .toolbar-item-spacer {
     flex: 1 1 auto;
 }
@@ -31,4 +35,8 @@
 
 mat-list-item:has(.home-btn) {
     margin: 0;
+}
+
+.account-icon {
+    scale: 1.6;
 }

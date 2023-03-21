@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
+import { AppSharedService } from '../app-shared.service';
 import { NavigationService } from './navigation.service';
 
 @Component({
@@ -10,9 +11,12 @@ import { NavigationService } from './navigation.service';
 })
 export class NavigationComponent {
   @ViewChild('sidenav') sidenav!: MatSidenav;
-  username = 'name';
 
-  constructor(private router: Router, public navigationService: NavigationService) {}
+  constructor(
+    private router: Router,
+    public navigationService: NavigationService,
+    public appSharedService: AppSharedService
+  ) {}
 
   toggleSidenav() {
     this.navigationService.isSidenavOpened = !this.navigationService.isSidenavOpened;
@@ -29,8 +33,9 @@ export class NavigationComponent {
     this.router.navigateByUrl(section);
   }
 
-  // TODO - need to create dashboard component
-  onDashboard() {
+  onLogout() {
+    localStorage.clear();
+    this.appSharedService.logout = true;
     this.navigationService.isSidenavOpened = false;
     this.navigationService.menu = null;
     this.navigationService.removeFocus();

@@ -1,0 +1,43 @@
+.login {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fafafa;
+    background: linear-gradient(to top, #fafafa, #3f51b5);
+    background-size: contain;
+}
+
+.login-img {
+    width: 120px;
+    height: 120px;
+    background: url('../../assets/images/account_circle.png');
+    background-size: cover;
+}
+
+.card {
+    width: 35%;
+    padding: 8px 16px 32px 16px;
+}
+
+.form {
+    padding: 32px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+mat-card-header {
+    display: flex;
+    justify-content: center;
+}
+
+mat-card-actions {
+    display: flex;
+    justify-content: center;
+}
+
+button {
+    width: 100%;
+    height: 50px !important;
+}

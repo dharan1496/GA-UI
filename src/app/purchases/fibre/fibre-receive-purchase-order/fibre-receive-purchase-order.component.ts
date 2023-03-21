@@ -57,6 +57,14 @@ export class FibreReceivePurchaseOrderComponent {
       this.notificationService.notify('Please add the receive order details!', NotifyType.ERROR);
       return;
     }
+    this.notificationService.notify('Order submitted!', NotifyType.SUCCESS);
+  }
+
+  resetData() {
+    this.form.reset();
+    this.dataSource = [];
+    this.table.renderRows();
+    this.form.patchValue({ poNo: this.appSharedService.genUniqueId() });
   }
 
   addData(): void {
