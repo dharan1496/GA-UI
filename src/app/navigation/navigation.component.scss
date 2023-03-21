@@ -10,7 +10,7 @@
 }
 
 .app-container {
-    height: 90%;
+    height: 100%;
     margin: 0;
 
     .app-sidenav {
@@ -22,13 +22,10 @@
    background: rgba(0, 0, 0, 0.2);
 }
 
-.sidenav-content {
-    margin: 0 8px;
-}
-
-.dashboard-btn {
+.home-btn {
     display: flex;
     gap: 8px;
     align-items: center;
     padding-right: 32px;
+   
 }
