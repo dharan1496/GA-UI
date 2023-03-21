@@ -31,8 +31,14 @@
           <h3 mat-subheader>Home</h3>
           <mat-list-item class="mb-24" routerLink="/">
             <div class="home-btn">
-                <mat-icon aria-hidden="false" aria-label="home icon" fontIcon="home"></mat-icon>
-                <span class="font-weight-bold">Home</span>
+                <mat-icon aria-hidden="false" aria-label="info icon" fontIcon="info"></mat-icon>
+                <span class="font-weight-bold">About</span>
+            </div>
+          </mat-list-item>
+          <mat-list-item class="mb-24">
+            <div class="dashboard-btn">
+                <mat-icon aria-hidden="false" aria-label="dashboard icon" fontIcon="dashboard"></mat-icon>
+                <span class="font-weight-bold">Dashboard</span>
             </div>
           </mat-list-item>
           <h3 *ngIf="navigationService.menu?.length" mat-subheader>Navigation</h3>
