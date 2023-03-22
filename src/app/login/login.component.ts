@@ -29,16 +29,16 @@ export class LoginComponent {
   ) {}
 
   ngOnInit() {
+    this.form = this.formBuilder.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required],
+    })
     if (!!localStorage.getItem('loggedIn')) {
       this.appSharedService.logout = false;
       this.router.navigateByUrl('/home');
       return;
     }
     this.appSharedService.logout = true;
-    this.form = this.formBuilder.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required],
-    })
   }
 
   togglePasswordVisibility() {

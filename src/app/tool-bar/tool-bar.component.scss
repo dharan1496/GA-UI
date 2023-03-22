@@ -15,28 +15,8 @@
     }
 }
 
-.app-container {
-    height: 100%;
-    margin: 0;
-
-    .app-sidenav {
-        padding-left: 12px;
-    }
-}
-
 .item-selected {
    background: rgba(0, 0, 0, 0.2);
-}
-
-.home-btn, .dashboard-btn {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    padding-right: 32px;
-}
-
-mat-list-item:has(.home-btn) {
-    margin: 0;
 }
 
 .account-icon {
