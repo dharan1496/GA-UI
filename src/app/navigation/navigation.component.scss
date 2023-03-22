@@ -1,5 +1,7 @@
-mat-toolbar {
+.tool-bar {
     padding-right: 24px;
+    position: relative;
+    z-index: 50;
 }
 
 .toolbar-item-spacer {
