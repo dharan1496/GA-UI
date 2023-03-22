@@ -1,5 +1,5 @@
 .container {
-    margin: 24px;
+    margin: 32px;
 }
 
 .header {
@@ -18,7 +18,7 @@
 }
 
 h1 {
-    margin: 48px 0;
+    margin: 32px 0;
 }
 
 
@@ -53,4 +53,14 @@ mat-form-field {
     margin-top: 40px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+}
+
+.print-btn {
+    display: flex;
+    align-items: center;
+
+    button:first-child {
+        margin-right: 0;
+    }
 }

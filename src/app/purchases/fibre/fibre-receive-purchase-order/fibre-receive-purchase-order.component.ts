@@ -162,4 +162,16 @@ export class FibreReceivePurchaseOrderComponent {
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
+
+  getAmount() {
+    return this.dataSource.map((data: any) => data?.amount).reduce((acc, value) => acc + value, 0);
+  }
+
+  getTaxAmount() {
+    return this.dataSource.map((data: any) => (data?.amount * data?.gst)/100).reduce((acc, value) => acc + value, 0);
+  }
+
+  getTotalAmount() {
+    return this.dataSource.map((data: any) => data?.totalAmount).reduce((acc, value) => acc + value, 0);
+  }
 }

@@ -85,97 +85,81 @@
                           [aria-label]="checkboxLabel(row)">
             </mat-checkbox>
           </td>
+          <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
   
         <ng-container matColumnDef="fibre">
           <th mat-header-cell *matHeaderCellDef>Fibre</th>
           <td mat-cell *matCellDef="let element">{{ element.fibre }}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
   
         <ng-container matColumnDef="hsnCode">
           <th mat-header-cell *matHeaderCellDef>HSN Code</th>
           <td mat-cell *matCellDef="let element">{{ element.hsnCode }}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="orderQty">
             <th mat-header-cell *matHeaderCellDef>Order Qty</th>
             <td mat-cell *matCellDef="let element">{{ element.orderQty }}</td>
+            <td mat-footer-cell *matFooterCellDef></td>
           </ng-container>
 
           <ng-container matColumnDef="pendingQty">
             <th mat-header-cell *matHeaderCellDef>Pending Qty</th>
             <td mat-cell *matCellDef="let element">{{ element.pendingQty }}</td>
+            <td mat-footer-cell *matFooterCellDef></td>
           </ng-container>
 
           <ng-container matColumnDef="receivedQty">
             <th mat-header-cell *matHeaderCellDef>Received Qty</th>
             <td mat-cell *matCellDef="let element">{{ element.receivedQty }}</td>
+            <td mat-footer-cell *matFooterCellDef></td>
           </ng-container>
 
           <ng-container matColumnDef="receivedBales">
             <th mat-header-cell *matHeaderCellDef>Received Bales</th>
             <td mat-cell *matCellDef="let element">{{ element.receivedBales }}</td>
+            <td mat-footer-cell *matFooterCellDef></td>
           </ng-container>
       
         <ng-container matColumnDef="lot">
           <th mat-header-cell *matHeaderCellDef>Lot</th>
           <td mat-cell *matCellDef="let element">{{ element.lot }}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
       
         <ng-container matColumnDef="rate">
           <th mat-header-cell *matHeaderCellDef>Rate</th>
           <td mat-cell *matCellDef="let element">{{ element.rate | currency:'INR' }}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
       
         <ng-container matColumnDef="amount">
           <th mat-header-cell *matHeaderCellDef>Amount</th>
           <td mat-cell *matCellDef="let element">{{ element.amount | currency:'INR' }}</td>
+          <td mat-footer-cell *matFooterCellDef>{{ getAmount() | currency: 'INR' }}</td>
         </ng-container>
   
         <ng-container matColumnDef="gst">
           <th mat-header-cell *matHeaderCellDef>GST%</th>
           <td mat-cell *matCellDef="let element">{{ element.gst | number: '1.2-2' }}%</td>
+          <td mat-footer-cell *matFooterCellDef>{{ getTaxAmount() | currency: 'INR' }}</td>
         </ng-container>
   
         <ng-container matColumnDef="totalAmount">
           <th mat-header-cell *matHeaderCellDef>Total Amount</th>
           <td mat-cell *matCellDef="let element">{{ element.totalAmount | currency:'INR' }}</td>
+          <td mat-footer-cell *matFooterCellDef>{{ getTotalAmount() | currency: 'INR' }}</td>
         </ng-container>
       
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
       </table>
-      <mat-card class="summary-card" *ngIf="dataSource.length">
-        <mat-card-header>
-          <mat-card-title>Summary</mat-card-title>
-        </mat-card-header>
-          <mat-card-content>
-            <mat-list>
-              <mat-list-item>
-                <div class="summary-content">
-                  <span>Total amount before tax</span>
-                  <span>{{ amountBeforeTax | currency:'INR' }}</span>
-                </div>
-              </mat-list-item>
-              <mat-divider></mat-divider>
-              <mat-list-item>
-                <div class="summary-content">
-                  <span>Tax amount</span>
-                  <span>{{ taxAmount | currency:'INR' }}</span>
-                </div>
-              </mat-list-item>
-              <mat-divider></mat-divider>
-              <mat-list-item>
-                <div class="summary-content">
-                  <span>Total amount after tax</span>
-                  <span>{{ amountAfterTax | currency:'INR' }}</span>
-                </div>
-              </mat-list-item>
-            </mat-list>
-          </mat-card-content>
-        </mat-card>
-     
-        <div class="submit-order-btn">
+      
+      <div class="submit-order-btn">
           <button mat-raised-button class="mr-16" (click)="resetData()"><mat-icon>refresh</mat-icon>Reset</button>
           <button mat-raised-button color="primary" (click)="submitOrder()"><mat-icon>save_alt</mat-icon>Submit</button>
         </div>   
