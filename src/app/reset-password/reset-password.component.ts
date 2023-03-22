@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
 import { NotifyType } from '../models/notify';
-import { NavigationService } from '../navigation/navigation.service';
+import { NavigationService } from '../shared/navigation.service';
 import { NotificationService } from '../notification-snackbar/notification.service';
 
 @Component({

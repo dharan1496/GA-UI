@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { PURCHASE } from 'src/constants/purchase-menu-values.const';
-import { NavigationService } from '../navigation/navigation.service';
+import { NavigationService } from '../shared/navigation.service';
 
 @Component({
   selector: 'app-purchases',

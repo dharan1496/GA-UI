@@ -1,16 +1,16 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
-import { AppSharedService } from '../app-shared.service';
-import { NavigationService } from './navigation.service';
+import { AppSharedService } from '../shared/app-shared.service';
+import { NavigationService } from '../shared/navigation.service';
 
 @Component({
-  selector: 'app-navigation',
-  templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.scss']
+  selector: 'app-tool-bar',
+  templateUrl: './tool-bar.component.html',
+  styleUrls: ['./tool-bar.component.scss']
 })
-export class NavigationComponent {
-  @ViewChild('sidenav') sidenav!: MatSidenav;
+export class ToolBarComponent {
+  @Input() sidenav!: MatSidenav;
 
   constructor(
     private router: Router,

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavigationService } from '../navigation/navigation.service';
+import { NavigationService } from '../shared/navigation.service';
 
 @Component({
   selector: 'app-home',

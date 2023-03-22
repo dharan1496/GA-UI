@@ -142,8 +142,16 @@
       </mat-card>
    
       <div class="submit-order-btn">
-        <button mat-raised-button color="primary" class="mr-16" (click)="resetData()">Reset</button>
-        <button mat-raised-button color="primary" class="mr-16" (click)="submitAndPrint()">Submit & Print Order</button>
-        <button mat-raised-button color="primary"(click)="submitOrder()">Submit Order</button>
+        <div>
+          <button mat-raised-button
+            [disabled]="dataSource.length && form.valid ? null : true"
+            color="warn" class="mr-16" (click)="printBill()">
+              <mat-icon>print</mat-icon> Print Bill
+          </button>
+        </div>
+        <div>
+          <button mat-raised-button class="mr-16" (click)="resetData()"><mat-icon>refresh</mat-icon>Reset</button>
+          <button mat-raised-button color="primary"(click)="submitOrder()">Submit Order</button>
+        </div>
       </div>   
 </section>

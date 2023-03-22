@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AppSharedService } from '../app-shared.service';
+import { AppSharedService } from '../shared/app-shared.service';
 import { MaterialModule } from '../material.module';
 import { NotifyType } from '../models/notify';
 import { NotificationService } from '../notification-snackbar/notification.service';
@@ -51,6 +51,16 @@ export class LoginComponent {
       this.notificationService.notify('Please enter valid credentials!', NotifyType.ERROR);
       return;
     }
+    // TEMP - start
+    if (this.username?.value !== 'admin') {
+      this.notificationService.notify('Error: Username do not match', NotifyType.ERROR);
+      return;
+    } 
+    if (this.password?.value !== '@admin') {
+      this.notificationService.notify('Error: Password do not match', NotifyType.ERROR);
+      return;
+    }
+    // TEMP - end
     this.router.navigateByUrl('/home');
     this.appSharedService.logout = false;
     this.appSharedService.username = this.username?.value;

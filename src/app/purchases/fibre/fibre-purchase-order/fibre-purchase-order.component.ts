@@ -3,9 +3,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable } from '@angular/material/table';
-import { AppSharedService } from 'src/app/app-shared.service';
+import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NotifyType } from 'src/app/models/notify';
-import { NavigationService } from 'src/app/navigation/navigation.service';
+import { NavigationService } from 'src/app/shared/navigation.service';
 import { NotificationService } from 'src/app/notification-snackbar/notification.service';
 import { PURCHASE } from 'src/constants/purchase-menu-values.const';
 import { OrderDetailsDialogComponent } from './order-details-dialog/order-details-dialog.component';
@@ -47,19 +47,17 @@ export class FibrePurchaseOrderComponent implements OnInit {
       poDate: ['', Validators.required],
     });
 
-    window.onafterprint = () => {
-      this.printFibrePOService.print = false;
-      this.notificationService.notify('Order submitted!', NotifyType.SUCCESS);
-    }
+    window.onafterprint = () => this.printFibrePOService.print = false;
   }
 
   submitOrder() {
     if (!this.hasError()) {
       this.notificationService.notify('Order submitted!', NotifyType.SUCCESS);
+      this.resetData();
     }
   }
 
-  submitAndPrint() {
+  printBill() {
     if (!this.hasError() && this.dataSource.length) {
       this.printFibrePOService.fibrePOData = {
         ...this.form.getRawValue(),
