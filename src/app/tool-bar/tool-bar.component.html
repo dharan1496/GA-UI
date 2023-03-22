@@ -10,7 +10,7 @@
       <button id="sales" mat-button (click)="selectSection('sales')"><span class="font-size-16">Sales</span></button>
     </div>
     <span class="toolbar-item-spacer"></span>
-    <span class="font-weight-normal pr-4">Welcome, {{ appSharedService.username }}</span>
+    <span class="pr-4">Welcome, {{ appSharedService.username }}</span>
     <button mat-icon-button matTooltip="My Account" [matMenuTriggerFor]="userAccountMenu">
         <mat-icon class="account-icon">account_circle</mat-icon>
     </button>
