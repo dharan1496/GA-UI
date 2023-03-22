@@ -5,11 +5,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTable } from '@angular/material/table';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NotifyType } from 'src/app/models/notify';
-import { NavigationService } from 'src/app/shared/navigation.service';
 import { NotificationService } from 'src/app/notification-snackbar/notification.service';
 import { PURCHASE } from 'src/constants/purchase-menu-values.const';
 import { OrderDetailsDialogComponent } from './order-details-dialog/order-details-dialog.component';
 import { PrintFibrePOService } from './print-fibre-po/print.fibre-po.service';
+import { UserActionConfirmationComponent } from 'src/app/user-action-confirmation/user-action-confirmation.component';
+import { NavigationService } from 'src/app/shared/navigation.service';
 
 
 @Component({
@@ -19,7 +20,7 @@ import { PrintFibrePOService } from './print-fibre-po/print.fibre-po.service';
 })
 export class FibrePurchaseOrderComponent implements OnInit {
   form!: FormGroup;
-  displayedColumns: string[] = ['select', 'fibre', 'shadeName', 'kgs', 'rate', 'amount', 'gst', 'totalAmount'];
+  displayedColumns: string[] = ['fibre', 'shadeName', 'kgs', 'rate', 'amount', 'gst', 'totalAmount', 'button'];
   dataSource = [];
   @ViewChild(MatTable) table!: MatTable<any>;
   selection = new SelectionModel<any>(true, []);
@@ -114,76 +115,37 @@ export class FibrePurchaseOrderComponent implements OnInit {
     })
   }
 
-  updateData() {
-    const selectedRow = this.selection.selected;
-    if (selectedRow && selectedRow?.length === 1) {
-      this.selection.deselect(selectedRow[0]);
-      const dialogRef = this.dialog.open(OrderDetailsDialogComponent, { data: selectedRow[0] });
-
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.dataSource.forEach((data: any, index: number) => {
-              if (data?.orderNo === result?.orderNo) {
-                this.dataSource[index] = result as never;
-              }
-            });
-        }
-        this.calculateSummary();
-        this.table.renderRows();
-      });
-    } else {
-      this.notificationService.notify('Please select one row to update', NotifyType.WARN);
-    }
-  }
-
-  removeData() {
-    const selectedRow = this.selection.selected;
-    if (selectedRow && selectedRow?.length) {
-      if (selectedRow.length === this.dataSource.length) {
-        this.dataSource = [];
-        this.selection.clear();
-      } else {
-        const newList: any = [];
-        this.dataSource.forEach((data: any) => selectedRow.forEach(
-          (row) => {
-            if (data?.orderNo != row?.orderNo) {
-              newList.push(data);
-            } else {
-              this.selection.deselect(row);
+  updateData(selectedRow: any) {
+    const dialogRef = this.dialog.open(OrderDetailsDialogComponent, { data: selectedRow });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.dataSource.forEach((data: any, index: number) => {
+            if (data?.orderNo === result?.orderNo) {
+              this.dataSource[index] = result as never;
             }
-          }
-        ));
-        this.dataSource = newList;
+        });
       }
       this.calculateSummary();
       this.table.renderRows();
-    } else {
-      this.notificationService.notify('Please select atleast one row to remove', NotifyType.WARN);
-    }
+    });
   }
 
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.length;
-    return numSelected === numRows;
-  }
-
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
-  toggleAllRows() {
-    if (this.isAllSelected()) {
-      this.selection.clear();
-      return;
-    }
-
-    this.selection.select(...this.dataSource);
-  }
-
-  /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: any): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+  removeData(selectedRow: any) {
+    this.dialog.open(UserActionConfirmationComponent).afterClosed().subscribe(
+      (result: boolean) => {
+        if (result) {
+          const newList: any = [];
+          this.dataSource.forEach((data: any) =>{
+            if (data?.orderNo != selectedRow?.orderNo) {
+              newList.push(data);
+            }
+          });
+          this.dataSource = newList;
+          this.calculateSummary();
+          this.table.renderRows();
+        }
+      }
+    );
   }
 
   getAmount() {

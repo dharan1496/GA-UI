@@ -18,12 +18,7 @@
 }
 
 h1 {
-    margin: 32px 0;
-}
-
-
-mat-form-field {
-    width: 25%;
+    margin: 40px 0;
 }
 
 .table {
@@ -50,17 +45,8 @@ mat-form-field {
 }
 
 .submit-order-btn {
-    margin-top: 40px;
+    margin-top: 50px;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
-}
-
-.print-btn {
-    display: flex;
-    align-items: center;
-
-    button:first-child {
-        margin-right: 0;
-    }
 }

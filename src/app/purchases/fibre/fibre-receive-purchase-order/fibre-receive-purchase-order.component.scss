@@ -14,19 +14,14 @@
     padding: 32px;
     display: flex;
     column-gap: 48px;
-    row-gap: 24px;
+    row-gap: 28px;
     flex-wrap: wrap;
     align-items: center;
 }
 
 
 h1 {
-    margin: 32px 0;
-}
-
-
-mat-form-field {
-    width: 25%;
+    margin: 40px 0;
 }
 
 .table {

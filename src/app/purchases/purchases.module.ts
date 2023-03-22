@@ -15,6 +15,6 @@ import { PurchasesComponent } from './purchases.component';
     PurchasesRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
-  ]
+  ],
 })
 export class PurchasesModule { }
