@@ -27,6 +27,8 @@ export class FibrePurchaseOrderComponent implements OnInit {
   amountBeforeTax!: number;
   taxAmount!: number;
   amountAfterTax!: number;
+  successBanner = false;
+  orderDetails!: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -48,28 +50,32 @@ export class FibrePurchaseOrderComponent implements OnInit {
       poDate: ['', Validators.required],
     });
 
-    window.onafterprint = () => this.printFibrePOService.print = false;
+    window.onafterprint = () => {
+      this.printFibrePOService.print = false;
+      this.successBanner = false;
+    }
   }
 
   submitOrder() {
     if (!this.hasError()) {
-      this.notificationService.notify('Order submitted!', NotifyType.SUCCESS);
-      this.resetData();
-    }
-  }
-
-  printBill() {
-    if (!this.hasError() && this.dataSource.length) {
-      this.printFibrePOService.fibrePOData = {
+       // Need to make API call here to submit data
+      this.orderDetails = {
         ...this.form.getRawValue(),
         orders: [...this.dataSource],
         amountBeforeTax: this.amountBeforeTax,
         taxAmount: this.taxAmount,
         amountAfterTax: this.amountAfterTax,
-      };
-      this.printFibrePOService.print = true;
-      setTimeout(() => window.print());
+      }
+      this.successBanner = true;
+      this.resetData();
     }
+   
+  }
+
+  printBill() {
+    this.printFibrePOService.fibrePOData = this.orderDetails;
+    this.printFibrePOService.print = true;
+    setTimeout(() => window.print());
   }
 
   hasError() {
@@ -158,5 +164,9 @@ export class FibrePurchaseOrderComponent implements OnInit {
 
   getTotalAmount() {
     return this.dataSource.map((data: any) => data?.totalAmount).reduce((acc, value) => acc + value, 0);
+  }
+
+  closeSuccessBanner() {
+    this.successBanner = false;
   }
 }
