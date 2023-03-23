@@ -52,42 +52,53 @@ h1 {
 }
 
 .success-banner {
-    padding: 8px 4px 8px 32px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
     position: absolute;
     top: 50%;
     left: 50%;
-    background-color: rgba(149, 245, 53, 0.235);
-    backdrop-filter: brightness(180%);
+    background-color: #fff;
     transform: translate(-50%, -50%);
     border-radius: 5px;
     z-index: 100;
     box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
 
-    & span {
-        font-size: 18px;
-        font-weight: 500;
+    .banner-header {
+        padding: 35px 65px;
+        background-color: rgba(10, 191, 107, 0.714);
+        position: relative;
         display: flex;
+        justify-content: center;
         align-items: center;
-        gap: 16px;
+    }
+
+    .close-button {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    .banner-content {
+        padding: 35px 65px; 
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        align-items: center;
+        justify-content: center;
     }
 
     .green-tick {
-        width: 30px;
-        height: 30px;
-        background-image: url('../../../../assets/images/green-tick.png');
+        width: 100px;
+        height: 100px;
+        background-image: url('../../../../assets/images/white-tick.png');
         background-size: cover;
     }
 }
 
 .overlay {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     z-index: 99;
-    width: 100%;
     height: 100%;
-    background-color: rgba(116, 113, 113, 0.6);
+    width: 100%;
+    background-color: rgba(0,0,0,.32);
 }

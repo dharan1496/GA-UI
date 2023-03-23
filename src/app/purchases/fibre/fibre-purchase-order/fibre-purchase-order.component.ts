@@ -66,8 +66,8 @@ export class FibrePurchaseOrderComponent implements OnInit {
         taxAmount: this.taxAmount,
         amountAfterTax: this.amountAfterTax,
       }
-      this.successBanner = true;
       this.resetData();
+      this.successBanner = true;
     }
    
   }

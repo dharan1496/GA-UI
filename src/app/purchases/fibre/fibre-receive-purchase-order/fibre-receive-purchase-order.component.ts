@@ -25,6 +25,7 @@ export class FibreReceivePurchaseOrderComponent {
   amountBeforeTax!: number;
   taxAmount!: number;
   amountAfterTax!: number;
+  successBanner = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -58,7 +59,8 @@ export class FibreReceivePurchaseOrderComponent {
       this.notificationService.notify('Please add the receive order details!', NotifyType.ERROR);
       return;
     }
-    this.notificationService.notify('Order submitted!', NotifyType.SUCCESS);
+    this.successBanner = true;
+    this.resetData();
   }
 
   resetData() {
@@ -134,5 +136,9 @@ export class FibreReceivePurchaseOrderComponent {
 
   getTotalAmount() {
     return this.dataSource.map((data: any) => data?.totalAmount).reduce((acc, value) => acc + value, 0);
+  }
+
+  closeSuccessBanner() {
+    this.successBanner = false;
   }
 }
