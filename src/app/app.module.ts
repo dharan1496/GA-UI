@@ -4,11 +4,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MaterialModule } from './material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { PrintFibrePOComponent } from './purchases/fibre/fibre-purchase-order/print-fibre-po/print-fibre-po.component';
-import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './shared/auth.guard';
-import { SideMenuComponent } from './side-menu/side-menu.component';
-import { ToolBarComponent } from './tool-bar/tool-bar.component';
+import { SideMenuComponent } from './components/side-menu/side-menu.component';
+import { HttpClientModule } from '@angular/common/http';
+import { LoginComponent } from './components/login/login.component';
+import { PrintFibrePOComponent } from './components/purchases/fibre/fibre-purchase-order/print-fibre-po/print-fibre-po.component';
+import { ToolBarComponent } from './components/tool-bar/tool-bar.component';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -21,8 +23,9 @@ import { ToolBarComponent } from './tool-bar/tool-bar.component';
     BrowserAnimationsModule,
     PrintFibrePOComponent,
     LoginComponent,
+    HttpClientModule,
   ],
-  providers: [AuthGuard],
+  providers: [AuthGuard, DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

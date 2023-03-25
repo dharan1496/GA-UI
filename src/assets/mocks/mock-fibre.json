@@ -1,0 +1,32 @@
+[
+    {
+      "fibretypeId": 1,
+      "fibretype": "Cotton",
+      "fibretypeCode": "COTTON"
+    },
+    {
+      "fibretypeId": 2,
+      "fibretype": "Polyster",
+      "fibretypeCode": "POLYSTER"
+    },
+    {
+      "fibretypeId": 14,
+      "fibretype": "Viscose",
+      "fibretypeCode": "VISCOSE"
+    },
+    {
+      "fibretypeId": 15,
+      "fibretype": "Silk",
+      "fibretypeCode": "Silk"
+    },
+    {
+      "fibretypeId": 16,
+      "fibretype": "Pneumofil Waste",
+      "fibretypeCode": "Pneumofil_Waste"
+    },
+    {
+      "fibretypeId": 17,
+      "fibretype": "Carding Waste",
+      "fibretypeCode": "Carding_Waste"
+    }
+  ]

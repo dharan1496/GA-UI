@@ -1,0 +1,24 @@
+<mat-nav-list>
+    <h3 mat-subheader class="pt-16">General</h3>
+    <mat-list-item class="mb-24" routerLink="/dashboard" (click)="onDashboard()">
+      <div class="dashboard-btn">
+          <mat-icon aria-hidden="false" aria-label="dashboard icon" fontIcon="dashboard"></mat-icon>
+          <span class="font-weight-bold">Dashboard</span>
+      </div>
+    </mat-list-item>
+    <h3 *ngIf="navigationService.menu?.length" mat-subheader>Navigation</h3>
+    <ng-container *ngFor="let item of navigationService.menu">
+      <mat-expansion-panel [class.mat-elevation-z0]="true" expanded="true">
+          <mat-expansion-panel-header>
+             <span class="font-size-16"> {{ item?.title }}</span>
+          </mat-expansion-panel-header>
+            <mat-nav-list>
+                <ng-container *ngFor="let submenu of item?.submenu">
+                    <a mat-list-item [routerLink]="submenu.route">
+                        <span class="font-size-14">{{ submenu.title }}</span>
+                    </a>
+                </ng-container>
+            </mat-nav-list>
+        </mat-expansion-panel>
+    </ng-container>
+</mat-nav-list>

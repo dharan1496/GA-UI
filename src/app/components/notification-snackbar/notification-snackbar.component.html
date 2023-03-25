@@ -1,0 +1,15 @@
+<section class="container error" *ngIf="notify.type === 'error'">
+    <mat-icon aria-hidden="false" fontIcon="error"></mat-icon>
+    <span class="error">{{ notify.message }}</span>
+</section>
+
+<section class="container warn" *ngIf="notify.type === 'warn'">
+    <mat-icon aria-hidden="false" fontIcon="warning"></mat-icon>
+    <span>{{ notify.message }}</span>
+</section>
+
+<section class="container success" *ngIf="notify.type === 'success'">
+    <mat-icon aria-hidden="false" fontIcon="notifications"></mat-icon>
+    <span>{{ notify.message }}</span>
+</section>
+

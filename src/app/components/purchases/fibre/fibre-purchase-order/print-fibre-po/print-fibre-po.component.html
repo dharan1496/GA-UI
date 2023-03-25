@@ -1,0 +1,58 @@
+<section class="print" *ngIf="printFibreService.print">
+  <section id="header">
+    <span>SREE GOMATHI AMMAN SPINNING MILLS PVT LTD</span>
+    <span>GOBICETTIPALAYAM</span>
+    <span>GSTNO : 33AAKCS5785R1ZC</span>
+  </section>
+  <section id="po-details">
+    <div id="po">
+      <span><span class="font-weight-bold">PO NO</span>&nbsp;&nbsp;&nbsp;{{ printFibreService.fibrePOData?.pono}}</span>
+      <span><span class="font-weight-bold">PO DATE</span>&nbsp;&nbsp;&nbsp;{{ printFibreService.fibrePOData?.podate }}</span>
+    </div>
+    <div id="party-details">
+      <div>ABC POLYMERS PVT LTD</div>
+      <div>123 AVINASI ROAD</div>
+      <div>PELAMEDU</div>
+      <div>GSTNO : 33AAKCS5785R1ZC</div>
+    </div>
+    <table>
+      <thead>
+        <th>Fibre</th>
+        <th>Shade Name</th>
+        <th class="text-right">KGs</th>
+        <th class="text-right">Rate</th>
+        <th class="text-right">Amount</th>
+        <th class="text-right">GST%</th>
+        <th class="text-right">TotalAmount</th>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let order of printFibreService.fibrePOData?.orders">
+          <tr>
+            <td>{{ order?.fibreName }}</td>
+            <td>{{ order?.shadeName }}</td>
+            <td class="text-right">{{ order?.weight }}</td>
+            <td class="text-right">{{ order?.rate | currency: 'INR' }}</td>
+            <td class="text-right">{{ order?.amount | currency: 'INR' }}</td>
+            <td class="text-right">{{ order?.gstpercent | number: '1.2-2' }}%</td>
+            <td class="text-right">{{ order?.totalAmount | currency: 'INR' }}</td>
+          </tr>
+        </ng-container>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td class="text-right">{{ printFibreService.fibrePOData?.amountBeforeTax | currency: 'INR' }}</td>
+          <td class="text-right">{{ printFibreService.fibrePOData?.taxAmount | currency: 'INR' }}</td>
+          <td class="text-right">{{ printFibreService.fibrePOData?.amountAfterTax | currency: 'INR'}}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </section>
+  <section id="footer">
+    <div>Please mention our GST NO and PO Ref NO in your Invoice.</div>
+    <div>Thanking You,</div>
+  </section>
+</section>

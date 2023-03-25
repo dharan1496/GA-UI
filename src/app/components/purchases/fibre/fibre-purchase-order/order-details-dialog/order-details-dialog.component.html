@@ -1,0 +1,60 @@
+<h1 mat-dialog-title>Order details</h1>
+<form [formGroup]="form" class="form">
+    <div mat-dialog-content>
+        <div class="flex-container">
+            <mat-form-field appearance="fill">
+                <mat-label>Fibre</mat-label>
+                <mat-select formControlName="fibreTypeId">
+                    <ng-container *ngFor="let fibre of fibreService.fibres">
+                        <mat-option [value]="fibre.fibretypeId">{{ fibre.fibretype }}</mat-option>
+                    </ng-container>
+                </mat-select>
+                <mat-error>This field is required.</mat-error>
+              </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Shade Name</mat-label>
+                <input type="text" matInput formControlName="shadeName">
+                <mat-error>This field is required.</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="flex-container">
+            <mat-form-field appearance="fill">
+                <mat-label>KGS</mat-label>
+                <input type="number" min="1" matInput formControlName="weight">
+                <mat-error>This field is required.</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <span matPrefix>&nbsp;&#x20B9;&nbsp;</span>
+                <mat-label>Rate</mat-label>
+                <input type="number" min="0.00" step=".01" matInput formControlName="rate">
+                <mat-error>This field is required.</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="flex-container">
+            <mat-form-field appearance="fill">
+                <span matPrefix>&nbsp;&#x20B9;&nbsp;</span>
+                <mat-label>Amount</mat-label>
+                <input type="number" min="0.00" step=".01" matInput formControlName="amount">
+                <mat-error>This field is required.</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>GST%</mat-label>
+                <input type="number" max="100" matInput formControlName="gstpercent">
+                <mat-error *ngIf="form.get('gst')?.hasError('required')">This field is required.</mat-error>
+                <mat-error *ngIf="form.get('gst')?.hasError('max')">Value should be between 1 and 100</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="flex-container text-black">
+            <mat-form-field appearance="fill">
+                <span matPrefix>&nbsp;&#x20B9;&nbsp;</span>
+                <mat-label>Total Amount</mat-label>
+                <input type="number" matInput formControlName="totalAmount">
+            </mat-form-field>
+        </div>
+          
+      </div>
+      <div mat-dialog-actions class="footer">
+        <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+        <button mat-button (click)="onCancel()">Cancel</button>
+      </div>
+</form>

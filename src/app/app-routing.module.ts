@@ -6,24 +6,23 @@ const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
     path: 'login',
-    loadComponent: () => import('./login/login.component')
+    loadComponent: () => import('./components/login/login.component')
     .then(m => m.LoginComponent)
   },
   {
-    path: 'home',
-    loadChildren: () => import('./home/home.module')
-    .then(m => m.HomeModule),
-    canActivate: [AuthGuard]
+    path: 'dashboard',
+    loadComponent: () => import('./components/dashboard/dashboard.component')
+    .then(m => m.DashboardComponent)
   },
   {
     path: 'purchases',
-    loadChildren: () => import('./purchases/purchases.module')
+    loadChildren: () => import('./components/purchases/purchases.module')
     .then(m => m.PurchasesModule),
     canActivate: [AuthGuard]
    },
    {
     path: 'reset-password',
-    loadChildren: () => import('./reset-password/reset-password.module')
+    loadChildren: () => import('./components/reset-password/reset-password.module')
     .then(m => m.ResetPasswordModule),
     canActivate: [AuthGuard]
    },

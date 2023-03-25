@@ -1,0 +1,27 @@
+<mat-toolbar class="tool-bar mat-elevation-z4" color="primary" *ngIf="!appSharedService.logout">
+    <button mat-icon-button (click)="toggleSidenav()" matTooltip="Menu">
+        <mat-icon *ngIf="navigationService.isSidenavOpened">close</mat-icon>
+        <mat-icon *ngIf="!navigationService.isSidenavOpened">menu</mat-icon>
+    </button>
+    <span class="font-weight-normal">Menu</span>
+    <div class="nav-btn py-32">
+      <button id="purchases" mat-button (click)="selectSection('purchases')">Purchases</button>
+      <button id="production" mat-button (click)="selectSection('production')">Production</button>
+      <button id="sales" mat-button (click)="selectSection('sales')">Sales</button>
+    </div>
+    <span class="toolbar-item-spacer"></span>
+    <span class="pr-4 font-weight-normal">{{ appSharedService.username | titlecase }}</span>
+    <button mat-icon-button matTooltip="My Account" [matMenuTriggerFor]="userAccountMenu">
+        <mat-icon class="account-icon">account_circle</mat-icon>
+    </button>
+    <mat-menu #userAccountMenu [overlapTrigger]="false" yPosition="below">
+        <button mat-menu-item routerLink="/reset-password" (click)="navigationService.removeFocus()">
+            <mat-icon>person</mat-icon><span>Reset password</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="onLogout()" routerLink="/login">
+            <mat-icon>exit_to_app</mat-icon>Logout
+        </button>
+    </mat-menu>
+</mat-toolbar>
+  

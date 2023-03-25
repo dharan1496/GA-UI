@@ -1,0 +1,110 @@
+.container {
+    margin: 32px;
+}
+
+.header {
+    font-weight: 500 !important;
+}
+
+.party-card {
+    margin-bottom: 32px;
+}
+
+.form-container {
+    padding: 32px;
+    display: flex;
+    column-gap: 48px;
+    row-gap: 28px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+
+.header {
+    font-weight: 500;
+    margin: 40px 0;
+}
+
+.table {
+    width: 100%;
+  }
+  
+.button-container {
+    padding-bottom: 16px;
+}
+  
+.button + .button {
+    margin-left: 8px;
+}
+
+
+.summary-card {
+    margin-top: 32px;
+    width: 50%;
+
+    .summary-content {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+.submit-order-btn {
+    margin-top: 40px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.success-banner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background-color: #fff;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+    z-index: 100;
+    box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2),
+    0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
+
+    .banner-header {
+        padding: 35px 60px;
+        background-color: rgba(10, 191, 107, 0.714);
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .close-button {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    .banner-content {
+        padding: 35px 60px; 
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .green-tick {
+        width: 100px;
+        height: 100px;
+        background-image: url('../../../../../assets/images/white-tick.png');
+        background-size: cover;
+    }
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.32);
+}
+
