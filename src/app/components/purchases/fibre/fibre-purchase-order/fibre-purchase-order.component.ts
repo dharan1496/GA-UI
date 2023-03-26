@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTable } from '@angular/material/table';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NotifyType } from 'src/app/models/notify';
-import { NotificationService } from 'src/app/components/notification-snackbar/notification.service';
+import { NotificationService } from 'src/app/shared/notification.service';
 import { PURCHASE } from 'src/app/constants/purchase-menu-values.const';
 import { OrderDetailsDialogComponent } from './order-details-dialog/order-details-dialog.component';
 import { PrintFibrePOService } from './print-fibre-po/print.fibre-po.service';
@@ -17,7 +17,6 @@ import { FibrePODto } from 'src/app/models/fibrePODto';
 import { FibrePODtsDto } from 'src/app/models/fibrePODtsDto';
 import { UserActionConfirmationComponent } from 'src/app/components/user-action-confirmation/user-action-confirmation.component';
 import { DatePipe } from '@angular/common';
-
 
 @Component({
   selector: 'app-fibre-purchase-order',
@@ -33,7 +32,6 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
   amountBeforeTax!: number;
   taxAmount!: number;
   amountAfterTax!: number;
-  successBanner = false;
   orderDetails!: any;
   subscription = new Subscription
 
@@ -88,14 +86,12 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
         amountAfterTax: this.amountAfterTax,
       }
       this.resetData();
-      this.successBanner = true;
+      this.printFibrePOService.fibrePOData = this.orderDetails;
+      this.notificationService.success({
+        printPO: true,
+        message: 'Purchase order submitted successfully',
+      }, true);
     }
-  }
-
-  printPO() {
-    this.printFibrePOService.fibrePOData = this.orderDetails;
-    this.printFibrePOService.print = true;
-    setTimeout(() => window.print());
   }
 
   hasError() {
@@ -186,9 +182,5 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
 
   getTotalAmount() {
     return this.dataSource.map((data: any) => data?.totalAmount).reduce((acc, value) => acc + value, 0);
-  }
-
-  closeSuccessBanner() {
-    this.successBanner = false;
   }
 }

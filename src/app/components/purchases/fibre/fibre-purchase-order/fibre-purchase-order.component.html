@@ -107,21 +107,3 @@
         <button mat-raised-button color="primary"(click)="submitOrder()"><mat-icon>save_alt</mat-icon>Submit</button>
     </div>   
 </section>
-
-<section class="success-banner" *ngIf="successBanner">
-  <div class="banner-header">
-    <button mat-icon-button class="close-button" (click)="closeSuccessBanner()">
-      <mat-icon>close</mat-icon>
-    </button>
-    <div class="green-tick"></div>
-  </div>
-  <div class="banner-content">
-    <div class="font-size-28 letter-spacing-1">Success!</div>
-    <div class="font-size-16">Purchase order submitted successfully.</div>
-    <button mat-raised-button color="accent" (click)="printPO()">
-      <mat-icon>print</mat-icon>Print PO
-    </button>
-  </div>
-</section>
-
-<div class="overlay" *ngIf="successBanner"></div>

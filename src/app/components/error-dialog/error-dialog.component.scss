@@ -1,0 +1,35 @@
+.banner {
+    background-color: #fff;
+    border-radius: 5px;
+}
+
+.banner-header {
+    padding: 35px 65px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(244, 69, 34, 0.7);
+}
+
+.banner-content {
+    padding: 35px 65px; 
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+    justify-content: center;
+}
+
+.error-img {
+    width: 100px;
+    height: 100px;
+    background: url('../../../assets/images/error.png');
+    background-size: cover !important;
+}
+
+.close-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+}

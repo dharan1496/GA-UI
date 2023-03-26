@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTable } from '@angular/material/table';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NotifyType } from 'src/app/models/notify';
-import { NotificationService } from 'src/app/components/notification-snackbar/notification.service';
+import { NotificationService } from 'src/app/shared/notification.service';
 import { PURCHASE } from 'src/app/constants/purchase-menu-values.const';
 import { ReceiveOrderDetailsComponent } from './receive-order-details/receive-order-details.component';
 import { NavigationService } from 'src/app/shared/navigation.service';
@@ -28,7 +28,6 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
   amountBeforeTax!: number;
   taxAmount!: number;
   amountAfterTax!: number;
-  successBanner = false;
   subscription = new Subscription();
 
   constructor(
@@ -72,7 +71,7 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
       this.notificationService.notify('Please add the receive order details!', NotifyType.ERROR);
       return;
     }
-    this.successBanner = true;
+    this.notificationService.success('Invoice againt purchase order submitted successfully.');
     this.resetData();
   }
 
@@ -149,9 +148,5 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
 
   getTotalAmount() {
     return this.dataSource.map((data: any) => data?.totalAmount).reduce((acc, value) => acc + value, 0);
-  }
-
-  closeSuccessBanner() {
-    this.successBanner = false;
   }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NotifyType } from 'src/app/models/notify';
 import { NavigationService } from 'src/app/shared/navigation.service';
-import { NotificationService } from '../notification-snackbar/notification.service';
+import { NotificationService } from '../../shared/notification.service';
 
 @Component({
   selector: 'app-reset-password',

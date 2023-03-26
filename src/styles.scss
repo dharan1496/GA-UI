@@ -14,7 +14,7 @@ app-print-fibre-po {
       display: block;
     }
 
-    #app-container {
+    #app-container, .cdk-overlay-container {
       display: none;
     }
 }

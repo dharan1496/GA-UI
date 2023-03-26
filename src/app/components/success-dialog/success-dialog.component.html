@@ -1,0 +1,16 @@
+<section class="banner">
+    <div class="banner-header green">
+      <button mat-icon-button class="close-button" (click)="close()">
+        <mat-icon>close</mat-icon>
+      </button>
+      <div class="success-img"></div>
+    </div>
+    <div class="banner-content">
+      <div class="font-size-28 letter-spacing-1">Success!</div>
+      <div class="font-size-16">{{ data?.message || data }}</div>
+      <button *ngIf="data?.printPO" mat-raised-button color="accent" (click)="printPO()">
+        <mat-icon>print</mat-icon>Print PO
+      </button>
+    </div>
+</section>
+  

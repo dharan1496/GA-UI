@@ -1,0 +1,12 @@
+<section class="banner">
+    <div class="banner-header">
+      <button mat-icon-button class="close-button" (click)="close()">
+        <mat-icon>close</mat-icon>
+      </button>
+      <div class="error-img"></div>
+    </div>
+    <div class="banner-content">
+      <div class="font-size-28 letter-spacing-1">Error!</div>
+      <div class="font-size-16">{{ message || 'Something went wrong. Please try again.' }}</div>
+    </div>
+</section>

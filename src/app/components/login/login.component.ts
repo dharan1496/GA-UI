@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { MaterialModule } from 'src/app/material.module';
 import { NotifyType } from 'src/app/models/notify';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
-import { NotificationService } from '../notification-snackbar/notification.service';
+import { NotificationService } from '../../shared/notification.service';
 
 
 @Component({

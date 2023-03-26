@@ -5,7 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { combineLatest, startWith, Subscription } from 'rxjs';
 import { MaterialModule } from 'src/app/material.module';
 import { NotifyType } from 'src/app/models/notify';
-import { NotificationService } from 'src/app/components/notification-snackbar/notification.service';
+import { NotificationService } from 'src/app/shared/notification.service';
 import { FibreService } from 'src/app/services/fibre.service';
 
 @Component({
