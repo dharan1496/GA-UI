@@ -26,17 +26,14 @@ export class NavigationService {
         document.querySelectorAll('button')?.forEach(element => element?.classList.remove('item-selected'));
     }
 
-    logout() {
-        this.idle.stop();
-       
+    logout(interval: any) {
         this.appSharedService.logout = true;
-       
-        this.removeFocus();
         this.isSidenavOpened = false;
         this.menu = null;
-
+        this.removeFocus();
+        clearInterval(interval); // clear the sleep mode interval for session timeout
+        this.idle.stop(); // stops the idle listener
         localStorage.clear();
-        
         this.router.navigateByUrl('/login');
     }
 

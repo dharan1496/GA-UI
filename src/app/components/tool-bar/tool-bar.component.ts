@@ -37,7 +37,7 @@ export class ToolBarComponent {
 
   onLogout() {
     this.timeoutService.inSession = false;
-    this.navigationService.logout();
+    this.navigationService.logout(this.timeoutService.interval);
   }
 
 }

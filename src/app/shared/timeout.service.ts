@@ -10,6 +10,7 @@ import { NavigationService } from "./navigation.service";
 })
 export class TimeoutService {
     inSession = false;
+    interval: any;
 
     constructor(
         private idle: Idle,
@@ -18,6 +19,7 @@ export class TimeoutService {
     ) {}
 
     init() {
+        this.checkSleepMode();
         this.inSession = true;
         this.idle.setIdle(environment.idleTime);
         this.idle.setTimeout(environment.timeout);
@@ -26,8 +28,19 @@ export class TimeoutService {
         this.idle.watch();
     }
 
+    checkSleepMode() {
+        let lastTime = (new Date()).getTime();
+        this.interval = setInterval(() => {
+            const currentTime = (new Date()).getTime();
+            if (currentTime > (lastTime + (environment.idleTime * 1000))) {
+                this.logout();
+            }
+            lastTime = currentTime;
+        }, 2000);
+    }
+
     logout() {
         this.inSession = false;
-        this.navigationService.logout();
+        this.navigationService.logout(this.interval);
     }
 }
