@@ -11,6 +11,7 @@ import { LoginComponent } from './components/login/login.component';
 import { PrintFibrePOComponent } from './components/purchases/fibre/fibre-purchase-order/print-fibre-po/print-fibre-po.component';
 import { ToolBarComponent } from './components/tool-bar/tool-bar.component';
 import { DatePipe } from '@angular/common';
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { DatePipe } from '@angular/common';
     PrintFibrePOComponent,
     LoginComponent,
     HttpClientModule,
+    NgIdleKeepaliveModule.forRoot()
   ],
   providers: [AuthGuard, DatePipe],
   bootstrap: [AppComponent]

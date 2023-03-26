@@ -3,6 +3,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
+import { TimeoutService } from 'src/app/shared/timeout.service';
 
 @Component({
   selector: 'app-tool-bar',
@@ -15,7 +16,8 @@ export class ToolBarComponent {
   constructor(
     private router: Router,
     public navigationService: NavigationService,
-    public appSharedService: AppSharedService
+    public appSharedService: AppSharedService,
+    private timeoutService: TimeoutService,
   ) {}
 
   toggleSidenav() {
@@ -34,11 +36,8 @@ export class ToolBarComponent {
   }
 
   onLogout() {
-    localStorage.clear();
-    this.appSharedService.logout = true;
-    this.navigationService.isSidenavOpened = false;
-    this.navigationService.menu = null;
-    this.navigationService.removeFocus();
+    this.timeoutService.inSession = false;
+    this.navigationService.logout();
   }
 
 }

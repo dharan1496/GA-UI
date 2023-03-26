@@ -1,4 +1,8 @@
 import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
+import { Idle } from "@ng-idle/core";
+import { AppSharedService } from "./app-shared.service";
+import { TimeoutService } from "./timeout.service";
 
 @Injectable({
     providedIn: 'root',
@@ -7,6 +11,12 @@ export class NavigationService {
     menu!: any[] | null;
     isSidenavOpened = false;
 
+    constructor(
+        private idle: Idle,
+        private router: Router,
+        private appSharedService: AppSharedService,
+    ) {}
+
     setFocus(id: string) {
         this.removeFocus();
         document.querySelector(`#${id}`)?.classList.add('item-selected');   
@@ -14,6 +24,20 @@ export class NavigationService {
     
     removeFocus() {
         document.querySelectorAll('button')?.forEach(element => element?.classList.remove('item-selected'));
+    }
+
+    logout() {
+        this.idle.stop();
+       
+        this.appSharedService.logout = true;
+       
+        this.removeFocus();
+        this.isSidenavOpened = false;
+        this.menu = null;
+
+        localStorage.clear();
+        
+        this.router.navigateByUrl('/login');
     }
 
 }

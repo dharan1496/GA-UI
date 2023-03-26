@@ -7,17 +7,16 @@ import { NavigationService } from './shared/navigation.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  isShowing!: boolean;
 
   constructor(public navigationService: NavigationService) {}
-
-  isShowing!: boolean;
 
   toggleSidenav() {
     this.isShowing = !this.isShowing;
   }
 
   callMethods() {
-      this.toggleSidenav();
+    this.toggleSidenav();
   }
 
 }

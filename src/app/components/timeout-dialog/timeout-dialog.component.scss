@@ -1,0 +1,30 @@
+.container {
+    padding: 32px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.title {
+    font-size: 28px;
+}
+
+.timer-img {
+    width: 40px;
+    height: 40px;
+    background: url('../../../assets/images/timer.png');
+    background-size: cover;
+}
+
+.countdown {
+    font-size: 20px;
+    padding: 0 2px;
+}
+
+p {
+    margin-top: 24px;
+    font-size: 16px;
+}
