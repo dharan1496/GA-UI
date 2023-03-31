@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Constants } from 'src/app/constants/constants';
 import { PURCHASE } from 'src/app/constants/purchase-menu-values.const';
 import { NavigationService } from 'src/app/shared/navigation.service';
 
@@ -12,7 +13,7 @@ export class PurchasesComponent  {
   constructor(private navigationService: NavigationService) {
     this.navigationService.menu = PURCHASE;
     this.navigationService.isSidenavOpened = true;
-    this.navigationService.setFocus('purchases');
+    this.navigationService.setFocus(Constants.PURCHASES);
   }
 
 

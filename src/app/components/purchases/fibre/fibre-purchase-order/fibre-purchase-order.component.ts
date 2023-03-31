@@ -17,6 +17,7 @@ import { FibrePODto } from 'src/app/models/fibrePODto';
 import { FibrePODtsDto } from 'src/app/models/fibrePODtsDto';
 import { UserActionConfirmationComponent } from 'src/app/components/user-action-confirmation/user-action-confirmation.component';
 import { DatePipe } from '@angular/common';
+import { Constants } from 'src/app/constants/constants';
 
 @Component({
   selector: 'app-fibre-purchase-order',
@@ -47,7 +48,7 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe,
   ) {
     this.navigationService.isSidenavOpened = false;
-    this.navigationService.setFocus('purchases');
+    this.navigationService.setFocus(Constants.PURCHASES);
     this.navigationService.menu = PURCHASE;
   }
 

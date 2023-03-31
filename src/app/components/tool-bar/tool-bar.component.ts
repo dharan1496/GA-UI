@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
+import { Constants } from 'src/app/constants/constants';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
 import { TimeoutService } from 'src/app/shared/timeout.service';
@@ -27,7 +28,7 @@ export class ToolBarComponent {
 
   selectSection(section: string) {
     // Temp - start, needed until production and sales component add
-    if (section !== 'purchases') {
+    if (section !== Constants.PURCHASES) {
       this.navigationService.menu = null
     }
     this.navigationService.setFocus(section);
