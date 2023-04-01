@@ -49,7 +49,7 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
     this.subscription.add(this.fibreService.getFibres().subscribe((data) => this.fibreService.fibres = data));
 
     this.form = this.formBuilder.group({
-      poNo: [{ value: this.appSharedService.genUniqueId(), disabled: true }],
+      poNo: [{ value: this.appSharedService.generatePONo(), disabled: true }],
       party: ['', Validators.required],
       poDate: ['', Validators.required],
       invoiceNo: ['', Validators.required],
@@ -79,7 +79,7 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
     this.form.reset();
     this.dataSource = [];
     this.table.renderRows();
-    this.form.patchValue({ poNo: this.appSharedService.genUniqueId() });
+    this.form.patchValue({ poNo: this.appSharedService.generatePONo() });
   }
 
   addData(): void {

@@ -2,19 +2,19 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MaterialModule } from "src/app/material.module";
-import { ResetPasswordRoutingModule } from "./reset-password-routing.module";
-import { ResetPasswordComponent } from "./reset-password.component";
+import { ChangePasswordComponent } from "./change-password.component";
+import { ChangePasswordRoutingModule } from "./change-password-routing.module";
 
 
 @NgModule({
   declarations: [
-    ResetPasswordComponent
+    ChangePasswordComponent
   ],
   imports: [
     CommonModule,
     MaterialModule,
     ReactiveFormsModule,
-    ResetPasswordRoutingModule,
+    ChangePasswordRoutingModule,
   ],
 })
-export class ResetPasswordModule { }
+export class ChangePasswordModule { }

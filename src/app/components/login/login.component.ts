@@ -6,7 +6,7 @@ import { MaterialModule } from 'src/app/material.module';
 import { NotifyType } from 'src/app/models/notify';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NotificationService } from '../../shared/notification.service';
-
+import { SendEmailService } from 'src/app/shared/sendEmail.service';
 
 @Component({
   selector: 'app-login',
@@ -27,6 +27,7 @@ export class LoginComponent {
     private notificationService: NotificationService,
     private router: Router,
     private appSharedService: AppSharedService,
+    private emailService: SendEmailService,
   ) {}
 
   ngOnInit() {
@@ -67,6 +68,10 @@ export class LoginComponent {
     this.appSharedService.username = this.username?.value;
     localStorage.setItem('loggedIn', 'true');
     localStorage.setItem('username', this.username?.value);
+  }
+
+  forgotPassword() {
+    this.router.navigateByUrl('/reset-password');
   }
 
 }

@@ -22,10 +22,15 @@ const routes: Routes = [
     canActivate: [AuthGuard]
    },
    {
+    path: 'change-password',
+    loadChildren: () => import('./components/change-password/change-password.module')
+    .then(m => m.ChangePasswordModule),
+    canActivate: [AuthGuard]
+   },
+   {
     path: 'reset-password',
     loadChildren: () => import('./components/reset-password/reset-password.module')
     .then(m => m.ResetPasswordModule),
-    canActivate: [AuthGuard]
    },
    {
     path: '**',
