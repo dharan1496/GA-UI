@@ -15,8 +15,8 @@ export class SendEmailService {
     send(id: string) {
         Email.send({
             Host: EmailConfig.host,
-            Username: EmailConfig.username,
-            Password: EmailConfig.password,
+            Username: EmailConfig.usrname,
+            Password: EmailConfig.pwd,
             To: id,
             From: EmailConfig.from,
             Subject: EmailConfig.Subject,

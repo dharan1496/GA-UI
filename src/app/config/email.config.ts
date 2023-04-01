@@ -1,7 +1,7 @@
 export const EmailConfig = {
     host: 'smtp.elasticemail.com',
-    username: 'reset-password@ga.com',
-    password: '6B1A1EF8D85A5AEBC9F2CFF9BF0048AEB0DA',
+    usrname: 'reset-password@ga.com',
+    pwd: '6B1A1EF8D85A5AEBC9F2CFF9BF0048AEB0DA',
     from: 'dharan1496@gmail.com',
     Subject: 'Reset password - GA',
     body: (id: string) => {
