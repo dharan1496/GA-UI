@@ -85,7 +85,9 @@ export class FibreDashboardComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   scrollInto(id: string) {
-    setTimeout(() =>  document.getElementById(id)?.scrollIntoView(), 250);
+    setTimeout(() =>  document.getElementById(id)?.scrollIntoView({
+      behavior: 'smooth'
+    }), 250);
   }
 
 }
@@ -124,6 +126,66 @@ const ELEMENT_DATA: any[] = [
   {
     poNo: '125/GA/23',
     party: 'party3',
+    poStatus: 'Pending',
+    poDate: '02/02/2023',
+    invoices: [
+      {
+        invoice: 1,
+        fibre: 'cotton',
+        shade: 'white',
+        kgs: 12,
+        amount: 25000,
+      }
+    ]
+  },
+  {
+    poNo: '126/GA/23',
+    party: 'party4',
+    poStatus: 'Pending',
+    poDate: '02/02/2023',
+    invoices: [
+      {
+        invoice: 1,
+        fibre: 'cotton',
+        shade: 'white',
+        kgs: 12,
+        amount: 25000,
+      }
+    ]
+  },
+  {
+    poNo: '127/GA/23',
+    party: 'party5',
+    poStatus: 'Pending',
+    poDate: '02/02/2023',
+    invoices: [
+      {
+        invoice: 1,
+        fibre: 'cotton',
+        shade: 'white',
+        kgs: 12,
+        amount: 25000,
+      }
+    ]
+  },
+  {
+    poNo: '128/GA/23',
+    party: 'party5',
+    poStatus: 'Pending',
+    poDate: '02/02/2023',
+    invoices: [
+      {
+        invoice: 1,
+        fibre: 'cotton',
+        shade: 'white',
+        kgs: 12,
+        amount: 25000,
+      }
+    ]
+  },
+  {
+    poNo: '129/GA/23',
+    party: 'party6',
     poStatus: 'Pending',
     poDate: '02/02/2023',
     invoices: [
