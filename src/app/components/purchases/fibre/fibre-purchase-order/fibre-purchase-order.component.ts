@@ -34,7 +34,7 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
   taxAmount!: number;
   amountAfterTax!: number;
   orderDetails!: any;
-  subscription = new Subscription
+  subscription = new Subscription;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -55,7 +55,6 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscription.add(this.partyService.getParties().subscribe((data) => this.partyService.parties = data));
     this.subscription.add(this.fibreService.getFibres().subscribe((data) => this.fibreService.fibres = data));
-
 
     this.form = this.formBuilder.group({
       fibrePoid: 0,

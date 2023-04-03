@@ -2,13 +2,17 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FibrePurchaseOrderComponent } from './fibre/fibre-purchase-order/fibre-purchase-order.component';
 import { FibreReceivePurchaseOrderComponent } from './fibre/fibre-receive-purchase-order/fibre-receive-purchase-order.component';
-import { PendingPurchaseOrderComponent } from './fibre/pending-purchase-order/pending-purchase-order.component';
 import { PurchasesComponent } from './purchases.component';
+import { FibreDashboardComponent } from './fibre/fibre-dashboard/fibre-dashboard.component';
 
 const routes: Routes = [
   {
     path: '',
     component: PurchasesComponent,
+  },
+  {
+    path: 'fibre',
+    component: FibreDashboardComponent,
   },
   {
     path: 'fibre/fibre-new-purchase-order',
@@ -18,10 +22,6 @@ const routes: Routes = [
     path: 'fibre/fibre-receive-purchase-order',
     component: FibreReceivePurchaseOrderComponent,
   },
-  {
-    path: 'fibre/pending-purchase-order',
-    component: PendingPurchaseOrderComponent,
-  }
 ];
 
 @NgModule({

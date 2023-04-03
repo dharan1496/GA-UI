@@ -11,7 +11,7 @@
 }
 
 .form-container {
-    padding: 32px;
+    padding: 24px 32px 8px 32px;
     display: flex;
     column-gap: 48px;
     row-gap: 28px;
@@ -58,4 +58,12 @@
 .mat-mdc-table-sticky {
     border-top: 1px solid #e0e0e0;
 }
+
+.no-rows {
+    padding: 16px 0;
+    text-align: center;
+}
   
+.mat-mdc-header-row {
+    background: whitesmoke;
+}

@@ -18,6 +18,9 @@ export const EmailConfig = {
         <br/>
         Regards,
         <br/>
-        GA`
+        GA
+        <br/>
+        <br/>
+        `
     }
 }

@@ -14,6 +14,7 @@ import { SendEmailService } from 'src/app/shared/sendEmail.service';
 export class ResetPasswordComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   id!: string;
+  generatedId!: string;
  
   constructor(
     private formBuilder: FormBuilder,
@@ -33,25 +34,25 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.id = this.activatedRoute.snapshot.params['id'] || '';
     if (this.id) {
-        const generatedId = localStorage.getItem('id');
-        if (generatedId === this.id) {
-        this.form = this.formBuilder.group({
-          password: ['', [
-            Validators.required,
-            Validators.minLength(8),
-          ]],
-          confirmPassword: ['', [Validators.required]]
-        },
-        { 
-          validators: (formGroup: FormGroup) => {
-            const password = formGroup.get('password')?.value;
-            const confirmPassword = formGroup.get('confirmPassword')?.value;
-            return password === confirmPassword ? null : { passwordNotMatch: true };
-          }
-        });
-      } else {
-        this.router.navigateByUrl('/login');
-      }
+        this.generatedId = localStorage.getItem('id') || '';
+        if (this.generatedId === this.id) {
+          this.form = this.formBuilder.group({
+            password: ['', [
+              Validators.required,
+              Validators.minLength(8),
+            ]],
+            confirmPassword: ['', [Validators.required]]
+          },
+          { 
+            validators: (formGroup: FormGroup) => {
+              const password = formGroup.get('password')?.value;
+              const confirmPassword = formGroup.get('confirmPassword')?.value;
+              return password === confirmPassword ? null : { passwordNotMatch: true };
+            }
+          });
+        } else {
+          this.router.navigateByUrl('/login');
+        }
     } else {
       this.form = this.formBuilder.group({
         email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
