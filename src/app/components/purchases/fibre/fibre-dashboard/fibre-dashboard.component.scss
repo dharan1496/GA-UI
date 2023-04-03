@@ -9,6 +9,7 @@
 .form-container {
     padding: 24px 32px 8px 32px;
     display: flex;
+    flex-wrap: wrap;
     gap: 48px;
     align-items: center;
 }
@@ -27,12 +28,13 @@ tr.detail-row {
   height: 0;
 }
 
-tr.row:not(.expanded-row):hover {
-  box-shadow: 0 1px 9px 1px rgba(0, 0, 0, 0.2);
-}
+tr.row:not(.expanded-row) {
+  transition: all 0.1s ease-in-out;
 
-tr.row:not(.expanded-row):active {
-  background: #efefef;
+  &:hover {
+    transform: scale(1.005);
+    box-shadow: 0px 9px 4px -6px rgba(0, 0, 0, 0.3)
+  }
 }
 
 .row {
