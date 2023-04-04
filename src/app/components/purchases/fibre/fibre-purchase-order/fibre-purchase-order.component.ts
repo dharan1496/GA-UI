@@ -58,7 +58,7 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe,
     private router: Router
   ) {
-    this.navigationService.isSidenavOpened = false;
+    this.navigationService.isSidenavOpened = true;
     this.navigationService.setFocus(Constants.PURCHASES);
     this.navigationService.menu = PURCHASE;
   }

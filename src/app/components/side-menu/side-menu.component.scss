@@ -1,14 +1,26 @@
 .item-selected {
-    background: rgba(0, 0, 0, 0.2);
- }
- 
- .dashboard-btn {
-     display: flex;
-     gap: 8px;
-     align-items: center;
-     padding-right: 32px;
- }
+  background: rgba(0, 0, 0, 0.2);
+}
 
- .account-icon {
-     scale: 1.2  ;
- }
+.dashboard-btn {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding-right: 32px;
+}
+
+.account-icon {
+  scale: 1.2;
+}
+
+a {
+  padding-left: 8px;
+}
+
+mat-nav-list {
+  padding-top: 0;
+}
+
+.pl-12 {
+  padding-left: 12px;
+}

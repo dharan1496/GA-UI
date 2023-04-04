@@ -8,9 +8,13 @@ import { PurchasesRoutingModule } from './purchases-routing.module';
 import { PurchasesComponent } from './purchases.component';
 import { FibreDashboardComponent } from './fibre/fibre-dashboard/fibre-dashboard.component';
 
-
 @NgModule({
-  declarations: [PurchasesComponent, FibrePurchaseOrderComponent, FibreReceivePurchaseOrderComponent, FibreDashboardComponent],
+  declarations: [
+    PurchasesComponent,
+    FibrePurchaseOrderComponent,
+    FibreReceivePurchaseOrderComponent,
+    FibreDashboardComponent,
+  ],
   imports: [
     CommonModule,
     PurchasesRoutingModule,
@@ -18,4 +22,4 @@ import { FibreDashboardComponent } from './fibre/fibre-dashboard/fibre-dashboard
     ReactiveFormsModule,
   ],
 })
-export class PurchasesModule { }
+export class PurchasesModule {}

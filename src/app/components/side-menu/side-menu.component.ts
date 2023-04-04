@@ -10,6 +10,7 @@ export class SideMenuComponent {
   constructor(public navigationService: NavigationService) {}
 
   onDashboard() {
+    this.navigationService.menu = null;
     this.navigationService.removeFocus();
   }
 }

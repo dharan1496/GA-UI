@@ -5,11 +5,11 @@
   flex-direction: column;
 }
 
+mat-sidenav[ng-reflect-opened="true"] {
+  width: 18%;
+}
+
 .sidenav-container {
   height: 100%;
   margin: 0;
-
-  .app-sidenav {
-    padding-left: 12px;
-  }
 }

@@ -19,6 +19,7 @@ import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 const modules = [
   MatButtonModule,
@@ -41,6 +42,7 @@ const modules = [
   MatDialogModule,
   MatCheckboxModule,
   MatSnackBarModule,
+  MatGridListModule,
 ];
 
 @NgModule({
