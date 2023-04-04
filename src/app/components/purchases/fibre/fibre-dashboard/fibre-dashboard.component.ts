@@ -44,7 +44,7 @@ export class FibreDashboardComponent
   subscription = new Subscription();
   dataSource = new MatTableDataSource<any>(ELEMENT_DATA);
   columnsToDisplay = ['expand', 'poNo', 'party', 'poStatus', 'poDate'];
-  innerDisplayedColumns = ['invoice', 'fibre', 'shade', 'kgs', 'amount'];
+  innerDisplayedColumns = ['receivedDc', 'fibre', 'shade', 'kgs', 'amount'];
   expandedElement: any;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   loader = false;
@@ -129,18 +129,18 @@ const ELEMENT_DATA: any[] = [
   {
     poNo: '123/GA/23',
     party: 'party1',
-    poStatus: 'Received',
+    poStatus: 'Delivered',
     poDate: '02/02/2023',
     invoices: [
       {
-        invoice: 1,
+        receivedDc: 1,
         fibre: 'cotton',
         shade: 'white',
         kgs: 12,
         amount: 25000,
       },
       {
-        invoice: 2,
+        receivedDc: 2,
         fibre: 'silk',
         shade: 'blue',
         kgs: 20,
@@ -162,7 +162,7 @@ const ELEMENT_DATA: any[] = [
     poDate: '02/02/2023',
     invoices: [
       {
-        invoice: 1,
+        receivedDc: 1,
         fibre: 'cotton',
         shade: 'white',
         kgs: 12,
@@ -177,14 +177,14 @@ const ELEMENT_DATA: any[] = [
     poDate: '02/02/2023',
     invoices: [
       {
-        invoice: 1,
+        receivedDc: 1,
         fibre: 'cotton',
         shade: 'white',
         kgs: 12,
         amount: 25000,
       },
       {
-        invoice: 2,
+        receivedDc: 2,
         fibre: 'Silk',
         shade: 'blue',
         kgs: 22,

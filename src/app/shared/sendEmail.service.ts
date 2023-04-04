@@ -5,6 +5,7 @@ import { AppSharedService } from './app-shared.service';
 import { EmailConfig } from '../config/email.config';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, of } from 'rxjs';
+import { Constants } from '../constants/constants';
 
 declare let Email: any;
 
@@ -29,7 +30,7 @@ export class SendEmailService {
   send(id: string) {
     this.isValid(id).subscribe((data) => {
       if (data) {
-        if (data?.deliverability === 'DELIVERABLE') {
+        if (data?.deliverability === Constants.DELIVERABLE) {
           this.isInvalid = false;
           this.callElasticEmailAPI(id);
         } else {
@@ -57,13 +58,20 @@ export class SendEmailService {
       From: EmailConfig.from,
       Subject: EmailConfig.Subject,
       Body: EmailConfig.body(this.appSharedService.genUniqueId()),
-    }).then((message: any) => {
-      if (message === 'OK') {
+    })
+      .then((message: any) => {
+        if (message === 'OK') {
+          this.notificationService.notify(
+            'Link sent to your email',
+            NotifyType.SUCCESS
+          );
+        }
+      })
+      .catch(() => {
         this.notificationService.notify(
-          'Link sent to your email',
-          NotifyType.SUCCESS
+          'Something went wrong! Please try again later.',
+          NotifyType.ERROR
         );
-      }
-    });
+      });
   }
 }

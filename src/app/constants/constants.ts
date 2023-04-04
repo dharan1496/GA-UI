@@ -1,3 +1,4 @@
 export const Constants = {
-    PURCHASES: 'purchases',
+  PURCHASES: 'purchases',
+  DELIVERABLE: 'DELIVERABLE',
 };
