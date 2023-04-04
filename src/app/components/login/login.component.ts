@@ -1,6 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { MaterialModule } from 'src/app/material.module';
 import { NotifyType } from 'src/app/models/notify';
@@ -13,21 +18,26 @@ import { SendEmailService } from 'src/app/shared/sendEmail.service';
   standalone: true,
   imports: [CommonModule, MaterialModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
   form!: FormGroup;
   showPassword = false;
+  credentialsError = false;
 
-  get password() { return this.form.get('password'); }
-  get username() { return this.form.get('username'); }
+  get password() {
+    return this.form.get('password');
+  }
+  get username() {
+    return this.form.get('username');
+  }
 
   constructor(
     private formBuilder: FormBuilder,
     private notificationService: NotificationService,
     private router: Router,
     private appSharedService: AppSharedService,
-    private emailService: SendEmailService,
+    private emailService: SendEmailService
   ) {}
 
   ngOnInit() {
@@ -50,18 +60,18 @@ export class LoginComponent implements OnInit {
   submit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.notificationService.notify('Please enter valid credentials!', NotifyType.ERROR);
+      this.notificationService.notify(
+        'Please enter valid credentials!',
+        NotifyType.ERROR
+      );
       return;
     }
     // TEMP - start
-    if (this.username?.value !== 'admin') {
-      this.notificationService.notify('Error: Username do not match', NotifyType.ERROR);
-      return;
-    } 
-    if (this.password?.value !== '@admin') {
-      this.notificationService.notify('Error: Password do not match', NotifyType.ERROR);
+    if (this.username?.value !== 'admin' || this.password?.value !== '@admin') {
+      this.credentialsError = true;
       return;
     }
+    this.credentialsError = false;
     // TEMP - end
     this.router.navigateByUrl('/dashboard');
     this.appSharedService.logout = false;
@@ -73,5 +83,4 @@ export class LoginComponent implements OnInit {
   forgotPassword() {
     this.router.navigateByUrl('/reset-password');
   }
-
 }

@@ -21,7 +21,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private activatedRoute: ActivatedRoute,
     private appSharedService: AppSharedService,
-    private emailService: SendEmailService,
+    public emailService: SendEmailService,
     private router: Router
   ) {
     this.appSharedService.logout = true;
