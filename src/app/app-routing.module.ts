@@ -6,41 +6,50 @@ const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
     path: 'login',
-    loadComponent: () => import('./components/login/login.component')
-    .then(m => m.LoginComponent)
+    loadComponent: () =>
+      import('./components/login/login.component').then(
+        (m) => m.LoginComponent
+      ),
   },
   {
     path: 'dashboard',
-    loadComponent: () => import('./components/dashboard/dashboard.component')
-    .then(m => m.DashboardComponent),
-    canActivate: [AuthGuard]
+    loadComponent: () =>
+      import('./components/dashboard/dashboard.component').then(
+        (m) => m.DashboardComponent
+      ),
+    canActivate: [AuthGuard],
   },
   {
     path: 'purchases',
-    loadChildren: () => import('./components/purchases/purchases.module')
-    .then(m => m.PurchasesModule),
-    canActivate: [AuthGuard]
-   },
-   {
+    loadChildren: () =>
+      import('./components/purchases/purchases.module').then(
+        (m) => m.PurchasesModule
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'change-password',
-    loadChildren: () => import('./components/change-password/change-password.module')
-    .then(m => m.ChangePasswordModule),
-    canActivate: [AuthGuard]
-   },
-   {
+    loadChildren: () =>
+      import('./components/change-password/change-password.module').then(
+        (m) => m.ChangePasswordModule
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'reset-password',
-    loadChildren: () => import('./components/reset-password/reset-password.module')
-    .then(m => m.ResetPasswordModule),
-   },
-   {
+    loadChildren: () =>
+      import('./components/reset-password/reset-password.module').then(
+        (m) => m.ResetPasswordModule
+      ),
+  },
+  {
     path: '**',
-    redirectTo: 'login'
-   }
-   
+    redirectTo: 'login',
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

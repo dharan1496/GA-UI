@@ -33,6 +33,7 @@ export class FibreDashboardComponent implements OnInit, OnDestroy, AfterViewInit
   innerDisplayedColumns = ['invoice', 'fibre', 'shade', 'kgs', 'amount'];
   expandedElement: any;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  loader = false;
 
   constructor(
     public partyService: PartyService,
@@ -66,6 +67,10 @@ export class FibreDashboardComponent implements OnInit, OnDestroy, AfterViewInit
 
   onSearch() {
     // API call to be implementated
+    this.loader = true;
+    setTimeout(() => {
+      this.loader = false;
+    }, 1000);
   }
 
   onReset() {
@@ -78,6 +83,10 @@ export class FibreDashboardComponent implements OnInit, OnDestroy, AfterViewInit
 
   addOrUpdateInvoice() {
     this.router.navigateByUrl('/purchases/fibre/fibre-receive-purchase-order');
+  }
+
+  updatePO() {
+    this.router.navigateByUrl('/purchases/fibre/fibre-new-purchase-order');
   }
 
   getTotal(invoice: any[], property: string) {
@@ -124,36 +133,6 @@ const ELEMENT_DATA: any[] = [
     invoices: []
   },
   {
-    poNo: '125/GA/23',
-    party: 'party3',
-    poStatus: 'Pending',
-    poDate: '02/02/2023',
-    invoices: [
-      {
-        invoice: 1,
-        fibre: 'cotton',
-        shade: 'white',
-        kgs: 12,
-        amount: 25000,
-      }
-    ]
-  },
-  {
-    poNo: '126/GA/23',
-    party: 'party4',
-    poStatus: 'Pending',
-    poDate: '02/02/2023',
-    invoices: [
-      {
-        invoice: 1,
-        fibre: 'cotton',
-        shade: 'white',
-        kgs: 12,
-        amount: 25000,
-      }
-    ]
-  },
-  {
     poNo: '127/GA/23',
     party: 'party5',
     poStatus: 'Pending',
@@ -180,6 +159,13 @@ const ELEMENT_DATA: any[] = [
         shade: 'white',
         kgs: 12,
         amount: 25000,
+      },
+      {
+        invoice: 2,
+        fibre: 'Silk',
+        shade: 'blue',
+        kgs: 22,
+        amount: 55000,
       }
     ]
   },
@@ -188,14 +174,6 @@ const ELEMENT_DATA: any[] = [
     party: 'party6',
     poStatus: 'Pending',
     poDate: '02/02/2023',
-    invoices: [
-      {
-        invoice: 1,
-        fibre: 'cotton',
-        shade: 'white',
-        kgs: 12,
-        amount: 25000,
-      }
-    ]
+    invoices: []
   },
 ];

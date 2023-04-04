@@ -20,7 +20,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
-
 const modules = [
   MatButtonModule,
   MatIconModule,
@@ -47,8 +46,6 @@ const modules = [
 @NgModule({
   imports: modules,
   exports: modules,
-  providers: [
-    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
-  ]
+  providers: [{ provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
 })
 export class MaterialModule {}

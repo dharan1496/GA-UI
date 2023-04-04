@@ -41,13 +41,6 @@
     }
 }
 
-.submit-order-btn {
-    margin-top: 50px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-}
-
 .mat-mdc-table-sticky {
     border-top: 1px solid #e0e0e0;
 }
@@ -59,6 +52,12 @@
 
 .mat-mdc-header-row {
     background: whitesmoke;
+}
+
+.footer {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-between;
 }
 
 

@@ -14,9 +14,7 @@ import { DatePipe } from '@angular/common';
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 
 @NgModule({
-  declarations: [
-    AppComponent, SideMenuComponent, ToolBarComponent
-  ],
+  declarations: [AppComponent, SideMenuComponent, ToolBarComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -25,9 +23,9 @@ import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
     PrintFibrePOComponent,
     LoginComponent,
     HttpClientModule,
-    NgIdleKeepaliveModule.forRoot()
+    NgIdleKeepaliveModule.forRoot(),
   ],
   providers: [AuthGuard, DatePipe],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

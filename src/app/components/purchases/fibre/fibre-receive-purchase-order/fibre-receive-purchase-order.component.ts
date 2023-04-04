@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
 import { PartyService } from 'src/app/services/party.service';
 import { FibreService } from 'src/app/services/fibre.service';
 import { UserActionConfirmationComponent } from 'src/app/components/user-action-confirmation/user-action-confirmation.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-fibre-receive-purchase-order',
@@ -38,6 +39,7 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
     private navigationService: NavigationService,
     public partyService: PartyService,
     private fibreService: FibreService,
+    private router: Router,
   ) {
       this.navigationService.isSidenavOpened = false;
       this.navigationService.setFocus('purchases');
@@ -82,6 +84,11 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
     this.form.patchValue({ poNo: this.appSharedService.generatePONo() });
   }
 
+  goToSearch() {
+    this.router.navigateByUrl('purchases/fibre');
+  }
+
+
   addData(): void {
     const dialogRef = this.dialog.open(ReceiveOrderDetailsComponent, { data: this.dataSource.length });
 
@@ -102,7 +109,7 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
       this.amountBeforeTax += order.amount;
       this.taxAmount += (order.amount * order.gst)/100;
       this.amountAfterTax += order.totalAmount;
-    })
+    });
   }
 
   updateData(selectedRow: any) {

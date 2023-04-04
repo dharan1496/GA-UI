@@ -12,7 +12,7 @@ import { MaterialModule } from 'src/app/material.module';
 })
 export class ErrorDialogComponent {
 
-  constructor(@Inject(MAT_DIALOG_DATA) public message: any, private matDialogRef: MatDialogRef<void>) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public message: string, private matDialogRef: MatDialogRef<void>) {}
 
   close() {
     this.matDialogRef.close();

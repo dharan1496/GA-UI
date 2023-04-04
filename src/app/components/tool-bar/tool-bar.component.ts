@@ -29,7 +29,7 @@ export class ToolBarComponent {
   selectSection(section: string) {
     // Temp - start, needed until production and sales component add
     if (section !== Constants.PURCHASES) {
-      this.navigationService.menu = null
+      this.navigationService.menu = null;
     }
     this.navigationService.setFocus(section);
     // Temp - end

@@ -21,6 +21,6 @@ export const EmailConfig = {
         GA
         <br/>
         <br/>
-        `
+        `;
     }
-}
+};

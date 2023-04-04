@@ -1,12 +1,17 @@
 <section class="app-container" id="app-container">
   <app-tool-bar [sidenav]="sidenav"></app-tool-bar>
   <mat-sidenav-container class="sidenav-container">
-      <mat-sidenav #sidenav mode="side" class="app-sidenav mat-elevation-z4" [opened]="navigationService.isSidenavOpened">
-        <app-side-menu ></app-side-menu>
-      </mat-sidenav>
-      <mat-sidenav-content class="sidenav-content">
-        <router-outlet></router-outlet>
-      </mat-sidenav-content>
+    <mat-sidenav
+      #sidenav
+      mode="side"
+      class="app-sidenav mat-elevation-z4"
+      [opened]="navigationService.isSidenavOpened"
+    >
+      <app-side-menu></app-side-menu>
+    </mat-sidenav>
+    <mat-sidenav-content class="sidenav-content">
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
   </mat-sidenav-container>
 </section>
 <app-print-fibre-po></app-print-fibre-po>

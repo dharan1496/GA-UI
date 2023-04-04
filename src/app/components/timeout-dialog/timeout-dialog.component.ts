@@ -28,7 +28,7 @@ export class TimeoutDialogComponent implements OnInit, OnDestroy {
     });
     const timeout = this.idle.onTimeout.subscribe(() => {
       this.timeoutService.logout();
-      this.matDialogRef.close()
+      this.matDialogRef.close();
     });
     this.subscription.add(timeoutWarning);
     this.subscription.add(idleEnd);

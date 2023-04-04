@@ -107,8 +107,11 @@
       <tr [hidden]="!dataSource.length" mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
     </table>
 
-    <div class="submit-order-btn">
-        <button mat-raised-button class="mr-16" (click)="resetData()"><mat-icon>refresh</mat-icon>Reset</button>
-        <button mat-raised-button color="primary" (click)="submitOrder()"><mat-icon>save_alt</mat-icon>Submit</button>
-    </div>   
+    <div class="footer">
+      <button mat-raised-button (click)="goToSearch()"><mat-icon>arrow_back</mat-icon>Go to Search</button>
+      <div>
+          <button mat-raised-button class="mr-16" (click)="resetData()"><mat-icon>refresh</mat-icon>Reset</button>
+          <button mat-raised-button color="primary" (click)="submitOrder()"><mat-icon>save_alt</mat-icon>Submit</button>
+      </div>   
+    </div>
 </section>

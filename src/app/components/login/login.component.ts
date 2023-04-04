@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MaterialModule } from 'src/app/material.module';
@@ -15,7 +15,7 @@ import { SendEmailService } from 'src/app/shared/sendEmail.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   form!: FormGroup;
   showPassword = false;
 
@@ -34,8 +34,8 @@ export class LoginComponent {
     this.form = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
-    })
-    if (!!localStorage.getItem('loggedIn')) {
+    });
+    if (localStorage.getItem('loggedIn')) {
       this.appSharedService.logout = false;
       this.router.navigateByUrl('/dashboard');
       return;
