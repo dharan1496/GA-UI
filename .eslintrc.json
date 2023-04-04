@@ -17,6 +17,7 @@
       "rules": {
         "semi": "error",
         "no-console": ["error", { "allow": [ "error"] }],
+        "no-multiple-empty-lines": "error",
         "@angular-eslint/directive-selector": [
           "error",
           {
