@@ -10,17 +10,34 @@
   bottom: 15px;
 }
 
-.more-button {
-  position: absolute;
-  top: 5px;
-  right: 10px;
-}
-
-.dashboard-card-content {
-  text-align: center;
-}
-
 .header {
   font-weight: 500;
   margin: 40px 0 24px 16px;
+}
+
+.dashboard-card-content {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  font-size: 20px;
+  margin-top: 32px;
+}
+
+.border-top {
+  margin-top: 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.fibre-section {
+  width: 100%;
+
+  .total,
+  .pending {
+    display: flex;
+    justify-content: space-between;
+  }
 }

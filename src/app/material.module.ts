@@ -21,6 +21,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSortModule } from '@angular/material/sort';
+import { MatRippleModule } from '@angular/material/core';
 import { NgChartsModule } from 'ng2-charts';
 
 const modules = [
@@ -46,6 +47,7 @@ const modules = [
   MatSnackBarModule,
   MatGridListModule,
   MatSortModule,
+  MatRippleModule,
   NgChartsModule,
 ];
 

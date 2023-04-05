@@ -1,18 +1,45 @@
 <div class="grid-container">
   <h1 class="header">Dashboard</h1>
-  <mat-grid-list cols="3" rowHeight="350px">
-    <mat-grid-tile
-      *ngFor="let card of cards"
-      [colspan]="card.cols"
-      [rowspan]="card.rows"
-    >
+  <mat-grid-list cols="3" rowHeight="550px">
+    <mat-grid-tile colspan="1" rowspan="1">
       <mat-card class="dashboard-card">
         <mat-card-header>
-          <mat-card-title>
-            {{ card.title }}
-          </mat-card-title>
+          <mat-card-title class> Purchases </mat-card-title>
         </mat-card-header>
-        <mat-card-content class="dashboard-card-content">
+        <mat-card-content class="dashboard-card-content border-top">
+          <div class="title">Fibre</div>
+          <div class="my-16">
+            Total orders: <span class="font-weight-bold font-size-18">100</span>
+          </div>
+          <canvas
+            baseChart
+            [type]="'pie'"
+            [datasets]="fibrePieChartDatasets"
+            [labels]="fibrePieChartLabels"
+            [options]="fibrePieChartOptions"
+            [legend]="true"
+            (chartClick)="navigateToFibre($event)"
+          >
+          </canvas>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile colspan="1" rowspan="1">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title> Production </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content border-top">
+          <div></div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile colspan="1" rowspan="1">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title> Sales </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content border-top">
           <div></div>
         </mat-card-content>
       </mat-card>
