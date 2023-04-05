@@ -1,6 +1,6 @@
 <div class="grid-container">
   <h1 class="header">Dashboard</h1>
-  <mat-grid-list cols="3" rowHeight="550px">
+  <mat-grid-list cols="2" rowHeight="550px">
     <mat-grid-tile colspan="1" rowspan="1">
       <mat-card class="dashboard-card">
         <mat-card-header>
@@ -9,14 +9,14 @@
         <mat-card-content class="dashboard-card-content border-top">
           <div class="title">Fibre</div>
           <div class="my-16">
-            Total orders: <span class="font-weight-bold font-size-18">100</span>
+            Total orders: <span class="font-weight-bold font-size-20">100</span>
           </div>
           <canvas
             baseChart
-            [type]="'pie'"
-            [datasets]="fibrePieChartDatasets"
-            [labels]="fibrePieChartLabels"
-            [options]="fibrePieChartOptions"
+            [type]="'doughnut'"
+            [datasets]="fibreChartDatasets"
+            [labels]="fibreChartLabels"
+            [options]="fibreChartOptions"
             [legend]="true"
             (chartClick)="navigateToFibre($event)"
           >
@@ -34,7 +34,7 @@
         </mat-card-content>
       </mat-card>
     </mat-grid-tile>
-    <mat-grid-tile colspan="1" rowspan="1">
+    <mat-grid-tile colspan="2" rowspan="1">
       <mat-card class="dashboard-card">
         <mat-card-header>
           <mat-card-title> Sales </mat-card-title>

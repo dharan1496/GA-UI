@@ -13,11 +13,11 @@ import { ChartOptions } from 'chart.js';
   styleUrls: ['./dash.component.scss'],
 })
 export class DashComponent {
-  fibrePieChartOptions: ChartOptions<'pie'> = {
+  fibreChartOptions: ChartOptions<'doughnut'> = {
     responsive: false,
   };
-  fibrePieChartLabels = ['Pending', 'Delivered'];
-  fibrePieChartDatasets = [
+  fibreChartLabels = ['Pending', 'Delivered'];
+  fibreChartDatasets = [
     {
       data: [12, 88],
     },
@@ -32,7 +32,9 @@ export class DashComponent {
   }
 
   navigateToFibre(event: any) {
-    this.fibrePieChartLabels[event.active[0]?.index];
-    this.router.navigateByUrl('/purchases/fibre');
+    const status = this.fibreChartLabels[event.active[0]?.index];
+    if (status) {
+      this.router.navigateByUrl('/purchases/fibre');
+    }
   }
 }
