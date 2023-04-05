@@ -14,9 +14,18 @@
     Navigation
   </h3>
   <ng-container *ngFor="let item of navigationService.menu">
-    <mat-expansion-panel expanded="true" class="mat-elevation-z0">
+    <mat-list-item *ngIf="!item?.submenu" [routerLink]="item.route">
+      <div class="navigation-btn pl-20">
+        <span class="font-weight-bold"> {{ item?.title }} </span>
+      </div>
+    </mat-list-item>
+    <mat-expansion-panel
+      *ngIf="item?.submenu"
+      expanded="true"
+      class="mat-elevation-z0"
+    >
       <mat-expansion-panel-header>
-        <span class="font-size-16 pl-12"> {{ item?.title }}</span>
+        <span class="font-size-16 pl-12"> {{ item?.title }} </span>
       </mat-expansion-panel-header>
       <mat-nav-list class="pl-12">
         <ng-container *ngFor="let submenu of item?.submenu">
