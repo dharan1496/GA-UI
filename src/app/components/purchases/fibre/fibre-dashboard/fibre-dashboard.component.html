@@ -73,6 +73,7 @@
       [dataSource]="dataSource"
       multiTemplateDataRows
       class="w-100"
+      matSort
     >
       <ng-container matColumnDef="expand">
         <th mat-header-cell *matHeaderCellDef></th>
@@ -86,17 +87,17 @@
       </ng-container>
 
       <ng-container matColumnDef="poNo">
-        <th mat-header-cell *matHeaderCellDef>PONo</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>PONo</th>
         <td mat-cell *matCellDef="let element">{{ element.poNo }}</td>
       </ng-container>
 
       <ng-container matColumnDef="party">
-        <th mat-header-cell *matHeaderCellDef>Party</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Party</th>
         <td mat-cell *matCellDef="let element">{{ element.party }}</td>
       </ng-container>
 
       <ng-container matColumnDef="poStatus">
-        <th mat-header-cell *matHeaderCellDef>POStatus</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>POStatus</th>
         <td mat-cell *matCellDef="let element">
           <div
             class="status-chip"
@@ -108,7 +109,7 @@
       </ng-container>
 
       <ng-container matColumnDef="poDate">
-        <th mat-header-cell *matHeaderCellDef>PODate</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>PODate</th>
         <td mat-cell *matCellDef="let element">{{ element.poDate }}</td>
       </ng-container>
 

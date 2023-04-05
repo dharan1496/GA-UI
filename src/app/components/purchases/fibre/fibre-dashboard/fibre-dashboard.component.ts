@@ -21,6 +21,7 @@ import {
   trigger,
 } from '@angular/animations';
 import { Router } from '@angular/router';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-fibre-dashboard',
@@ -28,10 +29,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./fibre-dashboard.component.scss'],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('collapsed, void', style({ height: '0px', minHeight: '0' })),
       state('expanded', style({ height: '*' })),
       transition(
-        'expanded <=> collapsed',
+        'expanded <=> collapsed, void <=> *',
         animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
       ),
     ]),
@@ -47,6 +48,7 @@ export class FibreDashboardComponent
   innerDisplayedColumns = ['receivedDc', 'fibre', 'shade', 'kgs', 'amount'];
   expandedElement: any;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
   loader = false;
 
   constructor(
@@ -62,6 +64,7 @@ export class FibreDashboardComponent
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   ngOnInit(): void {
@@ -77,6 +80,21 @@ export class FibreDashboardComponent
       poStartDate: '',
       poEndDate: '',
     });
+
+    this.dataSource.sortingDataAccessor = (item, property) => {
+      switch (property) {
+        case 'poDate': {
+          const split = item?.poDate?.split('/');
+          if (split?.length === 3) {
+            const date = `${split[1]}/${split[0]}/${split[2]}`;
+            return new Date(date);
+          }
+          return item[property];
+        }
+        default:
+          return item[property];
+      }
+    };
   }
 
   ngOnDestroy() {
@@ -128,9 +146,9 @@ export class FibreDashboardComponent
 const ELEMENT_DATA: any[] = [
   {
     poNo: '123/GA/23',
-    party: 'party1',
+    party: 'party7',
     poStatus: 'Delivered',
-    poDate: '02/02/2023',
+    poDate: '02/01/2023',
     invoices: [
       {
         receivedDc: 1,
@@ -150,9 +168,9 @@ const ELEMENT_DATA: any[] = [
   },
   {
     poNo: '124/GA/23',
-    party: 'party2',
+    party: 'party9',
     poStatus: 'Pending',
-    poDate: '02/02/2023',
+    poDate: '23/02/2023',
     invoices: [],
   },
   {
@@ -172,9 +190,9 @@ const ELEMENT_DATA: any[] = [
   },
   {
     poNo: '128/GA/23',
-    party: 'party5',
+    party: 'party4',
     poStatus: 'Pending',
-    poDate: '02/02/2023',
+    poDate: '02/10/2023',
     invoices: [
       {
         receivedDc: 1,
@@ -194,9 +212,9 @@ const ELEMENT_DATA: any[] = [
   },
   {
     poNo: '129/GA/23',
-    party: 'party6',
+    party: 'party2',
     poStatus: 'Pending',
-    poDate: '02/02/2023',
+    poDate: '03/02/2023',
     invoices: [],
   },
 ];

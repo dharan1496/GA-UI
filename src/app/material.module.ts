@@ -20,6 +20,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatSortModule } from '@angular/material/sort';
 
 const modules = [
   MatButtonModule,
@@ -43,6 +44,7 @@ const modules = [
   MatCheckboxModule,
   MatSnackBarModule,
   MatGridListModule,
+  MatSortModule,
 ];
 
 @NgModule({
