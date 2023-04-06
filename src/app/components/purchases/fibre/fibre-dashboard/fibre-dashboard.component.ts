@@ -76,7 +76,7 @@ export class FibreDashboardComponent
 
     this.form = this.formBuilder.group({
       partyId: '',
-      poType: '',
+      poStatus: '',
       poStartDate: '',
       poEndDate: '',
     });
