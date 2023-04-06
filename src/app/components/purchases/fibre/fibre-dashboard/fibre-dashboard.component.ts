@@ -104,9 +104,20 @@ export class FibreDashboardComponent
   onSearch() {
     // API call to be implementated
     this.loader = true;
+    // TEMP - start
+    if (this.form.get('poStatus')?.value) {
+      this.dataSource.data = ELEMENT_DATA.filter(
+        (data) =>
+          this.form.get('poStatus')?.value?.toLowerCase() ===
+          data.poStatus?.toLowerCase()
+      );
+    } else {
+      this.dataSource.data = ELEMENT_DATA;
+    }
     setTimeout(() => {
       this.loader = false;
-    }, 1000);
+    }, 500);
+    // TEMP - end
   }
 
   onReset() {
