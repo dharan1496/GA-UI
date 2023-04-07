@@ -36,7 +36,7 @@ export class TimeoutService {
       const currentTime = new Date().getTime();
       if (
         currentTime >
-        lastTime + environment.idleTime * 1000 + environment.timeout * 1000
+        lastTime + (environment.idleTime + environment.timeout) * 1000
       ) {
         this.logout();
       }
