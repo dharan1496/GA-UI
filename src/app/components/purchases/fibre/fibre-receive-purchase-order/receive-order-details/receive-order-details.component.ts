@@ -26,7 +26,7 @@ export class ReceiveOrderDetailsComponent implements OnInit, OnDestroy {
 
   constructor(
     private formBuilder: FormBuilder,
-    private dialogRef: MatDialogRef<void>,
+    private dialogRef: MatDialogRef<ReceiveOrderDetailsComponent>,
     @Inject(MAT_DIALOG_DATA) private data: any,
     private notificationService: NotificationService,
     public fibreService: FibreService
@@ -35,34 +35,32 @@ export class ReceiveOrderDetailsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.form = this.formBuilder.group({
       orderNo: typeof this.data === 'number' ? +this.data + 1 : '',
-      fibreTypeId: ['', Validators.required],
-      fibreName: '',
+      poNo: [{ value: '', disabled: true }],
+      fibreTypeId: [{ value: '', disabled: true }],
+      fibreType: '',
+      shade: [{ value: '', disabled: true }],
       hsnCode: ['', Validators.required],
-      orderQty: ['', Validators.required],
-      pendingQty: ['', Validators.required],
+      orderQty: [{ value: '', disabled: true }],
+      pendingQty: [{ value: '', disabled: true }],
       receivedQty: ['', Validators.required],
       receivedBales: ['', Validators.required],
       lot: ['', Validators.required],
       rate: ['', Validators.required],
       amount: [{ value: '', disabled: true }],
-      gst: ['', Validators.required],
+      gstpercent: ['', Validators.required],
       totalAmount: [{ value: '', disabled: true }],
     });
 
     this.subscription.add(
       this.form.get('fibreTypeId')?.valueChanges.subscribe((fibreTypeId) => {
         const filteredParty = this.fibreService.fibres.filter(
-          (fibre) => fibre.fibretypeId === fibreTypeId
+          (fibre) => fibre.fibreTypeId === fibreTypeId
         );
         this.form
           .get('fibreName')
-          ?.setValue(filteredParty.reduce((p, c) => c.fibretype, ''));
+          ?.setValue(filteredParty.reduce((p, c) => c.fibreType, ''));
       })
     );
-
-    if (typeof this.data === 'object') {
-      this.form.patchValue(this.data);
-    }
 
     // TODO: Replace combineLatest with any other approach
     const observable1$ = combineLatest([
@@ -83,18 +81,38 @@ export class ReceiveOrderDetailsComponent implements OnInit, OnDestroy {
         .get('amount')
         ?.valueChanges.pipe(startWith(this.form.get('amount')?.value)),
       this.form
-        .get('gst')
-        ?.valueChanges.pipe(startWith(this.form.get('gst')?.value)),
+        .get('gstpercent')
+        ?.valueChanges.pipe(startWith(this.form.get('gstpercent')?.value)),
     ]).subscribe((value: any[]) => {
       this.form
         .get('totalAmount')
-        ?.setValue(value[0] - (value[0] * value[1]) / 100);
+        ?.setValue(value[0] + (value[0] * value[1]) / 100);
     });
     this.subscription.add(observable2$);
+
+    if (typeof this.data === 'object') {
+      this.form.patchValue({
+        ...this.data,
+        pendingQty: this.data?.orderQty - this.data?.receivedQty,
+      });
+    }
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+  }
+
+  receivedQtyChange() {
+    const received = +this.form.get('receivedQty')?.value;
+    const orderQty = +this.form.get('orderQty')?.value;
+    const pending = orderQty - received;
+    if (pending < 0) {
+      this.form.get('pendingQty')?.setValue(orderQty);
+      this.form.get('receivedQty')?.setErrors({ moreThanOrder: true });
+    } else {
+      this.form.get('receivedQty')?.setErrors(null);
+      this.form.get('pendingQty')?.setValue(pending);
+    }
   }
 
   onSubmit() {
@@ -106,7 +124,7 @@ export class ReceiveOrderDetailsComponent implements OnInit, OnDestroy {
       );
       return;
     }
-    this.dialogRef.close(this.form.getRawValue());
+    this.dialogRef.close({ ...this.form.getRawValue(), isValid: true });
   }
 
   onCancel() {

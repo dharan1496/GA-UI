@@ -6,13 +6,28 @@
   </section>
   <section id="po-details">
     <div id="po">
-      <span><span class="font-weight-bold">PO NO</span>&nbsp;&nbsp;&nbsp;{{ printFibreService.fibrePOData?.pono}}</span>
-      <span><span class="font-weight-bold">PO DATE</span>&nbsp;&nbsp;&nbsp;{{ printFibreService.fibrePOData?.podate }}</span>
+      <span
+        ><span class="font-weight-bold">PO NO</span>&nbsp;&nbsp;&nbsp;{{
+          printFibreService.fibrePOData?.pono
+        }}</span
+      >
+      <span
+        ><span class="font-weight-bold">PO DATE</span>&nbsp;&nbsp;&nbsp;{{
+          printFibreService.fibrePOData?.podate | date : "dd/MM/yyyy"
+        }}</span
+      >
     </div>
     <div id="party-details">
-      <div>ABC POLYMERS PVT LTD</div>
-      <div>123 AVINASI ROAD</div>
-      <div>PELAMEDU</div>
+      <div>{{ printFibreService.fibrePOData?.partyName }}</div>
+      <div>{{ printFibreService.fibrePOData?.address1 }}</div>
+      <div *ngIf="printFibreService.fibrePOData?.address2">
+        {{ printFibreService.fibrePOData?.address2 }}
+      </div>
+      <div *ngIf="printFibreService.fibrePOData?.address3">
+        {{ printFibreService.fibrePOData?.address3 }}
+      </div>
+      <div>{{ printFibreService.fibrePOData?.city }}</div>
+      <div>{{ printFibreService.fibrePOData?.state }}</div>
       <div>GSTNO : 33AAKCS5785R1ZC</div>
     </div>
     <table>
@@ -26,15 +41,27 @@
         <th class="text-right">TotalAmount</th>
       </thead>
       <tbody>
-        <ng-container *ngFor="let order of printFibreService.fibrePOData?.orders">
+        <ng-container
+          *ngFor="let order of printFibreService.fibrePOData?.fibrePODts"
+        >
           <tr>
-            <td>{{ order?.fibreName }}</td>
-            <td>{{ order?.shadeName }}</td>
+            <td>{{ order?.fibreType }}</td>
+            <td>{{ order?.shade }}</td>
             <td class="text-right">{{ order?.weight }}</td>
-            <td class="text-right">{{ order?.rate | currency: 'INR' }}</td>
-            <td class="text-right">{{ order?.amount | currency: 'INR' }}</td>
-            <td class="text-right">{{ order?.gstpercent | number: '1.2-2' }}%</td>
-            <td class="text-right">{{ order?.totalAmount | currency: 'INR' }}</td>
+            <td class="text-right">{{ order?.rate | currency : "INR" }}</td>
+            <td class="text-right">
+              {{ order?.rate * order?.weight | currency : "INR" }}
+            </td>
+            <td class="text-right">
+              {{ order?.gstpercent | number : "1.2-2" }}%
+            </td>
+            <td class="text-right">
+              {{
+                order?.rate * order?.weight +
+                  (order?.rate * order?.weight * order?.gstpercent) / 100
+                  | currency : "INR"
+              }}
+            </td>
           </tr>
         </ng-container>
       </tbody>
@@ -44,9 +71,15 @@
           <td></td>
           <td></td>
           <td></td>
-          <td class="text-right">{{ printFibreService.fibrePOData?.amountBeforeTax | currency: 'INR' }}</td>
-          <td class="text-right">{{ printFibreService.fibrePOData?.taxAmount | currency: 'INR' }}</td>
-          <td class="text-right">{{ printFibreService.fibrePOData?.amountAfterTax | currency: 'INR'}}</td>
+          <td class="text-right">
+            {{ getAmount() | currency : "INR" }}
+          </td>
+          <td class="text-right">
+            {{ getTaxAmount() | currency : "INR" }}
+          </td>
+          <td class="text-right">
+            {{ getTotalAmount() | currency : "INR" }}
+          </td>
         </tr>
       </tfoot>
     </table>

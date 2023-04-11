@@ -1,78 +1,126 @@
 <h1 mat-dialog-title>Order details</h1>
 <form [formGroup]="form" class="form">
-    <div mat-dialog-content>
-        <div class="flex-container">
-            <mat-form-field appearance="fill">
-                <mat-label>Fibre</mat-label>
-                <mat-select formControlName="fibreTypeId">
-                    <ng-container *ngFor="let fibre of fibreService.fibres">
-                        <mat-option [value]="fibre.fibretypeId">{{ fibre.fibretype }}</mat-option>
-                    </ng-container>
-                </mat-select>
-                <mat-error>This field is required.</mat-error>
-              </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>HSN Code</mat-label>
-                <input type="number" matInput formControlName="hsnCode">
-                <mat-error>This field is required.</mat-error>
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>Order Qty</mat-label>
-                <input type="number" matInput formControlName="orderQty">
-                <mat-error>This field is required.</mat-error>
-            </mat-form-field>
-        </div>
-        <div class="flex-container">
-            <mat-form-field appearance="fill">
-                <mat-label>Pending Qty</mat-label>
-                <input type="number" matInput formControlName="pendingQty">
-                <mat-error>This field is required.</mat-error>
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>Received Qty</mat-label>
-                <input type="number" matInput formControlName="receivedQty">
-                <mat-error>This field is required.</mat-error>
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>Received Bales</mat-label>
-                <input type="number" matInput formControlName="receivedBales">
-                <mat-error>This field is required.</mat-error>
-            </mat-form-field>
-        </div>
-        <div class="flex-container">
-            <mat-form-field appearance="fill">
-                <mat-label>Lot</mat-label>
-                <input type="number" matInput formControlName="lot">
-                <mat-error>This field is required.</mat-error>
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <span matPrefix>&nbsp;&#x20B9;&nbsp;</span>
-                <mat-label>Rate</mat-label>
-                <input type="number" min="0.00" step=".01" matInput formControlName="rate">
-                <mat-error>This field is required.</mat-error>
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <span matPrefix>&nbsp;&#x20B9;&nbsp;</span>
-                <mat-label>Amount</mat-label>
-                <input type="number" min="0.00" step=".01" matInput formControlName="amount">
-                <mat-error>This field is required.</mat-error>
-            </mat-form-field>
-        </div>
-        <div class="flex-container">
-            <mat-form-field appearance="fill">
-                <mat-label>GST%</mat-label>
-                <input type="number" max="100" matInput formControlName="gst">
-                <mat-error *ngIf="form.get('gst')?.hasError('required')">This field is required.</mat-error>
-                <mat-error *ngIf="form.get('gst')?.hasError('max')">Value should be between 1 and 100</mat-error>
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>Total Amount</mat-label>
-                <input type="number" matInput formControlName="totalAmount">
-            </mat-form-field>
+  <div mat-dialog-content>
+    <div class="flex-container pb-16">
+      <div class="w-100 pl-16">
+        <label for="poNo" class="font-size-14 text-dark">PONo</label>
+        <div id="poNo" class="text-gray">
+          {{ form.get("poNo")?.value }}
         </div>
       </div>
-      <div mat-dialog-actions class="footer">
-        <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
-        <button mat-button (click)="onCancel()">Cancel</button>
+      <div class="w-100 pl-16">
+        <label for="fibre" class="font-size-14 text-dark">Fibre</label>
+        <div id="fibre" class="text-gray">
+          {{ form.get("fibreType")?.value }}
+        </div>
       </div>
+      <div class="w-100 pl-16">
+        <label for="shade" class="font-size-14 text-dark">Shade</label>
+        <div id="shade" class="text-gray">
+          {{ form.get("shade")?.value }}
+        </div>
+      </div>
+    </div>
+
+    <div class="flex-container">
+      <div class="w-100">
+        <div class="pl-16">
+          <label for="orderQty" class="font-size-14 text-dark">Order Qty</label>
+          <div id="orderQty" class="text-gray">
+            {{ form.get("orderQty")?.value }}
+          </div>
+        </div>
+      </div>
+      <div class="w-100">
+        <div class="pl-16">
+          <label for="pendingQty" class="font-size-14 text-dark"
+            >Pending Qty</label
+          >
+          <div id="pendingQty" class="text-gray">
+            {{ form.get("pendingQty")?.value }}
+          </div>
+        </div>
+      </div>
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>Received Qty</mat-label>
+        <input
+          type="number"
+          matInput
+          (change)="receivedQtyChange()"
+          formControlName="receivedQty"
+        />
+        <mat-error *ngIf="form.get('receivedQty')?.hasError('required')"
+          >This field is required.</mat-error
+        >
+        <mat-error *ngIf="form.get('receivedQty')?.hasError('moreThanOrder')"
+          >Received more than orderQty</mat-error
+        >
+      </mat-form-field>
+    </div>
+    <div class="flex-container">
+      <mat-form-field appearance="fill">
+        <mat-label>Received Bales</mat-label>
+        <input type="number" matInput formControlName="receivedBales" />
+        <mat-error>This field is required.</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Lot</mat-label>
+        <input type="text" matInput formControlName="lot" />
+        <mat-error>This field is required.</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>HSN Code</mat-label>
+        <input type="number" matInput formControlName="hsnCode" />
+        <mat-error>This field is required.</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="flex-container">
+      <mat-form-field appearance="fill" class="w-100">
+        <span matPrefix>&nbsp;&#x20B9;&nbsp;</span>
+        <mat-label>Rate</mat-label>
+        <input
+          type="number"
+          min="0.00"
+          step=".01"
+          matInput
+          formControlName="rate"
+        />
+        <mat-error>This field is required.</mat-error>
+      </mat-form-field>
+      <div class="w-100">
+        <div class="pl-16">
+          <label for="amount" class="font-size-14 text-dark">Amount</label>
+          <div id="amount" class="text-gray">
+            {{ form.get("amount")?.value | currency : "INR" }}
+          </div>
+        </div>
+      </div>
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>GST%</mat-label>
+        <input type="number" max="100" matInput formControlName="gstpercent" />
+        <mat-error *ngIf="form.get('gstpercent')?.hasError('required')"
+          >This field is required.</mat-error
+        >
+        <mat-error *ngIf="form.get('gstpercent')?.hasError('max')"
+          >Value should be between 1 and 100</mat-error
+        >
+      </mat-form-field>
+    </div>
+    <div class="flex-container">
+      <div class="w-100 pl-16">
+        <label for="total-amount" class="font-size-14 text-dark"
+          >Total Amount</label
+        >
+        <div id="total-amount" class="text-gray">
+          {{ form.get("totalAmount")?.value | currency : "INR" }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions class="footer">
+    <button mat-raised-button color="primary" (click)="onSubmit()">
+      Submit
+    </button>
+    <button mat-button (click)="onCancel()">Cancel</button>
+  </div>
 </form>

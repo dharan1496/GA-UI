@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DEFAULT_INTERRUPTSOURCES, Idle } from '@ng-idle/core';
 import { environment } from 'src/environment/environment';
 import { TimeoutDialogComponent } from '../components/timeout-dialog/timeout-dialog.component';
@@ -11,6 +11,7 @@ import { NavigationService } from './navigation.service';
 export class TimeoutService {
   inSession = false;
   interval: any;
+  dialogRef!: MatDialogRef<TimeoutDialogComponent>;
 
   constructor(
     private idle: Idle,
@@ -24,8 +25,8 @@ export class TimeoutService {
     this.idle.setIdle(environment.idleTime);
     this.idle.setTimeout(environment.timeout);
     this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
-    this.idle.onIdleStart.subscribe(() =>
-      this.dialog.open(TimeoutDialogComponent)
+    this.idle.onIdleStart.subscribe(
+      () => (this.dialogRef = this.dialog.open(TimeoutDialogComponent))
     );
     this.idle.watch();
   }
@@ -34,7 +35,11 @@ export class TimeoutService {
     let lastTime = new Date().getTime();
     this.interval = setInterval(() => {
       const currentTime = new Date().getTime();
-      if (currentTime > lastTime + environment.idleTime * 1000) {
+      if (
+        currentTime >
+        lastTime + (environment.idleTime + environment.timeout) * 1000
+      ) {
+        this.dialogRef?.close();
         this.logout();
       }
       lastTime = currentTime;

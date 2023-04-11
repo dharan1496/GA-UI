@@ -18,6 +18,7 @@
         "semi": "error",
         "no-console": ["error", { "allow": [ "error"] }],
         "no-multiple-empty-lines": "error",
+        "@typescript-eslint/no-explicit-any": "off",
         "@angular-eslint/directive-selector": [
           "error",
           {

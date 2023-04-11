@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { MaterialModule } from 'src/app/material.module';
 import { NavigationService } from 'src/app/shared/navigation.service';
 import { Router } from '@angular/router';
-import { ChartOptions } from 'chart.js';
 
 @Component({
   selector: 'app-dash',
@@ -13,28 +12,11 @@ import { ChartOptions } from 'chart.js';
   styleUrls: ['./dash.component.scss'],
 })
 export class DashComponent {
-  fibreChartOptions: ChartOptions<'doughnut'> = {
-    responsive: false,
-  };
-  fibreChartLabels = ['Pending', 'Delivered'];
-  fibreChartDatasets = [
-    {
-      data: [12, 88],
-    },
-  ];
-
   constructor(
     private navigationService: NavigationService,
     private router: Router
   ) {
     this.navigationService.menu = null;
     this.navigationService.removeFocus();
-  }
-
-  navigateToFibre(event: any) {
-    const status = this.fibreChartLabels[event.active[0]?.index];
-    if (status) {
-      this.router.navigateByUrl('/purchases/fibre');
-    }
   }
 }

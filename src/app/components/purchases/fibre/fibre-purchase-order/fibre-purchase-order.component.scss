@@ -1,63 +1,60 @@
 .container {
-    margin: 32px;
+  margin: 32px;
 }
 
 .party-card {
-    margin-bottom: 32px;
+  margin-bottom: 32px;
 }
 
 .form-container {
-    padding: 24px 32px 8px 32px;
-    display: flex;
-    gap: 48px;
-    align-items: center;
+  padding: 32px 32px 16px 32px;
+  display: flex;
+  gap: 48px;
+  align-items: flex-start;
 }
 
 .header {
-    font-weight: 500;
-    margin: 40px 0;
+  font-weight: 500;
+  margin: 40px 0;
 }
 
 .table {
-    width: 100%;
-  }
-  
-.button-container {
-    padding-bottom: 16px;
-}
-  
-.button + .button {
-    margin-left: 8px;
+  width: 100%;
 }
 
+.button-container {
+  padding-bottom: 16px;
+}
+
+.button + .button {
+  margin-left: 8px;
+}
 
 .summary-card {
-    margin-top: 32px;
-    width: 50%;
+  margin-top: 32px;
+  width: 50%;
 
-    .summary-content {
-        display: flex;
-        justify-content: space-between;
-    }
+  .summary-content {
+    display: flex;
+    justify-content: space-between;
+  }
 }
 
 .mat-mdc-table-sticky {
-    border-top: 1px solid #e0e0e0;
+  border-top: 1px solid #e0e0e0;
 }
 
 .no-rows {
-    padding: 16px 0;
-    text-align: center;
+  padding: 16px 0;
+  text-align: center;
 }
 
 .mat-mdc-header-row {
-    background: whitesmoke;
+  background: rgb(225, 225, 225);
 }
 
 .footer {
-    margin-top: 50px;
-    display: flex;
-    justify-content: space-between;
+  margin-top: 50px;
+  display: flex;
+  justify-content: space-between;
 }
-
-

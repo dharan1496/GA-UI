@@ -2,116 +2,164 @@
   <h1 class="header letter-spacing-1">Fibre New Purchase Order</h1>
   <mat-card class="party-card">
     <mat-card-header>
-      <mat-card-title>Party details</mat-card-title>
+      <mat-card-title>PO details</mat-card-title>
     </mat-card-header>
-      <mat-card-content>
-          <form class="form-container" [formGroup]="form">
-              <mat-form-field hintLabel="Auto-generated" appearance="fill" class="w-20">
-                <mat-label>PONo</mat-label>
-                <input matInput #input formControlName="pono">
-              </mat-form-field>
+    <mat-card-content>
+      <form class="form-container" [formGroup]="form">
+        <div class="w-15">
+          <label for="poNo" class="font-weight-bold">PONo</label>
+          <div id="poNo" class="text-gray pt-4">
+            {{ form.get("poNo")?.value ? form.get("poNo")?.value : "_" }}
+          </div>
+        </div>
 
-              <mat-form-field appearance="fill" class="w-40">
-                <mat-label>Party</mat-label>
-                <mat-select formControlName="partyId">
-                  <ng-container *ngFor="let party of partyService.parties">
-                    <mat-option [value]="party.partyId">{{ party.partyName }}</mat-option>
-                  </ng-container>
-                </mat-select>
-                <mat-error>This field is required.</mat-error>
-              </mat-form-field>
-  
-              <mat-form-field appearance="fill" class="w-20">
-                  <mat-label>PODate</mat-label>
-                  <input matInput [matDatepicker]="picker" formControlName="podate">
-                  <mat-hint>DD/MM/YYYY</mat-hint>
-                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                  <mat-datepicker #picker></mat-datepicker>
-                  <mat-error>This field is required.</mat-error>
-              </mat-form-field>
-          </form>
-      </mat-card-content>
-    </mat-card>
-  
-    <div class="button-container">
-      <button mat-raised-button (click)="addData()" class="button">
-        <mat-icon>add_circle_outline</mat-icon>Add item
+        <mat-form-field appearance="fill" class="w-40">
+          <mat-label>Party</mat-label>
+          <mat-select formControlName="partyId">
+            <ng-container *ngFor="let party of partyService.parties">
+              <mat-option [value]="party.partyId">{{
+                party.partyName
+              }}</mat-option>
+            </ng-container>
+          </mat-select>
+          <mat-error>This field is required.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="w-20">
+          <mat-label>PODate</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="pOdate" />
+          <mat-hint>DD/MM/YYYY</mat-hint>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error>This field is required.</mat-error>
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="button-container">
+    <button mat-raised-button (click)="addData()" class="button">
+      <mat-icon>add_circle_outline</mat-icon>Add item
+    </button>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 table">
+    <ng-container matColumnDef="fibreName">
+      <th mat-header-cell *matHeaderCellDef>Fibre</th>
+      <td mat-cell *matCellDef="let element">{{ element.fibreName }}</td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <ng-container matColumnDef="shade">
+      <th mat-header-cell *matHeaderCellDef>Shade</th>
+      <td mat-cell *matCellDef="let element">{{ element.shade }}</td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <ng-container matColumnDef="weight">
+      <th mat-header-cell *matHeaderCellDef class="text-right">KGs</th>
+      <td mat-cell *matCellDef="let element" class="text-right">
+        {{ element.weight }}
+      </td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <ng-container matColumnDef="rate">
+      <th mat-header-cell *matHeaderCellDef class="text-right">Rate</th>
+      <td mat-cell *matCellDef="let element" class="text-right">
+        {{ element.rate | currency : "INR" }}
+      </td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef class="text-right">Amount</th>
+      <td mat-cell *matCellDef="let element" class="text-right">
+        {{ element.amount | currency : "INR" }}
+      </td>
+      <td mat-footer-cell *matFooterCellDef class="text-right">
+        {{ getAmount() | currency : "INR" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="gstPercent">
+      <th mat-header-cell *matHeaderCellDef class="text-right">GST%</th>
+      <td mat-cell *matCellDef="let element" class="text-right">
+        {{ element.gstPercent | number : "1.2-2" }}%
+      </td>
+      <td mat-footer-cell *matFooterCellDef class="text-right">
+        {{ getTaxAmount() | currency : "INR" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="totalAmount">
+      <th mat-header-cell *matHeaderCellDef class="text-right">Total Amount</th>
+      <td mat-cell *matCellDef="let element" class="text-right">
+        {{ element.totalAmount | currency : "INR" }}
+      </td>
+      <td mat-footer-cell *matFooterCellDef class="text-right">
+        {{ getTotalAmount() | currency : "INR" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="button">
+      <th mat-header-cell *matHeaderCellDef class="text-center">Actions</th>
+      <td mat-cell *matCellDef="let element" class="text-center">
+        <button
+          mat-icon-button
+          [matMenuTriggerFor]="menu"
+          aria-label="Actions menu"
+        >
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button
+            mat-menu-item
+            aria-label="button with a edit icon"
+            (click)="updateData(element)"
+          >
+            <mat-icon>edit</mat-icon> Edit
+          </button>
+          <button
+            mat-menu-item
+            (click)="removeData(element)"
+            aria-label="button with a delete icon"
+          >
+            <mat-icon>delete</mat-icon> Delete
+          </button>
+        </mat-menu>
+      </td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell no-rows" [attr.colspan]="displayedColumns.length">
+        No rows to display
+      </td>
+    </tr>
+    <tr
+      [hidden]="!dataSource.length"
+      mat-footer-row
+      *matFooterRowDef="displayedColumns; sticky: true"
+    ></tr>
+  </table>
+
+  <div class="footer">
+    <button mat-raised-button (click)="goToSearch()">
+      <mat-icon>arrow_back</mat-icon>Go to Search
+    </button>
+    <div>
+      <button mat-raised-button class="mr-16" (click)="resetData()">
+        <mat-icon>refresh</mat-icon>Reset
+      </button>
+      <button mat-raised-button color="primary" (click)="submitOrder()">
+        <mat-icon>save_alt</mat-icon>Submit
       </button>
     </div>
-    
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 table">
-      <ng-container matColumnDef="fibreName">
-        <th mat-header-cell *matHeaderCellDef>Fibre</th>
-        <td mat-cell *matCellDef="let element">{{ element.fibreName }}</td>
-        <td mat-footer-cell *matFooterCellDef></td>
-      </ng-container>
-
-      <ng-container matColumnDef="shadeName">
-        <th mat-header-cell *matHeaderCellDef>Shade</th>
-        <td mat-cell *matCellDef="let element">{{ element.shadeName }}</td>
-        <td mat-footer-cell *matFooterCellDef></td>
-      </ng-container>
-
-      <ng-container matColumnDef="weight">
-        <th mat-header-cell *matHeaderCellDef class="text-right">KGs</th>
-        <td mat-cell *matCellDef="let element" class="text-right">{{ element.weight }}</td>
-        <td mat-footer-cell *matFooterCellDef> </td>
-      </ng-container>
-    
-      <ng-container matColumnDef="rate">
-        <th mat-header-cell *matHeaderCellDef class="text-right">Rate</th>
-        <td mat-cell *matCellDef="let element" class="text-right">{{ element.rate | currency:'INR' }}</td>
-        <td mat-footer-cell *matFooterCellDef></td>
-      </ng-container>
-    
-      <ng-container matColumnDef="amount">
-        <th mat-header-cell *matHeaderCellDef class="text-right">Amount</th>
-        <td mat-cell *matCellDef="let element" class="text-right">{{ element.amount | currency:'INR' }}</td>
-        <td mat-footer-cell *matFooterCellDef class="text-right">{{ getAmount() | currency: 'INR' }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="gstpercent">
-        <th mat-header-cell *matHeaderCellDef class="text-right">GST%</th>
-        <td mat-cell *matCellDef="let element" class="text-right">{{ element.gstpercent | number: '1.2-2' }}%</td>
-        <td mat-footer-cell *matFooterCellDef class="text-right">{{ getTaxAmount() | currency: 'INR' }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="totalAmount">
-        <th mat-header-cell *matHeaderCellDef class="text-right">Total Amount</th>
-        <td mat-cell *matCellDef="let element" class="text-right">{{ element.totalAmount | currency:'INR' }}</td>
-        <td mat-footer-cell *matFooterCellDef class="text-right">{{ getTotalAmount() | currency: 'INR' }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="button">
-        <th mat-header-cell *matHeaderCellDef class="text-center">Actions</th>
-        <td mat-cell *matCellDef="let element" class="text-center">
-            <button mat-icon-button color="basic" aria-label="button with a edit icon"
-                (click)="updateData(element)" matTooltip="Edit User">
-                <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-icon-button color="warn" (click)="removeData(element)"
-                aria-label="button with a delete icon" matTooltip="Delete User">
-                <mat-icon>delete</mat-icon>
-            </button>
-        </td>
-        <td mat-footer-cell *matFooterCellDef></td>
-    </ng-container>
-    
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell no-rows" [attr.colspan]="displayedColumns.length">
-          No rows to display
-        </td>
-      </tr>
-      <tr [hidden]="!dataSource.length" mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
-    </table>
-
-    <div class="footer">
-      <button mat-raised-button (click)="goToSearch()"><mat-icon>arrow_back</mat-icon>Go to Search</button>
-      <div>
-          <button mat-raised-button class="mr-16" (click)="resetData()"><mat-icon>refresh</mat-icon>Reset</button>
-          <button mat-raised-button color="primary" (click)="submitOrder()"><mat-icon>save_alt</mat-icon>Submit</button>
-      </div>   
-    </div>
+  </div>
 </section>

@@ -3,7 +3,6 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable } from '@angular/material/table';
-import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NotifyType } from 'src/app/models/notify';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { PURCHASE } from 'src/app/constants/purchase-menu-values.const';
@@ -14,6 +13,8 @@ import { PartyService } from 'src/app/services/party.service';
 import { FibreService } from 'src/app/services/fibre.service';
 import { UserActionConfirmationComponent } from 'src/app/components/user-action-confirmation/user-action-confirmation.component';
 import { Router } from '@angular/router';
+import { PendingFibrePoComponent } from './pending-fibre-po/pending-fibre-po.component';
+import { ReceiveFibrePODts } from 'src/app/models/receiveFibrePODts';
 
 @Component({
   selector: 'app-fibre-receive-purchase-order',
@@ -23,32 +24,30 @@ import { Router } from '@angular/router';
 export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   displayedColumns: string[] = [
-    'fibreName',
-    'hsnCode',
+    'poNo',
+    'fibreType',
+    'shade',
     'orderQty',
     'pendingQty',
     'receivedQty',
     'receivedBales',
     'lot',
+    'hsnCode',
     'rate',
     'amount',
-    'gst',
+    'gstpercent',
     'totalAmount',
     'button',
   ];
   dataSource = [];
   @ViewChild(MatTable) table!: MatTable<any>;
   selection = new SelectionModel<any>(true, []);
-  amountBeforeTax!: number;
-  taxAmount!: number;
-  amountAfterTax!: number;
   subscription = new Subscription();
 
   constructor(
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
     private notificationService: NotificationService,
-    private appSharedService: AppSharedService,
     private navigationService: NavigationService,
     public partyService: PartyService,
     private fibreService: FibreService,
@@ -72,11 +71,11 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
     );
 
     this.form = this.formBuilder.group({
-      poNo: [{ value: this.appSharedService.generatePONo(), disabled: true }],
-      party: ['', Validators.required],
-      poDate: ['', Validators.required],
-      invoiceNo: ['', Validators.required],
-      invoiceDate: ['', Validators.required],
+      poNo: [{ value: '', disabled: true }],
+      partyId: [{ value: '', disabled: true }],
+      recdDate: ['', Validators.required],
+      recdDCNo: ['', Validators.required],
+      dcDate: ['', Validators.required],
     });
   }
 
@@ -85,6 +84,14 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
   }
 
   submitOrder() {
+    if (!this.form.get('poNo')?.value || !this.form.get('partyId')?.value) {
+      this.notificationService.notify(
+        'Please choose pending PO!',
+        NotifyType.ERROR
+      );
+      return;
+    }
+
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       this.notificationService.notify(
@@ -93,53 +100,58 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
       );
       return;
     }
-    if (!this.dataSource.length) {
+
+    const valid = this.dataSource.reduce(
+      (acc: boolean, cur: any) => acc && cur?.isValid,
+      true
+    );
+
+    if (!this.dataSource.length || !valid) {
       this.notificationService.notify(
         'Please add the receive order details!',
         NotifyType.ERROR
       );
       return;
     }
-    this.notificationService.success(
-      'Invoice againt purchase order submitted successfully.'
+
+    const request = {
+      ...this.form.value,
+      fibrePODts: [],
+    };
+
+    this.dataSource.forEach((data: any) => {
+      request.fibrePODts.push({
+        poDtsId: 0,
+        lot: data?.lot,
+        hsnCode: data?.hsnCode,
+        receivedWeight: data?.receivedQty,
+        receivedBales: data?.receivedBales,
+        rate: data?.rate,
+        gstPercent: data?.gstpercent,
+      } as ReceiveFibrePODts);
+    });
+
+    this.subscription.add(
+      this.fibreService.submitReceiveFibre(request).subscribe(
+        (response) => {
+          this.notificationService.success(response);
+          this.resetData();
+        },
+        (error) => {
+          this.notificationService.error(error.message);
+        }
+      )
     );
-    this.resetData();
   }
 
   resetData() {
     this.form.reset();
-    this.dataSource = [];
     this.table.renderRows();
-    this.form.patchValue({ poNo: this.appSharedService.generatePONo() });
+    this.dataSource = [];
   }
 
   goToSearch() {
     this.router.navigateByUrl('purchases/fibre');
-  }
-
-  addData(): void {
-    const dialogRef = this.dialog.open(ReceiveOrderDetailsComponent, {
-      data: this.dataSource.length,
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.dataSource.push(result as never);
-        this.calculateSummary();
-        this.table.renderRows();
-      }
-    });
-  }
-
-  calculateSummary() {
-    this.amountBeforeTax = 0;
-    this.taxAmount = 0;
-    this.amountAfterTax = 0;
-    this.dataSource.forEach((order: any) => {
-      this.amountBeforeTax += order.amount;
-      this.taxAmount += (order.amount * order.gst) / 100;
-      this.amountAfterTax += order.totalAmount;
-    });
   }
 
   updateData(selectedRow: any) {
@@ -154,7 +166,6 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
           }
         });
       }
-      this.calculateSummary();
       this.table.renderRows();
     });
   }
@@ -172,27 +183,67 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
             }
           });
           this.dataSource = newList;
-          this.calculateSummary();
           this.table.renderRows();
+          const poNo = [
+            ...new Set(this.dataSource.map((po: any) => po.poNo)),
+          ].concat();
+          this.form.patchValue({ poNo: poNo });
         }
       });
   }
 
+  choosePending() {
+    this.dialog
+      .open(PendingFibrePoComponent, {
+        width: '65%',
+      })
+      .afterClosed()
+      .subscribe((data) => {
+        if (data) {
+          this.patchData(data);
+        }
+      });
+  }
+
+  patchData(data: any) {
+    const po = data?.po?.map((data: any, index: number) => {
+      data['orderNo'] = index + 1;
+      data['isValid'] = false;
+      return data;
+    });
+    const poNo = [...new Set(po?.map((po: any) => po.poNo))]
+      ?.concat()
+      .toString()
+      ?.replaceAll(',', ', ');
+
+    this.form.patchValue({
+      poNo: poNo,
+      partyId: data.partyId,
+    });
+    this.dataSource = po as never[];
+  }
+
+  getPartyName() {
+    const partyId = this.form.get('partyId')?.value;
+    return this.partyService.parties.find((data) => data.partyId === partyId)
+      ?.partyName;
+  }
+
   getAmount() {
     return this.dataSource
-      .map((data: any) => data?.amount)
+      .map((data: any) => data?.amount || 0)
       .reduce((acc, value) => acc + value, 0);
   }
 
   getTaxAmount() {
     return this.dataSource
-      .map((data: any) => (data?.amount * data?.gst) / 100)
+      .map((data: any) => ((data?.amount || 0) * data?.gstpercent) / 100)
       .reduce((acc, value) => acc + value, 0);
   }
 
   getTotalAmount() {
     return this.dataSource
-      .map((data: any) => data?.totalAmount)
+      .map((data: any) => data?.totalAmount || 0)
       .reduce((acc, value) => acc + value, 0);
   }
 }

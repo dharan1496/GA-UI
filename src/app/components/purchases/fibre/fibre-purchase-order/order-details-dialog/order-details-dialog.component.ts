@@ -1,6 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { combineLatest, startWith, Subscription } from 'rxjs';
 import { MaterialModule } from 'src/app/material.module';
@@ -13,7 +18,7 @@ import { FibreService } from 'src/app/services/fibre.service';
   standalone: true,
   imports: [CommonModule, MaterialModule, ReactiveFormsModule],
   templateUrl: './order-details-dialog.component.html',
-  styleUrls: ['./order-details-dialog.component.scss']
+  styleUrls: ['./order-details-dialog.component.scss'],
 })
 export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
   form!: FormGroup;
@@ -25,54 +30,64 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
     private dialogRef: MatDialogRef<void>,
     @Inject(MAT_DIALOG_DATA) private data: any,
     private notificationService: NotificationService,
-    public fibreService: FibreService,
+    public fibreService: FibreService
   ) {}
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
-      orderNo: typeof(this.data) === 'number' ? +this.data + 1 : '',
+      orderNo: typeof this.data === 'number' ? +this.data + 1 : '',
       fibreTypeId: ['', Validators.required],
       fibreName: '',
-      shadeName: ['', Validators.required],
+      shade: ['', Validators.required],
       weight: ['', Validators.required],
       rate: ['', Validators.required],
-      amount: [{value: '', disabled: true}],
-      gstpercent: ['', Validators.required],
-      totalAmount: [{ value: '', disabled: true}],
+      amount: [{ value: '', disabled: true }],
+      gstPercent: ['', Validators.required],
+      totalAmount: [{ value: '', disabled: true }],
     });
 
-    this.subscription.add(this.form.get('fibreTypeId')?.valueChanges.subscribe(
-      (fibreTypeId) => {
-        const filteredParty = this.fibreService.fibres.filter(fibre => fibre.fibretypeId === fibreTypeId);
-        this.form.get('fibreName')?.setValue(filteredParty.reduce((p, c) =>  c.fibretype, ''));
-    }));
+    this.subscription.add(
+      this.form.get('fibreTypeId')?.valueChanges.subscribe((fibreTypeId) => {
+        const filteredParty = this.fibreService.fibres.filter(
+          (fibre) => fibre.fibreTypeId === fibreTypeId
+        );
+        this.form
+          .get('fibreName')
+          ?.setValue(filteredParty.reduce((p, c) => c.fibreType, ''));
+      })
+    );
 
-    if (typeof(this.data) === 'object') {
+    if (typeof this.data === 'object') {
       this.form.patchValue(this.data);
     }
-    
+
     // TODO: Replace combineLatest with any other approach
     const observable1$ = combineLatest([
-      this.form.get('weight')?.valueChanges.pipe(startWith(this.form.get('weight')?.value)),
-      this.form.get('rate')?.valueChanges.pipe(startWith(this.form.get('rate')?.value))
-    ]).subscribe(
-      (value: any[]) => {
-        this.form.get('amount')?.setValue(value[0] * value[1]);
-      }
-    );
+      this.form
+        .get('weight')
+        ?.valueChanges.pipe(startWith(this.form.get('weight')?.value)),
+      this.form
+        .get('rate')
+        ?.valueChanges.pipe(startWith(this.form.get('rate')?.value)),
+    ]).subscribe((value: any[]) => {
+      this.form.get('amount')?.setValue(value[0] * value[1]);
+    });
     this.subscription.add(observable1$);
 
-     // TODO: Replace combineLatest with any other approach
+    // TODO: Replace combineLatest with any other approach
     const observable2$ = combineLatest([
-      this.form.get('amount')?.valueChanges.pipe(startWith(this.form.get('amount')?.value)),
-      this.form.get('gstpercent')?.valueChanges.pipe(startWith(this.form.get('gstpercent')?.value))
-    ]).subscribe(
-      (value: any[]) => {
-        this.form.get('totalAmount')?.setValue(value[0] - (value[0] * value[1]) / 100);
-      }
-    );
+      this.form
+        .get('amount')
+        ?.valueChanges.pipe(startWith(this.form.get('amount')?.value)),
+      this.form
+        .get('gstPercent')
+        ?.valueChanges.pipe(startWith(this.form.get('gstPercent')?.value)),
+    ]).subscribe((value: any[]) => {
+      this.form
+        .get('totalAmount')
+        ?.setValue(value[0] + (value[0] * value[1]) / 100);
+    });
     this.subscription.add(observable2$);
-     
   }
 
   ngOnDestroy(): void {
@@ -82,7 +97,10 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
   onSubmit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.notificationService.notify('Error occured in order details!', NotifyType.ERROR);
+      this.notificationService.notify(
+        'Error occured in order details!',
+        NotifyType.ERROR
+      );
       return;
     }
     this.dialogRef.close(this.form.getRawValue());

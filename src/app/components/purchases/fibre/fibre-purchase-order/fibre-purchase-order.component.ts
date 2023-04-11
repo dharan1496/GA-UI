@@ -13,12 +13,11 @@ import { NavigationService } from 'src/app/shared/navigation.service';
 import { PartyService } from 'src/app/services/party.service';
 import { Subscription } from 'rxjs';
 import { FibreService } from 'src/app/services/fibre.service';
-import { FibrePODto } from 'src/app/models/fibrePODto';
-import { FibrePODtsDto } from 'src/app/models/fibrePODtsDto';
 import { UserActionConfirmationComponent } from 'src/app/components/user-action-confirmation/user-action-confirmation.component';
-import { DatePipe } from '@angular/common';
 import { Constants } from 'src/app/constants/constants';
 import { Router } from '@angular/router';
+import { CreateFibrePO } from 'src/app/models/createFibrePO';
+import { CreateFibrePODts } from 'src/app/models/createFibrePODts';
 
 @Component({
   selector: 'app-fibre-purchase-order',
@@ -29,11 +28,11 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   displayedColumns: string[] = [
     'fibreName',
-    'shadeName',
+    'shade',
     'weight',
     'rate',
     'amount',
-    'gstpercent',
+    'gstPercent',
     'totalAmount',
     'button',
   ];
@@ -43,8 +42,8 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
   amountBeforeTax!: number;
   taxAmount!: number;
   amountAfterTax!: number;
-  orderDetails!: any;
   subscription = new Subscription();
+  poNo = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -55,7 +54,6 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
     private printFibrePOService: PrintFibrePOService,
     public partyService: PartyService,
     private fibreService: FibreService,
-    private datePipe: DatePipe,
     private router: Router
   ) {
     this.navigationService.isSidenavOpened = true;
@@ -64,6 +62,12 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // this.subscription.add(
+    //   this.fibreService
+    //     .getPONo()
+    //     .subscribe((data) => this.form.get('poNo')?.setValue(data))
+    // );
+
     this.subscription.add(
       this.partyService
         .getParties()
@@ -76,12 +80,9 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
     );
 
     this.form = this.formBuilder.group({
-      fibrePoid: 0,
-      pono: [{ value: this.appSharedService.generatePONo(), disabled: true }],
+      poNo: [{ value: this.appSharedService.generatePONo(), disabled: true }],
       partyId: ['', Validators.required],
-      podate: ['', Validators.required],
-      createdBy: this.appSharedService.username,
-      fibrePODts: '',
+      pOdate: ['', Validators.required],
     });
 
     window.onafterprint = () => {
@@ -95,26 +96,38 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
 
   submitOrder() {
     if (!this.hasError()) {
-      // Need to make API call here to submit data
-      this.orderDetails = {
+      const fibrePODts = this.dataSource.map((data: CreateFibrePODts) => {
+        return {
+          fibreTypeId: data.fibreTypeId,
+          shade: data.shade,
+          weight: data.weight,
+          rate: data.rate,
+          gstPercent: data.gstPercent,
+        };
+      });
+      const orderDetails = {
         ...this.form.getRawValue(),
-        podate: this.datePipe.transform(
-          this.form.get('podate')?.value,
-          'dd/MM/yyyy'
-        ),
-        orders: [...this.dataSource],
-        amountBeforeTax: this.amountBeforeTax,
-        taxAmount: this.taxAmount,
-        amountAfterTax: this.amountAfterTax,
-      };
-      this.resetData();
-      this.printFibrePOService.fibrePOData = this.orderDetails;
-      this.notificationService.success(
-        {
-          printPO: true,
-          message: 'Purchase order submitted successfully',
-        },
-        true
+        createdBy: 0,
+        fibrePODts: fibrePODts,
+      } as CreateFibrePO;
+
+      this.subscription.add(
+        this.fibreService.submitFibrePO(orderDetails).subscribe(
+          (response) => {
+            this.resetData();
+            this.notificationService.success(
+              {
+                printPO: true,
+                poId: response,
+                message: 'Purchase order submitted successfully',
+              },
+              true
+            );
+          },
+          (error) => {
+            this.notificationService.error(error?.message);
+          }
+        )
       );
     }
   }
@@ -159,8 +172,6 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
         this.dataSource.push(result as never);
         this.calculateSummary();
         this.table.renderRows();
-        const fibrePORequest = this.form.getRawValue() as FibrePODto;
-        fibrePORequest.fibrePODts = this.dataSource as FibrePODtsDto[];
       }
     });
   }
@@ -171,7 +182,7 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
     this.amountAfterTax = 0;
     this.dataSource.forEach((order: any) => {
       this.amountBeforeTax += order.amount;
-      this.taxAmount += (order.amount * order.gstpercent) / 100;
+      this.taxAmount += (order.amount * order.gstPercent) / 100;
       this.amountAfterTax += order.totalAmount;
     });
   }
@@ -220,7 +231,7 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
 
   getTaxAmount() {
     return this.dataSource
-      .map((data: any) => (data?.amount * data?.gstpercent) / 100)
+      .map((data: any) => (data?.amount * data?.gstPercent) / 100)
       .reduce((acc, value) => acc + value, 0);
   }
 

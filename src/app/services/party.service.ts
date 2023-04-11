@@ -1,18 +1,18 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { environment } from "src/environment/environment";
-import { PartyDto } from "../models/partyDTO";
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environment/environment';
+import { Party } from '../models/party';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class PartyService {
-    parties!: PartyDto[];
+  parties!: Party[];
 
-    constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
-    getParties(): Observable<PartyDto[]> {
-        return this.http.get<PartyDto[]>(`${environment.api}/Party`);
-    }
+  getParties(): Observable<Party[]> {
+    return this.http.get<Party[]>(`${environment.api}/Party`);
+  }
 }

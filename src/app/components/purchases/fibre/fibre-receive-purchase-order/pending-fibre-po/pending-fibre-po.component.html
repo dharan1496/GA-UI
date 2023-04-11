@@ -1,0 +1,97 @@
+<h1 mat-dialog-title>Pending PO</h1>
+<div mat-dialog-content>
+  <mat-form-field appearance="fill" class="w-50 mb-24">
+    <mat-label>Party (PO count)</mat-label>
+    <mat-select [formControl]="party">
+      <ng-container *ngFor="let party of partiesWithPendingPO">
+        <mat-option [value]="party?.partyId">{{
+          party?.partyName + " (" + party?.poCounts + ")"
+        }}</mat-option>
+      </ng-container>
+    </mat-select>
+    <mat-error>This field is required.</mat-error>
+  </mat-form-field>
+
+  <div *ngIf="loader" class="loader">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" class="border-bottom">
+    <ng-container matColumnDef="poNo">
+      <th mat-header-cell *matHeaderCellDef>PONo</th>
+      <td mat-cell *matCellDef="let element">{{ element.poNo }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="fibreType">
+      <th mat-header-cell *matHeaderCellDef>Fibre</th>
+      <td mat-cell *matCellDef="let element">{{ element.fibreType }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="shade">
+      <th mat-header-cell *matHeaderCellDef>Shade</th>
+      <td mat-cell *matCellDef="let element">{{ element.shade }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="orderQty">
+      <th mat-header-cell *matHeaderCellDef class="text-right">Order Qty</th>
+      <td mat-cell *matCellDef="let element" class="text-right">
+        {{ element.orderQty }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="receivedQty">
+      <th mat-header-cell *matHeaderCellDef class="text-right">
+        Received Qty (so far)
+      </th>
+      <td mat-cell *matCellDef="let element" class="text-right">
+        {{ element.receivedQty }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="balanceQty">
+      <th mat-header-cell *matHeaderCellDef class="text-right">Pending Qty</th>
+      <td mat-cell *matCellDef="let element" class="text-right">
+        {{ element.balanceQty }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef class="text-right">
+        Choose to Receive
+      </th>
+      <td mat-cell *matCellDef="let row" class="text-center">
+        <mat-checkbox
+          (click)="$event.stopPropagation()"
+          (change)="$event ? selection.toggle(row) : null"
+          [checked]="selection.isSelected(row)"
+          [aria-label]="checkboxLabel(row)"
+        >
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr
+      mat-row
+      class="row"
+      *matRowDef="let row; columns: columnsToDisplay"
+      (click)="selection.toggle(row)"
+    ></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell no-rows" [attr.colspan]="columnsToDisplay.length">
+        No rows to display
+      </td>
+    </tr>
+  </table>
+  <mat-paginator
+    [pageSizeOptions]="[5, 10, 20, 50]"
+    showFirstLastButtons
+    class="border-top py-12"
+    aria-label="Select page of POs"
+  >
+  </mat-paginator>
+</div>
+<div mat-dialog-actions class="footer">
+  <button mat-raised-button color="primary" (click)="onChoose()">Choose</button>
+  <button mat-button (click)="onCancel()">Cancel</button>
+</div>

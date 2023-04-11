@@ -29,8 +29,16 @@ app-print-fibre-po {
 
 // size
 
+.min-w-25 {
+  min-width: 25%;
+}
+
 .w-10 {
   width: 10%;
+}
+
+.w-15 {
+  width: 15%;
 }
 
 .w-20 {
@@ -75,6 +83,14 @@ app-print-fibre-po {
   padding-top: 24px;
 }
 
+.pt-4 {
+  padding-top: 4px;
+}
+
+.pb-16 {
+  padding-bottom: 16px;
+}
+
 .py-12 {
   padding: 12px 0;
 }
@@ -93,6 +109,10 @@ app-print-fibre-po {
 
 .pr-4 {
   padding-right: 4px;
+}
+
+.pl-16 {
+  padding-left: 16px;
 }
 
 // margin
@@ -185,4 +205,14 @@ app-print-fibre-po {
 
 .text-left {
   text-align: left !important;
+}
+
+// color
+
+.text-gray {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.text-dark {
+  color: rgba(0, 0, 0, 0.95);
 }

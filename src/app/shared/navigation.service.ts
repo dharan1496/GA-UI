@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Idle } from '@ng-idle/core';
 import { AppSharedService } from './app-shared.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,8 @@ export class NavigationService {
   constructor(
     private idle: Idle,
     private router: Router,
-    private appSharedService: AppSharedService
+    private appSharedService: AppSharedService,
+    private dialog: MatDialog
   ) {}
 
   setFocus(id: string) {
@@ -28,6 +30,7 @@ export class NavigationService {
   }
 
   logout(interval: any) {
+    this.dialog.closeAll();
     this.appSharedService.logout = true;
     this.isSidenavOpened = false;
     this.menu = null;

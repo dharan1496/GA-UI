@@ -1,39 +1,25 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 
 @Injectable({
-    providedIn: 'root',
+  providedIn: 'root',
 })
 export class AppSharedService {
-    logout = false;
-    username = localStorage.getItem('username') || '';
+  logout = false;
+  username = localStorage.getItem('username') || '';
 
-    genUniqueId(): string {
-        const dateStr = Date
-          .now()
-          .toString(36)
-          .substring(5);
-      
-        const randomNum = Math
-          .random()
-          .toString(36)
-          .substring(5);
-        const id =  `${randomNum}${dateStr}`;
-        localStorage.setItem('id', id);
-        return id;
-    }
+  genUniqueId(): string {
+    const dateStr = Date.now().toString(36).substring(5);
 
-    generatePONo(): string {
-      const dateStr = Date
-        .now()
-        .toString(36)
-        .substring(5);
-    
-      const randomNum = Math
-        .random()
-        .toString(36)
-        .substring(2, 5);
+    const randomNum = Math.random().toString(36).substring(5);
+    const id = `${randomNum}${dateStr}`;
+    localStorage.setItem('id', id);
+    return id;
+  }
 
-      const year = new Date().getFullYear().toString().substring(2);
-      return `${randomNum}${dateStr}/GA/${year}`;
+  generatePONo(): string {
+    const randomNum = Math.random().toString(36).substring(2, 5);
+
+    const year = new Date().getFullYear().toString().substring(2);
+    return `${randomNum}/GA/${year}`;
   }
 }
