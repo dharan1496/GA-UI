@@ -86,7 +86,7 @@ export class PurchasesComponent implements OnInit {
             stacked: true,
             title: {
               display: true,
-              text: 'Months (2023)',
+              text: 'Month (2023)',
               padding: 20,
             },
           },
