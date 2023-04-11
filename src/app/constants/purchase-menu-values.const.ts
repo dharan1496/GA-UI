@@ -3,14 +3,14 @@ export const PURCHASE = [
   {
     title: 'Fibre',
     submenu: [
-      { title: 'Search Fibre PO', route: 'purchases/fibre' },
+      { title: 'Search Fibre PO', route: 'purchases/fibre/search' },
       {
         title: 'New Fibre PO',
-        route: 'purchases/fibre/fibre-new-purchase-order',
+        route: 'purchases/fibre/new-purchase-order',
       },
       {
         title: 'Receive Fibre PO',
-        route: 'purchases/fibre/fibre-receive-purchase-order',
+        route: 'purchases/fibre/receive-purchase-order',
       },
     ],
   },

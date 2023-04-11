@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { FibrePurchaseOrderComponent } from './fibre/fibre-purchase-order/fibre-purchase-order.component';
 import { FibreReceivePurchaseOrderComponent } from './fibre/fibre-receive-purchase-order/fibre-receive-purchase-order.component';
 import { PurchasesComponent } from './purchases.component';
-import { FibreDashboardComponent } from './fibre/fibre-dashboard/fibre-dashboard.component';
+import { FibreSearchComponent } from './fibre/fibre-search/fibre-search.component';
 
 const routes: Routes = [
   {
@@ -11,21 +11,21 @@ const routes: Routes = [
     component: PurchasesComponent,
   },
   {
-    path: 'fibre',
-    component: FibreDashboardComponent,
+    path: 'fibre/search',
+    component: FibreSearchComponent,
   },
   {
-    path: 'fibre/fibre-new-purchase-order',
+    path: 'fibre/new-purchase-order',
     component: FibrePurchaseOrderComponent,
   },
   {
-    path: 'fibre/fibre-receive-purchase-order',
+    path: 'fibre/receive-purchase-order',
     component: FibreReceivePurchaseOrderComponent,
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class PurchasesRoutingModule { }
+export class PurchasesRoutingModule {}

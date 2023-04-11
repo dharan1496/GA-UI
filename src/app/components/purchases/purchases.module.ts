@@ -6,14 +6,14 @@ import { FibrePurchaseOrderComponent } from './fibre/fibre-purchase-order/fibre-
 import { FibreReceivePurchaseOrderComponent } from './fibre/fibre-receive-purchase-order/fibre-receive-purchase-order.component';
 import { PurchasesRoutingModule } from './purchases-routing.module';
 import { PurchasesComponent } from './purchases.component';
-import { FibreDashboardComponent } from './fibre/fibre-dashboard/fibre-dashboard.component';
+import { FibreSearchComponent } from './fibre/fibre-search/fibre-search.component';
 
 @NgModule({
   declarations: [
     PurchasesComponent,
     FibrePurchaseOrderComponent,
     FibreReceivePurchaseOrderComponent,
-    FibreDashboardComponent,
+    FibreSearchComponent,
   ],
   imports: [
     CommonModule,

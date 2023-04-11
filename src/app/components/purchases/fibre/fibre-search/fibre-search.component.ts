@@ -25,8 +25,8 @@ import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-fibre-dashboard',
-  templateUrl: './fibre-dashboard.component.html',
-  styleUrls: ['./fibre-dashboard.component.scss'],
+  templateUrl: './fibre-search.component.html',
+  styleUrls: ['./fibre-search.component.scss'],
   animations: [
     trigger('detailExpand', [
       state('collapsed, void', style({ height: '0px', minHeight: '0' })),
@@ -38,9 +38,7 @@ import { MatSort } from '@angular/material/sort';
     ]),
   ],
 })
-export class FibreDashboardComponent
-  implements OnInit, OnDestroy, AfterViewInit
-{
+export class FibreSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   form!: FormGroup;
   subscription = new Subscription();
   dataSource = new MatTableDataSource<any>(ELEMENT_DATA);
@@ -125,15 +123,15 @@ export class FibreDashboardComponent
   }
 
   addPO() {
-    this.router.navigateByUrl('/purchases/fibre/fibre-new-purchase-order');
+    this.router.navigateByUrl('/purchases/fibre/new-purchase-order');
   }
 
-  addOrUpdateInvoice() {
-    this.router.navigateByUrl('/purchases/fibre/fibre-receive-purchase-order');
+  receivePO() {
+    this.router.navigateByUrl('/purchases/fibre/receive-purchase-order');
   }
 
   updatePO() {
-    this.router.navigateByUrl('/purchases/fibre/fibre-new-purchase-order');
+    this.router.navigateByUrl('/purchases/fibre/new-purchase-order');
   }
 
   getTotal(invoice: any[], property: string) {
