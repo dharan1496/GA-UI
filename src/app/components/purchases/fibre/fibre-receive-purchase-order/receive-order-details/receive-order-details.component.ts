@@ -12,6 +12,7 @@ import { MaterialModule } from 'src/app/material.module';
 import { NotifyType } from 'src/app/models/notify';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { FibreService } from 'src/app/services/fibre.service';
+import { AppSharedService } from 'src/app/shared/app-shared.service';
 
 @Component({
   selector: 'app-receive-order-details',
@@ -29,7 +30,8 @@ export class ReceiveOrderDetailsComponent implements OnInit, OnDestroy {
     private dialogRef: MatDialogRef<ReceiveOrderDetailsComponent>,
     @Inject(MAT_DIALOG_DATA) private data: any,
     private notificationService: NotificationService,
-    public fibreService: FibreService
+    public fibreService: FibreService,
+    public appSharedService: AppSharedService
   ) {}
 
   ngOnInit(): void {

@@ -48,6 +48,7 @@
           matInput
           (change)="receivedQtyChange()"
           formControlName="receivedQty"
+          (input)="appSharedService.restrictDecimal($event, 3)"
         />
         <mat-error *ngIf="form.get('receivedQty')?.hasError('required')"
           >This field is required.</mat-error
@@ -60,7 +61,12 @@
     <div class="flex-container">
       <mat-form-field appearance="fill">
         <mat-label>Received Bales</mat-label>
-        <input type="number" matInput formControlName="receivedBales" />
+        <input
+          type="number"
+          matInput
+          formControlName="receivedBales"
+          (input)="appSharedService.restrictDecimal($event, 0)"
+        />
         <mat-error>This field is required.</mat-error>
       </mat-form-field>
       <mat-form-field appearance="fill">
@@ -84,6 +90,7 @@
           step=".01"
           matInput
           formControlName="rate"
+          (input)="appSharedService.restrictDecimal($event, 2)"
         />
         <mat-error>This field is required.</mat-error>
       </mat-form-field>
@@ -97,7 +104,13 @@
       </div>
       <mat-form-field appearance="fill" class="w-100">
         <mat-label>GST%</mat-label>
-        <input type="number" max="100" matInput formControlName="gstpercent" />
+        <input
+          type="number"
+          max="100"
+          matInput
+          formControlName="gstpercent"
+          (input)="appSharedService.restrictDecimal($event, 2)"
+        />
         <mat-error *ngIf="form.get('gstpercent')?.hasError('required')"
           >This field is required.</mat-error
         >

@@ -22,4 +22,18 @@ export class AppSharedService {
     const year = new Date().getFullYear().toString().substring(2);
     return `${randomNum}/GA/${year}`;
   }
+
+  restrictDecimal(event: any, digit: number) {
+    const value = event.target.value;
+    if (value && value.includes('.')) {
+      if (digit === 0) {
+        event.target.value = value.substr(0, value.indexOf('.'));
+      } else {
+        const decimal = value.substr(value.indexOf('.') + 1);
+        if (decimal?.length > digit) {
+          event.target.value = value.slice(0, value?.length - 1);
+        }
+      }
+    }
+  }
 }
