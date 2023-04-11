@@ -70,7 +70,7 @@
       </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
     <tr
       mat-row
       class="row"
@@ -82,14 +82,17 @@
         No rows to display
       </td>
     </tr>
+    <ng-container matColumnDef="groupHeader">
+      <td colspan="8" mat-cell *matCellDef="let groupBy" class="group-by">
+        <strong>{{ groupBy.poNo }}</strong>
+      </td>
+    </ng-container>
+
+    <tr
+      mat-row
+      *matRowDef="let row; columns: ['groupHeader']; when: isGroup"
+    ></tr>
   </table>
-  <mat-paginator
-    [pageSizeOptions]="[5, 10, 20, 50]"
-    showFirstLastButtons
-    class="border-top py-12"
-    aria-label="Select page of POs"
-  >
-  </mat-paginator>
 </div>
 <div mat-dialog-actions class="footer">
   <button mat-raised-button color="primary" (click)="onChoose()">Choose</button>
