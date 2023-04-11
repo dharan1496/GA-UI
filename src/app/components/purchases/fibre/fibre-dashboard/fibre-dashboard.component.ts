@@ -158,7 +158,7 @@ const ELEMENT_DATA: any[] = [
   {
     poNo: '123/GA/23',
     party: 'party7',
-    poStatus: 'Delivered',
+    poStatus: 'Received',
     poDate: '02/01/2023',
     invoices: [
       {

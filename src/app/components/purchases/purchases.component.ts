@@ -69,11 +69,13 @@ export class PurchasesComponent implements OnInit {
             data: [10, 5, 8, 12, 18, 6, 22, 2, 20, 15, 20, 23],
             label: 'Fibre PO Received',
             barPercentage: 0.75,
+            backgroundColor: `rgba(88, 235, 52, 0.7)`,
           },
           {
             data: [2, 5, 3, 5, 7, 2, 5, 6, 8, 5, 8, 5],
             label: 'Fibre PO Pending',
             barPercentage: 0.75,
+            backgroundColor: `rgba(235, 211, 52, 0.75)`,
           },
         ],
       },
