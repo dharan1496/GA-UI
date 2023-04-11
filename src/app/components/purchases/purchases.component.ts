@@ -48,13 +48,13 @@ export class PurchasesComponent implements OnInit {
             0
           );
 
-          ctx.font = '12px sans-serif';
+          ctx.font = '14px sans-serif';
           ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
           ctx.textAlign = 'center';
           ctx.fillText(
             sum,
             x.getPixelForValue(index),
-            chart.getDatasetMeta(1).data[index].y - 15
+            chart.getDatasetMeta(1).data[index]?.y - 15
           );
         });
       },
@@ -72,7 +72,7 @@ export class PurchasesComponent implements OnInit {
             backgroundColor: `rgba(88, 235, 52, 0.7)`,
           },
           {
-            data: [2, 5, 3, 5, 7, 2, 5, 6, 8, 5, 8, 5],
+            data: ['', '', '', '', 7, 2, 5, 6, 8, 5, 8, 2],
             label: 'Fibre PO Pending',
             barPercentage: 0.75,
             backgroundColor: `rgba(235, 211, 52, 0.75)`,
