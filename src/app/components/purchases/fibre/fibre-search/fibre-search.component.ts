@@ -43,7 +43,15 @@ export class FibreSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   subscription = new Subscription();
   dataSource = new MatTableDataSource<any>(ELEMENT_DATA);
   columnsToDisplay = ['expand', 'poNo', 'party', 'poStatus', 'poDate'];
-  innerDisplayedColumns = ['receivedDc', 'fibre', 'shade', 'kgs', 'amount'];
+  innerDisplayedColumns = [
+    'receivedDc',
+    'receivedDate',
+    'fibre',
+    'shade',
+    'orderQty',
+    'receivedQty',
+    'amount',
+  ];
   expandedElement: any;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -167,16 +175,20 @@ const ELEMENT_DATA: any[] = [
     invoices: [
       {
         receivedDc: 1,
+        receivedDate: '02/02/2023',
         fibre: 'cotton',
         shade: 'white',
-        kgs: 12,
+        orderQty: 12,
+        receivedQty: 12,
         amount: 25000,
       },
       {
         receivedDc: 2,
+        receivedDate: '06/02/2023',
         fibre: 'silk',
         shade: 'blue',
-        kgs: 20,
+        orderQty: 20,
+        receivedQty: 20,
         amount: 35000,
       },
     ],
@@ -196,9 +208,11 @@ const ELEMENT_DATA: any[] = [
     invoices: [
       {
         receivedDc: 1,
+        receivedDate: '02/03/2023',
         fibre: 'cotton',
         shade: 'white',
-        kgs: 12,
+        orderQty: 12,
+        receivedQty: 8,
         amount: 25000,
       },
     ],
@@ -207,20 +221,33 @@ const ELEMENT_DATA: any[] = [
     poNo: '128/GA/23',
     party: 'party4',
     poStatus: 'Pending',
-    poDate: '02/10/2023',
+    poDate: '02/10/2022',
     invoices: [
       {
         receivedDc: 1,
+        receivedDate: '02/02/2023',
         fibre: 'cotton',
         shade: 'white',
-        kgs: 12,
-        amount: 25000,
+        orderQty: 12,
+        receivedQty: 7,
+        amount: 15000,
       },
       {
         receivedDc: 2,
+        receivedDate: '02/02/2023',
+        fibre: 'cotton',
+        shade: 'white',
+        orderQty: 12,
+        receivedQty: 5,
+        amount: 10000,
+      },
+      {
+        receivedDc: 3,
+        receivedDate: '02/02/2023',
         fibre: 'Silk',
         shade: 'blue',
-        kgs: 22,
+        orderQty: 20,
+        receivedQty: 10,
         amount: 55000,
       },
     ],
