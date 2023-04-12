@@ -27,7 +27,7 @@
         <div class="pl-16">
           <label for="orderQty" class="font-size-14 text-dark">Order Qty</label>
           <div id="orderQty" class="text-gray">
-            {{ form.get("orderQty")?.value }}
+            {{ form.get("orderQty")?.value | number : "1.0-3" }}
           </div>
         </div>
       </div>
@@ -37,7 +37,7 @@
             >Pending Qty</label
           >
           <div id="pendingQty" class="text-gray">
-            {{ form.get("pendingQty")?.value }}
+            {{ form.get("pendingQty")?.value | number : "1.0-3" }}
           </div>
         </div>
       </div>
