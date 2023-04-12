@@ -32,31 +32,32 @@ export class PurchasesComponent implements OnInit {
     const topLabels = {
       id: 'topLabels',
       afterDatasetsDraw: (chart: Chart) => {
-        const {
-          ctx,
-          scales: { x },
-        } = chart;
+        if (chart.isDatasetVisible(0) && chart.isDatasetVisible(1)) {
+          const {
+            ctx,
+            scales: { x },
+          } = chart;
+          chart.data.datasets[0].data.forEach((datapoint, index) => {
+            const datasetArray: any[] = [];
+            chart.data.datasets.forEach((dataset) =>
+              datasetArray.push(dataset.data[index])
+            );
 
-        chart.data.datasets[0].data.forEach((datapoint, index) => {
-          const datasetArray: any[] = [];
-          chart.data.datasets.forEach((dataset) =>
-            datasetArray.push(dataset.data[index])
-          );
+            const sum = datasetArray.reduce(
+              (total: number, values: number) => total + values,
+              0
+            );
 
-          const sum = datasetArray.reduce(
-            (total: number, values: number) => total + values,
-            0
-          );
-
-          ctx.font = '14px sans-serif';
-          ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
-          ctx.textAlign = 'center';
-          ctx.fillText(
-            sum,
-            x.getPixelForValue(index),
-            chart.getDatasetMeta(1).data[index]?.y - 15
-          );
-        });
+            ctx.font = '14px sans-serif';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
+            ctx.textAlign = 'center';
+            ctx.fillText(
+              sum,
+              x.getPixelForValue(index),
+              chart.getDatasetMeta(1).data[index]?.y - 15
+            );
+          });
+        }
       },
     };
 
@@ -70,12 +71,14 @@ export class PurchasesComponent implements OnInit {
             label: 'Fibre PO Received',
             barPercentage: 0.75,
             backgroundColor: `rgba(88, 235, 52, 0.7)`,
+            stack: 'fibre',
           },
           {
             data: ['', '', '', '', 7, 2, 5, 6, 8, 5, 8, 2],
             label: 'Fibre PO Pending',
             barPercentage: 0.75,
             backgroundColor: `rgba(235, 211, 52, 0.75)`,
+            stack: 'fibre',
           },
         ],
       },

@@ -24,7 +24,7 @@ export class PendingFibrePoComponent implements OnInit, OnDestroy {
   party = new FormControl();
   dataSource = new MatTableDataSource<PendingPODetailsByParty>([]);
   columnsToDisplay = [
-    'poNo',
+    'space',
     'fibreType',
     'shade',
     'orderQty',
@@ -56,11 +56,7 @@ export class PendingFibrePoComponent implements OnInit, OnDestroy {
         this.selection.clear();
         this.subscription.add(
           this.fibreService.getPendingPOByParty(partyId).subscribe((data) => {
-            const party = this.partiesWithPendingPO.find(
-              (party) => party.partyId === partyId
-            ) as PartywisePOCounts;
-            this.dataSource.data =
-              data?.length > party.poCounts ? this.groupBy(data) : data;
+            this.dataSource.data = this.groupBy(data);
             this.loader = false;
           })
         );
