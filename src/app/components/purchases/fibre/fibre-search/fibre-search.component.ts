@@ -48,6 +48,7 @@ export class FibreSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   loader = false;
+  minDate = new Date();
 
   constructor(
     public partyService: PartyService,
@@ -66,6 +67,7 @@ export class FibreSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.setMinDate();
     this.subscription.add(
       this.partyService
         .getParties()
@@ -97,6 +99,10 @@ export class FibreSearchComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  setMinDate() {
+    this.minDate.setMonth(this.minDate.getMonth() - 12);
   }
 
   onSearch() {
@@ -222,7 +228,7 @@ const ELEMENT_DATA: any[] = [
   {
     poNo: '129/GA/23',
     party: 'party2',
-    poStatus: 'Pending',
+    poStatus: 'Cancelled',
     poDate: '03/02/2023',
     invoices: [],
   },

@@ -101,16 +101,20 @@ tr.row:not(.expanded-row) {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 85px;
+  width: 88px;
   height: 30px;
   border-radius: 20px;
   color: #fff;
 }
 
+.cancelled {
+  background: rgb(212, 74, 50);
+}
+
 .pending {
-  background: rgb(222, 78, 52);
+  background: rgb(227, 172, 61);
 }
 
 .received {
-  background: rgb(37, 154, 26);
+  background: rgb(50, 166, 39);
 }
