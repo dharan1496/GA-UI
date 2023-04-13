@@ -28,18 +28,56 @@
 
         <mat-form-field appearance="fill">
           <mat-label>PO date range</mat-label>
-          <mat-date-range-input [rangePicker]="picker" [min]="minDate">
+          <mat-date-range-input
+            [rangePicker]="picker"
+            [min]="minDate"
+            [max]="maxDate"
+          >
             <input
               matStartDate
               formControlName="poStartDate"
               placeholder="Start date"
+              (dateChange)="
+                appSharedService.formatDate(
+                  $event,
+                  form.controls['poStartDate']
+                )
+              "
             />
             <input
               matEndDate
               formControlName="poEndDate"
               placeholder="End date"
+              (dateChange)="
+                appSharedService.formatDate($event, form.controls['poEndDate'])
+              "
             />
           </mat-date-range-input>
+          <mat-error
+            *ngIf="
+              !(
+                form.get('poStartDate')?.hasError('matDatepickerMin') ||
+                form.get('poStartDate')?.hasError('matDatepickerMax') ||
+                form.get('poEndDate')?.hasError('matDatepickerMin') ||
+                form.get('poEndDate')?.hasError('matDatepickerMax')
+              )
+            "
+            >Invalid format entered</mat-error
+          >
+          <mat-error
+            *ngIf="
+              form.get('poStartDate')?.hasError('matDatepickerMin') ||
+              form.get('poStartDate')?.hasError('matDatepickerMax')
+            "
+            >Start Date should be between last 12 months</mat-error
+          >
+          <mat-error
+            *ngIf="
+              form.get('poEndDate')?.hasError('matDatepickerMin') ||
+              form.get('poEndDate')?.hasError('matDatepickerMax')
+            "
+            >End Date should be between last 12 months</mat-error
+          >
           <mat-hint>DD/MM/YYYY – DD/MM/YYYY</mat-hint>
           <mat-datepicker-toggle
             matIconSuffix

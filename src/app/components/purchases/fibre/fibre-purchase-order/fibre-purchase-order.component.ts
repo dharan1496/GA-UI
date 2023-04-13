@@ -49,7 +49,7 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
     private notificationService: NotificationService,
-    private appSharedService: AppSharedService,
+    public appSharedService: AppSharedService,
     private navigationService: NavigationService,
     private printFibrePOService: PrintFibrePOService,
     public partyService: PartyService,
@@ -159,7 +159,7 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
     this.form.reset();
     this.dataSource = [];
     this.table.renderRows();
-    this.form.patchValue({ pono: this.appSharedService.generatePONo() });
+    this.form.patchValue({ poNo: this.appSharedService.generatePONo() });
   }
 
   addData(): void {

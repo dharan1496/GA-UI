@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { AbstractControl } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +35,16 @@ export class AppSharedService {
           event.target.value = value.slice(0, value?.length - 1);
         }
       }
+    }
+  }
+
+  formatDate(e: any, dateControl: AbstractControl) {
+    const enteredDate = e.target.value;
+    if (enteredDate && dateControl) {
+      const date = new Date(e.target.value);
+      date.setHours(date.getHours() + 5);
+      date.setMinutes(date.getMinutes() + 30);
+      dateControl?.setValue(date, { onlyself: true });
     }
   }
 }

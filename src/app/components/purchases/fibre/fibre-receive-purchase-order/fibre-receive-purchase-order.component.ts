@@ -15,6 +15,7 @@ import { UserActionConfirmationComponent } from 'src/app/components/user-action-
 import { Router } from '@angular/router';
 import { PendingFibrePoComponent } from './pending-fibre-po/pending-fibre-po.component';
 import { ReceiveFibrePODts } from 'src/app/models/receiveFibrePODts';
+import { AppSharedService } from 'src/app/shared/app-shared.service';
 
 @Component({
   selector: 'app-fibre-receive-purchase-order',
@@ -51,7 +52,8 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
     private navigationService: NavigationService,
     public partyService: PartyService,
     private fibreService: FibreService,
-    private router: Router
+    private router: Router,
+    public appSharedService: AppSharedService
   ) {
     this.navigationService.isSidenavOpened = true;
     this.navigationService.setFocus('purchases');

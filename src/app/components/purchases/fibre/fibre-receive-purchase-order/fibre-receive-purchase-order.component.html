@@ -32,6 +32,9 @@
               matInput
               [matDatepicker]="receivedDatePicker"
               formControlName="recdDate"
+              (dateChange)="
+                appSharedService.formatDate($event, form.controls['recdDate'])
+              "
             />
             <mat-hint>DD/MM/YYYY</mat-hint>
             <mat-datepicker-toggle
@@ -54,6 +57,9 @@
               matInput
               [matDatepicker]="dcDatePicker"
               formControlName="dcDate"
+              (dateChange)="
+                appSharedService.formatDate($event, form.controls['dcDate'])
+              "
             />
             <mat-hint>DD/MM/YYYY</mat-hint>
             <mat-datepicker-toggle

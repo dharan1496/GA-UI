@@ -27,7 +27,14 @@
 
         <mat-form-field appearance="fill" class="w-20">
           <mat-label>PODate</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="pOdate" />
+          <input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="pOdate"
+            (dateChange)="
+              appSharedService.formatDate($event, form.controls['pOdate'])
+            "
+          />
           <mat-hint>DD/MM/YYYY</mat-hint>
           <mat-datepicker-toggle
             matIconSuffix

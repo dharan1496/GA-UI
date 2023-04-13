@@ -22,6 +22,9 @@ import {
 } from '@angular/animations';
 import { Router } from '@angular/router';
 import { MatSort } from '@angular/material/sort';
+import { AppSharedService } from 'src/app/shared/app-shared.service';
+import { NotificationService } from 'src/app/shared/notification.service';
+import { NotifyType } from 'src/app/models/notify';
 
 @Component({
   selector: 'app-fibre-dashboard',
@@ -57,12 +60,15 @@ export class FibreSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   loader = false;
   minDate = new Date();
+  maxDate = new Date();
 
   constructor(
     public partyService: PartyService,
     private formBuilder: FormBuilder,
     private navigationService: NavigationService,
-    private router: Router
+    private router: Router,
+    public appSharedService: AppSharedService,
+    private notificationService: NotificationService
   ) {
     this.navigationService.isSidenavOpened = true;
     this.navigationService.setFocus(Constants.PURCHASES);
@@ -114,6 +120,13 @@ export class FibreSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onSearch() {
+    if (this.form.invalid) {
+      this.notificationService.notify(
+        'Error occured in search details!',
+        NotifyType.ERROR
+      );
+      return;
+    }
     // API call to be implementated
     this.loader = true;
     // TEMP - start
