@@ -1,3 +1,5 @@
+import { environment } from 'src/environment/environment';
+
 export const EmailConfig = {
   host: 'smtp.elasticemail.com',
   usrname: 'reset-password@ga.com',
@@ -13,7 +15,7 @@ export const EmailConfig = {
         <br/>
         To reset your password, use below url:
         <br/>
-        http://localhost:4300/reset-password/${id}
+        ${environment.baseurl}/reset-password/${id}
         <br/>
         <br/>
         Regards,

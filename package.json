@@ -10,7 +10,7 @@
     "prettier": "prettier --write src/**/*.{ts,js,scss,html}",
     "lint": "ng lint",
     "pre-commit": "lint-staged",
-    "start:stage": "ng serve --port 4300 --ssl false --disable-host-check"
+    "start:stage": "ng serve --ssl false --disable-host-check"
   },
   "private": true,
   "dependencies": {

@@ -98,6 +98,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
       NotifyType.SUCCESS
     );
     setTimeout(() => this.router.navigateByUrl('/login'), 1000);
+    this.form.reset();
   }
 
   backToLogin() {
