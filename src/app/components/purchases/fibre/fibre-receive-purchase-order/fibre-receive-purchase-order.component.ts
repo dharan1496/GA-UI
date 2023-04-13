@@ -74,7 +74,7 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
 
     this.form = this.formBuilder.group({
       poNo: [{ value: '', disabled: true }],
-      partyId: [{ value: '', disabled: true }],
+      partyId: '',
       recdDate: ['', Validators.required],
       recdDCNo: ['', Validators.required],
       dcDate: ['', Validators.required],
@@ -118,6 +118,7 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
 
     const request = {
       ...this.form.value,
+      receivedByUserId: 0,
       fibrePODts: [],
     };
 
