@@ -6,9 +6,9 @@
     </mat-card-header>
     <mat-card-content>
       <form class="form-container" [formGroup]="form">
-        <div class="w-15">
+        <div class="w-10 pt-8">
           <label for="poNo" class="font-weight-bold">PONo</label>
-          <div id="poNo" class="text-gray pt-4">
+          <div id="poNo" class="font-size-16 text-gray pt-4">
             {{ form.get("poNo")?.value ? form.get("poNo")?.value : "_" }}
           </div>
         </div>
