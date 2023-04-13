@@ -216,6 +216,7 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
       .toString()
       ?.replaceAll(',', ', ');
 
+    this.form.reset();
     this.form.patchValue({
       poNo: poNo,
       partyId: data.partyId,
