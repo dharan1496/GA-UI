@@ -28,7 +28,6 @@ export class AddPartyComponent implements OnInit {
     private partyService: PartyService,
     private router: Router
   ) {
-    this.navigationService.isSidenavOpened = true;
     this.navigationService.setFocus(Constants.PARTY);
     this.navigationService.menu = PARTY;
   }

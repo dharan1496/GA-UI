@@ -70,7 +70,6 @@ export class FibreSearchComponent implements OnInit, OnDestroy, AfterViewInit {
     public appSharedService: AppSharedService,
     private notificationService: NotificationService
   ) {
-    this.navigationService.isSidenavOpened = true;
     this.navigationService.setFocus(Constants.PURCHASES);
     this.navigationService.menu = PURCHASE;
   }

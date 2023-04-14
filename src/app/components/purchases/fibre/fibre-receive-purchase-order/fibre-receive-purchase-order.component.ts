@@ -55,7 +55,6 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
     private router: Router,
     public appSharedService: AppSharedService
   ) {
-    this.navigationService.isSidenavOpened = true;
     this.navigationService.setFocus('purchases');
     this.navigationService.menu = PURCHASE;
   }
