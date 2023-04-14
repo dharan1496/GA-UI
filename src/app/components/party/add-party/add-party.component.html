@@ -1,0 +1,129 @@
+<section class="container" [formGroup]="form">
+  <h1 class="header letter-spacing-1">{{ edit ? "Update" : "Add" }} Party</h1>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title> Basic Details </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form class="grid col-2 gap padding">
+        <mat-form-field appearance="fill">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="partyName" />
+          <mat-error>This field is required.</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Branch</mat-label>
+          <input matInput formControlName="branchName" />
+          <mat-error>This field is required.</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>GST No</mat-label>
+          <input matInput formControlName="gstno" />
+          <mat-error>This field is required.</mat-error>
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title> Address </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form class="grid col-2 gap padding">
+        <mat-form-field appearance="fill">
+          <mat-label>Address Line 1</mat-label>
+          <input matInput formControlName="address1" />
+          <mat-error>This field is required.</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Address Line 2</mat-label>
+          <input matInput formControlName="address2" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Address Line 3</mat-label>
+          <input matInput formControlName="address3" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>District</mat-label>
+          <input matInput formControlName="district" />
+          <mat-error>This field is required.</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>City</mat-label>
+          <input matInput formControlName="city" />
+          <mat-error>This field is required.</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>State</mat-label>
+          <mat-select formControlName="state">
+            <mat-option *ngFor="let state of stateList" [value]="state">
+              {{ state }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Pincode</mat-label>
+          <input matInput formControlName="pincode" mask="000000" />
+          <mat-error *ngIf="form.get('pincode')?.hasError('required')"
+            >This field is required.</mat-error
+          >
+          <mat-error *ngIf="form.get('pincode')?.hasError('mask')"
+            >Invalid pincode</mat-error
+          >
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title> Contact </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form class="grid col-2 gap padding">
+        <mat-form-field appearance="fill">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="emailId" />
+          <mat-error *ngIf="form.get('emailId')?.hasError('required')"
+            >This field is required.</mat-error
+          >
+          <mat-error *ngIf="form.get('emailId')?.hasError('pattern')"
+            >Invalid email</mat-error
+          >
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Mobile No</mat-label>
+          <input matInput formControlName="mobileNo" mask="0000000000" />
+          <mat-error *ngIf="form.get('mobileNo')?.hasError('required')"
+            >This field is required.</mat-error
+          >
+
+          <mat-error *ngIf="form.get('mobileNo')?.hasError('mask')"
+            >Invalid mobile number</mat-error
+          >
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Landline No</mat-label>
+          <input
+            matInput
+            formControlName="landline"
+            mask="00000-000000"
+            placeholder="00000-000000"
+          />
+          <mat-error *ngIf="form.get('landline')?.hasError('mask')"
+            >Invalid landline number</mat-error
+          >
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  <div class="footer">
+    <button mat-raised-button (click)="resetData()">
+      <mat-icon>refresh</mat-icon>Reset
+    </button>
+    <button mat-raised-button color="primary" (click)="submitParty()">
+      <mat-icon>save_alt</mat-icon>{{ edit ? "Update" : "Submit" }}
+    </button>
+  </div>
+</section>

@@ -1,8 +1,8 @@
 export const PURCHASE = [
-  { title: 'Purchases', route: 'purchases' },
   {
     title: 'Fibre',
     submenu: [
+      { title: 'Fibre Dashboard', route: 'purchases/fibre' },
       { title: 'Search Fibre PO', route: 'purchases/fibre/search' },
       {
         title: 'New Fibre PO',
@@ -11,6 +11,10 @@ export const PURCHASE = [
       {
         title: 'Receive Fibre PO',
         route: 'purchases/fibre/receive-purchase-order',
+      },
+      {
+        title: 'Fibre Type List',
+        route: 'purchases/fibre/fibre-list',
       },
     ],
   },

@@ -9,6 +9,7 @@ import { Party } from '../models/party';
 })
 export class PartyService {
   parties!: Party[];
+  editPartyDetails: Party | undefined;
 
   constructor(private http: HttpClient) {}
 

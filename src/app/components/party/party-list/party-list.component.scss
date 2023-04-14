@@ -1,0 +1,32 @@
+.container {
+  margin: 32px;
+}
+
+.header {
+  font-weight: 500;
+  margin: 40px 0;
+}
+
+.align-start {
+  align-self: flex-start;
+}
+
+.card {
+  padding: 32px 40px;
+}
+
+.party-details {
+  display: flex;
+  gap: 5%;
+}
+
+.section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+mat-expansion-panel-header {
+  padding: 4px 24px;
+}

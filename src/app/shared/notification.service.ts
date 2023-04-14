@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NotifyType, Notify } from '../models/notify';
 import { NotificationSnackbarComponent } from '../components/notification-snackbar/notification-snackbar.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../components/error-dialog/error-dialog.component';
 import { SuccessDialogComponent } from '../components/success-dialog/success-dialog.component';
 
@@ -26,8 +26,11 @@ export class NotificationService {
     this.dialog.open(ErrorDialogComponent, { data: message });
   }
 
-  success(message: string | object, overlayDisable?: boolean) {
-    this.dialog.open(SuccessDialogComponent, {
+  success(
+    message: string | object,
+    overlayDisable?: boolean
+  ): MatDialogRef<SuccessDialogComponent> {
+    return this.dialog.open(SuccessDialogComponent, {
       data: message,
       disableClose: overlayDisable || false,
     });

@@ -29,6 +29,7 @@
     "@ng-idle/keepalive": "^11.0.3",
     "chart.js": "^4.2.1",
     "chartjs-plugin-datalabels": "^2.2.0",
+    "ngx-mask": "^15.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"

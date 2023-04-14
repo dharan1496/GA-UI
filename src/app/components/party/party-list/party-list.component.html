@@ -1,0 +1,120 @@
+<section class="container">
+  <h1 class="header letter-spacing-1">Party List</h1>
+  <mat-accordion>
+    <div class="mb-16">
+      <button
+        aria-label="button with a add icon"
+        mat-raised-button
+        routerLink="/party/add"
+      >
+        <mat-icon>add_circle_outline</mat-icon> Add Party
+      </button>
+    </div>
+    <mat-expansion-panel
+      *ngFor="let party of partyService.parties; let index = index"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span class="font-size-16 font-weight-normal"
+            ><span class="mr-16">{{ index + 1 }},</span
+            >{{ party.partyName }}</span
+          >
+        </mat-panel-title>
+        <mat-panel-description>{{ party.city }}</mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="my-16">
+        <button
+          aria-label="button with a edit icon"
+          mat-raised-button
+          class="mr-16"
+          (click)="editParty(party)"
+        >
+          <mat-icon>edit</mat-icon> Edit
+        </button>
+        <button
+          aria-label="button with a delete icon"
+          mat-raised-button
+          (click)="removeParty(party)"
+        >
+          <mat-icon>delete</mat-icon> Remove
+        </button>
+      </div>
+      <mat-card class="card">
+        <div class="party-details">
+          <div class="section">
+            <div>
+              <label for="name">Name</label>
+              <div id="name" class="text-gray">{{ party.partyName }}</div>
+            </div>
+            <div>
+              <label for="branch">Branch</label>
+              <div id="branch" class="text-gray">
+                {{ party.branchName || "_" }}
+              </div>
+            </div>
+            <div>
+              <label for="gstno">GST No</label>
+              <div id="gstno" class="text-gray">{{ party.gstno || "_" }}</div>
+            </div>
+            <div>
+              <label for="address1">Address 1</label>
+              <div id="address1" class="text-gray">
+                {{ party.address1 || "_" }}
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div>
+              <label for="address2">Address 2</label>
+              <div id="address2" class="text-gray">
+                {{ party.address2 || "_" }}
+              </div>
+            </div>
+            <div>
+              <label for="address3">Address 3</label>
+              <div id="address3" class="text-gray">
+                {{ party.address3 || "_" }}
+              </div>
+            </div>
+            <div>
+              <label for="district">District</label>
+              <div id="district" class="text-gray">
+                {{ party.district || "_" }}
+              </div>
+            </div>
+            <div>
+              <label for="city">City</label>
+              <div id="city" class="text-gray">{{ party.city || "_" }}</div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div>
+              <label for="state">State</label>
+              <div id="state" class="text-gray">{{ party.state || "_" }}</div>
+            </div>
+            <div>
+              <label for="pincode">Pincode</label>
+              <div id="pincode" class="text-gray">
+                {{ party.pinCode || "_" }}
+              </div>
+            </div>
+            <div>
+              <label for="email">Email</label>
+              <div id="email" class="text-gray">
+                {{ party.emailId || "_" }}
+              </div>
+            </div>
+            <div>
+              <label for="phone">Phone</label>
+              <div id="phone" class="text-gray">
+                {{ party.contactNo || "_" }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </mat-expansion-panel>
+  </mat-accordion>
+</section>

@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Constants } from 'src/app/constants/constants';
+import { PARTY } from 'src/app/constants/party-menu-values.const';
 import { PURCHASE } from 'src/app/constants/purchase-menu-values.const';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
@@ -30,6 +31,8 @@ export class ToolBarComponent {
     this.navigationService.isSidenavOpened = true;
     if (section === Constants.PURCHASES) {
       this.navigationService.menu = PURCHASE;
+    } else if (section === Constants.PARTY) {
+      this.navigationService.menu = PARTY;
     } else {
       this.navigationService.menu = null;
     }

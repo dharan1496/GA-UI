@@ -10,7 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './components/login/login.component';
 import { PrintFibrePOComponent } from './components/purchases/fibre/fibre-purchase-order/print-fibre-po/print-fibre-po.component';
 import { ToolBarComponent } from './components/tool-bar/tool-bar.component';
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 
 @NgModule({
@@ -25,7 +25,7 @@ import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
     HttpClientModule,
     NgIdleKeepaliveModule.forRoot(),
   ],
-  providers: [AuthGuard, DatePipe, CurrencyPipe],
+  providers: [AuthGuard, DatePipe, DecimalPipe],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

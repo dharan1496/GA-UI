@@ -6,7 +6,8 @@ import { CreateFibrePO } from '../models/createFibrePO';
 import { PartywisePOCounts } from '../models/partywisePOCounts';
 import { PendingPODetailsByParty } from '../models/pendingPODtsByParty';
 import { FibreType } from '../models/fibreType';
-import { ReceiveFibrePO } from '../models/ReceiveFibrePO';
+import { ReceiveFibrePO } from '../models/receiveFibrePO';
+import { FibreGraph } from '../models/fibreGraph';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,10 @@ export class FibreService {
   fibres!: FibreType[];
 
   constructor(private http: HttpClient) {}
+
+  getFibreGraphData(): Observable<FibreGraph[]> {
+    return this.http.get<FibreGraph[]>('/assets/mocks/mock-fibre-graph.json');
+  }
 
   getFibres(): Observable<FibreType[]> {
     return this.http.get<FibreType[]>(`${environment.api}/Fiber`);

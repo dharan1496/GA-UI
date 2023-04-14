@@ -26,6 +26,12 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: 'party',
+    loadChildren: () =>
+      import('./components/party/party.module').then((m) => m.PartyModule),
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'change-password',
     loadChildren: () =>
       import('./components/change-password/change-password.module').then(
