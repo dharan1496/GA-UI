@@ -119,11 +119,16 @@
     </mat-card-content>
   </mat-card>
   <div class="footer">
-    <button mat-raised-button (click)="resetData()">
-      <mat-icon>refresh</mat-icon>Reset
+    <button mat-raised-button routerLink="/party">
+      <mat-icon>arrow_back</mat-icon>Go to Party List
     </button>
-    <button mat-raised-button color="primary" (click)="submitParty()">
-      <mat-icon>save_alt</mat-icon>{{ edit ? "Update" : "Submit" }}
-    </button>
+    <div>
+      <button mat-raised-button (click)="resetData()" class="mr-16">
+        <mat-icon>refresh</mat-icon>Reset
+      </button>
+      <button mat-raised-button color="primary" (click)="submitParty()">
+        <mat-icon>save_alt</mat-icon>{{ edit ? "Update" : "Submit" }}
+      </button>
+    </div>
   </div>
 </section>
