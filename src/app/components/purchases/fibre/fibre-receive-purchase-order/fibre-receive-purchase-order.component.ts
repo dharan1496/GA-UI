@@ -123,7 +123,7 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
 
     this.dataSource.forEach((data: any) => {
       request.fibrePODts.push({
-        poDtsId: 0,
+        poDtsId: data?.poDtsId,
         lot: data?.lot,
         hsnCode: data?.hsnCode,
         receivedWeight: data?.receivedQty,
@@ -132,7 +132,6 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
         gstPercent: data?.gstpercent,
       } as ReceiveFibrePODts);
     });
-
     this.subscription.add(
       this.fibreService.submitReceiveFibre(request).subscribe(
         (response) => {

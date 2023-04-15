@@ -11,8 +11,8 @@
     "state": "TamilNadu",
     "city": "COIMBATORE",
     "stateCode": 33,
-    "gstno": "32423423",
-    "emailId": "jayaramakrishnan@groz-beckert.com",
+    "gstNo": "32423423",
+    "eMailId": "jayaramakrishnan@groz-beckert.com",
     "contactNo": "0422-2647181"
   },
   {
@@ -27,8 +27,8 @@
     "state": "TamilNadu",
     "city": "GOBI",
     "stateCode": 33,
-    "gstno": "34324",
-    "emailId": "abbee.pack@gmail.com",
+    "gstNo": "34324",
+    "eMailId": "abbee.pack@gmail.com",
     "contactNo": "9344277889, 9344477889"
   },
   {
@@ -43,8 +43,8 @@
     "state": "TamilNadu",
     "city": "",
     "stateCode": 33,
-    "gstno": "12234",
-    "emailId": null,
+    "gstNo": "12234",
+    "eMailId": null,
     "contactNo": "04636-224959, 9842122130"
   },
   {
@@ -59,8 +59,8 @@
     "state": "TamilNadu",
     "city": "COIMBATORE",
     "stateCode": 33,
-    "gstno": "124",
-    "emailId": "smecbe@yahoo.co.in",
+    "gstNo": "124",
+    "eMailId": "smecbe@yahoo.co.in",
     "contactNo": "9940830846"
   }
 ]

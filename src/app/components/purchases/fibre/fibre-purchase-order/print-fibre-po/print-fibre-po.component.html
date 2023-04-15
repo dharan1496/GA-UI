@@ -2,7 +2,7 @@
   <section id="header">
     <span>SREE GOMATHI AMMAN SPINNING MILLS PVT LTD</span>
     <span>GOBICETTIPALAYAM</span>
-    <span>GSTNO : 33AAKCS5785R1ZC</span>
+    <span>GST No : 33AAKCS5785R1ZC</span>
   </section>
   <section id="po-details">
     <div id="po">
@@ -26,9 +26,9 @@
       <div *ngIf="printFibreService.fibrePOData?.address3">
         {{ printFibreService.fibrePOData?.address3 }}
       </div>
-      <div>{{ printFibreService.fibrePOData?.city }}</div>
-      <div>{{ printFibreService.fibrePOData?.state }}</div>
-      <div>GSTNO : 33AAKCS5785R1ZC</div>
+      <div>{{ printFibreService.fibrePOData?.cityName }}</div>
+      <div>{{ printFibreService.fibrePOData?.stateName }}</div>
+      <div>GST No : {{ printFibreService.fibrePOData?.gstNo }}</div>
     </div>
     <table>
       <thead>

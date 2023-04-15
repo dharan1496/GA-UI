@@ -58,3 +58,23 @@
   display: flex;
   justify-content: space-between;
 }
+
+.po-no {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  mat-icon {
+    scale: 0.8;
+    border-radius: 50%;
+    transition: all 0.15s;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    &:active {
+      transform: rotate(180deg) scale(1.1);
+    }
+  }
+}

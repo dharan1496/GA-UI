@@ -33,6 +33,10 @@ export class PartyListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getParty();
+  }
+
+  getParty() {
     this.subscription.add(
       this.partyService
         .getParties()
@@ -54,6 +58,7 @@ export class PartyListComponent implements OnInit {
           this.partyService.deleteParty(party.partyId).subscribe(
             (response) => {
               if (response) {
+                this.getParty();
                 this.notificationService.success('Party deleted successfully!');
               } else {
                 this.notificationService.success('Unable to delete the Party!');

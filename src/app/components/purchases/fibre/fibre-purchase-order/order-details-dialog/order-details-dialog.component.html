@@ -63,10 +63,10 @@
           formControlName="gstPercent"
           (input)="appSharedService.restrictDecimal($event, 2)"
         />
-        <mat-error *ngIf="form.get('gst')?.hasError('required')"
+        <mat-error *ngIf="form.get('gstPercent')?.hasError('required')"
           >This field is required.</mat-error
         >
-        <mat-error *ngIf="form.get('gst')?.hasError('max')"
+        <mat-error *ngIf="form.get('gstPercent')?.hasError('max')"
           >Value should be between 1 and 100</mat-error
         >
       </mat-form-field>

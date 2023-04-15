@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MaterialModule } from 'src/app/material.module';
+import { FibreService } from 'src/app/services/fibre.service';
+import { NotificationService } from 'src/app/shared/notification.service';
 
 @Component({
   selector: 'app-add-fibre-type',
@@ -14,14 +16,21 @@ import { MaterialModule } from 'src/app/material.module';
 export class AddFibreTypeComponent {
   fibre = new FormControl('', Validators.required);
 
-  constructor(private matDialogRef: MatDialogRef<any>) {}
+  constructor(
+    private matDialogRef: MatDialogRef<any>,
+    private fibreService: FibreService,
+    private notificationService: NotificationService
+  ) {}
 
   submit() {
     if (this.fibre.invalid) {
       this.fibre.markAsTouched();
       return;
     }
-    this.close();
+    this.fibreService.addFibre(this.fibre.value || '').subscribe(
+      () => this.close(),
+      (error) => this.notificationService.error(error?.error || error?.message)
+    );
   }
 
   close() {

@@ -43,7 +43,7 @@ export class AddPartyComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       partyName: ['', Validators.required],
       branchName: ['', Validators.required],
-      gstno: ['', Validators.required],
+      gstNo: ['', Validators.required],
       address1: ['', Validators.required],
       address2: '',
       address3: '',
@@ -51,7 +51,7 @@ export class AddPartyComponent implements OnInit, OnDestroy {
       cityId: ['', Validators.required],
       stateId: ['', Validators.required],
       pinCode: ['', Validators.required],
-      emailId: [
+      eMailId: [
         '',
         [
           Validators.required,
@@ -70,7 +70,6 @@ export class AddPartyComponent implements OnInit, OnDestroy {
         mobileNo: contact?.length ? contact[0]?.trim() : '',
         landline: contact?.length ? contact[1]?.trim() : '',
       });
-      this.partyService.editPartyDetails = undefined;
     }
   }
 
@@ -110,23 +109,38 @@ export class AddPartyComponent implements OnInit, OnDestroy {
     const landline = this.form.get('landline')?.value;
     const partyRequest = {
       ...this.form.value,
-      createdByUserId: 0,
       contactNo: landline ? `${mobile},${landline}` : mobile,
+      createdByUserId: 0,
     };
     delete partyRequest?.mobileNo;
     delete partyRequest?.landline;
 
     if (this.edit) {
-      this.notificationService
-        .success('Party updated successfully!')
-        .afterClosed()
-        .subscribe(() => this.router.navigateByUrl('/party'));
+      this.partyService
+        .updateParty({
+          ...partyRequest,
+          partyId: this.partyService.editPartyDetails?.partyId,
+          cityName: '',
+          districtName: '',
+          stateName: '',
+        })
+        .subscribe(
+          (response) => {
+            this.partyService.editPartyDetails = undefined;
+            this.notificationService
+              .success(response)
+              .afterClosed()
+              .subscribe(() => this.router.navigateByUrl('/party'));
+          },
+          (error) =>
+            this.notificationService.error(error?.error || error.message)
+        );
       return;
     }
 
     this.partyService.addParty(partyRequest).subscribe(
-      (response) => {
-        this.notificationService.success(response);
+      () => {
+        this.notificationService.success('Party added successfully!');
         this.resetData();
       },
       (error) => this.notificationService.error(error?.error || error.message)

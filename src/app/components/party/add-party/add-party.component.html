@@ -18,7 +18,7 @@
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>GST No</mat-label>
-          <input matInput formControlName="gstno" />
+          <input matInput formControlName="gstNo" />
           <mat-error>This field is required.</mat-error>
         </mat-form-field>
       </form>
@@ -96,11 +96,11 @@
       <form class="grid col-2 gap padding">
         <mat-form-field appearance="fill">
           <mat-label>Email</mat-label>
-          <input matInput formControlName="emailId" />
-          <mat-error *ngIf="form.get('emailId')?.hasError('required')"
+          <input matInput formControlName="eMailId" />
+          <mat-error *ngIf="form.get('eMailId')?.hasError('required')"
             >This field is required.</mat-error
           >
-          <mat-error *ngIf="form.get('emailId')?.hasError('pattern')"
+          <mat-error *ngIf="form.get('eMailId')?.hasError('pattern')"
             >Invalid email</mat-error
           >
         </mat-form-field>

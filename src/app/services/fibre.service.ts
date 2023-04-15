@@ -24,7 +24,17 @@ export class FibreService {
   }
 
   getFibres(): Observable<FibreType[]> {
-    return this.http.get<FibreType[]>(`${environment.api}/Fiber`);
+    return this.http.get<FibreType[]>(`${environment.api}/Fiber/GetFibreTypes`);
+  }
+
+  addFibre(fibreName: string): Observable<any> {
+    return this.http.post(
+      `${environment.api}/Fiber/AddFibreType?fibreTypeName=${fibreName}`,
+      {},
+      {
+        responseType: 'text',
+      }
+    );
   }
 
   submitFibrePO(request: CreateFibrePO): Observable<string> {
@@ -40,7 +50,7 @@ export class FibreService {
   }
 
   getPOByID(id: string): Observable<any> {
-    return this.http.get<any>(`${environment.api}/Fiber/GetPOById/${id}`);
+    return this.http.get<any>(`${environment.api}/Fiber/GetPOById?poId=${id}`);
   }
 
   getPartywiswPendingPO(): Observable<PartywisePOCounts[]> {

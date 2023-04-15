@@ -53,8 +53,11 @@
         <mat-error *ngIf="form.get('receivedQty')?.hasError('required')"
           >This field is required.</mat-error
         >
+        <mat-error *ngIf="form.get('receivedQty')?.hasError('zero')"
+          >Received Qty cannot be zero or less than zero</mat-error
+        >
         <mat-error *ngIf="form.get('receivedQty')?.hasError('moreThanOrder')"
-          >Received more than orderQty</mat-error
+          >Entered more than pending Qty</mat-error
         >
       </mat-form-field>
     </div>

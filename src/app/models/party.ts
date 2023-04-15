@@ -13,8 +13,8 @@ export interface Party {
   stateName: string;
   stateId: number;
   stateCode: number;
-  gstno: string;
-  emailId: string;
+  gstNo: string;
+  eMailId: string;
   contactNo: string;
   createdByUserId: number;
 }

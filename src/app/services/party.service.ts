@@ -21,16 +21,26 @@ export class PartyService {
   }
 
   addParty(party: Party): Observable<string> {
-    return this.http.post(`${environment.api}/Party/AddParty`, party, {
+    return this.http.post<string>(`${environment.api}/Party/AddParty`, party);
+  }
+
+  updateParty(party: Party): Observable<string> {
+    return this.http.put(`${environment.api}/Party/UpdateParty`, party, {
       responseType: 'text',
     });
   }
 
-  deleteParty(partyId: number): Observable<boolean> {
-    return this.http.put<boolean>(`${environment.api}/Party/DeleteParty`, {
-      partyId,
-      deletedByUserId: 0,
-    });
+  deleteParty(partyId: number): Observable<string> {
+    return this.http.put(
+      `${environment.api}/Party/DeleteParty`,
+      {
+        partyId,
+        deletedByUserId: 0,
+      },
+      {
+        responseType: 'text',
+      }
+    );
   }
 
   getStates(): Observable<State[]> {

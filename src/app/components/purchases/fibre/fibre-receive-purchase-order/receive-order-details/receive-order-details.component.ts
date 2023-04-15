@@ -24,6 +24,7 @@ import { AppSharedService } from 'src/app/shared/app-shared.service';
 export class ReceiveOrderDetailsComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   subscription = new Subscription();
+  actualPendingQty = 0;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -36,6 +37,7 @@ export class ReceiveOrderDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
+      poDtsId: '',
       orderNo: typeof this.data === 'number' ? +this.data + 1 : '',
       poNo: [{ value: '', disabled: true }],
       fibreTypeId: [{ value: '', disabled: true }],
@@ -97,6 +99,7 @@ export class ReceiveOrderDetailsComponent implements OnInit, OnDestroy {
         ...this.data,
         pendingQty: this.data?.orderQty - this.data?.receivedQty,
       });
+      this.actualPendingQty = this.data?.orderQty - this.data?.receivedQty;
     }
   }
 
@@ -106,15 +109,18 @@ export class ReceiveOrderDetailsComponent implements OnInit, OnDestroy {
 
   receivedQtyChange() {
     const received = +this.form.get('receivedQty')?.value;
-    const orderQty = +this.form.get('orderQty')?.value;
-    const pending = orderQty - received;
-    if (pending < 0) {
-      this.form.get('pendingQty')?.setValue(orderQty);
-      this.form.get('receivedQty')?.setErrors({ moreThanOrder: true });
-    } else {
-      this.form.get('receivedQty')?.setErrors(null);
-      this.form.get('pendingQty')?.setValue(pending);
+    const pending = this.actualPendingQty - received;
+    this.form.get('pendingQty')?.setValue(this.actualPendingQty);
+    if (received <= 0) {
+      this.form.get('receivedQty')?.setErrors({ zero: true });
+      return;
     }
+    if (received > this.actualPendingQty) {
+      this.form.get('receivedQty')?.setErrors({ moreThanOrder: true });
+      return;
+    }
+    this.form.get('pendingQty')?.setValue(pending);
+    this.form.get('receivedQty')?.setErrors(null);
   }
 
   onSubmit() {

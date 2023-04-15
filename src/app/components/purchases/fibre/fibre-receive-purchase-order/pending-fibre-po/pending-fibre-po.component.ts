@@ -59,10 +59,7 @@ export class PendingFibrePoComponent implements OnInit, OnDestroy {
             .getPendingPOByParty(partyId)
             .pipe(finalize(() => (this.loader = false)))
             .subscribe(
-              (data) => {
-                this.dataSource.data = this.groupBy(data);
-                this.loader = false;
-              },
+              (data) => (this.dataSource.data = this.groupBy(data)),
               (error) =>
                 this.notificationService.error(error?.error || error?.message)
             )
