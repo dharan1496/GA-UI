@@ -46,29 +46,41 @@
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>District</mat-label>
-          <input matInput formControlName="district" />
+          <mat-select formControlName="districtId">
+            <mat-option
+              *ngFor="let district of districtList"
+              [value]="district.districtId"
+            >
+              {{ district.districtName }}
+            </mat-option>
+          </mat-select>
           <mat-error>This field is required.</mat-error>
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>City</mat-label>
-          <input matInput formControlName="city" />
+          <mat-select formControlName="cityId">
+            <mat-option *ngFor="let city of cityList" [value]="city.cityId">
+              {{ city.cityName }}
+            </mat-option>
+          </mat-select>
           <mat-error>This field is required.</mat-error>
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>State</mat-label>
-          <mat-select formControlName="state">
-            <mat-option *ngFor="let state of stateList" [value]="state">
-              {{ state }}
+          <mat-select formControlName="stateId">
+            <mat-option *ngFor="let state of stateList" [value]="state.stateId">
+              {{ state.stateName }}
             </mat-option>
           </mat-select>
+          <mat-error>This field is required.</mat-error>
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>Pincode</mat-label>
-          <input matInput formControlName="pincode" mask="000000" />
-          <mat-error *ngIf="form.get('pincode')?.hasError('required')"
+          <input matInput formControlName="pinCode" mask="000000" />
+          <mat-error *ngIf="form.get('pinCode')?.hasError('required')"
             >This field is required.</mat-error
           >
-          <mat-error *ngIf="form.get('pincode')?.hasError('mask')"
+          <mat-error *ngIf="form.get('pinCode')?.hasError('mask')"
             >Invalid pincode</mat-error
           >
         </mat-form-field>

@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { Constants } from 'src/app/constants/constants';
 import { PARTY } from 'src/app/constants/party-menu-values.const';
-import { STATES, STATE_CODE } from 'src/app/constants/state-list.const';
+import { City } from 'src/app/models/city';
+import { District } from 'src/app/models/district';
 import { NotifyType } from 'src/app/models/notify';
+import { State } from 'src/app/models/state';
 import { PartyService } from 'src/app/services/party.service';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
@@ -15,10 +18,13 @@ import { NotificationService } from 'src/app/shared/notification.service';
   templateUrl: './add-party.component.html',
   styleUrls: ['./add-party.component.scss'],
 })
-export class AddPartyComponent implements OnInit {
+export class AddPartyComponent implements OnInit, OnDestroy {
   form!: FormGroup;
-  stateList = STATES;
+  stateList!: State[];
+  cityList!: City[];
+  districtList!: District[];
   edit = false;
+  subscription = new Subscription();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -33,6 +39,7 @@ export class AddPartyComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getDropdownData();
     this.form = this.formBuilder.group({
       partyName: ['', Validators.required],
       branchName: ['', Validators.required],
@@ -40,10 +47,10 @@ export class AddPartyComponent implements OnInit {
       address1: ['', Validators.required],
       address2: '',
       address3: '',
-      district: ['', Validators.required],
-      city: ['', Validators.required],
-      state: ['Tamil Nadu', Validators.required],
-      pincode: ['', Validators.required],
+      districtId: ['', Validators.required],
+      cityId: ['', Validators.required],
+      stateId: ['', Validators.required],
+      pinCode: ['', Validators.required],
       emailId: [
         '',
         [
@@ -67,6 +74,28 @@ export class AddPartyComponent implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+  getDropdownData() {
+    this.subscription.add(
+      this.partyService
+        .getStates()
+        .subscribe((states) => (this.stateList = states))
+    );
+    this.subscription.add(
+      this.partyService
+        .getCities()
+        .subscribe((cities) => (this.cityList = cities))
+    );
+    this.subscription.add(
+      this.partyService
+        .getDistricts()
+        .subscribe((districts) => (this.districtList = districts))
+    );
+  }
+
   submitParty() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -77,20 +106,15 @@ export class AddPartyComponent implements OnInit {
       return;
     }
 
+    const mobile = this.form.get('mobileNo')?.value;
+    const landline = this.form.get('landline')?.value;
     const partyRequest = {
-      partyId: 0,
       ...this.form.value,
-      stateCode: STATE_CODE.find(
-        (data) => data.state === this.form.value?.state
-      )?.code,
-      contactNo: `${this.form.get('mobileNo')?.value}, ${
-        this.form.get('landline')?.value
-      }`,
+      createdByUserId: 0,
+      contactNo: landline ? `${mobile},${landline}` : mobile,
     };
     delete partyRequest?.mobileNo;
     delete partyRequest?.landline;
-
-    // TODO: API call to be added
 
     if (this.edit) {
       this.notificationService
@@ -99,8 +123,14 @@ export class AddPartyComponent implements OnInit {
         .subscribe(() => this.router.navigateByUrl('/party'));
       return;
     }
-    this.resetData();
-    this.notificationService.success('Party added successfully!');
+
+    this.partyService.addParty(partyRequest).subscribe(
+      (response) => {
+        this.notificationService.success(response);
+        this.resetData();
+      },
+      (error) => this.notificationService.error(error?.error || error.message)
+    );
   }
 
   resetData() {

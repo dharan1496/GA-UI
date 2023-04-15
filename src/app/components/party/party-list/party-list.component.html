@@ -10,6 +10,9 @@
         <mat-icon>add_circle_outline</mat-icon> Add Party
       </button>
     </div>
+    <mat-card *ngIf="!partyService.parties?.length">
+      <div class="no-party">No Party to display!</div>
+    </mat-card>
     <mat-expansion-panel
       *ngFor="let party of partyService.parties; let index = index"
     >
@@ -20,7 +23,7 @@
             >{{ party.partyName }}</span
           >
         </mat-panel-title>
-        <mat-panel-description>{{ party.city }}</mat-panel-description>
+        <mat-panel-description>{{ party.cityName }}</mat-panel-description>
       </mat-expansion-panel-header>
       <div class="my-16">
         <button
@@ -80,19 +83,21 @@
             <div>
               <label for="district">District</label>
               <div id="district" class="text-gray">
-                {{ party.district || "_" }}
+                {{ party.districtName || "_" }}
               </div>
             </div>
             <div>
               <label for="city">City</label>
-              <div id="city" class="text-gray">{{ party.city || "_" }}</div>
+              <div id="city" class="text-gray">{{ party.cityName || "_" }}</div>
             </div>
           </div>
 
           <div class="section">
             <div>
               <label for="state">State</label>
-              <div id="state" class="text-gray">{{ party.state || "_" }}</div>
+              <div id="state" class="text-gray">
+                {{ party.stateName || "_" }}
+              </div>
             </div>
             <div>
               <label for="pincode">Pincode</label>

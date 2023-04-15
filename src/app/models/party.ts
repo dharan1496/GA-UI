@@ -5,12 +5,16 @@ export interface Party {
   address1: string;
   address2: string;
   address3: string;
-  district: string;
-  city: string;
+  districtName: string;
+  districtId: number;
+  cityName: string;
+  cityId: number;
   pinCode: string;
-  state: string;
+  stateName: string;
+  stateId: number;
   stateCode: number;
   gstno: string;
   emailId: string;
   contactNo: string;
+  createdByUserId: number;
 }

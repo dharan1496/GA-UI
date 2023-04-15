@@ -4,7 +4,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { Subscription } from 'rxjs';
+import { Subscription, finalize } from 'rxjs';
 import { MaterialModule } from 'src/app/material.module';
 import { PartywisePOCounts } from 'src/app/models/partywisePOCounts';
 import { PendingPODetailsByParty } from 'src/app/models/pendingPODtsByParty';
@@ -55,10 +55,17 @@ export class PendingFibrePoComponent implements OnInit, OnDestroy {
         this.loader = true;
         this.selection.clear();
         this.subscription.add(
-          this.fibreService.getPendingPOByParty(partyId).subscribe((data) => {
-            this.dataSource.data = this.groupBy(data);
-            this.loader = false;
-          })
+          this.fibreService
+            .getPendingPOByParty(partyId)
+            .pipe(finalize(() => (this.loader = false)))
+            .subscribe(
+              (data) => {
+                this.dataSource.data = this.groupBy(data);
+                this.loader = false;
+              },
+              (error) =>
+                this.notificationService.error(error?.error || error?.message)
+            )
         );
       })
     );

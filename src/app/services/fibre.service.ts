@@ -18,7 +18,9 @@ export class FibreService {
   constructor(private http: HttpClient) {}
 
   getFibreGraphData(): Observable<FibreGraph[]> {
-    return this.http.get<FibreGraph[]>('/assets/mocks/mock-fibre-graph.json');
+    return this.http.get<FibreGraph[]>(
+      `${environment.api}/Fiber/GetTwelveMonthSummary`
+    );
   }
 
   getFibres(): Observable<FibreType[]> {

@@ -61,25 +61,12 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // this.subscription.add(
-    //   this.fibreService
-    //     .getPONo()
-    //     .subscribe((data) => this.form.get('poNo')?.setValue(data))
-    // );
-
-    this.subscription.add(
-      this.partyService
-        .getParties()
-        .subscribe((data) => (this.partyService.parties = data))
-    );
-    this.subscription.add(
-      this.fibreService
-        .getFibres()
-        .subscribe((data) => (this.fibreService.fibres = data))
-    );
+    this.getPoNo();
+    this.getPartyList();
+    this.getFibreList();
 
     this.form = this.formBuilder.group({
-      poNo: [{ value: this.appSharedService.generatePONo(), disabled: true }],
+      poNo: [{ value: '', disabled: true }],
       partyId: ['', Validators.required],
       pOdate: ['', Validators.required],
     });
@@ -91,6 +78,30 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  getPoNo() {
+    this.subscription.add(
+      this.fibreService
+        .getPONo()
+        .subscribe((data) => this.form.get('poNo')?.setValue(data))
+    );
+  }
+
+  getPartyList() {
+    this.subscription.add(
+      this.partyService
+        .getParties()
+        .subscribe((data) => (this.partyService.parties = data))
+    );
+  }
+
+  getFibreList() {
+    this.subscription.add(
+      this.fibreService
+        .getFibres()
+        .subscribe((data) => (this.fibreService.fibres = data))
+    );
   }
 
   submitOrder() {
@@ -124,7 +135,7 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
             );
           },
           (error) => {
-            this.notificationService.error(error?.message);
+            this.notificationService.error(error?.error || error?.message);
           }
         )
       );
@@ -156,9 +167,9 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
 
   resetData() {
     this.form.reset();
+    this.getPoNo();
     this.dataSource = [];
     this.table.renderRows();
-    this.form.patchValue({ poNo: this.appSharedService.generatePONo() });
   }
 
   addData(): void {

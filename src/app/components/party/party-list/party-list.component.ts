@@ -9,6 +9,7 @@ import { PartyService } from 'src/app/services/party.service';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
 import { UserActionConfirmationComponent } from '../../user-action-confirmation/user-action-confirmation.component';
+import { NotificationService } from 'src/app/shared/notification.service';
 
 @Component({
   selector: 'app-party-list',
@@ -23,7 +24,8 @@ export class PartyListComponent implements OnInit {
     private navigationService: NavigationService,
     public partyService: PartyService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private notificationService: NotificationService
   ) {
     this.navigationService.isSidenavOpened = true;
     this.navigationService.setFocus(Constants.PARTY);
@@ -49,7 +51,17 @@ export class PartyListComponent implements OnInit {
       .afterClosed()
       .subscribe((response) => {
         if (response) {
-          // delete
+          this.partyService.deleteParty(party.partyId).subscribe(
+            (response) => {
+              if (response) {
+                this.notificationService.success('Party deleted successfully!');
+              } else {
+                this.notificationService.success('Unable to delete the Party!');
+              }
+            },
+            (error) =>
+              this.notificationService.error(error?.error || error?.message)
+          );
         }
       });
   }
