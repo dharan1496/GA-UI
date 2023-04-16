@@ -79,19 +79,25 @@ export class AddPartyComponent implements OnInit, OnDestroy {
 
   getDropdownData() {
     this.subscription.add(
-      this.partyService
-        .getStates()
-        .subscribe((states) => (this.stateList = states))
+      this.partyService.getStates().subscribe({
+        next: (states) => (this.stateList = states),
+        error: (error) =>
+          this.notificationService.error(error?.error || error?.message),
+      })
     );
     this.subscription.add(
-      this.partyService
-        .getCities()
-        .subscribe((cities) => (this.cityList = cities))
+      this.partyService.getCities().subscribe({
+        next: (cities) => (this.cityList = cities),
+        error: (error) =>
+          this.notificationService.error(error?.error || error?.message),
+      })
     );
     this.subscription.add(
-      this.partyService
-        .getDistricts()
-        .subscribe((districts) => (this.districtList = districts))
+      this.partyService.getDistricts().subscribe({
+        next: (districts) => (this.districtList = districts),
+        error: (error) =>
+          this.notificationService.error(error?.error || error?.message),
+      })
     );
   }
 
@@ -124,27 +130,28 @@ export class AddPartyComponent implements OnInit, OnDestroy {
           districtName: '',
           stateName: '',
         })
-        .subscribe(
-          (response) => {
+        .subscribe({
+          next: (response) => {
             this.partyService.editPartyDetails = undefined;
             this.notificationService
               .success(response)
               .afterClosed()
               .subscribe(() => this.router.navigateByUrl('/party'));
           },
-          (error) =>
-            this.notificationService.error(error?.error || error.message)
-        );
+          error: (error) =>
+            this.notificationService.error(error?.error || error.message),
+        });
       return;
     }
 
-    this.partyService.addParty(partyRequest).subscribe(
-      () => {
+    this.partyService.addParty(partyRequest).subscribe({
+      next: () => {
         this.notificationService.success('Party added successfully!');
         this.resetData();
       },
-      (error) => this.notificationService.error(error?.error || error.message)
-    );
+      error: (error) =>
+        this.notificationService.error(error?.error || error.message),
+    });
   }
 
   resetData() {

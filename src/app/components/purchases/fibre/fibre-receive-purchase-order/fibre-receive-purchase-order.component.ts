@@ -77,21 +77,21 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
 
   getParty() {
     this.subscription.add(
-      this.partyService.getParties().subscribe(
-        (data) => (this.partyService.parties = data),
-        (error) =>
-          this.notificationService.error(error?.error || error?.message)
-      )
+      this.partyService.getParties().subscribe({
+        next: (data) => (this.partyService.parties = data),
+        error: (error) =>
+          this.notificationService.error(error?.error || error?.message),
+      })
     );
   }
 
   getFibre() {
     this.subscription.add(
-      this.fibreService.getFibres().subscribe(
-        (data) => (this.fibreService.fibres = data),
-        (error) =>
-          this.notificationService.error(error?.error || error?.message)
-      )
+      this.fibreService.getFibres().subscribe({
+        next: (data) => (this.fibreService.fibres = data),
+        error: (error) =>
+          this.notificationService.error(error?.error || error?.message),
+      })
     );
   }
 
@@ -144,15 +144,15 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
       } as ReceiveFibrePODts);
     });
     this.subscription.add(
-      this.fibreService.submitReceiveFibre(request).subscribe(
-        (response) => {
+      this.fibreService.submitReceiveFibre(request).subscribe({
+        next: (response) => {
           this.notificationService.success(response);
           this.resetData();
         },
-        (error) => {
+        error: (error) => {
           this.notificationService.error(error.message);
-        }
-      )
+        },
+      })
     );
   }
 

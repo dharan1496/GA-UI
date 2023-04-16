@@ -82,9 +82,11 @@ export class FibreSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
     this.setMinDate();
     this.subscription.add(
-      this.partyService
-        .getParties()
-        .subscribe((data) => (this.partyService.parties = data))
+      this.partyService.getParties().subscribe({
+        next: (data) => (this.partyService.parties = data),
+        error: (error) =>
+          this.notificationService.error(error?.error || error?.message),
+      })
     );
 
     this.form = this.formBuilder.group({

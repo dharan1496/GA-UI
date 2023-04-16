@@ -40,11 +40,11 @@ export class PartyListComponent implements OnInit {
 
   getParty() {
     this.subscription.add(
-      this.partyService.getParties().subscribe(
-        (data) => (this.partyService.parties = data),
-        (error) =>
-          this.notificationService.error(error?.error || error?.message)
-      )
+      this.partyService.getParties().subscribe({
+        next: (data) => (this.partyService.parties = data),
+        error: (error) =>
+          this.notificationService.error(error?.error || error?.message),
+      })
     );
   }
 
@@ -59,8 +59,8 @@ export class PartyListComponent implements OnInit {
       .afterClosed()
       .subscribe((response) => {
         if (response) {
-          this.partyService.deleteParty(party.partyId).subscribe(
-            (response) => {
+          this.partyService.deleteParty(party.partyId).subscribe({
+            next: (response) => {
               if (response) {
                 this.getParty();
                 this.notificationService.success('Party deleted successfully!');
@@ -68,9 +68,9 @@ export class PartyListComponent implements OnInit {
                 this.notificationService.success('Unable to delete the Party!');
               }
             },
-            (error) =>
-              this.notificationService.error(error?.error || error?.message)
-          );
+            error: (error) =>
+              this.notificationService.error(error?.error || error?.message),
+          });
         }
       });
   }

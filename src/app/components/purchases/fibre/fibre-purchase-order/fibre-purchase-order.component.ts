@@ -82,31 +82,31 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
 
   getPoNo() {
     this.subscription.add(
-      this.fibreService.getPONo().subscribe(
-        (data) => this.form.get('poNo')?.setValue(data),
-        (error) =>
-          this.notificationService.error(error?.error || error?.message)
-      )
+      this.fibreService.getPONo().subscribe({
+        next: (data) => this.form.get('poNo')?.setValue(data),
+        error: (error) =>
+          this.notificationService.error(error?.error || error?.message),
+      })
     );
   }
 
   getPartyList() {
     this.subscription.add(
-      this.partyService.getParties().subscribe(
-        (data) => (this.partyService.parties = data),
-        (error) =>
-          this.notificationService.error(error?.error || error?.message)
-      )
+      this.partyService.getParties().subscribe({
+        next: (data) => (this.partyService.parties = data),
+        error: (error) =>
+          this.notificationService.error(error?.error || error?.message),
+      })
     );
   }
 
   getFibreList() {
     this.subscription.add(
-      this.fibreService.getFibres().subscribe(
-        (data) => (this.fibreService.fibres = data),
-        (error) =>
-          this.notificationService.error(error?.error || error?.message)
-      )
+      this.fibreService.getFibres().subscribe({
+        next: (data) => (this.fibreService.fibres = data),
+        error: (error) =>
+          this.notificationService.error(error?.error || error?.message),
+      })
     );
   }
 
@@ -128,8 +128,8 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
       } as CreateFibrePO;
 
       this.subscription.add(
-        this.fibreService.submitFibrePO(orderDetails).subscribe(
-          (response) => {
+        this.fibreService.submitFibrePO(orderDetails).subscribe({
+          next: (response) => {
             this.resetData();
             this.notificationService.success(
               {
@@ -140,10 +140,10 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
               true
             );
           },
-          (error) => {
+          error: (error) => {
             this.notificationService.error(error?.error || error?.message);
-          }
-        )
+          },
+        })
       );
     }
   }

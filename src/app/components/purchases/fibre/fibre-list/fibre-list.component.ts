@@ -43,11 +43,11 @@ export class FibreListComponent implements OnInit {
       this.fibreService
         .getFibres()
         .pipe(finalize(() => (this.loader = false)))
-        .subscribe(
-          (data) => (this.dataSource = data),
-          (error) =>
-            this.notificationService.error(error?.error || error?.message)
-        )
+        .subscribe({
+          next: (data) => (this.dataSource = data),
+          error: (error) =>
+            this.notificationService.error(error?.error || error?.message),
+        })
     );
   }
 
@@ -62,10 +62,14 @@ export class FibreListComponent implements OnInit {
     this.dialog
       .open(UserActionConfirmationComponent)
       .afterClosed()
-      .subscribe((action) => {
-        if (action) {
-          // delete fibre
-        }
+      .subscribe({
+        next: (action) => {
+          if (action) {
+            // delete fibre
+          }
+        },
+        error: (error) =>
+          this.notificationService.error(error?.error || error?.message),
       });
   }
 }

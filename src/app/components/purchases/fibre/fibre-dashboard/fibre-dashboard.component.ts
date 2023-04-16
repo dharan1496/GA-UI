@@ -32,10 +32,10 @@ export class FibreDashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscription.add(
-      this.fibreService.getFibreGraphData().subscribe(
-        (data: FibreGraph[]) => this.createChart(data),
-        (error) => this.handleError(error)
-      )
+      this.fibreService.getFibreGraphData().subscribe({
+        next: (data: FibreGraph[]) => this.createChart(data),
+        error: (error) => this.handleError(error),
+      })
     );
   }
 

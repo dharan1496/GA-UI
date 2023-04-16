@@ -7,7 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { combineLatest, startWith, Subscription } from 'rxjs';
+import { combineLatest, ObservableInput, startWith, Subscription } from 'rxjs';
 import { MaterialModule } from 'src/app/material.module';
 import { NotifyType } from 'src/app/models/notify';
 import { NotificationService } from 'src/app/shared/notification.service';
@@ -63,33 +63,42 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
       this.form.patchValue(this.data);
     }
 
-    // TODO: Replace combineLatest with any other approach
-    const observable1$ = combineLatest([
-      this.form
-        .get('weight')
-        ?.valueChanges.pipe(startWith(this.form.get('weight')?.value)),
-      this.form
-        .get('rate')
-        ?.valueChanges.pipe(startWith(this.form.get('rate')?.value)),
-    ]).subscribe((value: any[]) => {
-      this.form.get('amount')?.setValue(value[0] * value[1]);
-    });
-    this.subscription.add(observable1$);
+    const amount: Record<string, ObservableInput<any>> = {
+      weight:
+        this.form
+          .get('weight')
+          ?.valueChanges.pipe(startWith(this.form.get('weight')?.value)) || '',
+      rate:
+        this.form
+          .get('rate')
+          ?.valueChanges.pipe(startWith(this.form.get('rate')?.value)) || '',
+    };
+    this.subscription.add(
+      combineLatest(amount).subscribe((value: Record<string, number>) => {
+        this.form.get('amount')?.setValue(value['weight'] * value['rate']);
+      })
+    );
 
-    // TODO: Replace combineLatest with any other approach
-    const observable2$ = combineLatest([
-      this.form
-        .get('amount')
-        ?.valueChanges.pipe(startWith(this.form.get('amount')?.value)),
-      this.form
-        .get('gstPercent')
-        ?.valueChanges.pipe(startWith(this.form.get('gstPercent')?.value)),
-    ]).subscribe((value: any[]) => {
-      this.form
-        .get('totalAmount')
-        ?.setValue(value[0] + (value[0] * value[1]) / 100);
-    });
-    this.subscription.add(observable2$);
+    const totalAmount: Record<string, ObservableInput<any>> = {
+      amount:
+        this.form
+          .get('amount')
+          ?.valueChanges.pipe(startWith(this.form.get('amount')?.value)) || '',
+      gstPercent:
+        this.form
+          .get('gstPercent')
+          ?.valueChanges.pipe(startWith(this.form.get('gstPercent')?.value)) ||
+        '',
+    };
+    this.subscription.add(
+      combineLatest(totalAmount).subscribe((value: Record<string, number>) => {
+        this.form
+          .get('totalAmount')
+          ?.setValue(
+            value['amount'] + (value['amount'] * value['gstPercent']) / 100
+          );
+      })
+    );
   }
 
   ngOnDestroy(): void {

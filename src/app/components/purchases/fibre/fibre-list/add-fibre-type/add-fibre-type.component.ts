@@ -27,10 +27,11 @@ export class AddFibreTypeComponent {
       this.fibre.markAsTouched();
       return;
     }
-    this.fibreService.addFibre(this.fibre.value || '').subscribe(
-      () => this.close(),
-      (error) => this.notificationService.error(error?.error || error?.message)
-    );
+    this.fibreService.addFibre(this.fibre.value || '').subscribe({
+      next: () => this.close(),
+      error: (error) =>
+        this.notificationService.error(error?.error || error?.message),
+    });
   }
 
   close() {
