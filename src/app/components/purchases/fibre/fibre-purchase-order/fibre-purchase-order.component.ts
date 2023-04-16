@@ -149,7 +149,7 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
   }
 
   goToSearch() {
-    this.router.navigateByUrl('purchases/fibre');
+    this.router.navigateByUrl('purchases/fibre/search');
   }
 
   hasError() {
