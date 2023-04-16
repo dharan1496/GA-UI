@@ -8,6 +8,7 @@ import { Constants } from 'src/app/constants/constants';
 import { PURCHASE } from 'src/app/constants/purchase-menu-values.const';
 import { FibreType } from 'src/app/models/fibreType';
 import { UserActionConfirmationComponent } from 'src/app/components/user-action-confirmation/user-action-confirmation.component';
+import { NotificationService } from 'src/app/shared/notification.service';
 
 @Component({
   selector: 'app-fibre-list',
@@ -24,7 +25,8 @@ export class FibreListComponent implements OnInit {
   constructor(
     public fibreService: FibreService,
     private dialog: MatDialog,
-    private navigationService: NavigationService
+    private navigationService: NavigationService,
+    private notificationService: NotificationService
   ) {
     this.navigationService.isSidenavOpened = true;
     this.navigationService.setFocus(Constants.PURCHASES);
@@ -41,7 +43,11 @@ export class FibreListComponent implements OnInit {
       this.fibreService
         .getFibres()
         .pipe(finalize(() => (this.loader = false)))
-        .subscribe((data) => (this.dataSource = data))
+        .subscribe(
+          (data) => (this.dataSource = data),
+          (error) =>
+            this.notificationService.error(error?.error || error?.message)
+        )
     );
   }
 
