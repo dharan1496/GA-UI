@@ -1,5 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Constants } from 'src/app/constants/constants';
@@ -25,6 +31,7 @@ export class AddPartyComponent implements OnInit, OnDestroy {
   districtList!: District[];
   edit = false;
   subscription = new Subscription();
+  phoneLimit = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -58,23 +65,74 @@ export class AddPartyComponent implements OnInit, OnDestroy {
           Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'),
         ],
       ],
-      mobileNo: ['', Validators.required],
       landline: '',
+      phones: this.formBuilder.array([this.formBuilder.group({ mobile: '' })]),
     });
 
     if (this.partyService.editPartyDetails) {
-      this.edit = true;
-      const contact = this.partyService.editPartyDetails.contactNo?.split(',');
-      this.form.patchValue({
-        ...this.partyService.editPartyDetails,
-        mobileNo: contact?.length ? contact[0]?.trim() : '',
-        landline: contact?.length ? contact[1]?.trim() : '',
-      });
+      this.handleUpdate();
     }
   }
 
+  handleUpdate() {
+    this.edit = true;
+    const contact =
+      this.partyService.editPartyDetails?.contactNo?.split(',') || [];
+    let landlineNo = '';
+
+    if (contact[contact.length - 1]?.length > 10) {
+      landlineNo = contact.pop() as string;
+    }
+    const phones =
+      contact
+        .filter((data) => !!data)
+        .map((phone) => {
+          return { mobile: phone };
+        }) || [];
+
+    this.form.patchValue({
+      ...this.partyService.editPartyDetails,
+      phones: [phones.shift()] || [],
+      landline: landlineNo,
+    });
+
+    phones.forEach((phone) => {
+      (this.form.get('phones') as FormArray).push(
+        this.formBuilder.group(phone)
+      );
+    });
+  }
+
   ngOnDestroy() {
+    this.partyService.editPartyDetails = undefined;
     this.subscription.unsubscribe();
+  }
+
+  addPhone(): void {
+    (this.form.get('phones') as FormArray).push(
+      this.formBuilder.group({ mobile: '' })
+    );
+    this.checkPhoneLimit();
+    setTimeout(() =>
+      document
+        .getElementById('mobile-' + (this.getPhonesFormControls()?.length - 1))
+        ?.focus()
+    );
+  }
+
+  removePhone(index: any) {
+    (this.form.get('phones') as FormArray).removeAt(index);
+    this.checkPhoneLimit();
+  }
+
+  getPhonesFormControls(): AbstractControl[] {
+    return (<FormArray>this.form.get('phones')).controls;
+  }
+
+  checkPhoneLimit() {
+    this.getPhonesFormControls()?.length > 2
+      ? (this.phoneLimit = true)
+      : (this.phoneLimit = false);
   }
 
   getDropdownData() {
@@ -111,14 +169,16 @@ export class AddPartyComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const mobile = this.form.get('mobileNo')?.value;
+    const mobile: string[] = this.form
+      .get('phones')
+      ?.value?.map((phones: Record<string, string>) => phones['mobile']);
     const landline = this.form.get('landline')?.value;
     const partyRequest = {
       ...this.form.value,
-      contactNo: landline ? `${mobile}, ${landline}` : mobile,
+      contactNo: landline ? `${mobile.join()},${landline}` : mobile.join(),
       createdByUserId: 0,
     };
-    delete partyRequest?.mobileNo;
+    delete partyRequest?.phones;
     delete partyRequest?.landline;
 
     if (this.edit) {

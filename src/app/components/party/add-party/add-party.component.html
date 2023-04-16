@@ -39,10 +39,12 @@
         <mat-form-field appearance="fill">
           <mat-label>Address Line 2</mat-label>
           <input matInput formControlName="address2" />
+          <mat-hint>Optional</mat-hint>
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>Address Line 3</mat-label>
           <input matInput formControlName="address3" />
+          <mat-hint>Optional</mat-hint>
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>District</mat-label>
@@ -104,14 +106,53 @@
             >Invalid email</mat-error
           >
         </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Mobile No</mat-label>
-          <input matInput formControlName="mobileNo" mask="0000000000" />
-          <mat-error *ngIf="form.get('mobileNo')?.hasError('required')"
+        <mat-form-field
+          appearance="fill"
+          formArrayName="phones"
+          *ngFor="let phone of getPhonesFormControls(); let i = index"
+        >
+          <mat-label
+            >Mobile No{{
+              getPhonesFormControls().length === 1 ? "" : " " + (i + 1)
+            }}</mat-label
+          >
+          <div [formGroupName]="i">
+            <input
+              id="mobile-{{ i }}"
+              matInput
+              formControlName="mobile"
+              mask="0000000000"
+              [required]="i === 0 ? true : false"
+            />
+          </div>
+          <mat-icon
+            *ngIf="i !== 0"
+            matSuffix
+            (click)="removePhone(i)"
+            matTooltip="Delete phone"
+            >delete</mat-icon
+          >
+          <mat-icon
+            *ngIf="
+              getPhonesFormControls()[0]?.get('mobile')?.valid &&
+              i === 0 &&
+              !phoneLimit
+            "
+            matSuffix
+            matTooltip="Add another mobile No"
+            (click)="addPhone()"
+            >add_circle_outline</mat-icon
+          >
+          <mat-hint *ngIf="i !== 0">Optional</mat-hint>
+          <mat-error
+            *ngIf="
+              i === 0 &&
+              getPhonesFormControls()[i]?.get('mobile')?.hasError('required')
+            "
             >This field is required.</mat-error
           >
-
-          <mat-error *ngIf="form.get('mobileNo')?.hasError('mask')"
+          <mat-error
+            *ngIf="getPhonesFormControls()[i]?.get('mobile')?.hasError('mask')"
             >Invalid mobile number</mat-error
           >
         </mat-form-field>
@@ -123,6 +164,7 @@
             mask="00000-000000"
             placeholder="00000-000000"
           />
+          <mat-hint>Optional</mat-hint>
           <mat-error *ngIf="form.get('landline')?.hasError('mask')"
             >Invalid landline number</mat-error
           >

@@ -75,16 +75,20 @@ export class PartyListComponent implements OnInit {
       });
   }
 
-  getContactNo(no: string) {
-    if (no.includes(',')) {
-      const noArr = no.split(',');
-      if (noArr.length > 1) {
-        return `${noArr[0]}, ${this.maskPipe.transform(
-          noArr[1],
+  getContactNo(contactNo: string) {
+    if (contactNo.includes(',')) {
+      const noArr = contactNo.split(',');
+      if (noArr.length > 1 && noArr[noArr.length - 1].length > 10) {
+        return `${noArr
+          .slice(0, noArr.length - 1)
+          .filter((no) => !!no)
+          .join(', ')}, ${this.maskPipe.transform(
+          noArr[noArr.length - 1],
           '00000-000000'
         )}`;
       }
+      return noArr.filter((no) => !!no).join(', ');
     }
-    return no;
+    return contactNo;
   }
 }
