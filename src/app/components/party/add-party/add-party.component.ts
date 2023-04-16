@@ -109,7 +109,7 @@ export class AddPartyComponent implements OnInit, OnDestroy {
     const landline = this.form.get('landline')?.value;
     const partyRequest = {
       ...this.form.value,
-      contactNo: landline ? `${mobile},${landline}` : mobile,
+      contactNo: landline ? `${mobile}, ${landline}` : mobile,
       createdByUserId: 0,
     };
     delete partyRequest?.mobileNo;

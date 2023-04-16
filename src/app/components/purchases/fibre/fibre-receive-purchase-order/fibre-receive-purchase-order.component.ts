@@ -60,17 +60,8 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subscription.add(
-      this.partyService
-        .getParties()
-        .subscribe((data) => (this.partyService.parties = data))
-    );
-    this.subscription.add(
-      this.fibreService
-        .getFibres()
-        .subscribe((data) => (this.fibreService.fibres = data))
-    );
-
+    this.getParty();
+    this.getFibre();
     this.form = this.formBuilder.group({
       poNo: [{ value: '', disabled: true }],
       partyId: '',
@@ -82,6 +73,26 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  getParty() {
+    this.subscription.add(
+      this.partyService.getParties().subscribe(
+        (data) => (this.partyService.parties = data),
+        (error) =>
+          this.notificationService.error(error?.error || error?.message)
+      )
+    );
+  }
+
+  getFibre() {
+    this.subscription.add(
+      this.fibreService.getFibres().subscribe(
+        (data) => (this.fibreService.fibres = data),
+        (error) =>
+          this.notificationService.error(error?.error || error?.message)
+      )
+    );
   }
 
   submitOrder() {

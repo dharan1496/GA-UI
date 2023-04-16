@@ -8,6 +8,7 @@ import { DecimalPipe } from '@angular/common';
 import { FibreService } from 'src/app/services/fibre.service';
 import { FibreGraph } from 'src/app/models/fibreGraph';
 import { Subscription } from 'rxjs';
+import { NotificationService } from 'src/app/shared/notification.service';
 
 @Component({
   selector: 'app-fibre-dashboard',
@@ -16,13 +17,13 @@ import { Subscription } from 'rxjs';
 })
 export class FibreDashboardComponent implements OnInit, OnDestroy {
   chart: any;
-  fibreData!: FibreGraph[];
   subscription = new Subscription();
 
   constructor(
     private navigationService: NavigationService,
     private decimalPipe: DecimalPipe,
-    private fibreService: FibreService
+    private fibreService: FibreService,
+    private notificationService: NotificationService
   ) {
     this.navigationService.menu = PURCHASE;
     this.navigationService.isSidenavOpened = true;
@@ -31,14 +32,21 @@ export class FibreDashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscription.add(
-      this.fibreService
-        .getFibreGraphData()
-        .subscribe((data: FibreGraph[]) => this.createChart(data))
+      this.fibreService.getFibreGraphData().subscribe(
+        (data: FibreGraph[]) => this.createChart(data),
+        (error) => this.handleError(error)
+      )
     );
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  handleError(error: any) {
+    const emptyData = Array(12).fill('');
+    this.notificationService.error(error?.error || error?.message);
+    this.createChart(emptyData);
   }
 
   createChart(data: FibreGraph[]) {

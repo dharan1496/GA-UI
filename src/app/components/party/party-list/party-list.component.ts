@@ -10,6 +10,7 @@ import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
 import { UserActionConfirmationComponent } from '../../user-action-confirmation/user-action-confirmation.component';
 import { NotificationService } from 'src/app/shared/notification.service';
+import { NgxMaskPipe } from 'ngx-mask';
 
 @Component({
   selector: 'app-party-list',
@@ -25,7 +26,8 @@ export class PartyListComponent implements OnInit {
     public partyService: PartyService,
     private router: Router,
     private dialog: MatDialog,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private maskPipe: NgxMaskPipe
   ) {
     this.navigationService.isSidenavOpened = true;
     this.navigationService.setFocus(Constants.PARTY);
@@ -38,9 +40,11 @@ export class PartyListComponent implements OnInit {
 
   getParty() {
     this.subscription.add(
-      this.partyService
-        .getParties()
-        .subscribe((data) => (this.partyService.parties = data))
+      this.partyService.getParties().subscribe(
+        (data) => (this.partyService.parties = data),
+        (error) =>
+          this.notificationService.error(error?.error || error?.message)
+      )
     );
   }
 
@@ -69,5 +73,18 @@ export class PartyListComponent implements OnInit {
           );
         }
       });
+  }
+
+  getContactNo(no: string) {
+    if (no.includes(',')) {
+      const noArr = no.split(',');
+      if (noArr.length > 1) {
+        return `${noArr[0]}, ${this.maskPipe.transform(
+          noArr[1],
+          '00000-000000'
+        )}`;
+      }
+    }
+    return no;
   }
 }

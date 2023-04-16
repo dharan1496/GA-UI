@@ -5,7 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AddPartyComponent } from './add-party/add-party.component';
 import { PartyListComponent } from './party-list/party-list.component';
 import { PartyRoutingModule } from './party-routing.module';
-import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 @NgModule({
   declarations: [AddPartyComponent, PartyListComponent],
@@ -16,6 +16,6 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
     ReactiveFormsModule,
     NgxMaskDirective,
   ],
-  providers: [provideNgxMask()],
+  providers: [provideNgxMask(), NgxMaskPipe],
 })
 export class PartyModule {}
