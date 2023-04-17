@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+    <system.webServer>
+        <cors enabled="true" failUnlistedOrigins="true">
+            <add origin="*" />
+            <add origin="https://*.microsoft.com"
+                 allowCredentials="true"
+                 maxAge="120">
+                <allowHeaders allowAllRequestedHeaders="true">
+                    <add header="header1" />
+                    <add header="header2" />
+                </allowHeaders>
+                <allowMethods>
+                    <add method="DELETE" />
+                </allowMethods>
+                <exposeHeaders>
+                    <add header="header1" />
+                    <add header="header2" />
+                </exposeHeaders>
+            </add>
+            <add origin="http://*" allowed="true" />
+        </cors>
+        <rewrite>
+            <rules>
+                <rule name="Angular Routes" stopProcessing="true">
+                    <match url=".*" />
+                    <conditions logicalGrouping="MatchAll">
+                        <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+                        <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
+                    </conditions>
+                    <action type="Rewrite" url="/" />
+                </rule>
+            </rules>
+        </rewrite>
+    </system.webServer>
+</configuration>
