@@ -11,6 +11,7 @@ import { NavigationService } from 'src/app/shared/navigation.service';
 import { UserActionConfirmationComponent } from '../../user-action-confirmation/user-action-confirmation.component';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { NgxMaskPipe } from 'ngx-mask';
+import { MatExpansionPanel } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-party-list',
@@ -90,5 +91,11 @@ export class PartyListComponent implements OnInit {
       return noArr.filter((no) => !!no).join(', ');
     }
     return contactNo;
+  }
+
+  open(panel: MatExpansionPanel) {
+    document
+      .getElementById(panel.id)
+      ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 }

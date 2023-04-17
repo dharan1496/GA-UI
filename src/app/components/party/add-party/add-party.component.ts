@@ -71,6 +71,7 @@ export class AddPartyComponent implements OnInit, OnDestroy {
 
     if (this.partyService.editPartyDetails) {
       this.handleUpdate();
+      document.querySelector('.container')?.scrollIntoView();
     }
   }
 

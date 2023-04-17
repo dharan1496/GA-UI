@@ -15,6 +15,8 @@
     </mat-card>
     <mat-expansion-panel
       *ngFor="let party of partyService.parties; let index = index"
+      #panel
+      (afterExpand)="open(panel)"
     >
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -25,23 +27,6 @@
         </mat-panel-title>
         <mat-panel-description>{{ party.cityName }}</mat-panel-description>
       </mat-expansion-panel-header>
-      <div class="mb-16">
-        <button
-          aria-label="button with a edit icon"
-          mat-raised-button
-          class="mr-16"
-          (click)="editParty(party)"
-        >
-          <mat-icon>edit</mat-icon> Edit
-        </button>
-        <button
-          aria-label="button with a delete icon"
-          mat-raised-button
-          (click)="removeParty(party)"
-        >
-          <mat-icon>delete</mat-icon> Remove
-        </button>
-      </div>
       <section class="card">
         <div class="party-details">
           <div>
@@ -112,6 +97,26 @@
           </div>
         </div>
       </section>
+      <mat-action-row>
+        <button
+          aria-label="button with a delete icon"
+          mat-raised-button
+          color="warn"
+          class="mr-8"
+          (click)="removeParty(party)"
+        >
+          <mat-icon>delete</mat-icon> Remove
+        </button>
+        <button
+          aria-label="button with a edit icon"
+          mat-raised-button
+          color="primary"
+          class="mr-16"
+          (click)="editParty(party)"
+        >
+          <mat-icon>edit</mat-icon> Edit
+        </button>
+      </mat-action-row>
     </mat-expansion-panel>
   </mat-accordion>
 </section>
