@@ -141,21 +141,27 @@ export class AddPartyComponent implements OnInit, OnDestroy {
       this.partyService.getStates().subscribe({
         next: (states) => (this.stateList = states),
         error: (error) =>
-          this.notificationService.error(error?.error || error?.message),
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
       })
     );
     this.subscription.add(
       this.partyService.getCities().subscribe({
         next: (cities) => (this.cityList = cities),
         error: (error) =>
-          this.notificationService.error(error?.error || error?.message),
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
       })
     );
     this.subscription.add(
       this.partyService.getDistricts().subscribe({
         next: (districts) => (this.districtList = districts),
         error: (error) =>
-          this.notificationService.error(error?.error || error?.message),
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
       })
     );
   }

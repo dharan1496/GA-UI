@@ -44,7 +44,9 @@ export class PartyListComponent implements OnInit {
       this.partyService.getParties().subscribe({
         next: (data) => (this.partyService.parties = data),
         error: (error) =>
-          this.notificationService.error(error?.error || error?.message),
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
       })
     );
   }
@@ -70,7 +72,9 @@ export class PartyListComponent implements OnInit {
               }
             },
             error: (error) =>
-              this.notificationService.error(error?.error || error?.message),
+              this.notificationService.error(
+                typeof error?.error === 'string' ? error?.error : error?.message
+              ),
           });
         }
       });

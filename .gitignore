@@ -2,6 +2,7 @@
 
 # Compiled output
 /dist
+/ga-ui
 /tmp
 /out-tsc
 /bazel-out

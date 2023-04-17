@@ -85,7 +85,9 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
       this.fibreService.getPONo().subscribe({
         next: (data) => this.form.get('poNo')?.setValue(data),
         error: (error) =>
-          this.notificationService.error(error?.error || error?.message),
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
       })
     );
   }
@@ -95,7 +97,9 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
       this.partyService.getParties().subscribe({
         next: (data) => (this.partyService.parties = data),
         error: (error) =>
-          this.notificationService.error(error?.error || error?.message),
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
       })
     );
   }
@@ -105,7 +109,9 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
       this.fibreService.getFibres().subscribe({
         next: (data) => (this.fibreService.fibres = data),
         error: (error) =>
-          this.notificationService.error(error?.error || error?.message),
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
       })
     );
   }
@@ -141,7 +147,9 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
             );
           },
           error: (error) => {
-            this.notificationService.error(error?.error || error?.message);
+            this.notificationService.error(
+              typeof error?.error === 'string' ? error?.error : error?.message
+            );
           },
         })
       );

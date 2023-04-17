@@ -49,7 +49,9 @@ export class PendingFibrePoComponent implements OnInit, OnDestroy {
       this.fibreService.getPartywiswPendingPO().subscribe({
         next: (data) => (this.partiesWithPendingPO = data),
         error: (error) =>
-          this.notificationService.error(error?.error || error?.message),
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
       })
     );
     this.subscription.add(
@@ -63,7 +65,11 @@ export class PendingFibrePoComponent implements OnInit, OnDestroy {
             .subscribe({
               next: (data) => (this.dataSource.data = this.groupBy(data)),
               error: (error) =>
-                this.notificationService.error(error?.error || error?.message),
+                this.notificationService.error(
+                  typeof error?.error === 'string'
+                    ? error?.error
+                    : error?.message
+                ),
             })
         );
       })

@@ -85,7 +85,9 @@ export class FibreSearchComponent implements OnInit, OnDestroy, AfterViewInit {
       this.partyService.getParties().subscribe({
         next: (data) => (this.partyService.parties = data),
         error: (error) =>
-          this.notificationService.error(error?.error || error?.message),
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
       })
     );
 

@@ -30,7 +30,9 @@ export class AddFibreTypeComponent {
     this.fibreService.addFibre(this.fibre.value || '').subscribe({
       next: () => this.close(),
       error: (error) =>
-        this.notificationService.error(error?.error || error?.message),
+        this.notificationService.error(
+          typeof error?.error === 'string' ? error?.error : error?.message
+        ),
     });
   }
 

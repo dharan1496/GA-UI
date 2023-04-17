@@ -80,7 +80,9 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
       this.partyService.getParties().subscribe({
         next: (data) => (this.partyService.parties = data),
         error: (error) =>
-          this.notificationService.error(error?.error || error?.message),
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
       })
     );
   }
@@ -90,7 +92,9 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
       this.fibreService.getFibres().subscribe({
         next: (data) => (this.fibreService.fibres = data),
         error: (error) =>
-          this.notificationService.error(error?.error || error?.message),
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
       })
     );
   }

@@ -46,7 +46,9 @@ export class FibreListComponent implements OnInit {
         .subscribe({
           next: (data) => (this.dataSource = data),
           error: (error) =>
-            this.notificationService.error(error?.error || error?.message),
+            this.notificationService.error(
+              typeof error?.error === 'string' ? error?.error : error?.message
+            ),
         })
     );
   }
@@ -69,7 +71,9 @@ export class FibreListComponent implements OnInit {
           }
         },
         error: (error) =>
-          this.notificationService.error(error?.error || error?.message),
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
       });
   }
 }

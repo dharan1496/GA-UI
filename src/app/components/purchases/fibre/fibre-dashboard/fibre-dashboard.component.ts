@@ -45,7 +45,9 @@ export class FibreDashboardComponent implements OnInit, OnDestroy {
 
   handleError(error: any) {
     const emptyData = Array(12).fill('');
-    this.notificationService.error(error?.error || error?.message);
+    this.notificationService.error(
+      typeof error?.error === 'string' ? error?.error : error?.message
+    );
     this.createChart(emptyData);
   }
 
