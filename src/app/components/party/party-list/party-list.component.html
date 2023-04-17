@@ -25,7 +25,7 @@
         </mat-panel-title>
         <mat-panel-description>{{ party.cityName }}</mat-panel-description>
       </mat-expansion-panel-header>
-      <div class="my-16">
+      <div class="mb-16">
         <button
           aria-label="button with a edit icon"
           mat-raised-button
@@ -42,84 +42,76 @@
           <mat-icon>delete</mat-icon> Remove
         </button>
       </div>
-      <mat-card class="card">
+      <section class="card">
         <div class="party-details">
-          <div class="section">
-            <div>
-              <label for="name">Name</label>
-              <div id="name" class="text-gray">{{ party.partyName }}</div>
-            </div>
-            <div>
-              <label for="branch">Branch</label>
-              <div id="branch" class="text-gray">
-                {{ party.branchName || "_" }}
-              </div>
-            </div>
-            <div>
-              <label for="gstNo">GST No</label>
-              <div id="gstNo" class="text-gray">{{ party.gstNo || "_" }}</div>
-            </div>
-            <div>
-              <label for="address1">Address 1</label>
-              <div id="address1" class="text-gray">
-                {{ party.address1 || "_" }}
-              </div>
+          <div>
+            <label for="name">Name</label>
+            <div id="name" class="text-gray">{{ party.partyName }}</div>
+          </div>
+          <div>
+            <label for="branch">Branch</label>
+            <div id="branch" class="text-gray">
+              {{ party.branchName || "_" }}
             </div>
           </div>
-
-          <div class="section">
-            <div>
-              <label for="address2">Address 2</label>
-              <div id="address2" class="text-gray">
-                {{ party.address2 || "_" }}
-              </div>
-            </div>
-            <div>
-              <label for="address3">Address 3</label>
-              <div id="address3" class="text-gray">
-                {{ party.address3 || "_" }}
-              </div>
-            </div>
-            <div>
-              <label for="district">District</label>
-              <div id="district" class="text-gray">
-                {{ party.districtName || "_" }}
-              </div>
-            </div>
-            <div>
-              <label for="city">City</label>
-              <div id="city" class="text-gray">{{ party.cityName || "_" }}</div>
+          <div>
+            <label for="gstNo">GST No</label>
+            <div id="gstNo" class="text-gray">{{ party.gstNo || "_" }}</div>
+          </div>
+          <div>
+            <label for="address1">Address 1</label>
+            <div id="address1" class="text-gray">
+              {{ party.address1 || "_" }}
             </div>
           </div>
-
-          <div class="section">
-            <div>
-              <label for="state">State</label>
-              <div id="state" class="text-gray">
-                {{ party.stateName || "_" }}
-              </div>
+          <div>
+            <label for="address2">Address 2</label>
+            <div id="address2" class="text-gray">
+              {{ party.address2 || "_" }}
             </div>
-            <div>
-              <label for="pincode">Pincode</label>
-              <div id="pincode" class="text-gray">
-                {{ party.pinCode || "_" }}
-              </div>
+          </div>
+          <div>
+            <label for="address3">Address 3</label>
+            <div id="address3" class="text-gray">
+              {{ party.address3 || "_" }}
             </div>
-            <div>
-              <label for="email">Email</label>
-              <div id="email" class="text-gray">
-                {{ party.eMailId || "_" }}
-              </div>
+          </div>
+          <div>
+            <label for="district">District</label>
+            <div id="district" class="text-gray">
+              {{ party.districtName || "_" }}
             </div>
-            <div>
-              <label for="phone">Phone</label>
-              <div id="phone" class="text-gray">
-                {{ getContactNo(party.contactNo) }}
-              </div>
+          </div>
+          <div>
+            <label for="city">City</label>
+            <div id="city" class="text-gray">{{ party.cityName || "_" }}</div>
+          </div>
+          <div>
+            <label for="state">State</label>
+            <div id="state" class="text-gray">
+              {{ party.stateName || "_" }}
+            </div>
+          </div>
+          <div>
+            <label for="pincode">Pincode</label>
+            <div id="pincode" class="text-gray">
+              {{ party.pinCode || "_" }}
+            </div>
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <div id="email" class="text-gray">
+              {{ party.eMailId || "_" }}
+            </div>
+          </div>
+          <div>
+            <label for="phone">Phone</label>
+            <div id="phone" class="text-gray">
+              {{ getContactNo(party.contactNo) }}
             </div>
           </div>
         </div>
-      </mat-card>
+      </section>
     </mat-expansion-panel>
   </mat-accordion>
 </section>
