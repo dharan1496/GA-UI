@@ -206,7 +206,9 @@ export class AddPartyComponent implements OnInit, OnDestroy {
               .subscribe(() => this.router.navigateByUrl('/party'));
           },
           error: (error) =>
-            this.notificationService.error(error?.error || error.message),
+            this.notificationService.error(
+              typeof error?.error === 'string' ? error?.error : error?.message
+            ),
         });
       return;
     }
@@ -217,7 +219,9 @@ export class AddPartyComponent implements OnInit, OnDestroy {
         this.resetData();
       },
       error: (error) =>
-        this.notificationService.error(error?.error || error.message),
+        this.notificationService.error(
+          typeof error?.error === 'string' ? error?.error : error?.message
+        ),
     });
   }
 
