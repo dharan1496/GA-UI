@@ -88,7 +88,7 @@ export class FibreDashboardComponent implements OnInit, OnDestroy {
           y: {
             stacked: true,
             beginAtZero: true,
-            grace: 10,
+            grace: 20,
             title: {
               display: true,
               text: 'PO Qty',
