@@ -30,11 +30,8 @@ tr.detail-row {
 }
 
 tr.row:not(.expanded-row) {
-  transition: all 0.1s ease-in-out;
-
   &:hover {
-    transform: scale(1.003);
-    box-shadow: 0 9px 4px -6px rgba(0, 0, 0, 0.15);
+    background-color: whitesmoke;
   }
 }
 

@@ -99,7 +99,7 @@
 
   <div class="button-container">
     <button mat-raised-button class="mb-16" (click)="addPO()">
-      <mat-icon>add_circle_outline</mat-icon>Add PO
+      <mat-icon>add_circle_outline</mat-icon>Add New PO
     </button>
   </div>
 
@@ -162,12 +162,12 @@
           >
             <div class="pt-16 mb-16" *ngIf="element.poStatus === 'Pending'">
               <button mat-raised-button (click)="receivePO()">
-                <mat-icon>edit</mat-icon>Receive PO
+                <mat-icon>add_circle_outline</mat-icon>Receive PO
               </button>
               <button mat-raised-button class="ml-16" (click)="updatePO()">
                 <mat-icon>edit</mat-icon>Update PO
               </button>
-              <button mat-raised-button class="ml-16" color="accent">
+              <button mat-raised-button class="ml-16">
                 <mat-icon>print</mat-icon>Print PO
               </button>
             </div>
