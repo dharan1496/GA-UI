@@ -1,3 +1,4 @@
+// To run in local with swagger api
 export const environment = {
   baseurl: 'http://localhost:4200',
   api: 'http://localhost:4200/api',

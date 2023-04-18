@@ -1,3 +1,4 @@
+// To run in IIS server
 export const environment = {
   baseurl: 'http://localhost:82',
   api: 'http://localhost:84/api',
