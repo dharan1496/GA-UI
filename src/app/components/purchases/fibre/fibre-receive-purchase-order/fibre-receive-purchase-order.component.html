@@ -11,14 +11,14 @@
     </mat-card-header>
     <mat-card-content>
       <form class="form-container padding" [formGroup]="form">
-        <div class="min-w-25 pl-16">
+        <div class="min-w-25 max-w-50 pl-16">
           <label for="poNo" class="font-weight-bold">PONo(s)</label>
           <div id="poNo" class="font-size-16 text-gray pt-4">
             {{ form.get("poNo")?.value ? form.get("poNo")?.value : "_" }}
           </div>
         </div>
 
-        <div class="min-w-25">
+        <div class="min-w-25 max-w-50">
           <label for="poNo" class="font-weight-bold">Party</label>
           <div id="poNo" class="font-size-16 text-gray pt-4">
             {{ form.get("partyId")?.value ? getPartyName() : "_" }}
