@@ -47,7 +47,7 @@
           <tr>
             <td>{{ order?.fibreType }}</td>
             <td>{{ order?.shade }}</td>
-            <td class="text-right">{{ order?.weight }}</td>
+            <td class="text-right">{{ order?.weight | number }}</td>
             <td class="text-right">{{ order?.rate | currency : "INR" }}</td>
             <td class="text-right">
               {{ order?.rate * order?.weight | currency : "INR" }}
@@ -65,24 +65,31 @@
           </tr>
         </ng-container>
       </tbody>
-      <tfoot>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td class="text-right">
-            {{ getAmount() | currency : "INR" }}
-          </td>
-          <td class="text-right">
-            {{ getTaxAmount() | currency : "INR" }}
-          </td>
-          <td class="text-right">
-            {{ getTotalAmount() | currency : "INR" }}
-          </td>
-        </tr>
-      </tfoot>
     </table>
+    <section class="summary">
+      <div>
+        <div>
+          <label>Untaxed Amount:</label>
+          <div>{{ getAmount() | currency : "INR" }}</div>
+        </div>
+        <div>
+          <label>Tax:</label>
+          <div>{{ getTaxAmount() | currency : "INR" }}</div>
+        </div>
+        <div>
+          <label><strong>Total</strong>:</label>
+          <div>{{ getTotalAmount() | currency : "INR" }}</div>
+        </div>
+        <div>
+          <label><strong>Rounded Total</strong>:</label>
+          <div>{{ getRoundTotal() | currency : "INR" }}</div>
+        </div>
+        <div>
+          <label>Round off Amount:</label>
+          <div>{{ getRoundOffAmount() }}</div>
+        </div>
+      </div>
+    </section>
   </section>
   <section id="footer">
     <div>Please mention our GST NO and PO Ref NO in your Invoice.</div>

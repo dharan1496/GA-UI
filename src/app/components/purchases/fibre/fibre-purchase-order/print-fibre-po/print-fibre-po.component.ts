@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { MaterialModule } from 'src/app/material.module';
 import { PrintFibrePOService } from './print.fibre-po.service';
@@ -11,7 +11,10 @@ import { PrintFibrePOService } from './print.fibre-po.service';
   styleUrls: ['./print-fibre-po.component.scss'],
 })
 export class PrintFibrePOComponent {
-  constructor(public printFibreService: PrintFibrePOService) {}
+  constructor(
+    public printFibreService: PrintFibrePOService,
+    private currencyPipe: CurrencyPipe
+  ) {}
 
   getAmount() {
     return this.printFibreService.fibrePOData?.fibrePODts
@@ -33,5 +36,20 @@ export class PrintFibrePOComponent {
           (data?.rate * data?.weight * data?.gstpercent) / 100
       )
       .reduce((acc: number, value: number) => acc + value, 0);
+  }
+
+  getRoundTotal() {
+    return Math.round(this.getTotalAmount());
+  }
+
+  getRoundOffAmount() {
+    const roundOff = this.getRoundTotal() - this.getTotalAmount();
+    if (roundOff < 0) {
+      return `- ${this.currencyPipe.transform(Math.abs(roundOff), 'INR')}`;
+    }
+    if (roundOff > 0) {
+      return `+ ${this.currencyPipe.transform(roundOff, 'INR')}`;
+    }
+    return this.currencyPipe.transform(roundOff, 'INR');
   }
 }
