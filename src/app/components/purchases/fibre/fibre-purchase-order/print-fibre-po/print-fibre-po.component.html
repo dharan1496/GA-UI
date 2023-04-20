@@ -37,7 +37,24 @@
         <th class="text-right">KGs</th>
         <th class="text-right">Rate</th>
         <th class="text-right">Amount</th>
-        <th class="text-right">GST%</th>
+        <th
+          *ngIf="printFibreService.fibrePOData?.stateName === 'Tamil Nadu'"
+          class="text-right"
+        >
+          CGST%
+        </th>
+        <th
+          *ngIf="printFibreService.fibrePOData?.stateName === 'Tamil Nadu'"
+          class="text-right"
+        >
+          SGST%
+        </th>
+        <th
+          *ngIf="printFibreService.fibrePOData?.stateName !== 'Tamil Nadu'"
+          class="text-right"
+        >
+          IGST%
+        </th>
         <th class="text-right">TotalAmount</th>
       </thead>
       <tbody>
@@ -52,7 +69,22 @@
             <td class="text-right">
               {{ order?.rate * order?.weight | currency : "INR" }}
             </td>
-            <td class="text-right">
+            <td
+              *ngIf="printFibreService.fibrePOData?.stateName === 'Tamil Nadu'"
+              class="text-right"
+            >
+              {{ order?.gstpercent / 2 | number : "1.2-2" }}%
+            </td>
+            <td
+              *ngIf="printFibreService.fibrePOData?.stateName === 'Tamil Nadu'"
+              class="text-right"
+            >
+              {{ order?.gstpercent / 2 | number : "1.2-2" }}%
+            </td>
+            <td
+              *ngIf="printFibreService.fibrePOData?.stateName !== 'Tamil Nadu'"
+              class="text-right"
+            >
               {{ order?.gstpercent | number : "1.2-2" }}%
             </td>
             <td class="text-right">
@@ -72,21 +104,29 @@
           <label>Untaxed Amount:</label>
           <div>{{ getAmount() | currency : "INR" }}</div>
         </div>
-        <div>
-          <label>Tax:</label>
+        <div *ngIf="printFibreService.fibrePOData?.stateName === 'Tamil Nadu'">
+          <label>CGST:</label>
+          <div>{{ getTaxAmount() / 2 | currency : "INR" }}</div>
+        </div>
+        <div *ngIf="printFibreService.fibrePOData?.stateName === 'Tamil Nadu'">
+          <label>SGST:</label>
+          <div>{{ getTaxAmount() / 2 | currency : "INR" }}</div>
+        </div>
+        <div *ngIf="printFibreService.fibrePOData?.stateName !== 'Tamil Nadu'">
+          <label>IGST:</label>
           <div>{{ getTaxAmount() | currency : "INR" }}</div>
         </div>
         <div>
-          <label><strong>Total</strong>:</label>
+          <label>Total:</label>
           <div>{{ getTotalAmount() | currency : "INR" }}</div>
-        </div>
-        <div>
-          <label><strong>Rounded Total</strong>:</label>
-          <div>{{ getRoundTotal() | currency : "INR" }}</div>
         </div>
         <div>
           <label>Round off Amount:</label>
           <div>{{ getRoundOffAmount() }}</div>
+        </div>
+        <div>
+          <label><strong>Total Amount Payable</strong>:</label>
+          <div>{{ getRoundTotal() | currency : "INR" }}</div>
         </div>
       </div>
     </section>
