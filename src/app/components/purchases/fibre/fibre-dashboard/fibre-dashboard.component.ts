@@ -18,6 +18,7 @@ import { NotificationService } from 'src/app/shared/notification.service';
 export class FibreDashboardComponent implements OnInit, OnDestroy {
   chart: any;
   subscription = new Subscription();
+  grace = 10;
 
   constructor(
     private navigationService: NavigationService,
@@ -51,11 +52,20 @@ export class FibreDashboardComponent implements OnInit, OnDestroy {
     this.createChart(emptyData);
   }
 
+  getGrace(data: FibreGraph[]) {
+    const max = Math.max(...data.map((data) => data.poQuantity));
+    if (max > 10000) return 10000;
+    if (max > 1000) return 1000;
+    if (max > 100) return 100;
+    return 10;
+  }
+
   createChart(data: FibreGraph[]) {
     const receivedQty = data.map((data) => data.receivedQty || '');
     const pendingQty = data.map(
       (data) => data.poQuantity - data.receivedQty || ''
     );
+    this.grace = this.getGrace(data);
     const months = data.map((data) => data.poMonthYear);
     this.chart = new Chart('MyChart', {
       type: 'bar',
@@ -90,7 +100,7 @@ export class FibreDashboardComponent implements OnInit, OnDestroy {
           y: {
             stacked: true,
             beginAtZero: true,
-            grace: 20,
+            grace: this.grace,
             title: {
               display: true,
               text: 'PO Qty',
