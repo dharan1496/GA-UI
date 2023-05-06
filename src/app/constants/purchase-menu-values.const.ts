@@ -13,8 +13,8 @@ export const PURCHASE = [
         route: 'purchases/fibre/receive-purchase-order',
       },
       {
-        title: 'Fibre Type List',
-        route: 'purchases/fibre/fibre-list',
+        title: 'Master',
+        route: 'purchases/fibre/master',
       },
     ],
   },

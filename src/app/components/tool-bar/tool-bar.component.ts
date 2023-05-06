@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Constants } from 'src/app/constants/constants';
 import { PARTY } from 'src/app/constants/party-menu-values.const';
+import { PRODUCTION } from 'src/app/constants/production-menu-values.const';
 import { PURCHASE } from 'src/app/constants/purchase-menu-values.const';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
@@ -33,6 +34,8 @@ export class ToolBarComponent {
       this.navigationService.menu = PURCHASE;
     } else if (section === Constants.PARTY) {
       this.navigationService.menu = PARTY;
+    } else if (section === Constants.PRODUCTION) {
+      this.navigationService.menu = PRODUCTION;
     } else {
       this.navigationService.menu = null;
     }

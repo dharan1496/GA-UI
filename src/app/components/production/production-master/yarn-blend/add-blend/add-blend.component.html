@@ -1,0 +1,92 @@
+<h1 mat-dialog-title>Add Yarn Blend</h1>
+<div mat-dialog-content>
+  <div class="form-container">
+    <form [formGroup]="form" class="form">
+      <mat-form-field appearance="fill" class="w-50">
+        <mat-label>Fibre Category</mat-label>
+        <mat-select formControlName="fibreCategory">
+          <ng-container *ngFor="let category of fibreCategories">
+            <mat-option
+              [disabled]="checkAlreadyAdded(category.fibreCategoryName)"
+              [value]="category.fibreCategoryName"
+              >{{ category.fibreCategoryName }}</mat-option
+            >
+          </ng-container>
+        </mat-select>
+        <mat-error *ngIf="form.get('percentage')?.hasError('required')"
+          >This field is required.</mat-error
+        >
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Percentage</mat-label>
+        <input
+          type="number"
+          max="100"
+          formControlName="percentage"
+          matInput
+          (input)="appSharedService.restrictDecimal($event, 2)"
+        />
+        <mat-error *ngIf="form.get('percentage')?.hasError('required')"
+          >This field is required.</mat-error
+        >
+        <mat-error *ngIf="form.get('percentage')?.hasError('max')"
+          >Value should be between 1 and 100</mat-error
+        >
+      </mat-form-field>
+    </form>
+    <button (click)="add()" mat-raised-button color="primary">
+      <mat-icon>add_circle_outline</mat-icon> Add
+    </button>
+  </div>
+  <table mat-table [dataSource]="addedFibreCategory" class="table">
+    <!-- Fibre category Column -->
+    <ng-container matColumnDef="fibreCategory">
+      <th mat-header-cell *matHeaderCellDef>Fibre Category</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.fibreCategory }}
+      </td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <!-- percentage Column -->
+    <ng-container matColumnDef="percentage">
+      <th mat-header-cell *matHeaderCellDef>Percentage</th>
+      <td mat-cell *matCellDef="let element">{{ element.percentage }}</td>
+      <td mat-footer-cell *matFooterCellDef>{{ getTotalPercentage() }}</td>
+    </ng-container>
+
+    <!-- acition Column -->
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef>Action</th>
+      <td mat-cell *matCellDef="let element">
+        <button
+          mat-icon-button
+          (click)="removeData(element.fibreCategory)"
+          color="warn"
+          matTooltip="Remove"
+          aria-label="button with a delete icon"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    <tr *matNoDataRow>
+      <td class="no-rows" [attr.colspan]="displayedColumns.length">
+        No rows to display
+      </td>
+    </tr>
+    <tr
+      [hidden]="!addedFibreCategory.length"
+      mat-footer-row
+      *matFooterRowDef="displayedColumns; sticky: true"
+    ></tr>
+  </table>
+</div>
+<div mat-dialog-actions class="footer">
+  <button mat-raised-button (click)="submit()" color="primary">Submit</button>
+  <button mat-button (click)="close()">Cancel</button>
+</div>

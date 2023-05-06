@@ -1,0 +1,35 @@
+.form {
+  display: flex;
+  gap: 24px;
+}
+
+.form-container {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 24px;
+}
+
+.table {
+  border: 1px solid #e0e0e0;
+  margin-top: 24px;
+  margin-bottom: 16px;
+}
+
+.mat-mdc-header-row {
+  background: rgb(225, 225, 225);
+}
+
+.mat-mdc-table-sticky {
+  border-top: 1px solid #e0e0e0;
+}
+
+.no-rows {
+  padding: 16px 0;
+  text-align: center;
+}

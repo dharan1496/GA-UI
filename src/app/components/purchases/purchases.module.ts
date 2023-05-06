@@ -7,7 +7,9 @@ import { FibreReceivePurchaseOrderComponent } from './fibre/fibre-receive-purcha
 import { PurchasesRoutingModule } from './purchases-routing.module';
 import { FibreSearchComponent } from './fibre/fibre-search/fibre-search.component';
 import { FibreDashboardComponent } from './fibre/fibre-dashboard/fibre-dashboard.component';
-import { FibreListComponent } from './fibre/fibre-list/fibre-list.component';
+import { FibreListComponent } from './fibre/fibre-master/fibre-list/fibre-list.component';
+import { FibreMasterComponent } from './fibre/fibre-master/fibre-master.component';
+import { FibreShadeComponent } from './fibre/fibre-master/fibre-shade/fibre-shade.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +18,8 @@ import { FibreListComponent } from './fibre/fibre-list/fibre-list.component';
     FibreSearchComponent,
     FibreDashboardComponent,
     FibreListComponent,
+    FibreMasterComponent,
+    FibreShadeComponent,
   ],
   imports: [
     CommonModule,

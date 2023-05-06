@@ -65,6 +65,10 @@ app-print-fibre-po {
   width: 50%;
 }
 
+.w-70 {
+  width: 70%;
+}
+
 .w-100 {
   width: 100%;
 }
@@ -145,6 +149,10 @@ app-print-fibre-po {
   margin-top: 16px;
 }
 
+.mt-24 {
+  margin-top: 24px;
+}
+
 .mb-8 {
   margin-bottom: 8px;
 }
@@ -223,4 +231,8 @@ app-print-fibre-po {
 
 .text-dark {
   color: rgba(0, 0, 0, 0.95);
+}
+
+.tab-header-border {
+  border-bottom: 1px solid rgb(0, 0, 0, 0.12);
 }

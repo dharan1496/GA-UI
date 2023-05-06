@@ -3,9 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subscription, finalize } from 'rxjs';
 import { FibreService } from 'src/app/services/fibre.service';
 import { AddFibreTypeComponent } from './add-fibre-type/add-fibre-type.component';
-import { NavigationService } from 'src/app/shared/navigation.service';
-import { Constants } from 'src/app/constants/constants';
-import { PURCHASE } from 'src/app/constants/purchase-menu-values.const';
 import { FibreType } from 'src/app/models/fibreType';
 import { UserActionConfirmationComponent } from 'src/app/components/user-action-confirmation/user-action-confirmation.component';
 import { NotificationService } from 'src/app/shared/notification.service';
@@ -25,13 +22,8 @@ export class FibreListComponent implements OnInit {
   constructor(
     public fibreService: FibreService,
     private dialog: MatDialog,
-    private navigationService: NavigationService,
     private notificationService: NotificationService
-  ) {
-    this.navigationService.isSidenavOpened = true;
-    this.navigationService.setFocus(Constants.PURCHASES);
-    this.navigationService.menu = PURCHASE;
-  }
+  ) {}
 
   ngOnInit() {
     this.getFibre();

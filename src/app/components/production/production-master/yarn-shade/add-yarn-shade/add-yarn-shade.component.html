@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Add Yarn Shade</h1>
+<div mat-dialog-content class="form">
+  <mat-form-field appearance="fill">
+    <mat-label>Shade</mat-label>
+    <input matInput [formControl]="shade" />
+    <mat-error>This field is required.</mat-error>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions class="footer">
+  <button mat-raised-button (click)="submit()" color="primary">Submit</button>
+  <button mat-button (click)="close()">Cancel</button>
+</div>

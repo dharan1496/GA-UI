@@ -23,6 +23,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSortModule } from '@angular/material/sort';
 import { MatRippleModule } from '@angular/material/core';
 import { MomentDateModule } from '@angular/material-moment-adapter';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatRadioModule } from '@angular/material/radio';
 
 const MY_DATE_FORMATS = {
   parse: {
@@ -61,6 +63,8 @@ const modules = [
   MatSortModule,
   MatRippleModule,
   MomentDateModule,
+  MatTabsModule,
+  MatRadioModule,
 ];
 
 @NgModule({

@@ -1,0 +1,26 @@
+.container {
+  margin: 32px 25%;
+}
+
+h1 {
+  font-weight: 500;
+  margin: 40px 0;
+}
+
+.add-btn {
+  display: flex;
+  margin-bottom: 16px;
+}
+
+.table {
+  border: 1px solid #e0e0e0;
+}
+
+.mat-mdc-header-row {
+  background: rgb(225, 225, 225);
+}
+
+.no-rows {
+  padding: 16px 0;
+  text-align: center;
+}

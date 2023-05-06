@@ -1,0 +1,184 @@
+<section class="container">
+  <div class="header-container">
+    <h1 class="header letter-spacing-1">Mixing</h1>
+    <button mat-raised-button color="primary" (click)="chooseProgram()">
+      Choose Program for Mixing
+    </button>
+  </div>
+  <div class="prog-details-container">
+    <mat-card class="card w-50">
+      <mat-card-header>
+        <mat-card-title>Program Details</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="form-container">
+          <div>
+            <label class="font-weight-bold">Prog No</label>
+            <div class="font-size-16 text-gray pt-4">_</div>
+          </div>
+          <div>
+            <label class="font-weight-bold">Shade</label>
+            <div class="font-size-16 text-gray pt-4">_</div>
+          </div>
+          <div>
+            <label class="font-weight-bold">Blend</label>
+            <div class="font-size-16 text-gray pt-4">_</div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <div class="w-50">
+      <table mat-table [dataSource]="yarnDetails" class="mat-elevation-z8">
+        <ng-container matColumnDef="yarnCount">
+          <th mat-header-cell *matHeaderCellDef>Yarn Count</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.yarnCount }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="kgs">
+          <th mat-header-cell *matHeaderCellDef>KGs</th>
+          <td mat-cell *matCellDef="let element">{{ element.kgs }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="button">
+          <th mat-header-cell *matHeaderCellDef class="text-center">Actions</th>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="yarnDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: yarnDisplayedColumns"></tr>
+        <tr *matNoDataRow>
+          <td class="no-rows" [attr.colspan]="yarnDisplayedColumns.length">
+            No rows to display
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="mt-24">
+    <div class="fibre-stock-btn mb-16">
+      <button mat-raised-button color="primary" (click)="fibreStock()">
+        <mat-icon>playlist_add</mat-icon> Select Fibre Stock
+      </button>
+    </div>
+    <table mat-table [dataSource]="mixingDetails" class="mat-elevation-z8">
+      <!-- receivedDCNo Column -->
+      <ng-container matColumnDef="receivedDCNo">
+        <th mat-header-cell *matHeaderCellDef>Received DC No</th>
+        <td mat-cell *matCellDef="let element">{{ element.receivedDCNo }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <!-- fibreCategory Column -->
+      <ng-container matColumnDef="fibreCategory">
+        <th mat-header-cell *matHeaderCellDef>Fibre Category</th>
+        <td mat-cell *matCellDef="let element">{{ element.fibreCategory }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <!-- fibre Column -->
+      <ng-container matColumnDef="fibre">
+        <th mat-header-cell *matHeaderCellDef>Fibre</th>
+        <td mat-cell *matCellDef="let element">{{ element.fibre }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <!-- fibreShade Column -->
+      <ng-container matColumnDef="fibreShade">
+        <th mat-header-cell *matHeaderCellDef>Fibre Shade</th>
+        <td mat-cell *matCellDef="let element">{{ element.fibreShade }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <!-- lot Column -->
+      <ng-container matColumnDef="lot">
+        <th mat-header-cell *matHeaderCellDef>Lot</th>
+        <td mat-cell *matCellDef="let element">{{ element.lot }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <!-- stockQty Column -->
+      <ng-container matColumnDef="stockQty">
+        <th mat-header-cell *matHeaderCellDef class="text-right">Stock Qty</th>
+        <td mat-cell *matCellDef="let element" class="text-right">
+          {{ element.stockQty }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <!-- bales Column -->
+      <ng-container matColumnDef="bales">
+        <th mat-header-cell *matHeaderCellDef class="text-right">
+          Issued No of Bales
+        </th>
+        <td mat-cell *matCellDef="let element" class="w-15 text-right">
+          <input
+            #bales
+            type="number"
+            class="cell-input w-70"
+            (input)="
+              appSharedService.restrictDecimal($event, 0);
+              element.bales = bales.value
+            "
+          />
+        </td>
+        <td mat-footer-cell *matFooterCellDef class="text-right">
+          {{ getTotalBale() || 0 }}
+        </td>
+      </ng-container>
+
+      <!-- issuedQty Column -->
+      <ng-container matColumnDef="issuedQty">
+        <th mat-header-cell *matHeaderCellDef class="text-right">Issued Qty</th>
+        <td mat-cell *matCellDef="let element" class="w-15 text-right">
+          <input
+            #issuedQty
+            type="number"
+            class="cell-input w-70"
+            (input)="
+              appSharedService.restrictDecimal($event, 3);
+              element.issuedQty = issuedQty.value
+            "
+          />
+        </td>
+        <td mat-footer-cell *matFooterCellDef class="text-right">
+          {{ getTotalIssuedQty() || 0 | number : "1.0-3" }}
+        </td>
+      </ng-container>
+
+      <!-- percentUsed Column -->
+      <ng-container matColumnDef="percentUsed">
+        <th mat-header-cell *matHeaderCellDef class="text-right">% Used</th>
+        <td mat-cell *matCellDef="let element" class="text-right">
+          {{ getPercentUsed(element) | number : "1.2-2" }}%
+        </td>
+        <td mat-footer-cell *matFooterCellDef class="text-right">
+          {{ getTotalPercentage() || 0 | number : "1.2-2" }}%
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="mixingDisplayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: mixingDisplayedColumns"></tr>
+      <tr *matNoDataRow>
+        <td class="no-rows" [attr.colspan]="mixingDisplayedColumns.length">
+          No rows to display
+        </td>
+      </tr>
+      <tr
+        [hidden]="!mixingDetails.length"
+        mat-footer-row
+        *matFooterRowDef="mixingDisplayedColumns; sticky: true"
+      ></tr>
+    </table>
+  </div>
+  <div class="footer">
+    <button mat-raised-button class="mr-16" (click)="resetData()">
+      <mat-icon>refresh</mat-icon>Reset
+    </button>
+    <button mat-raised-button color="primary" (click)="submit()">
+      <mat-icon>save_alt</mat-icon>Submit
+    </button>
+  </div>
+</section>

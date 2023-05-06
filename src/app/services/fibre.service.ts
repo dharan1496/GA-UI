@@ -8,6 +8,7 @@ import { PendingPODetailsByParty } from '../models/pendingPODtsByParty';
 import { FibreType } from '../models/fibreType';
 import { ReceiveFibrePO } from '../models/receiveFibrePO';
 import { FibreGraph } from '../models/fibreGraph';
+import { FibreShade } from '../models/fibreShade';
 
 @Injectable({
   providedIn: 'root',
@@ -69,5 +70,21 @@ export class FibreService {
     return this.http.post(`${environment.api}/Fiber/ReceiveFibre`, request, {
       responseType: 'text',
     });
+  }
+
+  getFibreShade(): Observable<FibreShade[]> {
+    return this.http.get<FibreShade[]>(
+      `${environment.api}/Fiber/GetActiveFibreShades`
+    );
+  }
+
+  addFibreShade(shadeName: string): Observable<any> {
+    return this.http.post(
+      `${environment.api}/Fiber/AddFibreShade?fibreShadeName=${shadeName}`,
+      {},
+      {
+        responseType: 'text',
+      }
+    );
   }
 }

@@ -4,11 +4,11 @@ import { Constants } from 'src/app/constants/constants';
 import { PURCHASE } from 'src/app/constants/purchase-menu-values.const';
 import { NavigationService } from 'src/app/shared/navigation.service';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { DecimalPipe } from '@angular/common';
 import { FibreService } from 'src/app/services/fibre.service';
 import { FibreGraph } from 'src/app/models/fibreGraph';
 import { Subscription } from 'rxjs';
 import { NotificationService } from 'src/app/shared/notification.service';
+import { ChartService } from 'src/app/services/chart.service';
 
 @Component({
   selector: 'app-fibre-dashboard',
@@ -22,9 +22,9 @@ export class FibreDashboardComponent implements OnInit, OnDestroy {
 
   constructor(
     private navigationService: NavigationService,
-    private decimalPipe: DecimalPipe,
     private fibreService: FibreService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private chartService: ChartService
   ) {
     this.navigationService.menu = PURCHASE;
     this.navigationService.isSidenavOpened = true;
@@ -67,7 +67,7 @@ export class FibreDashboardComponent implements OnInit, OnDestroy {
     );
     this.grace = this.getGrace(data);
     const months = data.map((data) => data.poMonthYear);
-    this.chart = new Chart('MyChart', {
+    this.chart = new Chart('poChart', {
       type: 'bar',
       data: {
         labels: months,
@@ -109,41 +109,7 @@ export class FibreDashboardComponent implements OnInit, OnDestroy {
           },
         },
       },
-      plugins: [ChartDataLabels, this.getTopLabels()],
+      plugins: [ChartDataLabels, this.chartService.getTopLabels()],
     });
-  }
-
-  getTopLabels() {
-    return {
-      id: 'topLabels',
-      afterDatasetsDraw: (chart: Chart) => {
-        if (chart.isDatasetVisible(0) && chart.isDatasetVisible(1)) {
-          const {
-            ctx,
-            scales: { x },
-          } = chart;
-          chart.data.datasets[0].data.forEach((datapoint, index) => {
-            const datasetArray: any[] = [];
-            chart.data.datasets.forEach((dataset) =>
-              datasetArray.push(dataset.data[index])
-            );
-
-            const sum = datasetArray.reduce(
-              (total: number, values: number) => total + values,
-              0
-            );
-
-            ctx.font = '14px sans-serif';
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-            ctx.textAlign = 'center';
-            ctx.fillText(
-              sum ? `${this.decimalPipe.transform(sum, '1.0-3')} kg` : '',
-              x.getPixelForValue(index),
-              chart.getDatasetMeta(1).data[index]?.y - 25
-            );
-          });
-        }
-      },
-    };
   }
 }

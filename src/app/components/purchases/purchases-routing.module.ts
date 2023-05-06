@@ -4,7 +4,8 @@ import { FibrePurchaseOrderComponent } from './fibre/fibre-purchase-order/fibre-
 import { FibreReceivePurchaseOrderComponent } from './fibre/fibre-receive-purchase-order/fibre-receive-purchase-order.component';
 import { FibreSearchComponent } from './fibre/fibre-search/fibre-search.component';
 import { FibreDashboardComponent } from './fibre/fibre-dashboard/fibre-dashboard.component';
-import { FibreListComponent } from './fibre/fibre-list/fibre-list.component';
+import { FibreListComponent } from './fibre/fibre-master/fibre-list/fibre-list.component';
+import { FibreMasterComponent } from './fibre/fibre-master/fibre-master.component';
 
 const routes: Routes = [
   {
@@ -24,8 +25,8 @@ const routes: Routes = [
     component: FibreReceivePurchaseOrderComponent,
   },
   {
-    path: 'fibre/fibre-list',
-    component: FibreListComponent,
+    path: 'fibre/master',
+    component: FibreMasterComponent,
   },
 ];
 

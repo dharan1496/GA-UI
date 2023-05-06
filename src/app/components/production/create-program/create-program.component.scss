@@ -1,0 +1,52 @@
+.container {
+  margin: 32px;
+}
+
+.card {
+  margin-bottom: 32px;
+}
+
+.form-container {
+  padding: 32px 32px 4px 32px;
+}
+
+.form-first-row {
+  display: flex;
+  gap: 48px;
+  align-items: flex-start;
+  margin-bottom: 32px;
+}
+
+.header {
+  font-weight: 500;
+  margin: 40px 0;
+}
+
+.button-container {
+  padding-bottom: 16px;
+}
+
+.no-rows {
+  padding: 16px 0;
+  text-align: center;
+}
+
+.mat-mdc-header-row {
+  background: rgb(225, 225, 225);
+}
+
+.mat-mdc-table-sticky {
+  border-top: 1px solid #e0e0e0;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.footer {
+  margin-top: 50px;
+  display: flex;
+  justify-content: flex-end;
+}
