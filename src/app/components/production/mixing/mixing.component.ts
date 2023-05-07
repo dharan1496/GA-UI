@@ -9,6 +9,7 @@ import { ChooseProgramComponent } from './choose-program/choose-program.componen
 import { FibreStockComponent } from './fibre-stock/fibre-stock.component';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { MatTable } from '@angular/material/table';
+import { NotifyType } from 'src/app/models/notify';
 
 @Component({
   selector: 'app-mixing',
@@ -16,6 +17,7 @@ import { MatTable } from '@angular/material/table';
   styleUrls: ['./mixing.component.scss'],
 })
 export class MixingComponent {
+  programDetails = {};
   yarnDetails = [];
   mixingDetails = [];
   yarnDisplayedColumns = ['yarnCount', 'kgs'];
@@ -49,7 +51,7 @@ export class MixingComponent {
       .afterClosed()
       .subscribe((program) => {
         if (program) {
-          //
+          this.programDetails = program;
         }
       });
   }
@@ -87,10 +89,31 @@ export class MixingComponent {
   }
 
   submit() {
-    //
+    if (!this.hasError()) {
+      //
+    }
+  }
+
+  hasError(): boolean {
+    if (Object.keys(this.programDetails).length === 0) {
+      this.notificationService.notify(
+        'Please choose the program to proceed',
+        NotifyType.ERROR
+      );
+      return true;
+    }
+    if (this.mixingDetails.length === 0) {
+      this.notificationService.notify(
+        'Please choose the Fibre stock to proceed',
+        NotifyType.ERROR
+      );
+      return true;
+    }
+    return false;
   }
 
   resetData() {
+    this.programDetails = {};
     this.yarnDetails = [];
     this.mixingDetails = [];
   }
