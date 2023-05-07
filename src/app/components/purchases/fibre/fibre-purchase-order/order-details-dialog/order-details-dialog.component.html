@@ -15,7 +15,13 @@
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Shade Name</mat-label>
-        <input type="text" matInput formControlName="shade" />
+        <mat-select formControlName="shadeName">
+          <ng-container *ngFor="let shade of fibreShadeList">
+            <mat-option [value]="shade.shadeName">{{
+              shade.shadeName
+            }}</mat-option>
+          </ng-container>
+        </mat-select>
         <mat-error>This field is required.</mat-error>
       </mat-form-field>
     </div>

@@ -42,7 +42,7 @@ export class ReceiveOrderDetailsComponent implements OnInit, OnDestroy {
       poNo: [{ value: '', disabled: true }],
       fibreTypeId: [{ value: '', disabled: true }],
       fibreType: '',
-      shade: [{ value: '', disabled: true }],
+      shadeName: [{ value: '', disabled: true }],
       hsnCode: ['', Validators.required],
       orderQty: [{ value: '', disabled: true }],
       pendingQty: [{ value: '', disabled: true }],

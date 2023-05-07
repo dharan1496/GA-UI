@@ -121,7 +121,7 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
       const fibrePODts = this.dataSource.map((data: CreateFibrePODts) => {
         return {
           fibreTypeId: data.fibreTypeId,
-          shade: data.shade,
+          shadeId: data.shadeId,
           weight: data.weight,
           rate: data.rate,
           gstPercent: data.gstPercent,

@@ -13,6 +13,7 @@ import { NotifyType } from 'src/app/models/notify';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { FibreService } from 'src/app/services/fibre.service';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
+import { FibreShade } from 'src/app/models/fibreShade';
 
 @Component({
   selector: 'app-order-details-dialog',
@@ -23,7 +24,7 @@ import { AppSharedService } from 'src/app/shared/app-shared.service';
 })
 export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
   form!: FormGroup;
-
+  fibreShadeList!: FibreShade[];
   subscription = new Subscription();
 
   constructor(
@@ -40,13 +41,20 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
       orderNo: typeof this.data === 'number' ? +this.data + 1 : '',
       fibreTypeId: ['', Validators.required],
       fibreName: '',
-      shade: ['', Validators.required],
+      shadeId: '',
+      shadeName: ['', Validators.required],
       weight: ['', Validators.required],
       rate: ['', Validators.required],
       amount: [{ value: '', disabled: true }],
       gstPercent: ['', Validators.required],
       totalAmount: [{ value: '', disabled: true }],
     });
+
+    this.subscription.add(
+      this.fibreService
+        .getFibreShade()
+        .subscribe((data) => (this.fibreShadeList = data))
+    );
 
     this.subscription.add(
       this.form.get('fibreTypeId')?.valueChanges.subscribe((fibreTypeId) => {
@@ -56,6 +64,17 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
         this.form
           .get('fibreName')
           ?.setValue(filteredParty.reduce((p, c) => c.fibreType, ''));
+      })
+    );
+
+    this.subscription.add(
+      this.form.get('shadeName')?.valueChanges.subscribe((shadeName) => {
+        this.form
+          .get('shadeId')
+          ?.setValue(
+            this.fibreShadeList.find((shade) => shade.shadeName === shadeName)
+              ?.shadeId
+          );
       })
     );
 

@@ -111,8 +111,15 @@ export class AddBlendComponent implements OnInit {
 
   submit() {
     if (!this.hasError()) {
+      // sort fibreCategory by fibreCtaegoryId
+      const fibres =
+        this.addedFibreCategory.length > 1
+          ? this.addedFibreCategory.sort(
+              (a, b) => a.fibreCategoryId - b.fibreCategoryId
+            )
+          : this.addedFibreCategory;
       const blend: YarnBlendCreate = {
-        fibres: this.addedFibreCategory,
+        fibres,
         createdByUserId: 0,
       };
       this.subscription.add(

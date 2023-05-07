@@ -1,6 +1,6 @@
 export interface CreateFibrePODts {
   fibreTypeId: number;
-  shade: string;
+  shadeId: number;
   weight: number;
   rate: number;
   gstPercent: number;
