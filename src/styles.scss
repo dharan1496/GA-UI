@@ -53,6 +53,10 @@ app-print-fibre-po {
   width: 25%;
 }
 
+.w-30 {
+  width: 30%;
+}
+
 .w-35 {
   width: 35%;
 }
@@ -63,6 +67,14 @@ app-print-fibre-po {
 
 .w-50 {
   width: 50%;
+}
+
+.w-60 {
+  width: 60%;
+}
+
+.w-65 {
+  width: 65%;
 }
 
 .w-70 {
@@ -197,6 +209,10 @@ app-print-fibre-po {
   font-size: 14px;
 }
 
+.font-size-18 {
+  font-size: 18px;
+}
+
 .font-size-20 {
   font-size: 20px;
 }
@@ -231,6 +247,10 @@ app-print-fibre-po {
 
 .text-dark {
   color: rgba(0, 0, 0, 0.95);
+}
+
+.text-red {
+  color: rgb(246, 25, 25);
 }
 
 .tab-header-border {

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -14,6 +14,7 @@ import { FibreCategory } from 'src/app/models/fibreCategory';
 import { NotifyType } from 'src/app/models/notify';
 import { YarnBlendCreate } from 'src/app/models/yarnBlendCreate';
 import { YarnBlendFibres } from 'src/app/models/yarnBlendFibres';
+import { FibreService } from 'src/app/services/fibre.service';
 import { YarnService } from 'src/app/services/yarn.service';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NotificationService } from 'src/app/shared/notification.service';
@@ -25,7 +26,7 @@ import { NotificationService } from 'src/app/shared/notification.service';
   templateUrl: './add-blend.component.html',
   styleUrls: ['./add-blend.component.scss'],
 })
-export class AddBlendComponent implements OnInit {
+export class AddBlendComponent implements OnInit, OnDestroy {
   fibreCategories!: FibreCategory[];
   form!: FormGroup;
   subscription = new Subscription();
@@ -38,7 +39,8 @@ export class AddBlendComponent implements OnInit {
     private formBuilder: FormBuilder,
     private matDialogRef: MatDialogRef<any>,
     private yarnService: YarnService,
-    public appSharedService: AppSharedService
+    public appSharedService: AppSharedService,
+    private fibreService: FibreService
   ) {}
 
   ngOnInit() {
@@ -64,6 +66,10 @@ export class AddBlendComponent implements OnInit {
     );
   }
 
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
   checkAlreadyAdded(option: string): true | null {
     return (
       this.addedFibreCategory.some(
@@ -73,27 +79,16 @@ export class AddBlendComponent implements OnInit {
   }
 
   getFibreCategory() {
-    // TEMP
-    this.fibreCategories = [
-      {
-        fibreCategoryId: 1,
-        fibreCategoryName: 'Polyster',
-        categoryCode: 'P',
-        categoryOrder: 1,
-      },
-      {
-        fibreCategoryId: 2,
-        fibreCategoryName: 'Viscose',
-        categoryCode: 'V',
-        categoryOrder: 2,
-      },
-      {
-        fibreCategoryId: 3,
-        fibreCategoryName: 'Cotton',
-        categoryCode: 'C',
-        categoryOrder: 3,
-      },
-    ];
+    this.subscription.add(
+      this.fibreService.getFibreCategories().subscribe({
+        next: (data) => (this.fibreCategories = data),
+        error: (error) => {
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          );
+        },
+      })
+    );
   }
 
   add() {
@@ -123,7 +118,14 @@ export class AddBlendComponent implements OnInit {
         createdByUserId: 0,
       };
       this.subscription.add(
-        this.yarnService.addYarnBlend(blend).subscribe(() => this.close())
+        this.yarnService.addYarnBlend(blend).subscribe({
+          next: () => this.close(),
+          error: (error) => {
+            this.notificationService.error(
+              typeof error?.error === 'string' ? error?.error : error?.message
+            );
+          },
+        })
       );
     }
   }

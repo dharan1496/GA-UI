@@ -2,17 +2,17 @@
 <div mat-dialog-content class="form-container">
   <form [formGroup]="form" class="form">
     <mat-form-field appearance="fill" class="w-50">
-      <mat-label>Yarn Count</mat-label>
-      <mat-select formControlName="yarnCount">
-        <ng-container *ngFor="let count of countsList | async">
-          <mat-option [value]="count.countsId">{{ count.counts }}</mat-option>
+      <mat-label>Yarn Counts</mat-label>
+      <mat-select formControlName="counts">
+        <ng-container *ngFor="let count of countsList">
+          <mat-option [value]="count.counts">{{ count.counts }}</mat-option>
         </ng-container>
       </mat-select>
       <mat-error>This field is required.</mat-error>
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>KGs</mat-label>
-      <input matInput formControlName="kgs" />
+      <input matInput formControlName="quantity" />
       <mat-error>This field is required.</mat-error>
     </mat-form-field>
   </form>

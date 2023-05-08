@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Constants } from 'src/app/constants/constants';
 import { PRODUCTION } from 'src/app/constants/production-menu-values.const';
@@ -10,15 +10,24 @@ import { FibreStockComponent } from './fibre-stock/fibre-stock.component';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { MatTable } from '@angular/material/table';
 import { NotifyType } from 'src/app/models/notify';
+import { ConversionYarn } from 'src/app/models/conversionYarn';
+import { ConversionProgram } from 'src/app/models/conversionProgram';
+import { FormControl, Validators } from '@angular/forms';
+import { FibreMixing } from 'src/app/models/fibreMixing';
+import { DatePipe } from '@angular/common';
+import { FibreIssued } from 'src/app/models/fibreIssued';
+import { Subscription } from 'rxjs';
+import { YarnBlend } from 'src/app/models/yarnBlend';
+import { BlendMismatchComponent } from './blend-mismatch/blend-mismatch.component';
 
 @Component({
   selector: 'app-mixing',
   templateUrl: './mixing.component.html',
   styleUrls: ['./mixing.component.scss'],
 })
-export class MixingComponent {
-  programDetails = {};
-  yarnDetails = [];
+export class MixingComponent implements OnInit, OnDestroy {
+  programDetails: ConversionProgram | undefined;
+  yarnDetails: ConversionYarn[] = [];
   mixingDetails = [];
   yarnDisplayedColumns = ['yarnCount', 'kgs'];
   mixingDisplayedColumns = [
@@ -29,29 +38,55 @@ export class MixingComponent {
     'lot',
     'stockQty',
     'bales',
-    'issuedQty',
+    'issueQty',
     'percentUsed',
   ];
   @ViewChild(MatTable) table!: MatTable<any>;
+  mixingDate = new FormControl('', Validators.required);
+  blendList!: YarnBlend[];
+  subscription = new Subscription();
 
   constructor(
     private navigationService: NavigationService,
     public yarnService: YarnService,
     private dialog: MatDialog,
     private notificationService: NotificationService,
-    public appSharedService: AppSharedService
+    public appSharedService: AppSharedService,
+    private datePipe: DatePipe
   ) {
     this.navigationService.menu = PRODUCTION;
     this.navigationService.setFocus(Constants.PRODUCTION);
+  }
+
+  ngOnInit() {
+    this.subscription.add(
+      this.yarnService.getYarnBlend().subscribe({
+        next: (data) => (this.blendList = data),
+        error: (error) => {
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          );
+        },
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   chooseProgram() {
     this.dialog
       .open(ChooseProgramComponent, { minWidth: 1000 })
       .afterClosed()
-      .subscribe((program) => {
-        if (program) {
-          this.programDetails = program;
+      .subscribe((programId: number) => {
+        if (programId) {
+          this.yarnService
+            .getProgramDetailsById(programId)
+            .subscribe((data) => {
+              this.programDetails = data;
+              this.yarnDetails = data.yarnCounts;
+            });
         }
       });
   }
@@ -60,51 +95,119 @@ export class MixingComponent {
     this.dialog
       .open(FibreStockComponent, { minWidth: 1000 })
       .afterClosed()
-      .subscribe(() => {
-        // temps
-        this.mixingDetails = [
-          {
-            receivedDCNo: '12345',
-            fibreCategory: 'Polyster',
-            fibre: 'test',
-            fibreShade: 'blue',
-            lot: 'E#',
-            bales: '',
-            issuedQty: '',
-            stockQty: 234,
-          } as never,
-          {
-            receivedDCNo: '12345',
-            fibreCategory: 'Polyster',
-            fibre: 'test',
-            fibreShade: 'blue',
-            lot: 'E#',
-            bales: '',
-            issuedQty: '',
-            stockQty: 234,
-          } as never,
-        ];
-        this.table.renderRows();
+      .subscribe((stock) => {
+        if (stock) {
+          this.mixingDetails = stock;
+          this.table.renderRows();
+        }
       });
   }
 
   submit() {
     if (!this.hasError()) {
-      //
+      this.checkBlend();
     }
   }
 
+  checkBlend() {
+    const blend = this.blendList.find(
+      (data) => data.blendId === this.programDetails?.blendId
+    );
+    const mixingBlend: string[] = [];
+    blend?.fibres
+      .sort((a, b) => a.fibreCategoryId - b.fibreCategoryId)
+      .forEach((fibre) => {
+        mixingBlend.push(
+          fibre.fibreCategory[0] +
+            Math.round(
+              this.mixingDetails
+                .filter(
+                  (data) => data['fibreCategoryName'] === fibre.fibreCategory
+                )
+                .map((data) => data['percentUsed'])
+                .reduce((acc, curr) => acc + curr, 0) || 0
+            )
+        );
+      });
+    const mixedBlend = mixingBlend.join(':');
+    if (mixedBlend !== this.programDetails?.blendName) {
+      this.dialog
+        .open(BlendMismatchComponent, {
+          data: { expected: this.programDetails?.blendName, mixed: mixedBlend },
+        })
+        .afterClosed()
+        .subscribe((response) => response && this.issueFibre());
+      return;
+    }
+    this.issueFibre();
+  }
+
+  issueFibre() {
+    const fibres: FibreIssued[] = this.mixingDetails.map((data: any) => {
+      return {
+        receivedDtsId: data?.receivedDtsId,
+        fibreTypeId: data?.fibreTypeId,
+        issueQuantity: +data?.issueQuantity,
+        shadeId: data?.shadeId,
+      };
+    });
+    const fibreMixing: FibreMixing = {
+      programId: this.programDetails?.programId || 0,
+      mixingDate:
+        this.datePipe.transform(this.mixingDate.value, 'dd/MM/yyyy') || '',
+      issuedByUseId: 0,
+      fibres,
+    };
+    this.yarnService.issueFibreForMixing(fibreMixing).subscribe({
+      next: (response) => {
+        this.notificationService.success(response);
+        this.resetData();
+      },
+      error: (error) => {
+        this.notificationService.error(
+          typeof error?.error === 'string' ? error?.error : error?.message
+        );
+      },
+    });
+  }
+
   hasError(): boolean {
-    if (Object.keys(this.programDetails).length === 0) {
+    if (!this.programDetails) {
       this.notificationService.notify(
-        'Please choose the program to proceed',
+        'Please choose the Program to proceed',
+        NotifyType.ERROR
+      );
+      return true;
+    }
+    if (this.mixingDate.invalid) {
+      this.mixingDate.markAsTouched();
+      this.notificationService.notify(
+        'Please choose the Mixing Date to proceed',
         NotifyType.ERROR
       );
       return true;
     }
     if (this.mixingDetails.length === 0) {
       this.notificationService.notify(
-        'Please choose the Fibre stock to proceed',
+        'Please choose the Fibre Stock to proceed',
+        NotifyType.ERROR
+      );
+      return true;
+    }
+    if (document.getElementsByClassName('border-error').length > 0) {
+      this.notificationService.notify(
+        'Please correct the IssueQty to proceed',
+        NotifyType.ERROR
+      );
+      return true;
+    }
+    if (
+      !this.mixingDetails.every(
+        (data) => data['bales'] && data['issueQuantity']
+      )
+    ) {
+      this.notificationService.notify(
+        'Please enter the Bales & IssueQuantity',
         NotifyType.ERROR
       );
       return true;
@@ -113,36 +216,43 @@ export class MixingComponent {
   }
 
   resetData() {
-    this.programDetails = {};
+    this.programDetails = undefined;
     this.yarnDetails = [];
     this.mixingDetails = [];
   }
 
   getPercentUsed(element: any): number {
-    const totalIssuedQty = this.getTotalIssuedQty();
+    const totalIssueQty = this.getTotalIssueQty();
     let percent = 0;
-    if (element?.issuedQty) {
-      percent = (+element?.issuedQty / totalIssuedQty) * 100;
+    if (element?.issueQuantity) {
+      percent = (+element?.issueQuantity / totalIssueQty) * 100;
     }
     element.percentUsed = percent;
     return percent;
   }
 
-  getTotalIssuedQty(): number {
+  getTotalIssueQty(): number {
     return this.mixingDetails.reduce(
-      (acc, curr) => acc + +curr['issuedQty'],
+      (acc, curr) => acc + (+curr['issueQuantity'] || 0),
       0
     );
   }
 
   getTotalBale(): number {
-    return this.mixingDetails.reduce((acc, curr) => acc + +curr['bales'], 0);
+    return this.mixingDetails.reduce(
+      (acc, curr) => acc + (+curr['bales'] || 0),
+      0
+    );
   }
 
   getTotalPercentage(): number {
     return this.mixingDetails.reduce(
-      (acc, curr) => acc + +curr['percentUsed'],
+      (acc, curr) => acc + (+curr['percentUsed'] || 0),
       0
     );
+  }
+
+  checkIssueQty(element: any): boolean {
+    return element.issueQuantity > element.stock;
   }
 }

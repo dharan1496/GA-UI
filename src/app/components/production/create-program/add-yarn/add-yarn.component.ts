@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import {
   ReactiveFormsModule,
   Validators,
@@ -7,7 +7,7 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { MaterialModule } from 'src/app/material.module';
 import { NotifyType } from 'src/app/models/notify';
 import { YarnCounts } from 'src/app/models/yarnCounts';
@@ -21,9 +21,10 @@ import { NotificationService } from 'src/app/shared/notification.service';
   templateUrl: './add-yarn.component.html',
   styleUrls: ['./add-yarn.component.scss'],
 })
-export class AddYarnComponent implements OnInit {
+export class AddYarnComponent implements OnInit, OnDestroy {
   form!: FormGroup;
-  countsList?: Observable<YarnCounts[]>;
+  countsList!: YarnCounts[];
+  subscription = new Subscription();
 
   constructor(
     private notificationService: NotificationService,
@@ -36,15 +37,34 @@ export class AddYarnComponent implements OnInit {
   ngOnInit() {
     this.form = this.formBuilder.group({
       orderNo: typeof this.data === 'number' ? +this.data + 1 : '',
-      yarnCount: ['', Validators.required],
-      kgs: ['', Validators.required],
+      countsId: '',
+      counts: ['', Validators.required],
+      quantity: ['', Validators.required],
     });
 
-    this.countsList = this.yarnService.getYarnCounts();
+    this.subscription.add(
+      this.yarnService
+        .getYarnCounts()
+        .subscribe((data) => (this.countsList = data))
+    );
+
+    this.subscription.add(
+      this.form.get('counts')?.valueChanges.subscribe((counts) => {
+        this.form
+          .get('countsId')
+          ?.setValue(
+            this.countsList?.find((data) => data.counts === counts)?.countsId
+          );
+      })
+    );
 
     if (typeof this.data === 'object') {
       this.form.patchValue(this.data);
     }
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   submit() {
@@ -56,6 +76,7 @@ export class AddYarnComponent implements OnInit {
       );
       return;
     }
+
     this.matDialogRef.close(this.form.value);
   }
 

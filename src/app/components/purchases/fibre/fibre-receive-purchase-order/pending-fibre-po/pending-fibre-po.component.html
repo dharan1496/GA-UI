@@ -9,8 +9,8 @@
         }}</mat-option>
       </ng-container>
     </mat-select>
-    <mat-hint *ngIf="!partiesWithPendingPO.length"
-      ><strong>There is no pending PO</strong></mat-hint
+    <mat-hint *ngIf="!partiesWithPendingPO?.length"
+      >There is no pending PO</mat-hint
     >
     <mat-error>This field is required.</mat-error>
   </mat-form-field>

@@ -6,6 +6,9 @@ import { YarnShade } from '../models/yarnShade';
 import { YarnCounts } from '../models/yarnCounts';
 import { YarnBlend } from '../models/yarnBlend';
 import { YarnBlendCreate } from '../models/yarnBlendCreate';
+import { ConversionProgram } from '../models/conversionProgram';
+import { ProgramForMixing } from '../models/programForMixing';
+import { FibreMixing } from '../models/fibreMixing';
 
 @Injectable({
   providedIn: 'root',
@@ -55,5 +58,37 @@ export class YarnService {
     return this.http.post(`${environment.api}/Master/AddYarnBlend`, blend, {
       responseType: 'text',
     });
+  }
+
+  createProgram(program: ConversionProgram): Observable<any> {
+    return this.http.post(
+      `${environment.api}/Conversion/CreateConversionProgram`,
+      program,
+      {
+        responseType: 'text',
+      }
+    );
+  }
+
+  getProgramsForMixing(): Observable<ProgramForMixing[]> {
+    return this.http.get<ProgramForMixing[]>(
+      `${environment.api}/Conversion/GetProgramsForMixing`
+    );
+  }
+
+  getProgramDetailsById(programId: number): Observable<ConversionProgram> {
+    return this.http.get<ConversionProgram>(
+      `${environment.api}/Conversion/GetProgramDetailsById?programId=${programId}`
+    );
+  }
+
+  issueFibreForMixing(fibreMixing: FibreMixing): Observable<any> {
+    return this.http.post(
+      `${environment.api}/Conversion/IssueFibreForMixing`,
+      fibreMixing,
+      {
+        responseType: 'text',
+      }
+    );
   }
 }

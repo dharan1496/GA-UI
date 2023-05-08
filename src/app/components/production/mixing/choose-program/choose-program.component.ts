@@ -1,9 +1,11 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { Subscription, finalize } from 'rxjs';
 import { MaterialModule } from 'src/app/material.module';
 import { NotifyType } from 'src/app/models/notify';
+import { ProgramForMixing } from 'src/app/models/programForMixing';
 import { YarnService } from 'src/app/services/yarn.service';
 import { NotificationService } from 'src/app/shared/notification.service';
 
@@ -14,18 +16,20 @@ import { NotificationService } from 'src/app/shared/notification.service';
   templateUrl: './choose-program.component.html',
   styleUrls: ['./choose-program.component.scss'],
 })
-export class ChooseProgramComponent implements OnInit {
-  dataSource = [];
-  selection = new SelectionModel<any>(false, []);
+export class ChooseProgramComponent implements OnInit, OnDestroy {
+  programs!: ProgramForMixing[];
+  selection = new SelectionModel<ProgramForMixing>(false, []);
   displayedColumns = [
     'programNo',
     'shade',
     'blend',
     'yarnCounts',
-    'plannedQty',
-    'prodQty',
+    'plannedQuantity',
+    'producedQuantity',
     'select',
   ];
+  subscription = new Subscription();
+  loader = false;
 
   constructor(
     private notificationService: NotificationService,
@@ -34,25 +38,24 @@ export class ChooseProgramComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // temp
-    this.dataSource = [
-      {
-        programNo: '1234',
-        shade: 'blue',
-        blend: 'test',
-        yarnCounts: '10s',
-        plannedQty: 234,
-        prodQty: 34,
-      } as never,
-      {
-        programNo: '1244',
-        shade: 'blue',
-        blend: 'test',
-        yarnCounts: '10s',
-        plannedQty: 234,
-        prodQty: 34,
-      } as never,
-    ];
+    this.loader = true;
+    this.subscription.add(
+      this.yarnService
+        .getProgramsForMixing()
+        .pipe(finalize(() => (this.loader = false)))
+        .subscribe({
+          next: (data) => (this.programs = data),
+          error: (error) => {
+            this.notificationService.error(
+              typeof error?.error === 'string' ? error?.error : error?.message
+            );
+          },
+        })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   submit() {
@@ -63,7 +66,7 @@ export class ChooseProgramComponent implements OnInit {
       );
       return;
     }
-    this.matDialogRef.close(this.selection.selected.shift());
+    this.matDialogRef.close(this.selection.selected.shift()?.programId);
   }
 
   close() {

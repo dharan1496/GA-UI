@@ -1,0 +1,20 @@
+<h1 mat-dialog-title class="header">
+  <mat-icon>warning</mat-icon> <span>Blend Mismatch</span>
+</h1>
+<div mat-dialog-content class="content">
+  <p class="text-dark">
+    <span>programmed blend</span>
+    <span class="font-size-18 font-weight-bold">{{ data?.expected }}</span>
+  </p>
+  <P class="text-red">
+    <span>Mixed blend</span>
+    <span class="font-size-18 font-weight-bold">{{ data?.mixed }}</span>
+  </P>
+  <div class="question">Are you sure to continue?</div>
+</div>
+<div mat-dialog-actions class="footer">
+  <button mat-raised-button (click)="continue()" color="primary">
+    Continue
+  </button>
+  <button mat-button (click)="cancel()">Cancel</button>
+</div>

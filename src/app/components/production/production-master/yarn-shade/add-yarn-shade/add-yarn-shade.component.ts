@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 import { MaterialModule } from 'src/app/material.module';
 import { YarnService } from 'src/app/services/yarn.service';
 import { NotificationService } from 'src/app/shared/notification.service';
@@ -13,8 +14,9 @@ import { NotificationService } from 'src/app/shared/notification.service';
   templateUrl: './add-yarn-shade.component.html',
   styleUrls: ['./add-yarn-shade.component.scss'],
 })
-export class AddYarnShadeComponent {
+export class AddYarnShadeComponent implements OnDestroy {
   shade = new FormControl('', Validators.required);
+  subscription = new Subscription();
 
   constructor(
     private matDialogRef: MatDialogRef<any>,
@@ -27,13 +29,19 @@ export class AddYarnShadeComponent {
       this.shade.markAsTouched();
       return;
     }
-    this.yarnService.addYarnShade(this.shade.value || '').subscribe({
-      next: () => this.close(),
-      error: (error) =>
-        this.notificationService.error(
-          typeof error?.error === 'string' ? error?.error : error?.message
-        ),
-    });
+    this.subscription.add(
+      this.yarnService.addYarnShade(this.shade.value || '').subscribe({
+        next: () => this.close(),
+        error: (error) =>
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   close() {

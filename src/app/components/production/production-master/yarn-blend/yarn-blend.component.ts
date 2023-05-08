@@ -36,9 +36,14 @@ export class YarnBlendComponent implements OnInit, OnDestroy {
 
   getBlend() {
     this.subscription.add(
-      this.yarnService
-        .getYarnBlend()
-        .subscribe((data) => (this.blendList = data))
+      this.yarnService.getYarnBlend().subscribe({
+        next: (data) => (this.blendList = data),
+        error: (error) => {
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          );
+        },
+      })
     );
   }
 

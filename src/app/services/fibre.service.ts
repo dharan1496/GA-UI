@@ -9,6 +9,8 @@ import { FibreType } from '../models/fibreType';
 import { ReceiveFibrePO } from '../models/receiveFibrePO';
 import { FibreGraph } from '../models/fibreGraph';
 import { FibreShade } from '../models/fibreShade';
+import { FibreStock } from '../models/fibreStock';
+import { FibreCategory } from '../models/fibreCategory';
 
 @Injectable({
   providedIn: 'root',
@@ -85,6 +87,18 @@ export class FibreService {
       {
         responseType: 'text',
       }
+    );
+  }
+
+  getFibreStock(): Observable<FibreStock[]> {
+    return this.http.get<FibreStock[]>(
+      `${environment.api}/Fiber/GetFibreStock`
+    );
+  }
+
+  getFibreCategories(): Observable<FibreCategory[]> {
+    return this.http.get<FibreCategory[]>(
+      `${environment.api}/Fiber/GetFibreCategories`
     );
   }
 }

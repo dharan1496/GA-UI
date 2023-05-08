@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Constants } from 'src/app/constants/constants';
 import { PRODUCTION } from 'src/app/constants/production-menu-values.const';
 import { YarnShade } from 'src/app/models/yarnShade';
@@ -15,6 +15,9 @@ import { NotifyType } from 'src/app/models/notify';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { YarnCounts } from 'src/app/models/yarnCounts';
 import { YarnBlend } from 'src/app/models/yarnBlend';
+import { ConversionProgram } from 'src/app/models/conversionProgram';
+import { ConversionYarn } from 'src/app/models/conversionYarn';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-create-program',
@@ -23,12 +26,12 @@ import { YarnBlend } from 'src/app/models/yarnBlend';
 })
 export class CreateProgramComponent implements OnInit, OnDestroy {
   form!: FormGroup;
-  dataSource = [];
-  displayedColumns = ['yarnCount', 'kgs', 'button'];
+  dataSource: ConversionYarn[] = [];
+  displayedColumns = ['counts', 'quantity', 'button'];
   @ViewChild(MatTable) table!: MatTable<any>;
-  shadeList!: Observable<YarnShade[]>;
+  shadeList!: YarnShade[];
   countsList!: YarnCounts[];
-  blendList!: Observable<YarnBlend[]>;
+  blendList!: YarnBlend[];
   subscription = new Subscription();
 
   constructor(
@@ -37,7 +40,8 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
     public appSharedService: AppSharedService,
     private dialog: MatDialog,
     private formBuilder: FormBuilder,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private datePipe: DatePipe
   ) {
     this.navigationService.menu = PRODUCTION;
     this.navigationService.setFocus(Constants.PRODUCTION);
@@ -45,17 +49,67 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      shadeNo: ['', Validators.required],
-      progDate: ['', Validators.required],
-      blend: ['', Validators.required],
+      shadeId: '',
+      shadeName: ['', Validators.required],
+      programDate: ['', Validators.required],
+      blendId: '',
+      blendName: ['', Validators.required],
       remarks: '',
     });
-    this.shadeList = this.yarnService.getYarnShade();
-    this.blendList = this.yarnService.getYarnBlend();
+
     this.subscription.add(
-      this.yarnService
-        .getYarnCounts()
-        .subscribe((data) => (this.countsList = data))
+      this.yarnService.getYarnShade().subscribe({
+        next: (data) => (this.shadeList = data),
+        error: (error) => {
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          );
+        },
+      })
+    );
+
+    this.subscription.add(
+      this.yarnService.getYarnBlend().subscribe({
+        next: (data) => (this.blendList = data),
+        error: (error) => {
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          );
+        },
+      })
+    );
+
+    this.subscription.add(
+      this.yarnService.getYarnCounts().subscribe({
+        next: (data) => (this.countsList = data),
+        error: (error) => {
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          );
+        },
+      })
+    );
+
+    this.subscription.add(
+      this.form.get('shadeName')?.valueChanges.subscribe((shadeName) => {
+        this.form
+          .get('shadeId')
+          ?.setValue(
+            this.shadeList.find((shade) => shade.shadeName === shadeName)
+              ?.shadeId
+          );
+      })
+    );
+
+    this.subscription.add(
+      this.form.get('blendName')?.valueChanges.subscribe((blendName) => {
+        this.form
+          .get('blendId')
+          ?.setValue(
+            this.blendList.find((blend) => blend.blendName === blendName)
+              ?.blendId
+          );
+      })
     );
   }
 
@@ -63,19 +117,13 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  getCounts(counts: string): string {
-    return (
-      this.countsList?.find((count) => count.countsId === +counts)?.counts || ''
-    );
-  }
-
   addData() {
     this.dialog
       .open(AddYarnComponent)
       .afterClosed()
-      .subscribe((data: any) => {
+      .subscribe((data: ConversionYarn) => {
         if (data) {
-          this.dataSource.push(data as never);
+          this.dataSource.push(data);
           this.table.renderRows();
         }
       });
@@ -117,7 +165,39 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
 
   submitProgram() {
     if (!this.hasError()) {
-      // submit
+      const yarnCounts: ConversionYarn[] = this.dataSource.map((data) => {
+        return {
+          conversionYarnId: 0,
+          countsId: data.countsId,
+          counts: data.counts,
+          quantity: data.quantity,
+        };
+      });
+      const program: ConversionProgram = {
+        ...this.form.value,
+        programDate: this.datePipe.transform(
+          this.form.value?.programDate,
+          'dd/MM/yyyy'
+        ),
+        programId: 0,
+        programNo: '',
+        isDeleted: false,
+        isClosed: false,
+        closedByUserId: 0,
+        createdByUserId: 0,
+        yarnCounts,
+      };
+      this.yarnService.createProgram(program).subscribe({
+        next: () => {
+          this.notificationService.success('Program created successfully');
+          this.resetData();
+        },
+        error: (error) => {
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          );
+        },
+      });
     }
   }
 
@@ -147,7 +227,7 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
 
   getTotalKgs() {
     return this.dataSource
-      .map((data: any) => +data?.kgs)
+      .map((data: ConversionYarn) => +data.quantity)
       .reduce((acc, value) => acc + value, 0);
   }
 }

@@ -25,6 +25,10 @@
   justify-content: space-between;
 }
 
+.mixing-date {
+  padding: 8px 16px 16px;
+}
+
 .prog-details-container {
   display: flex;
   gap: 48px;
@@ -41,6 +45,10 @@
 .no-rows {
   padding: 16px 0;
   text-align: center;
+}
+
+.mixing-row {
+  height: 70px;
 }
 
 .footer {
@@ -62,5 +70,25 @@
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
+  margin: 0;
+}
+
+.border-error {
+  border: 2px solid rgba(223, 29, 29);
+  &:focus-visible {
+    outline-color: rgba(223, 29, 29);
+  }
+}
+
+.input-container {
+  position: relative;
+}
+
+.error-alert {
+  position: absolute;
+  right: 16px;
+  text-align: right;
+  font-size: 12px;
+  color: rgb(232, 80, 80);
   margin: 0;
 }
