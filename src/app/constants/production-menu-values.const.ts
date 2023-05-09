@@ -11,6 +11,14 @@ export const PRODUCTION = [
         route: 'production/create-program',
       },
       {
+        title: 'Close program',
+        route: 'production',
+      },
+      {
+        title: 'Reopen program',
+        route: 'production',
+      },
+      {
         title: 'Mixing',
         route: 'production/mixing',
       },
