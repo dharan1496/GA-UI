@@ -92,3 +92,9 @@ input::-webkit-inner-spin-button {
   color: rgb(232, 80, 80);
   margin: 0;
 }
+
+.fibre-stock-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}

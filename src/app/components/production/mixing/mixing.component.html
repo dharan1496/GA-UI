@@ -93,6 +93,16 @@
       <button mat-raised-button color="primary" (click)="fibreStock()">
         <mat-icon>playlist_add</mat-icon> Select Fibre Stock
       </button>
+      <mat-card>
+        <div
+          *ngIf="mixingDetails.length"
+          class="font-weight-bold font-size-18 px-16 py-10"
+        >
+          <span class="text-gray mr-8">Blend</span>-<span class="ml-8">{{
+            getMixedBlend()
+          }}</span>
+        </div>
+      </mat-card>
     </div>
     <table mat-table [dataSource]="mixingDetails" class="mat-elevation-z8">
       <!-- receivedDCNo Column -->

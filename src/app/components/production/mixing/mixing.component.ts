@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Constants } from 'src/app/constants/constants';
 import { PRODUCTION } from 'src/app/constants/production-menu-values.const';
@@ -17,7 +17,6 @@ import { FibreMixing } from 'src/app/models/fibreMixing';
 import { DatePipe } from '@angular/common';
 import { FibreIssued } from 'src/app/models/fibreIssued';
 import { Subscription } from 'rxjs';
-import { YarnBlend } from 'src/app/models/yarnBlend';
 import { BlendMismatchComponent } from './blend-mismatch/blend-mismatch.component';
 
 @Component({
@@ -25,7 +24,7 @@ import { BlendMismatchComponent } from './blend-mismatch/blend-mismatch.componen
   templateUrl: './mixing.component.html',
   styleUrls: ['./mixing.component.scss'],
 })
-export class MixingComponent implements OnInit, OnDestroy {
+export class MixingComponent {
   programDetails: ConversionProgram | undefined;
   yarnDetails: ConversionYarn[] = [];
   mixingDetails = [];
@@ -43,7 +42,6 @@ export class MixingComponent implements OnInit, OnDestroy {
   ];
   @ViewChild(MatTable) table!: MatTable<any>;
   mixingDate = new FormControl('', Validators.required);
-  blendList!: YarnBlend[];
   subscription = new Subscription();
 
   constructor(
@@ -56,23 +54,6 @@ export class MixingComponent implements OnInit, OnDestroy {
   ) {
     this.navigationService.menu = PRODUCTION;
     this.navigationService.setFocus(Constants.PRODUCTION);
-  }
-
-  ngOnInit() {
-    this.subscription.add(
-      this.yarnService.getYarnBlend().subscribe({
-        next: (data) => (this.blendList = data),
-        error: (error) => {
-          this.notificationService.error(
-            typeof error?.error === 'string' ? error?.error : error?.message
-          );
-        },
-      })
-    );
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
   }
 
   chooseProgram() {
@@ -110,26 +91,7 @@ export class MixingComponent implements OnInit, OnDestroy {
   }
 
   checkBlend() {
-    const blend = this.blendList.find(
-      (data) => data.blendId === this.programDetails?.blendId
-    );
-    const mixingBlend: string[] = [];
-    blend?.fibres
-      .sort((a, b) => a.fibreCategoryId - b.fibreCategoryId)
-      .forEach((fibre) => {
-        mixingBlend.push(
-          fibre.fibreCategory[0] +
-            Math.round(
-              this.mixingDetails
-                .filter(
-                  (data) => data['fibreCategoryName'] === fibre.fibreCategory
-                )
-                .map((data) => data['percentUsed'])
-                .reduce((acc, curr) => acc + curr, 0) || 0
-            )
-        );
-      });
-    const mixedBlend = mixingBlend.join(':');
+    const mixedBlend = this.getMixedBlend();
     if (mixedBlend !== this.programDetails?.blendName) {
       this.dialog
         .open(BlendMismatchComponent, {
@@ -140,6 +102,29 @@ export class MixingComponent implements OnInit, OnDestroy {
       return;
     }
     this.issueFibre();
+  }
+
+  getMixedBlend(): string {
+    const mixingBlend: string[] = [];
+    const addedStockType = [
+      ...new Set(
+        this.mixingDetails
+          .sort((a, b) => a['categoryOrder'] - b['categoryOrder'])
+          .map((data) => data['fibreCategoryName'])
+      ),
+    ];
+    addedStockType.forEach((fibreName: string) => {
+      mixingBlend.push(
+        fibreName[0] +
+          Math.round(
+            this.mixingDetails
+              .filter((data) => data['fibreCategoryName'] === fibreName)
+              .map((data) => data['percentUsed'])
+              .reduce((acc, curr) => acc + curr, 0) || 0
+          )
+      );
+    });
+    return mixingBlend.join(':');
   }
 
   issueFibre() {
