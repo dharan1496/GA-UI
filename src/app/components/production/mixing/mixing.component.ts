@@ -219,6 +219,7 @@ export class MixingComponent implements OnInit, OnDestroy {
     this.programDetails = undefined;
     this.yarnDetails = [];
     this.mixingDetails = [];
+    this.mixingDate.reset();
   }
 
   getPercentUsed(element: any): number {
