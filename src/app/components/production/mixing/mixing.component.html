@@ -95,11 +95,11 @@
       </button>
       <mat-card>
         <div
-          *ngIf="mixingDetails.length"
+          *ngIf="mixingDetails.length && mixedBlend"
           class="font-weight-bold font-size-18 px-16 py-10"
         >
           <span class="text-gray mr-8">Blend</span>-<span class="ml-8">{{
-            getMixedBlend()
+            mixedBlend
           }}</span>
         </div>
       </mat-card>
@@ -185,6 +185,7 @@
             #issuedQty
             type="number"
             class="cell-input w-70"
+            (keyup)="getMixedBlend()"
             (input)="
               appSharedService.restrictDecimal($event, 3);
               element.issueQuantity = issuedQty.value

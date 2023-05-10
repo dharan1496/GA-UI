@@ -43,6 +43,7 @@ export class MixingComponent {
   @ViewChild(MatTable) table!: MatTable<any>;
   mixingDate = new FormControl('', Validators.required);
   subscription = new Subscription();
+  mixedBlend = '';
 
   constructor(
     private navigationService: NavigationService,
@@ -80,6 +81,7 @@ export class MixingComponent {
         if (stock) {
           this.mixingDetails = stock;
           this.table.renderRows();
+          this.getMixedBlend();
         }
       });
   }
@@ -124,7 +126,8 @@ export class MixingComponent {
           )
       );
     });
-    return mixingBlend.join(':');
+    this.mixedBlend = mixingBlend.join(':');
+    return this.mixedBlend;
   }
 
   issueFibre() {
