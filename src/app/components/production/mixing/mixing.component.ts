@@ -213,7 +213,7 @@ export class MixingComponent {
   getPercentUsed(element: any): number {
     const totalIssueQty = this.getTotalIssueQty();
     let percent = 0;
-    if (element?.issueQuantity) {
+    if (+element?.issueQuantity) {
       percent = (+element?.issueQuantity / totalIssueQty) * 100;
     }
     element.percentUsed = percent;
