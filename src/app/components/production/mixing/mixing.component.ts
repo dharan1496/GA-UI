@@ -18,6 +18,7 @@ import { DatePipe } from '@angular/common';
 import { FibreIssued } from 'src/app/models/fibreIssued';
 import { Subscription } from 'rxjs';
 import { BlendMismatchComponent } from './blend-mismatch/blend-mismatch.component';
+import { UserActionConfirmationComponent } from '../../user-action-confirmation/user-action-confirmation.component';
 
 @Component({
   selector: 'app-mixing',
@@ -39,6 +40,7 @@ export class MixingComponent {
     'bales',
     'issueQty',
     'percentUsed',
+    'action',
   ];
   @ViewChild(MatTable) table!: MatTable<any>;
   mixingDate = new FormControl('', Validators.required);
@@ -121,7 +123,7 @@ export class MixingComponent {
           Math.round(
             this.mixingDetails
               .filter((data) => data['fibreCategoryName'] === fibreName)
-              .map((data) => data['percentUsed'])
+              .map((data) => this.getPercentUsed(data))
               .reduce((acc, curr) => acc + curr, 0) || 0
           )
       );
@@ -208,6 +210,20 @@ export class MixingComponent {
     this.yarnDetails = [];
     this.mixingDetails = [];
     this.mixingDate.reset();
+  }
+
+  removeStock(element: any) {
+    this.dialog
+      .open(UserActionConfirmationComponent)
+      .afterClosed()
+      .subscribe((response) => {
+        if (response) {
+          this.mixingDetails = this.mixingDetails.filter(
+            (data) => data !== element
+          );
+          this.getMixedBlend();
+        }
+      });
   }
 
   getPercentUsed(element: any): number {
