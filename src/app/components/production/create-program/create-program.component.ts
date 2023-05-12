@@ -170,7 +170,8 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
           conversionYarnId: 0,
           countsId: data.countsId,
           counts: data.counts,
-          quantity: data.quantity,
+          programQuantity: +data.programQuantity,
+          productionQuantity: 0,
         };
       });
       const program: ConversionProgram = {
@@ -227,7 +228,7 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
 
   getTotalKgs() {
     return this.dataSource
-      .map((data: ConversionYarn) => +data.quantity)
+      .map((data: ConversionYarn) => +data.programQuantity)
       .reduce((acc, value) => acc + value, 0);
   }
 }

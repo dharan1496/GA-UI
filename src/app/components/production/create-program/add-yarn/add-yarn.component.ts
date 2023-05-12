@@ -39,7 +39,7 @@ export class AddYarnComponent implements OnInit, OnDestroy {
       orderNo: typeof this.data === 'number' ? +this.data + 1 : '',
       countsId: '',
       counts: ['', Validators.required],
-      quantity: ['', Validators.required],
+      programQuantity: ['', Validators.required],
     });
 
     this.subscription.add(

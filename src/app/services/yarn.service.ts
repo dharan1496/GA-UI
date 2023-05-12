@@ -9,6 +9,8 @@ import { YarnBlendCreate } from '../models/yarnBlendCreate';
 import { ConversionProgram } from '../models/conversionProgram';
 import { ProgramForMixing } from '../models/programForMixing';
 import { FibreMixing } from '../models/fibreMixing';
+import { ProgramForProductionEntry } from '../models/programForProductionEntry';
+import { ProductionEntry } from '../models/productionEntry';
 
 @Injectable({
   providedIn: 'root',
@@ -86,6 +88,22 @@ export class YarnService {
     return this.http.post(
       `${environment.api}/Conversion/IssueFibreForMixing`,
       fibreMixing,
+      {
+        responseType: 'text',
+      }
+    );
+  }
+
+  getProgramsForProductionEntry(): Observable<ProgramForProductionEntry> {
+    return this.http.get<ProgramForProductionEntry>(
+      `${environment.api}/Conversion/GetProgramsForProductionEntry`
+    );
+  }
+
+  conversionProduction(entry: ProductionEntry): Observable<any> {
+    return this.http.post(
+      `${environment.api}/Conversion/ConversionProduction`,
+      entry,
       {
         responseType: 'text',
       }

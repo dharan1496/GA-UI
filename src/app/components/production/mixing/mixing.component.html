@@ -70,7 +70,9 @@
 
         <ng-container matColumnDef="kgs">
           <th mat-header-cell *matHeaderCellDef>KGs</th>
-          <td mat-cell *matCellDef="let element">{{ element.quantity }}</td>
+          <td mat-cell *matCellDef="let element">
+            {{ element.programQuantity }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="button">

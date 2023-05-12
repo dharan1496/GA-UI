@@ -46,6 +46,7 @@ export class ChooseProgramComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (data) => (this.programs = data),
           error: (error) => {
+            this.programs = [];
             this.notificationService.error(
               typeof error?.error === 'string' ? error?.error : error?.message
             );

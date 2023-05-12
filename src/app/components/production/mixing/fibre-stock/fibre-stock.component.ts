@@ -45,10 +45,12 @@ export class FibreStockComponent implements OnInit, OnDestroy {
         .pipe(finalize(() => (this.loader = false)))
         .subscribe({
           next: (fibreStock) => (this.dataSource = fibreStock),
-          error: (error) =>
+          error: (error) => {
+            this.dataSource = [];
             this.notificationService.error(
               typeof error?.error === 'string' ? error?.error : error?.message
-            ),
+            );
+          },
         })
     );
   }
