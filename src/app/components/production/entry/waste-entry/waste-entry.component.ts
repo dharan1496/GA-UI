@@ -12,6 +12,8 @@ import { YarnService } from 'src/app/services/yarn.service';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
 import { NotificationService } from 'src/app/shared/notification.service';
+import { NotifyType } from 'src/app/models/notify';
+import { AddWasteEntryComponent } from './add-waste-entry/add-waste-entry.component';
 
 @Component({
   selector: 'app-waste-entry',
@@ -56,7 +58,20 @@ export class WasteEntryComponent {
   }
 
   submit() {
-    //
+    if (!this.hasError()) {
+      //
+    }
+  }
+
+  hasError(): boolean {
+    if (!this.programDetails) {
+      this.notificationService.notify(
+        'Please choose the program to proceed',
+        NotifyType.ERROR
+      );
+      return true;
+    }
+    return false;
   }
 
   resetData() {
@@ -65,8 +80,18 @@ export class WasteEntryComponent {
     this.entryDetails = [];
   }
 
-  addEntry() {
-    //
+  addEntry(): void {
+    this.dialog
+      .open(AddWasteEntryComponent, {
+        data: this.entryDetails.length + 1,
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.entryDetails.push(result);
+          this.table.renderRows();
+        }
+      });
   }
 
   updateEntry(selectedRow: any) {

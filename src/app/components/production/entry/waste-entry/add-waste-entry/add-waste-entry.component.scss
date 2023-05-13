@@ -5,11 +5,6 @@
 .flex-container {
   display: flex;
   gap: 24px;
-
-  &:not(:last-child) {
-    justify-content: center;
-    margin-bottom: 16px;
-  }
 }
 
 .footer {

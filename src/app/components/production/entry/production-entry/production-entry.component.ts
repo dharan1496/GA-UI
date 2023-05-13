@@ -121,6 +121,7 @@ export class ProductionEntryComponent {
     this.programDetails = undefined;
     this.yarnDetails = [];
     this.entryDetails = [];
+    this.productionDate.reset();
   }
 
   addEntry(): void {
