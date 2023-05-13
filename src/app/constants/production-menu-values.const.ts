@@ -23,6 +23,14 @@ export const PRODUCTION = [
         route: 'production/mixing',
       },
       {
+        title: 'Production Entry',
+        route: 'production/production-entry',
+      },
+      {
+        title: 'Waste Entry',
+        route: 'production/waste-entry',
+      },
+      {
         title: 'Master',
         route: 'production/master',
       },

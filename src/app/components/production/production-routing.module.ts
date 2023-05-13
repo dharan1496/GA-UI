@@ -4,6 +4,8 @@ import { CreateProgramComponent } from './create-program/create-program.componen
 import { ProductionMasterComponent } from './production-master/production-master.component';
 import { ProductionDashboardComponent } from './production-dashboard/production-dashboard.component';
 import { MixingComponent } from './mixing/mixing.component';
+import { ProductionEntryComponent } from './entry/production-entry/production-entry.component';
+import { WasteEntryComponent } from './entry/waste-entry/waste-entry.component';
 
 const routes: Routes = [
   {
@@ -17,6 +19,14 @@ const routes: Routes = [
   {
     path: 'mixing',
     component: MixingComponent,
+  },
+  {
+    path: 'production-entry',
+    component: ProductionEntryComponent,
+  },
+  {
+    path: 'waste-entry',
+    component: WasteEntryComponent,
   },
   {
     path: 'master',

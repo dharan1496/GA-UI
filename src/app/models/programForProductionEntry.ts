@@ -9,6 +9,7 @@ export interface ProgramForProductionEntry {
   yarnCounts: string;
   plannedQuantity: number;
   producedQuantity: number;
+  mixingId: number;
   mixingDate: string;
   mixedQuantity: number;
 }

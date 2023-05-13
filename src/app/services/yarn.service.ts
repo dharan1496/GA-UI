@@ -94,8 +94,8 @@ export class YarnService {
     );
   }
 
-  getProgramsForProductionEntry(): Observable<ProgramForProductionEntry> {
-    return this.http.get<ProgramForProductionEntry>(
+  getProgramsForProductionEntry(): Observable<ProgramForProductionEntry[]> {
+    return this.http.get<ProgramForProductionEntry[]>(
       `${environment.api}/Conversion/GetProgramsForProductionEntry`
     );
   }

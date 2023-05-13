@@ -1,0 +1,48 @@
+<h1 mat-dialog-title>Entry details</h1>
+<form [formGroup]="form" class="form">
+  <div mat-dialog-content>
+    <div class="flex-container">
+      <mat-form-field appearance="fill">
+        <mat-label>Counts</mat-label>
+        <mat-select formControlName="counts">
+          <ng-container *ngFor="let counts of countsList">
+            <mat-option [value]="counts.counts">{{ counts.counts }}</mat-option>
+          </ng-container>
+        </mat-select>
+        <mat-error>This field is required.</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Lot</mat-label>
+        <input type="text" matInput formControlName="lot" />
+        <mat-error>This field is required.</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="flex-container">
+      <mat-form-field appearance="fill">
+        <mat-label>Production Qty</mat-label>
+        <input
+          type="number"
+          min="1"
+          matInput
+          formControlName="productionQty"
+          (input)="appSharedService.restrictDecimal($event, 3)"
+        />
+        <mat-error>This field is required.</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Winding</mat-label>
+        <mat-select formControlName="winding">
+          <mat-option value="Yes">Yes</mat-option>
+          <mat-option value="No">No</mat-option>
+        </mat-select>
+        <mat-error>This field is required.</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div mat-dialog-actions class="footer">
+    <button mat-raised-button color="primary" (click)="onSubmit()">
+      Submit
+    </button>
+    <button mat-button (click)="onCancel()">Cancel</button>
+  </div>
+</form>

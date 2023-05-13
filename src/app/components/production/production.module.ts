@@ -10,6 +10,8 @@ import { YarnBlendComponent } from './production-master/yarn-blend/yarn-blend.co
 import { YarnCountsComponent } from './production-master/yarn-counts/yarn-counts.component';
 import { ProductionDashboardComponent } from './production-dashboard/production-dashboard.component';
 import { MixingComponent } from './mixing/mixing.component';
+import { ProductionEntryComponent } from './entry/production-entry/production-entry.component';
+import { WasteEntryComponent } from './entry/waste-entry/waste-entry.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,8 @@ import { MixingComponent } from './mixing/mixing.component';
     YarnCountsComponent,
     ProductionDashboardComponent,
     MixingComponent,
+    ProductionEntryComponent,
+    WasteEntryComponent,
   ],
   imports: [
     CommonModule,

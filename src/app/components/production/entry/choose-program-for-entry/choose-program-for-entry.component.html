@@ -1,0 +1,92 @@
+<h1 mat-dialog-title>Choose Program</h1>
+<div mat-dialog-content class="form-container">
+  <div class="table-container">
+    <div *ngIf="loader" class="loader">
+      <mat-spinner></mat-spinner>
+    </div>
+    <table mat-table [dataSource]="programs" class="table">
+      <!-- programNo Column -->
+      <ng-container matColumnDef="programNo">
+        <th mat-header-cell *matHeaderCellDef>Program No</th>
+        <td mat-cell *matCellDef="let element">{{ element.programNo }}</td>
+      </ng-container>
+
+      <!-- shade Column -->
+      <ng-container matColumnDef="shade">
+        <th mat-header-cell *matHeaderCellDef>Shade</th>
+        <td mat-cell *matCellDef="let element">{{ element.shadeName }}</td>
+      </ng-container>
+
+      <!-- blend Column -->
+      <ng-container matColumnDef="blend">
+        <th mat-header-cell *matHeaderCellDef>Blend</th>
+        <td mat-cell *matCellDef="let element">{{ element.blendName }}</td>
+      </ng-container>
+
+      <!-- mixing date Column -->
+      <ng-container matColumnDef="mixingDate">
+        <th mat-header-cell *matHeaderCellDef>Mixing Date</th>
+        <td mat-cell *matCellDef="let element">{{ element.mixingDate }}</td>
+      </ng-container>
+
+      <!-- blend Column -->
+      <ng-container matColumnDef="mixedQty">
+        <th mat-header-cell *matHeaderCellDef>Mixed Qty</th>
+        <td mat-cell *matCellDef="let element">{{ element.mixedQuantity }}</td>
+      </ng-container>
+
+      <!-- yarnCounts Column -->
+      <ng-container matColumnDef="yarnCounts">
+        <th mat-header-cell *matHeaderCellDef>Yarn Counts</th>
+        <td mat-cell *matCellDef="let element">{{ element.yarnCounts }}</td>
+      </ng-container>
+
+      <!-- plannedQty Column -->
+      <ng-container matColumnDef="programQty">
+        <th mat-header-cell *matHeaderCellDef>Program Qty</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.plannedQuantity }}
+        </td>
+      </ng-container>
+
+      <!-- prodQty Column -->
+      <ng-container matColumnDef="productionQty">
+        <th mat-header-cell *matHeaderCellDef>Production Qty</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.producedQuantity }}
+        </td>
+      </ng-container>
+
+      <!-- Radio -->
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef class="text-center"></th>
+        <td mat-cell *matCellDef="let row" class="text-center">
+          <mat-radio-button
+            color="primary"
+            (click)="$event.stopPropagation()"
+            (change)="selectItem(row)"
+            [checked]="selection.isSelected(row)"
+            [aria-label]="radioLabel(row)"
+          ></mat-radio-button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr
+        class="row"
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        (click)="selection.toggle(row)"
+      ></tr>
+      <tr *matNoDataRow>
+        <td class="no-rows" [attr.colspan]="displayedColumns.length">
+          No rows to display
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div mat-dialog-actions class="footer">
+  <button mat-raised-button (click)="submit()" color="primary">Choose</button>
+  <button mat-button (click)="close()">Cancel</button>
+</div>

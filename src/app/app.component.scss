@@ -6,7 +6,7 @@
 }
 
 mat-sidenav[ng-reflect-opened="true"] {
-  width: 15%;
+  min-width: 15%;
 }
 
 .sidenav-container {
