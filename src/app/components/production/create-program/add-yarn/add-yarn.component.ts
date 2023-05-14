@@ -36,7 +36,7 @@ export class AddYarnComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      orderNo: typeof this.data === 'number' ? +this.data + 1 : '',
+      orderNo: Array.isArray(this.data) ? this.data.length + 1 : '',
       countsId: '',
       counts: ['', Validators.required],
       programQuantity: ['', Validators.required],
@@ -58,13 +58,18 @@ export class AddYarnComponent implements OnInit, OnDestroy {
       })
     );
 
-    if (typeof this.data === 'object') {
-      this.form.patchValue(this.data);
+    if (!Array.isArray(this.data) && this.data?.selectedRow) {
+      this.form.patchValue(this.data.selectedRow);
     }
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  isAlreadyAdded(counts: string): true | null {
+    const array = Array.isArray(this.data) ? this.data : this.data.countsList;
+    return array.some((data: any) => data['counts'] === counts) || null;
   }
 
   submit() {

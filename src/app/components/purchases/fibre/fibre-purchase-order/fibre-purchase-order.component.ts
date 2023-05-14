@@ -236,7 +236,7 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
         if (result) {
           const newList: any = [];
           this.dataSource.forEach((data: any) => {
-            if (data?.orderNo != selectedRow?.orderNo) {
+            if (data != selectedRow) {
               newList.push(data);
             }
           });

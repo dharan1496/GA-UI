@@ -5,7 +5,11 @@
       <mat-label>Yarn Counts</mat-label>
       <mat-select formControlName="counts">
         <ng-container *ngFor="let count of countsList">
-          <mat-option [value]="count.counts">{{ count.counts }}</mat-option>
+          <mat-option
+            [value]="count.counts"
+            [disabled]="isAlreadyAdded(count.counts)"
+            >{{ count.counts }}</mat-option
+          >
         </ng-container>
       </mat-select>
       <mat-error>This field is required.</mat-error>

@@ -119,7 +119,7 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
 
   addData() {
     this.dialog
-      .open(AddYarnComponent)
+      .open(AddYarnComponent, { data: this.dataSource })
       .afterClosed()
       .subscribe((data: ConversionYarn) => {
         if (data) {
@@ -131,7 +131,10 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
 
   updateData(selectedRow: any) {
     const dialogRef = this.dialog.open(AddYarnComponent, {
-      data: selectedRow,
+      data: {
+        selectedRow,
+        countsList: this.dataSource,
+      },
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -153,7 +156,7 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
         if (result) {
           const newList: any = [];
           this.dataSource.forEach((data: any) => {
-            if (data?.orderNo != selectedRow?.orderNo) {
+            if (data != selectedRow) {
               newList.push(data);
             }
           });
