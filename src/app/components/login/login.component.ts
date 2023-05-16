@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
     });
     if (localStorage.getItem('loggedIn')) {
       this.appSharedService.logout = false;
-      this.router.navigateByUrl('/dashboard');
+      this.router.navigateByUrl('/home');
       return;
     }
     this.appSharedService.logout = true;
@@ -73,7 +73,7 @@ export class LoginComponent implements OnInit {
     }
     this.credentialsError = false;
     // TEMP - end
-    this.router.navigateByUrl('/dashboard');
+    this.router.navigateByUrl('/home');
     this.appSharedService.logout = false;
     this.appSharedService.username = this.username?.value;
     localStorage.setItem('loggedIn', 'true');

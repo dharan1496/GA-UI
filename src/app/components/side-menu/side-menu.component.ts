@@ -9,7 +9,7 @@ import { NavigationService } from '../../shared/navigation.service';
 export class SideMenuComponent {
   constructor(public navigationService: NavigationService) {}
 
-  onDashboard() {
+  onHome() {
     this.navigationService.menu = null;
     this.navigationService.removeFocus();
   }

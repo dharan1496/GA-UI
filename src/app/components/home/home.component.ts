@@ -1,22 +1,19 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { MaterialModule } from 'src/app/material.module';
 import { NavigationService } from 'src/app/shared/navigation.service';
-import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-dash',
+  selector: 'app-home',
   standalone: true,
   imports: [CommonModule, MaterialModule],
-  templateUrl: './dash.component.html',
-  styleUrls: ['./dash.component.scss'],
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss'],
 })
-export class DashComponent {
-  constructor(
-    private navigationService: NavigationService,
-    private router: Router
-  ) {
+export class HomeComponent {
+  constructor(private navigationService: NavigationService) {
     this.navigationService.menu = null;
+    this.navigationService.isSidenavOpened = false;
     this.navigationService.removeFocus();
   }
 }

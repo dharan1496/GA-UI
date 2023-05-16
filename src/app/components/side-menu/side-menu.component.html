@@ -1,13 +1,13 @@
 <mat-nav-list>
   <h3 mat-subheader class="pt-24 pl-12">General</h3>
-  <mat-list-item class="mb-24" routerLink="/dashboard" (click)="onDashboard()">
-    <div class="dashboard-btn pl-12">
+  <mat-list-item class="mb-24" routerLink="/home" (click)="onHome()">
+    <div class="home-btn pl-12">
       <mat-icon
         aria-hidden="false"
-        aria-label="dashboard icon"
-        fontIcon="dashboard"
+        aria-label="home icon"
+        fontIcon="home"
       ></mat-icon>
-      <span class="font-weight-bold">Dashboard</span>
+      <span class="font-weight-bold">Home</span>
     </div>
   </mat-list-item>
   <h3 *ngIf="navigationService.menu?.length" mat-subheader class="pl-12">

@@ -12,9 +12,9 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'dashboard',
+    path: 'home',
     loadComponent: () =>
-      import('./components/dash/dash.component').then((m) => m.DashComponent),
+      import('./components/home/home.component').then((m) => m.HomeComponent),
     canActivate: [AuthGuard],
   },
   {
