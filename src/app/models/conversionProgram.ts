@@ -1,4 +1,5 @@
 import { ConversionYarn } from './conversionYarn';
+import { ProgramFibresMixed } from './programFibresMixed';
 
 export interface ConversionProgram {
   programId: number;
@@ -14,4 +15,5 @@ export interface ConversionProgram {
   createdByUserId: number;
   closedByUserId: number;
   yarnCounts: ConversionYarn[];
+  mixingSummary: ProgramFibresMixed[];
 }
