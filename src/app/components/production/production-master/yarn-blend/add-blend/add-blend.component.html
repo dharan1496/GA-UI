@@ -24,7 +24,7 @@
           max="100"
           formControlName="percentage"
           matInput
-          (input)="appSharedService.restrictDecimal($event, 2)"
+          decimal="2"
         />
         <mat-error *ngIf="form.get('percentage')?.hasError('required')"
           >This field is required.</mat-error

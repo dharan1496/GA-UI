@@ -12,12 +12,18 @@ import { MaterialModule } from 'src/app/material.module';
 import { NotifyType } from 'src/app/models/notify';
 import { YarnCounts } from 'src/app/models/yarnCounts';
 import { YarnService } from 'src/app/services/yarn.service';
+import { DecimalDirective } from 'src/app/shared/decimalNumberDirective';
 import { NotificationService } from 'src/app/shared/notification.service';
 
 @Component({
   selector: 'app-add-yarn',
   standalone: true,
-  imports: [CommonModule, MaterialModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    MaterialModule,
+    ReactiveFormsModule,
+    DecimalDirective,
+  ],
   templateUrl: './add-yarn.component.html',
   styleUrls: ['./add-yarn.component.scss'],
 })

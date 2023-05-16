@@ -13,11 +13,17 @@ import { NotifyType } from 'src/app/models/notify';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { FibreService } from 'src/app/services/fibre.service';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
+import { DecimalDirective } from 'src/app/shared/decimalNumberDirective';
 
 @Component({
   selector: 'app-receive-order-details',
   standalone: true,
-  imports: [CommonModule, MaterialModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    MaterialModule,
+    ReactiveFormsModule,
+    DecimalDirective,
+  ],
   templateUrl: './receive-order-details.component.html',
   styleUrls: ['./receive-order-details.component.scss'],
 })

@@ -97,14 +97,18 @@
         <ng-container matColumnDef="wasteCategory">
           <th mat-header-cell *matHeaderCellDef>Waste Category</th>
           <td mat-cell *matCellDef="let element">
-            {{ element.wasteCategory }}
+            {{ element.wasteCategoryName }}
           </td>
+          <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="quantity">
           <th mat-header-cell *matHeaderCellDef>Quantity</th>
           <td mat-cell *matCellDef="let element">
-            {{ element.productionQty }}
+            {{ element.wasteQuantity }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ getTotalQty() || 0 | number : "1.0-3" }}
           </td>
         </ng-container>
 
@@ -145,6 +149,11 @@
             No rows to display
           </td>
         </tr>
+        <tr
+          [hidden]="!entryDetails.length"
+          mat-footer-row
+          *matFooterRowDef="entryDisplayedColumns; sticky: true"
+        ></tr>
       </table>
     </div>
     <div class="footer w-40">

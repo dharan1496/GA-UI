@@ -17,12 +17,18 @@ import { YarnBlendFibres } from 'src/app/models/yarnBlendFibres';
 import { FibreService } from 'src/app/services/fibre.service';
 import { YarnService } from 'src/app/services/yarn.service';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
+import { DecimalDirective } from 'src/app/shared/decimalNumberDirective';
 import { NotificationService } from 'src/app/shared/notification.service';
 
 @Component({
   selector: 'app-add-blend',
   standalone: true,
-  imports: [CommonModule, MaterialModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    MaterialModule,
+    ReactiveFormsModule,
+    DecimalDirective,
+  ],
   templateUrl: './add-blend.component.html',
   styleUrls: ['./add-blend.component.scss'],
 })

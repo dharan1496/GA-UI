@@ -165,7 +165,7 @@
             type="number"
             class="cell-input w-70"
             (input)="
-              appSharedService.restrictDecimal($event, 0);
+              appSharedService.restrictDecimalZero($event);
               element.bales = bales.value
             "
           />
@@ -189,10 +189,8 @@
             type="number"
             class="cell-input w-70"
             (keyup)="getMixedBlend()"
-            (input)="
-              appSharedService.restrictDecimal($event, 3);
-              element.issueQuantity = issuedQty.value
-            "
+            (input)="element.issueQuantity = issuedQty.value"
+            decimal="3"
           />
           <p *ngIf="checkIssueQty(element)" class="error-alert">
             Greater than Stock Qty

@@ -6,7 +6,11 @@
         <mat-label>Counts</mat-label>
         <mat-select formControlName="counts">
           <ng-container *ngFor="let counts of countsList">
-            <mat-option [value]="counts.counts">{{ counts.counts }}</mat-option>
+            <mat-option
+              [disabled]="isAlreadyAdded(counts.counts)"
+              [value]="counts.counts"
+              >{{ counts.counts }}</mat-option
+            >
           </ng-container>
         </mat-select>
         <mat-error>This field is required.</mat-error>
@@ -25,7 +29,7 @@
           min="1"
           matInput
           formControlName="productionQty"
-          (input)="appSharedService.restrictDecimal($event, 3)"
+          decimal="3"
         />
         <mat-error>This field is required.</mat-error>
       </mat-form-field>

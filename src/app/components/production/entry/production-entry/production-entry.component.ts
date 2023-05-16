@@ -133,6 +133,7 @@ export class ProductionEntryComponent {
             counts: data.counts,
             countsId: data.countsId,
           })),
+          alreadyExist: this.entryDetails.map((data) => data.counts),
         },
       })
       .afterClosed()
@@ -152,6 +153,7 @@ export class ProductionEntryComponent {
           counts: data.counts,
           countsId: data.countsId,
         })),
+        alreadyExist: this.entryDetails.map((data) => data.counts),
       },
     });
     dialogRef.afterClosed().subscribe((result) => {

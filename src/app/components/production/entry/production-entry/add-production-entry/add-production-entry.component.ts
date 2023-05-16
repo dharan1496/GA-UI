@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 import { MaterialModule } from 'src/app/material.module';
 import { NotifyType } from 'src/app/models/notify';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
+import { DecimalDirective } from 'src/app/shared/decimalNumberDirective';
 import { NotificationService } from 'src/app/shared/notification.service';
 
 interface Counts {
@@ -21,7 +22,12 @@ interface Counts {
 @Component({
   selector: 'app-add-production-entry',
   standalone: true,
-  imports: [CommonModule, MaterialModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    MaterialModule,
+    ReactiveFormsModule,
+    DecimalDirective,
+  ],
   templateUrl: './add-production-entry.component.html',
   styleUrls: ['./add-production-entry.component.scss'],
 })
@@ -70,6 +76,14 @@ export class AddProductionEntryComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  isAlreadyAdded(counts: string): true | null {
+    if (this.data?.alreadyExist && Array.isArray(this.data?.alreadyExist)) {
+      const array = this.data?.alreadyExist;
+      return array.some((data: any) => data === counts) || null;
+    }
+    return null;
   }
 
   onSubmit() {

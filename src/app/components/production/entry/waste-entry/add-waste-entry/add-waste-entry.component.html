@@ -4,7 +4,15 @@
     <div class="flex-container">
       <mat-form-field appearance="fill">
         <mat-label>Waste Category</mat-label>
-        <mat-select formControlName="wasteCategory"> </mat-select>
+        <mat-select formControlName="wasteCategoryName">
+          <ng-container *ngFor="let waste of wasteCategorylist">
+            <mat-option
+              [disabled]="isAlreadyAdded(waste.wasteCategoryName)"
+              [value]="waste.wasteCategoryName"
+              >{{ waste.wasteCategoryName }}</mat-option
+            >
+          </ng-container>
+        </mat-select>
         <mat-error>This field is required.</mat-error>
       </mat-form-field>
       <mat-form-field appearance="fill">
@@ -13,8 +21,8 @@
           type="number"
           min="1"
           matInput
-          formControlName="quantity"
-          (input)="appSharedService.restrictDecimal($event, 3)"
+          formControlName="wasteQuantity"
+          decimal="3"
         />
         <mat-error>This field is required.</mat-error>
       </mat-form-field>

@@ -33,7 +33,7 @@
           min="1"
           matInput
           formControlName="weight"
-          (input)="appSharedService.restrictDecimal($event, 3)"
+          decimal="3"
         />
         <mat-error>This field is required.</mat-error>
       </mat-form-field>
@@ -46,7 +46,7 @@
           step=".01"
           matInput
           formControlName="rate"
-          (input)="appSharedService.restrictDecimal($event, 2)"
+          decimal="2"
         />
         <mat-error>This field is required.</mat-error>
       </mat-form-field>
@@ -67,7 +67,7 @@
           max="100"
           matInput
           formControlName="gstPercent"
-          (input)="appSharedService.restrictDecimal($event, 2)"
+          decimal="2"
         />
         <mat-error *ngIf="form.get('gstPercent')?.hasError('required')"
           >This field is required.</mat-error

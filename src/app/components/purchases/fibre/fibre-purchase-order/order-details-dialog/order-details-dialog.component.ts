@@ -14,11 +14,17 @@ import { NotificationService } from 'src/app/shared/notification.service';
 import { FibreService } from 'src/app/services/fibre.service';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { FibreShade } from 'src/app/models/fibreShade';
+import { DecimalDirective } from 'src/app/shared/decimalNumberDirective';
 
 @Component({
   selector: 'app-order-details-dialog',
   standalone: true,
-  imports: [CommonModule, MaterialModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    MaterialModule,
+    ReactiveFormsModule,
+    DecimalDirective,
+  ],
   templateUrl: './order-details-dialog.component.html',
   styleUrls: ['./order-details-dialog.component.scss'],
 })
@@ -72,7 +78,7 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
         this.form
           .get('shadeId')
           ?.setValue(
-            this.fibreShadeList.find((shade) => shade.shadeName === shadeName)
+            this.fibreShadeList?.find((shade) => shade.shadeName === shadeName)
               ?.shadeId
           );
       })

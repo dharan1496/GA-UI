@@ -12,6 +12,7 @@ import { ProductionDashboardComponent } from './production-dashboard/production-
 import { MixingComponent } from './mixing/mixing.component';
 import { ProductionEntryComponent } from './entry/production-entry/production-entry.component';
 import { WasteEntryComponent } from './entry/waste-entry/waste-entry.component';
+import { DecimalDirective } from 'src/app/shared/decimalNumberDirective';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { WasteEntryComponent } from './entry/waste-entry/waste-entry.component';
     MaterialModule,
     ReactiveFormsModule,
     ProductionRoutingModule,
+    DecimalDirective,
   ],
 })
 export class ProductionModule {}

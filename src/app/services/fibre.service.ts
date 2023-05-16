@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { environment } from 'src/environment/environment';
 import { CreateFibrePO } from '../models/createFibrePO';
 import { PartywisePOCounts } from '../models/partywisePOCounts';
@@ -100,5 +100,22 @@ export class FibreService {
     return this.http.get<FibreCategory[]>(
       `${environment.api}/Fiber/GetFibreCategories`
     );
+  }
+
+  getWasteCategory(): Observable<any[]> {
+    return of([
+      {
+        wasteCategoryId: '4',
+        wasteCategoryName: 'Comber Waste',
+      },
+      {
+        wasteCategoryId: '5',
+        wasteCategoryName: 'Carding',
+      },
+      {
+        wasteCategoryId: '6',
+        wasteCategoryName: 'Pneumafil Waste',
+      },
+    ]);
   }
 }

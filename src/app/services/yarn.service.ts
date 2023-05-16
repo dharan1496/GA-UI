@@ -11,6 +11,7 @@ import { ProgramForMixing } from '../models/programForMixing';
 import { FibreMixing } from '../models/fibreMixing';
 import { ProgramForProductionEntry } from '../models/programForProductionEntry';
 import { ProductionEntry } from '../models/productionEntry';
+import { ProgramWaste } from '../models/programWaste';
 
 @Injectable({
   providedIn: 'root',
@@ -107,6 +108,25 @@ export class YarnService {
       {
         responseType: 'text',
       }
+    );
+  }
+
+  conversionWaste(
+    wasteEntry: ProgramWaste[],
+    programId: number
+  ): Observable<any> {
+    return this.http.post(
+      `${environment.api}/Conversion/ConversionWaste?programId=${programId}&createdByUserId=0`,
+      wasteEntry,
+      {
+        responseType: 'text',
+      }
+    );
+  }
+
+  getProgramWasteById(programId: number): Observable<ProgramWaste[]> {
+    return this.http.get<ProgramWaste[]>(
+      `${environment.api}/Conversion/GetProgramWasteById?programId=${programId}`
     );
   }
 }
