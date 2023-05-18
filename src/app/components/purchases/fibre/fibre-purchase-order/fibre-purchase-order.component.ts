@@ -1,4 +1,3 @@
-import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -38,10 +37,6 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
   ];
   dataSource = [];
   @ViewChild(MatTable) table!: MatTable<any>;
-  selection = new SelectionModel<any>(true, []);
-  amountBeforeTax!: number;
-  taxAmount!: number;
-  amountAfterTax!: number;
   subscription = new Subscription();
   poNo = '';
 
@@ -194,20 +189,8 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.dataSource.push(result as never);
-        this.calculateSummary();
         this.table.renderRows();
       }
-    });
-  }
-
-  calculateSummary() {
-    this.amountBeforeTax = 0;
-    this.taxAmount = 0;
-    this.amountAfterTax = 0;
-    this.dataSource.forEach((order: any) => {
-      this.amountBeforeTax += order.amount;
-      this.taxAmount += (order.amount * order.gstPercent) / 100;
-      this.amountAfterTax += order.totalAmount;
     });
   }
 
@@ -223,7 +206,6 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
           }
         });
       }
-      this.calculateSummary();
       this.table.renderRows();
     });
   }
@@ -241,7 +223,6 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
             }
           });
           this.dataSource = newList;
-          this.calculateSummary();
           this.table.renderRows();
         }
       });

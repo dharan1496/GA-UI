@@ -57,9 +57,13 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
     });
 
     this.subscription.add(
-      this.fibreService
-        .getFibreShade()
-        .subscribe((data) => (this.fibreShadeList = data))
+      this.fibreService.getFibreShade().subscribe({
+        next: (data) => (this.fibreShadeList = data),
+        error: (error) =>
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
+      })
     );
 
     this.subscription.add(
