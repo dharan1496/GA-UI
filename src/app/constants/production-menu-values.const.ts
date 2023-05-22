@@ -12,11 +12,11 @@ export const PRODUCTION = [
       },
       {
         title: 'Close program',
-        route: 'production',
+        route: 'production/close-program',
       },
       {
         title: 'Reopen program',
-        route: 'production',
+        route: 'production/reopen-program',
       },
       {
         title: 'Mixing',
@@ -29,6 +29,10 @@ export const PRODUCTION = [
       {
         title: 'Waste Entry',
         route: 'production/waste-entry',
+      },
+      {
+        title: 'Yarn Recovery',
+        route: 'production/yarn-recovery',
       },
       {
         title: 'Master',

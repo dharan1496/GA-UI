@@ -13,6 +13,9 @@ import { MixingComponent } from './mixing/mixing.component';
 import { ProductionEntryComponent } from './entry/production-entry/production-entry.component';
 import { WasteEntryComponent } from './entry/waste-entry/waste-entry.component';
 import { DecimalDirective } from 'src/app/shared/decimalNumberDirective';
+import { YarnRecoveryComponent } from './yarn-recovery/yarn-recovery.component';
+import { CloseProgramComponent } from './close-program/close-program.component';
+import { ReopenProgramComponent } from './reopen-program/reopen-program.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +28,9 @@ import { DecimalDirective } from 'src/app/shared/decimalNumberDirective';
     MixingComponent,
     ProductionEntryComponent,
     WasteEntryComponent,
+    YarnRecoveryComponent,
+    CloseProgramComponent,
+    ReopenProgramComponent,
   ],
   imports: [
     CommonModule,

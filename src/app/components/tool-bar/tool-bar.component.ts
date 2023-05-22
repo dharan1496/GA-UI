@@ -4,6 +4,7 @@ import { Constants } from 'src/app/constants/constants';
 import { PARTY } from 'src/app/constants/party-menu-values.const';
 import { PRODUCTION } from 'src/app/constants/production-menu-values.const';
 import { PURCHASE } from 'src/app/constants/purchase-menu-values.const';
+import { SALES } from 'src/app/constants/sales-menu-values.const';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
 import { TimeoutService } from 'src/app/shared/timeout.service';
@@ -30,14 +31,21 @@ export class ToolBarComponent {
 
   selectSection(section: string) {
     this.navigationService.isSidenavOpened = true;
-    if (section === Constants.PURCHASES) {
-      this.navigationService.menu = PURCHASE;
-    } else if (section === Constants.PARTY) {
-      this.navigationService.menu = PARTY;
-    } else if (section === Constants.PRODUCTION) {
-      this.navigationService.menu = PRODUCTION;
-    } else {
-      this.navigationService.menu = null;
+    switch (section) {
+      case Constants.PURCHASES:
+        this.navigationService.menu = PURCHASE;
+        break;
+      case Constants.PRODUCTION:
+        this.navigationService.menu = PRODUCTION;
+        break;
+      case Constants.SALES:
+        this.navigationService.menu = SALES;
+        break;
+      case Constants.PARTY:
+        this.navigationService.menu = PARTY;
+        break;
+      default:
+        this.navigationService.menu = null;
     }
     this.navigationService.setFocus(section);
   }

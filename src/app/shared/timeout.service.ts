@@ -4,6 +4,7 @@ import { DEFAULT_INTERRUPTSOURCES, Idle } from '@ng-idle/core';
 import { environment } from 'src/environment/environment';
 import { TimeoutDialogComponent } from '../components/timeout-dialog/timeout-dialog.component';
 import { NavigationService } from './navigation.service';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +13,7 @@ export class TimeoutService {
   inSession = false;
   interval: any;
   dialogRef!: MatDialogRef<TimeoutDialogComponent>;
+  sleepMode = new Subject<void>();
 
   constructor(
     private idle: Idle,
@@ -40,6 +42,7 @@ export class TimeoutService {
         lastTime + (environment.idleTime + environment.timeout) * 1000
       ) {
         this.dialogRef?.close();
+        this.sleepMode.next();
         this.logout();
       }
       lastTime = currentTime;

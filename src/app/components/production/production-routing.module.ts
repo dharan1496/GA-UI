@@ -6,6 +6,9 @@ import { ProductionDashboardComponent } from './production-dashboard/production-
 import { MixingComponent } from './mixing/mixing.component';
 import { ProductionEntryComponent } from './entry/production-entry/production-entry.component';
 import { WasteEntryComponent } from './entry/waste-entry/waste-entry.component';
+import { YarnRecoveryComponent } from './yarn-recovery/yarn-recovery.component';
+import { CloseProgramComponent } from './close-program/close-program.component';
+import { ReopenProgramComponent } from './reopen-program/reopen-program.component';
 
 const routes: Routes = [
   {
@@ -15,6 +18,14 @@ const routes: Routes = [
   {
     path: 'create-program',
     component: CreateProgramComponent,
+  },
+  {
+    path: 'close-program',
+    component: CloseProgramComponent,
+  },
+  {
+    path: 'reopen-program',
+    component: ReopenProgramComponent,
   },
   {
     path: 'mixing',
@@ -27,6 +38,10 @@ const routes: Routes = [
   {
     path: 'waste-entry',
     component: WasteEntryComponent,
+  },
+  {
+    path: 'yarn-recovery',
+    component: YarnRecoveryComponent,
   },
   {
     path: 'master',

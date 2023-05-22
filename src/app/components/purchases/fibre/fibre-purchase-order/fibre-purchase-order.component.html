@@ -56,108 +56,112 @@
     </button>
   </div>
 
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 table">
-    <ng-container matColumnDef="fibreName">
-      <th mat-header-cell *matHeaderCellDef>Fibre</th>
-      <td mat-cell *matCellDef="let element">{{ element.fibreName }}</td>
-      <td mat-footer-cell *matFooterCellDef></td>
-    </ng-container>
+  <div class="overflow-auto mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" class="table">
+      <ng-container matColumnDef="fibreName">
+        <th mat-header-cell *matHeaderCellDef>Fibre</th>
+        <td mat-cell *matCellDef="let element">{{ element.fibreName }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
 
-    <ng-container matColumnDef="shade">
-      <th mat-header-cell *matHeaderCellDef>Shade</th>
-      <td mat-cell *matCellDef="let element">{{ element.shadeName }}</td>
-      <td mat-footer-cell *matFooterCellDef></td>
-    </ng-container>
+      <ng-container matColumnDef="shade">
+        <th mat-header-cell *matHeaderCellDef>Shade</th>
+        <td mat-cell *matCellDef="let element">{{ element.shadeName }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
 
-    <ng-container matColumnDef="weight">
-      <th mat-header-cell *matHeaderCellDef class="text-right">KGs</th>
-      <td mat-cell *matCellDef="let element" class="text-right">
-        {{ element.weight | number : "1.0-3" }}
-      </td>
-      <td mat-footer-cell *matFooterCellDef></td>
-    </ng-container>
+      <ng-container matColumnDef="weight">
+        <th mat-header-cell *matHeaderCellDef class="text-right">KGs</th>
+        <td mat-cell *matCellDef="let element" class="text-right">
+          {{ element.weight | number : "1.0-3" }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
 
-    <ng-container matColumnDef="rate">
-      <th mat-header-cell *matHeaderCellDef class="text-right">Rate</th>
-      <td mat-cell *matCellDef="let element" class="text-right">
-        {{ element.rate | currency : "INR" }}
-      </td>
-      <td mat-footer-cell *matFooterCellDef></td>
-    </ng-container>
+      <ng-container matColumnDef="rate">
+        <th mat-header-cell *matHeaderCellDef class="text-right">Rate</th>
+        <td mat-cell *matCellDef="let element" class="text-right">
+          {{ element.rate | currency : "INR" }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
 
-    <ng-container matColumnDef="amount">
-      <th mat-header-cell *matHeaderCellDef class="text-right">Amount</th>
-      <td mat-cell *matCellDef="let element" class="text-right">
-        {{ element.amount | currency : "INR" }}
-      </td>
-      <td mat-footer-cell *matFooterCellDef class="text-right">
-        {{ getAmount() | currency : "INR" }}
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef class="text-right">Amount</th>
+        <td mat-cell *matCellDef="let element" class="text-right">
+          {{ element.amount | currency : "INR" }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef class="text-right">
+          {{ getAmount() | currency : "INR" }}
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="gstPercent">
-      <th mat-header-cell *matHeaderCellDef class="text-right">GST%</th>
-      <td mat-cell *matCellDef="let element" class="text-right">
-        {{ element.gstPercent | number : "1.2-2" }}%
-      </td>
-      <td mat-footer-cell *matFooterCellDef class="text-right">
-        {{ getTaxAmount() | currency : "INR" }}
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="gstPercent">
+        <th mat-header-cell *matHeaderCellDef class="text-right">GST%</th>
+        <td mat-cell *matCellDef="let element" class="text-right">
+          {{ element.gstPercent | number : "1.2-2" }}%
+        </td>
+        <td mat-footer-cell *matFooterCellDef class="text-right">
+          {{ getTaxAmount() | currency : "INR" }}
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="totalAmount">
-      <th mat-header-cell *matHeaderCellDef class="text-right">Total Amount</th>
-      <td mat-cell *matCellDef="let element" class="text-right">
-        {{ element.totalAmount | currency : "INR" }}
-      </td>
-      <td mat-footer-cell *matFooterCellDef class="text-right">
-        {{ getTotalAmount() | currency : "INR" }}
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="totalAmount">
+        <th mat-header-cell *matHeaderCellDef class="text-right">
+          Total Amount
+        </th>
+        <td mat-cell *matCellDef="let element" class="text-right">
+          {{ element.totalAmount | currency : "INR" }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef class="text-right">
+          {{ getTotalAmount() | currency : "INR" }}
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="button">
-      <th mat-header-cell *matHeaderCellDef class="text-center">Actions</th>
-      <td mat-cell *matCellDef="let element" class="text-center">
-        <button
-          mat-icon-button
-          [matMenuTriggerFor]="menu"
-          aria-label="Actions menu"
-        >
-          <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
+      <ng-container matColumnDef="button">
+        <th mat-header-cell *matHeaderCellDef class="text-center">Actions</th>
+        <td mat-cell *matCellDef="let element" class="text-center">
           <button
-            mat-menu-item
-            aria-label="button with a edit icon"
-            (click)="updateData(element)"
+            mat-icon-button
+            [matMenuTriggerFor]="menu"
+            aria-label="Actions menu"
           >
-            <mat-icon>edit</mat-icon> Edit
+            <mat-icon>more_vert</mat-icon>
           </button>
-          <button
-            mat-menu-item
-            (click)="removeData(element)"
-            aria-label="button with a delete icon"
-          >
-            <mat-icon>delete</mat-icon> Delete
-          </button>
-        </mat-menu>
-      </td>
-      <td mat-footer-cell *matFooterCellDef></td>
-    </ng-container>
+          <mat-menu #menu="matMenu">
+            <button
+              mat-menu-item
+              aria-label="button with a edit icon"
+              (click)="updateData(element)"
+            >
+              <mat-icon>edit</mat-icon> Edit
+            </button>
+            <button
+              mat-menu-item
+              (click)="removeData(element)"
+              aria-label="button with a delete icon"
+            >
+              <mat-icon>delete</mat-icon> Delete
+            </button>
+          </mat-menu>
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell no-rows" [attr.colspan]="displayedColumns.length">
-        No rows to display
-      </td>
-    </tr>
-    <tr
-      [hidden]="!dataSource.length"
-      mat-footer-row
-      *matFooterRowDef="displayedColumns; sticky: true"
-    ></tr>
-  </table>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell no-rows" [attr.colspan]="displayedColumns.length">
+          No rows to display
+        </td>
+      </tr>
+      <tr
+        [hidden]="!dataSource.length"
+        mat-footer-row
+        *matFooterRowDef="displayedColumns; sticky: true"
+      ></tr>
+    </table>
+  </div>
 
   <div class="footer">
     <button mat-raised-button (click)="goToSearch()">

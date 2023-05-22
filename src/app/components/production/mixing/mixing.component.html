@@ -107,145 +107,141 @@
         </div>
       </mat-card>
     </div>
-    <table mat-table [dataSource]="mixingDetails" class="mat-elevation-z8">
-      <!-- receivedDCNo Column -->
-      <ng-container matColumnDef="receivedDCNo">
-        <th mat-header-cell *matHeaderCellDef>Received DC No</th>
-        <td mat-cell *matCellDef="let element">{{ element.receivedDCNo }}</td>
-        <td mat-footer-cell *matFooterCellDef></td>
-      </ng-container>
+    <div class="overflow-auto mat-elevation-z8">
+      <table mat-table [dataSource]="mixingDetails">
+        <ng-container matColumnDef="receivedDCNo">
+          <th mat-header-cell *matHeaderCellDef>Received DC No</th>
+          <td mat-cell *matCellDef="let element">{{ element.receivedDCNo }}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
 
-      <!-- fibreCategory Column -->
-      <ng-container matColumnDef="fibreCategory">
-        <th mat-header-cell *matHeaderCellDef>Fibre Category</th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.fibreCategoryName }}
-        </td>
-        <td mat-footer-cell *matFooterCellDef></td>
-      </ng-container>
+        <ng-container matColumnDef="fibreCategory">
+          <th mat-header-cell *matHeaderCellDef>Fibre Category</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.fibreCategoryName }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
 
-      <!-- fibre Column -->
-      <ng-container matColumnDef="fibre">
-        <th mat-header-cell *matHeaderCellDef>Fibre</th>
-        <td mat-cell *matCellDef="let element">{{ element.fibreType }}</td>
-        <td mat-footer-cell *matFooterCellDef></td>
-      </ng-container>
+        <ng-container matColumnDef="fibre">
+          <th mat-header-cell *matHeaderCellDef>Fibre</th>
+          <td mat-cell *matCellDef="let element">{{ element.fibreType }}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
 
-      <!-- fibreShade Column -->
-      <ng-container matColumnDef="fibreShade">
-        <th mat-header-cell *matHeaderCellDef>Fibre Shade</th>
-        <td mat-cell *matCellDef="let element">{{ element.shadeName }}</td>
-        <td mat-footer-cell *matFooterCellDef></td>
-      </ng-container>
+        <ng-container matColumnDef="fibreShade">
+          <th mat-header-cell *matHeaderCellDef>Fibre Shade</th>
+          <td mat-cell *matCellDef="let element">{{ element.shadeName }}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
 
-      <!-- lot Column -->
-      <ng-container matColumnDef="lot">
-        <th mat-header-cell *matHeaderCellDef>Lot</th>
-        <td mat-cell *matCellDef="let element">{{ element.lot }}</td>
-        <td mat-footer-cell *matFooterCellDef></td>
-      </ng-container>
+        <ng-container matColumnDef="lot">
+          <th mat-header-cell *matHeaderCellDef>Lot</th>
+          <td mat-cell *matCellDef="let element">{{ element.lot }}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
 
-      <!-- stockQty Column -->
-      <ng-container matColumnDef="stockQty">
-        <th mat-header-cell *matHeaderCellDef class="text-right">Stock Qty</th>
-        <td mat-cell *matCellDef="let element" class="text-right">
-          {{ element.stock }}
-        </td>
-        <td mat-footer-cell *matFooterCellDef></td>
-      </ng-container>
+        <ng-container matColumnDef="stockQty">
+          <th mat-header-cell *matHeaderCellDef class="text-right">
+            Stock Qty
+          </th>
+          <td mat-cell *matCellDef="let element" class="text-right">
+            {{ element.stock }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
 
-      <!-- bales Column -->
-      <ng-container matColumnDef="bales">
-        <th mat-header-cell *matHeaderCellDef class="text-right">
-          Issued No of Bales
-        </th>
-        <td mat-cell *matCellDef="let element" class="w-15 text-right">
-          <input
-            #bales
-            type="number"
-            class="cell-input w-70"
-            (input)="
-              appSharedService.restrictDecimalZero($event);
-              element.bales = bales.value
-            "
-          />
-        </td>
-        <td mat-footer-cell *matFooterCellDef class="text-right">
-          {{ getTotalBale() || 0 }}
-        </td>
-      </ng-container>
+        <ng-container matColumnDef="bales">
+          <th mat-header-cell *matHeaderCellDef class="text-right">
+            Issued No of Bales
+          </th>
+          <td mat-cell *matCellDef="let element" class="w-15 text-right">
+            <input
+              #bales
+              type="number"
+              class="cell-input w-70"
+              (input)="
+                appSharedService.restrictDecimalZero($event);
+                element.bales = bales.value
+              "
+            />
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="text-right">
+            {{ getTotalBale() || 0 }}
+          </td>
+        </ng-container>
 
-      <!-- issueQty Column -->
-      <ng-container matColumnDef="issueQty">
-        <th mat-header-cell *matHeaderCellDef class="text-right">Issue Qty</th>
-        <td
-          mat-cell
-          *matCellDef="let element"
-          class="w-15 text-right input-container"
-        >
-          <input
-            [ngClass]="{ 'border-error': checkIssueQty(element) }"
-            #issuedQty
-            type="number"
-            class="cell-input w-70"
-            (keyup)="getMixedBlend()"
-            (input)="element.issueQuantity = issuedQty.value"
-            decimal="3"
-          />
-          <p *ngIf="checkIssueQty(element)" class="error-alert">
-            Greater than Stock Qty
-          </p>
-        </td>
-        <td mat-footer-cell *matFooterCellDef class="text-right">
-          {{ getTotalIssueQty() || 0 | number : "1.0-3" }}
-        </td>
-      </ng-container>
-
-      <!-- percentUsed Column -->
-      <ng-container matColumnDef="percentUsed">
-        <th mat-header-cell *matHeaderCellDef class="text-right">% Used</th>
-        <td mat-cell *matCellDef="let element" class="text-right">
-          {{ getPercentUsed(element) | number : "1.2-2" }}%
-        </td>
-        <td mat-footer-cell *matFooterCellDef class="text-right">
-          {{ getTotalPercentage() || 0 | number : "1.2-2" }}%
-        </td>
-      </ng-container>
-
-      <!-- Action Column -->
-      <ng-container matColumnDef="action">
-        <th mat-header-cell *matHeaderCellDef class="text-right">Action</th>
-        <td mat-cell *matCellDef="let element" class="text-right">
-          <button
-            mat-icon-button
-            color="warn"
-            matTooltip="Remove"
-            aria-label="button with a delete icon"
-            (click)="removeStock(element)"
+        <ng-container matColumnDef="issueQty">
+          <th mat-header-cell *matHeaderCellDef class="text-right">
+            Issue Qty
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            class="w-15 text-right input-container"
           >
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-        <td mat-footer-cell *matFooterCellDef></td>
-      </ng-container>
+            <input
+              [ngClass]="{ 'border-error': checkIssueQty(element) }"
+              #issuedQty
+              type="number"
+              class="cell-input w-70"
+              (keyup)="getMixedBlend()"
+              (input)="element.issueQuantity = issuedQty.value"
+              decimal="3"
+            />
+            <p *ngIf="checkIssueQty(element)" class="error-alert">
+              Greater than Stock Qty
+            </p>
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="text-right">
+            {{ getTotalIssueQty() || 0 | number : "1.0-3" }}
+          </td>
+        </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="mixingDisplayedColumns"></tr>
-      <tr
-        class="mixing-row"
-        mat-row
-        *matRowDef="let row; columns: mixingDisplayedColumns"
-      ></tr>
-      <tr *matNoDataRow>
-        <td class="no-rows" [attr.colspan]="mixingDisplayedColumns.length">
-          No rows to display
-        </td>
-      </tr>
-      <tr
-        [hidden]="!mixingDetails.length"
-        mat-footer-row
-        *matFooterRowDef="mixingDisplayedColumns; sticky: true"
-      ></tr>
-    </table>
+        <ng-container matColumnDef="percentUsed">
+          <th mat-header-cell *matHeaderCellDef class="text-right">% Used</th>
+          <td mat-cell *matCellDef="let element" class="text-right">
+            {{ getPercentUsed(element) | number : "1.2-2" }}%
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="text-right">
+            {{ getTotalPercentage() || 0 | number : "1.2-2" }}%
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef class="text-right">Action</th>
+          <td mat-cell *matCellDef="let element" class="text-right">
+            <button
+              mat-icon-button
+              color="warn"
+              matTooltip="Remove"
+              aria-label="button with a delete icon"
+              (click)="removeStock(element)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="mixingDisplayedColumns"></tr>
+        <tr
+          class="mixing-row"
+          mat-row
+          *matRowDef="let row; columns: mixingDisplayedColumns"
+        ></tr>
+        <tr *matNoDataRow>
+          <td class="no-rows" [attr.colspan]="mixingDisplayedColumns.length">
+            No rows to display
+          </td>
+        </tr>
+        <tr
+          [hidden]="!mixingDetails.length"
+          mat-footer-row
+          *matFooterRowDef="mixingDisplayedColumns; sticky: true"
+        ></tr>
+      </table>
+    </div>
   </div>
   <div class="footer">
     <button mat-raised-button class="mr-16" (click)="resetData()">

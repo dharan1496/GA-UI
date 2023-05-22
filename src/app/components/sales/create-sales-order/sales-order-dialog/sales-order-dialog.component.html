@@ -1,0 +1,113 @@
+<h1 mat-dialog-title>Order details</h1>
+<form [formGroup]="form" class="form">
+  <div mat-dialog-content>
+    <div class="flex-container">
+      <mat-form-field appearance="fill">
+        <mat-label>Counts</mat-label>
+        <mat-select formControlName="countsId">
+          <ng-container *ngFor="let counts of countsList">
+            <mat-option [value]="counts.countsId">{{
+              counts.counts
+            }}</mat-option>
+          </ng-container>
+        </mat-select>
+        <mat-error>This field is required.</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Yarn Type</mat-label>
+        <mat-select formControlName="yarnType">
+          <mat-option value="1">1</mat-option>
+        </mat-select>
+        <mat-error>This field is required.</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Blend</mat-label>
+        <mat-select formControlName="blendId">
+          <ng-container *ngFor="let blend of blendList">
+            <mat-option [value]="blend.blendId">{{
+              blend.blendName
+            }}</mat-option>
+          </ng-container>
+        </mat-select>
+        <mat-error>This field is required.</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="flex-container">
+      <mat-form-field appearance="fill">
+        <mat-label>Shade Name</mat-label>
+        <mat-select formControlName="shadeId">
+          <ng-container *ngFor="let shade of fibreShadeList">
+            <mat-option [value]="shade.shadeId">{{
+              shade.shadeName
+            }}</mat-option>
+          </ng-container>
+        </mat-select>
+        <mat-error>This field is required.</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>KGs</mat-label>
+        <input
+          type="number"
+          min="1"
+          matInput
+          formControlName="weight"
+          decimal="3"
+        />
+        <mat-error>This field is required.</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <span matPrefix>&nbsp;&#x20B9;&nbsp;</span>
+        <mat-label>Rate</mat-label>
+        <input
+          type="number"
+          min="0.00"
+          step=".01"
+          matInput
+          formControlName="rate"
+          decimal="2"
+        />
+        <mat-error>This field is required.</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="flex-container">
+      <div class="w-100">
+        <div class="pl-16">
+          <label for="amount" class="font-size-14 text-dark">Amount</label>
+          <div id="amount" class="text-gray">
+            {{ form.get("amount")?.value || 0 | currency : "INR" }}
+          </div>
+        </div>
+      </div>
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>GST%</mat-label>
+        <input
+          type="number"
+          max="100"
+          matInput
+          formControlName="gstPercent"
+          decimal="2"
+        />
+        <mat-error *ngIf="form.get('gstPercent')?.hasError('required')"
+          >This field is required.</mat-error
+        >
+        <mat-error *ngIf="form.get('gstPercent')?.hasError('max')"
+          >Value should be between 1 and 100</mat-error
+        >
+      </mat-form-field>
+      <div class="w-100 pl-16 text-black">
+        <label for="total-amount" class="font-size-14 text-dark"
+          >Total Amount</label
+        >
+        <div id="total-amount" class="text-gray">
+          {{ form.get("totalAmount")?.value || 0 | currency : "INR" }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions class="footer">
+    <button mat-raised-button color="primary" (click)="onSubmit()">
+      Submit
+    </button>
+    <button mat-button (click)="onCancel()">Cancel</button>
+  </div>
+</form>

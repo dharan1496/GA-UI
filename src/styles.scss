@@ -29,6 +29,10 @@ app-print-fibre-po {
 
 // size
 
+.min-w-15 {
+  min-width: 15%;
+}
+
 .min-w-25 {
   min-width: 25%;
 }
@@ -127,6 +131,10 @@ app-print-fibre-po {
 
 .py-12 {
   padding: 12px 0;
+}
+
+.py-16 {
+  padding: 16px 0;
 }
 
 .px-32 {
@@ -265,4 +273,8 @@ app-print-fibre-po {
 
 .tab-header-border {
   border-bottom: 1px solid rgb(0, 0, 0, 0.12);
+}
+
+.overflow-auto {
+  overflow: auto;
 }

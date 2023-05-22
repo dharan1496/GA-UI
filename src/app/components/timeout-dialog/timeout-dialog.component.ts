@@ -12,16 +12,23 @@ import { environment } from 'src/environment/environment';
   standalone: true,
   imports: [CommonModule, MaterialModule],
   templateUrl: './timeout-dialog.component.html',
-  styleUrls: ['./timeout-dialog.component.scss']
+  styleUrls: ['./timeout-dialog.component.scss'],
 })
 export class TimeoutDialogComponent implements OnInit, OnDestroy {
   countDown = environment.timeout;
   subscription = new Subscription();
 
-  constructor(private idle: Idle, private timeoutService: TimeoutService, private matDialogRef: MatDialogRef<TimeoutDialogComponent>) {}
+  constructor(
+    private idle: Idle,
+    private timeoutService: TimeoutService,
+    private matDialogRef: MatDialogRef<TimeoutDialogComponent>
+  ) {}
 
   ngOnInit() {
-    const timeoutWarning = this.idle.onTimeoutWarning.subscribe((countdown) => this.countDown = countdown);
+    const timeoutWarning = this.idle.onTimeoutWarning.subscribe(
+      (countdown) => (this.countDown = countdown)
+    );
+    this.timeoutService.sleepMode.subscribe(() => (this.countDown = 0));
     const idleEnd = this.idle.onIdleEnd.subscribe(() => {
       this.idle.watch();
       this.matDialogRef.close();

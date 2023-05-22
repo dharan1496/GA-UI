@@ -1,0 +1,34 @@
+.container {
+  margin: 32px;
+}
+
+.header {
+  font-weight: 500;
+  margin: 40px 0;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-mdc-form-field {
+  font-size: 14px;
+  width: 40%;
+}
+
+.row {
+  cursor: pointer;
+
+  &:hover {
+    background-color: whitesmoke !important;
+  }
+}
+
+.mat-mdc-header-row {
+  background: rgb(225, 225, 225);
+}
+
+.mat-mdc-paginator {
+  border-top: 1px solid #e0e0e0;
+  padding: 8px 0;
+}
