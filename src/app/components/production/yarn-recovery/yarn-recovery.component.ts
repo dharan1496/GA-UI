@@ -88,6 +88,6 @@ export class YarnRecoveryComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   openRecoveryDetails(row: any) {
-    this.dialog.open(RecoveryDetailsComponent, { data: row });
+    this.dialog.open(RecoveryDetailsComponent, { data: row, minWidth: 500 });
   }
 }
