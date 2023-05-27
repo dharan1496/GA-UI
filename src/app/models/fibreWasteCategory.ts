@@ -1,4 +1,4 @@
-export interface WasteCategory {
+export interface FibreWasteCategory {
   wasteCategoryName: string;
   wasteCategoryId: number;
 }

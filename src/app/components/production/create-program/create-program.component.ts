@@ -168,15 +168,13 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
 
   submitProgram() {
     if (!this.hasError()) {
-      const yarnCounts: ConversionYarn[] = this.dataSource.map((data) => {
-        return {
-          conversionYarnId: 0,
-          countsId: data.countsId,
-          counts: data.counts,
-          programQuantity: +data.programQuantity,
-          productionQuantity: 0,
-        };
-      });
+      const yarnCounts: ConversionYarn[] = this.dataSource.map((data) => ({
+        conversionYarnId: 0,
+        countsId: data.countsId,
+        counts: data.counts,
+        programQuantity: +data.programQuantity,
+        productionQuantity: 0,
+      }));
       const program: ConversionProgram = {
         ...this.form.value,
         programDate: this.datePipe.transform(
@@ -190,6 +188,7 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
         closedByUserId: 0,
         createdByUserId: 0,
         yarnCounts,
+        mixingSummary: [],
       };
       this.yarnService.createProgram(program).subscribe({
         next: () => {

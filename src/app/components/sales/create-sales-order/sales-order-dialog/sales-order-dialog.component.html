@@ -14,13 +14,6 @@
         <mat-error>This field is required.</mat-error>
       </mat-form-field>
       <mat-form-field appearance="fill">
-        <mat-label>Yarn Type</mat-label>
-        <mat-select formControlName="yarnType">
-          <mat-option value="1">1</mat-option>
-        </mat-select>
-        <mat-error>This field is required.</mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="fill">
         <mat-label>Blend</mat-label>
         <mat-select formControlName="blendId">
           <ng-container *ngFor="let blend of blendList">
@@ -50,12 +43,14 @@
           type="number"
           min="1"
           matInput
-          formControlName="weight"
+          formControlName="orderQuantity"
           decimal="3"
         />
         <mat-error>This field is required.</mat-error>
       </mat-form-field>
-      <mat-form-field appearance="fill">
+    </div>
+    <div class="flex-container">
+      <mat-form-field appearance="fill" class="w-100">
         <span matPrefix>&nbsp;&#x20B9;&nbsp;</span>
         <mat-label>Rate</mat-label>
         <input
@@ -68,8 +63,6 @@
         />
         <mat-error>This field is required.</mat-error>
       </mat-form-field>
-    </div>
-    <div class="flex-container">
       <div class="w-100">
         <div class="pl-16">
           <label for="amount" class="font-size-14 text-dark">Amount</label>
@@ -78,6 +71,8 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="flex-container">
       <mat-form-field appearance="fill" class="w-100">
         <mat-label>GST%</mat-label>
         <input
@@ -94,12 +89,14 @@
           >Value should be between 1 and 100</mat-error
         >
       </mat-form-field>
-      <div class="w-100 pl-16 text-black">
-        <label for="total-amount" class="font-size-14 text-dark"
-          >Total Amount</label
-        >
-        <div id="total-amount" class="text-gray">
-          {{ form.get("totalAmount")?.value || 0 | currency : "INR" }}
+      <div class="w-100 text-black">
+        <div class="pl-16">
+          <label for="total-amount" class="font-size-14 text-dark"
+            >Total Amount</label
+          >
+          <div id="total-amount" class="text-gray">
+            {{ form.get("totalAmount")?.value || 0 | currency : "INR" }}
+          </div>
         </div>
       </div>
     </div>

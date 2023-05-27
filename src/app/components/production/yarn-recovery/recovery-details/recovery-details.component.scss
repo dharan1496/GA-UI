@@ -1,9 +1,36 @@
-.form-container {
-  padding: 0 24px 16px;
+.container {
+  padding: 0 24px 24px;
+}
+
+.details {
+  width: 100%;
+  & div {
+    display: flex;
+    gap: 16px;
+    justify-content: space-between;
+  }
+
+  & > div:not(:last-child) {
+    margin-bottom: 12px;
+  }
 }
 
 .footer {
   display: flex;
   justify-content: center;
   padding-bottom: 24px;
+}
+
+.table-header {
+  margin-top: 12px;
+}
+
+.table {
+  border: 1px solid #e0e0e0;
+  margin-top: 8px;
+  margin-bottom: 20px;
+}
+
+.mat-mdc-header-row {
+  background: rgb(225, 225, 225);
 }

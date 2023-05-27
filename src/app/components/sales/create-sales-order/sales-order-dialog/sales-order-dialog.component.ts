@@ -55,12 +55,11 @@ export class SalesOrderDialogComponent implements OnInit, OnDestroy {
       orderNo: typeof this.data === 'number' ? +this.data + 1 : '',
       countsId: ['', Validators.required],
       countsName: '',
-      yarnType: ['', Validators.required],
       blendId: ['', Validators.required],
       blendName: '',
       shadeId: ['', Validators.required],
       shadeName: '',
-      weight: ['', Validators.required],
+      orderQuantity: ['', Validators.required],
       rate: ['', Validators.required],
       amount: '',
       gstPercent: ['', Validators.required],
@@ -103,10 +102,12 @@ export class SalesOrderDialogComponent implements OnInit, OnDestroy {
     );
 
     const amount: Record<string, ObservableInput<any>> = {
-      weight:
+      orderQuantity:
         this.form
-          .get('weight')
-          ?.valueChanges.pipe(startWith(this.form.get('weight')?.value)) || '',
+          .get('orderQuantity')
+          ?.valueChanges.pipe(
+            startWith(this.form.get('orderQuantity')?.value)
+          ) || '',
       rate:
         this.form
           .get('rate')
@@ -114,7 +115,9 @@ export class SalesOrderDialogComponent implements OnInit, OnDestroy {
     };
     this.subscription.add(
       combineLatest(amount).subscribe((value: Record<string, number>) => {
-        this.form.get('amount')?.setValue(value['weight'] * value['rate']);
+        this.form
+          .get('amount')
+          ?.setValue(value['orderQuantity'] * value['rate']);
       })
     );
 

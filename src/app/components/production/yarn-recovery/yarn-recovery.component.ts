@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -7,93 +13,64 @@ import { Constants } from 'src/app/constants/constants';
 import { PRODUCTION } from 'src/app/constants/production-menu-values.const';
 import { NavigationService } from 'src/app/shared/navigation.service';
 import { RecoveryDetailsComponent } from './recovery-details/recovery-details.component';
+import { YarnService } from 'src/app/services/yarn.service';
+import { NotificationService } from 'src/app/shared/notification.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-yarn-recovery',
   templateUrl: './yarn-recovery.component.html',
   styleUrls: ['./yarn-recovery.component.scss'],
 })
-export class YarnRecoveryComponent implements OnInit, AfterViewInit {
+export class YarnRecoveryComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns: string[] = [
-    'letterNo',
-    'buyer',
-    'shadeNo',
-    'blend',
-    'blendDesc',
-    'lot',
-    'counts',
-    'letterQty',
+    'programNo',
+    'programDate',
+    'shadeName',
+    'blendName',
+    'plannedQty',
     'mixedQty',
-    'prodQty',
-    'mixingWaste',
-    'wastePerc',
-    'recoveryPerc',
+    'lot',
+    'productionQty',
+    'wasteQty',
+    'recoveryPercent',
   ];
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  subscription = new Subscription();
 
   constructor(
     private navigationService: NavigationService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private yarnService: YarnService,
+    private notificationService: NotificationService
   ) {
     this.navigationService.menu = PRODUCTION;
     this.navigationService.setFocus(Constants.PRODUCTION);
+    this.dataSource = new MatTableDataSource([] as never);
   }
 
   ngOnInit() {
-    this.dataSource = new MatTableDataSource([
-      {
-        letterNo: 12,
-        buyer: 'test',
-        shade: 'blue',
-        blend: 'P50:C50',
-        blendDesc: 'Polyster: 50%, Cotton: 50%',
-        lot: 'e3',
-        counts: '10s',
-        letterQty: 500,
-        mixedQty: 500,
-        producedQty: 475,
-        mixingWaste: 25,
-        wastePercent: 5,
-        recoveryPercent: 95,
-      },
-      {
-        letterNo: 13,
-        buyer: 'test1',
-        shade: 'green',
-        blend: 'P50:S50',
-        blendDesc: 'Polyster: 50%, Silk: 50%',
-        lot: 'e3',
-        counts: '10s',
-        letterQty: 1000,
-        mixedQty: 1000,
-        producedQty: 950,
-        mixingWaste: 50,
-        wastePercent: 5,
-        recoveryPercent: 95,
-      },
-      {
-        letterNo: 14,
-        buyer: 'test2',
-        shade: 'red',
-        blend: 'P50:V50',
-        blendDesc: 'Polyster: 50%, viscose: 50%',
-        lot: 'e3',
-        counts: '10s',
-        letterQty: 2000,
-        mixedQty: 2000,
-        producedQty: 1900,
-        mixingWaste: 100,
-        wastePercent: 5,
-        recoveryPercent: 95,
-      },
-    ] as never);
+    this.subscription.add(
+      this.yarnService.getYarnRecoverySummary().subscribe({
+        next: (data) => (this.dataSource = new MatTableDataSource(data)),
+        error: (error) => {
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          );
+        },
+      })
+    );
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   applyFilter(event: Event) {

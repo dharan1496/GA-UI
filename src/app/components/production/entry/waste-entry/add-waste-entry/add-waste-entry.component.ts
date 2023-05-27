@@ -10,7 +10,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { MaterialModule } from 'src/app/material.module';
 import { NotifyType } from 'src/app/models/notify';
-import { WasteCategory } from 'src/app/models/wasteCategory';
+import { FibreWasteCategory } from 'src/app/models/fibreWasteCategory';
 import { FibreService } from 'src/app/services/fibre.service';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NotificationService } from 'src/app/shared/notification.service';
@@ -31,7 +31,7 @@ import { DecimalDirective } from 'src/app/shared/decimalNumberDirective';
 export class AddWasteEntryComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   subscription = new Subscription();
-  wasteCategorylist: WasteCategory[] = [];
+  wasteCategorylist: FibreWasteCategory[] = [];
 
   constructor(
     private formBuilder: FormBuilder,

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environment/environment';
 import { CreateFibrePO } from '../models/createFibrePO';
 import { PartywisePOCounts } from '../models/partywisePOCounts';
@@ -11,6 +11,7 @@ import { FibreGraph } from '../models/fibreGraph';
 import { FibreShade } from '../models/fibreShade';
 import { FibreStock } from '../models/fibreStock';
 import { FibreCategory } from '../models/fibreCategory';
+import { FibreWasteCategory } from '../models/fibreWasteCategory';
 
 @Injectable({
   providedIn: 'root',
@@ -30,14 +31,10 @@ export class FibreService {
     return this.http.get<FibreType[]>(`${environment.api}/Fiber/GetFibreTypes`);
   }
 
-  addFibre(fibreName: string): Observable<any> {
-    return this.http.post(
-      `${environment.api}/Fiber/AddFibreType?fibreTypeName=${fibreName}`,
-      {},
-      {
-        responseType: 'text',
-      }
-    );
+  addFibre(fibreType: FibreType): Observable<any> {
+    return this.http.post(`${environment.api}/Fiber/AddFibreType`, fibreType, {
+      responseType: 'text',
+    });
   }
 
   submitFibrePO(request: CreateFibrePO): Observable<string> {
@@ -102,20 +99,9 @@ export class FibreService {
     );
   }
 
-  getWasteCategory(): Observable<any[]> {
-    return of([
-      {
-        wasteCategoryId: '4',
-        wasteCategoryName: 'Comber Waste',
-      },
-      {
-        wasteCategoryId: '5',
-        wasteCategoryName: 'Carding',
-      },
-      {
-        wasteCategoryId: '6',
-        wasteCategoryName: 'Pneumafil Waste',
-      },
-    ]);
+  getWasteCategory(): Observable<FibreWasteCategory[]> {
+    return this.http.get<FibreWasteCategory[]>(
+      `${environment.api}/Fiber/GetFibreWasteCategories`
+    );
   }
 }

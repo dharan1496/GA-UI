@@ -8,14 +8,14 @@
       <form class="form" [formGroup]="form">
         <div class="form-container">
           <div class="min-w-15 pt-8 sales-no-container">
-            <label for="salesNo" class="font-weight-bold">Sales No</label>
+            <label for="salesNo" class="font-weight-bold">Order No</label>
             <div id="salesNo" class="sales-no font-size-16 text-gray pt-4">
               {{
-                form.get("salesNo")?.value ? form.get("salesNo")?.value : "_"
+                form.get("orderNo")?.value ? form.get("orderNo")?.value : "_"
               }}
-              <!-- <mat-icon matTooltip="Refresh" (click)="getSalesNo()"
+              <mat-icon matTooltip="Refresh" (click)="getOrderNo()"
                 >refresh</mat-icon
-              > -->
+              >
             </div>
           </div>
           <mat-form-field appearance="fill" class="w-40">
@@ -32,7 +32,7 @@
 
           <mat-form-field appearance="fill" class="w-40">
             <mat-label>Broker Name</mat-label>
-            <mat-select formControlName="broker"> </mat-select>
+            <input matInput formControlName="brokerName" />
             <mat-error>This field is required.</mat-error>
           </mat-form-field>
         </div>
@@ -55,11 +55,6 @@
             <mat-datepicker #picker></mat-datepicker>
             <mat-error>This field is required.</mat-error>
           </mat-form-field>
-          <mat-form-field appearance="fill" class="w-50">
-            <mat-label>Delivery Address</mat-label>
-            <mat-select formControlName="address"> </mat-select>
-            <mat-error>This field is required.</mat-error>
-          </mat-form-field>
           <mat-form-field appearance="fill" class="w-25">
             <mat-label>Due Days</mat-label>
             <input
@@ -69,6 +64,11 @@
               (input)="appSharedService.restrictDecimalZero($event)"
             />
             <mat-error>This field is required.</mat-error>
+          </mat-form-field>
+          <mat-form-field class="w-50">
+            <mat-label>Remarks</mat-label>
+            <textarea matInput formControlName="remarks"></textarea>
+            <mat-hint>Optional</mat-hint>
           </mat-form-field>
         </div>
       </form>
@@ -88,12 +88,6 @@
       <td mat-footer-cell *matFooterCellDef></td>
     </ng-container>
 
-    <ng-container matColumnDef="yarnType">
-      <th mat-header-cell *matHeaderCellDef>Yarn Type</th>
-      <td mat-cell *matCellDef="let element">{{ element.yarnType }}</td>
-      <td mat-footer-cell *matFooterCellDef></td>
-    </ng-container>
-
     <ng-container matColumnDef="blend">
       <th mat-header-cell *matHeaderCellDef>Blend</th>
       <td mat-cell *matCellDef="let element">{{ element.blendName }}</td>
@@ -109,7 +103,7 @@
     <ng-container matColumnDef="weight">
       <th mat-header-cell *matHeaderCellDef class="text-right">Quantity(Kg)</th>
       <td mat-cell *matCellDef="let element" class="text-right">
-        {{ element.weight | number : "1.0-3" }}
+        {{ element.orderQuantity | number : "1.0-3" }}
       </td>
       <td mat-footer-cell *matFooterCellDef></td>
     </ng-container>

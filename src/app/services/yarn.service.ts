@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { environment } from 'src/environment/environment';
 import { YarnShade } from '../models/yarnShade';
 import { YarnCounts } from '../models/yarnCounts';
@@ -12,6 +12,7 @@ import { FibreMixing } from '../models/fibreMixing';
 import { ProgramForProductionEntry } from '../models/programForProductionEntry';
 import { ProductionEntry } from '../models/productionEntry';
 import { ProgramWaste } from '../models/programWaste';
+import { YarnRecoverySummary } from '../models/yarnRecoverySummary';
 
 @Injectable({
   providedIn: 'root',
@@ -128,5 +129,18 @@ export class YarnService {
     return this.http.get<ProgramWaste[]>(
       `${environment.api}/Conversion/GetProgramWasteById?programId=${programId}`
     );
+  }
+
+  getYarnRecoverySummary(): Observable<YarnRecoverySummary[]> {
+    return this.http.get<YarnRecoverySummary[]>(
+      `${environment.api}/Conversion/GetYarnRecoverySummary`
+    );
+  }
+
+  getYarnOrderNo(): Observable<string> {
+    return of('1/YPO/GA/23');
+    // return this.http.get(`${environment.api}/Fiber/`, {
+    //   responseType: 'text',
+    // });
   }
 }
