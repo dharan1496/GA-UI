@@ -15,7 +15,7 @@ import { NavigationService } from 'src/app/shared/navigation.service';
 import { RecoveryDetailsComponent } from './recovery-details/recovery-details.component';
 import { YarnService } from 'src/app/services/yarn.service';
 import { NotificationService } from 'src/app/shared/notification.service';
-import { Subscription } from 'rxjs';
+import { Subscription, finalize } from 'rxjs';
 
 @Component({
   selector: 'app-yarn-recovery',
@@ -39,6 +39,7 @@ export class YarnRecoveryComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   subscription = new Subscription();
+  loader = false;
 
   constructor(
     private navigationService: NavigationService,
@@ -52,15 +53,19 @@ export class YarnRecoveryComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.loader = true;
     this.subscription.add(
-      this.yarnService.getYarnRecoverySummary().subscribe({
-        next: (data) => (this.dataSource = new MatTableDataSource(data)),
-        error: (error) => {
-          this.notificationService.error(
-            typeof error?.error === 'string' ? error?.error : error?.message
-          );
-        },
-      })
+      this.yarnService
+        .getYarnRecoverySummary()
+        .pipe(finalize(() => (this.loader = false)))
+        .subscribe({
+          next: (data) => (this.dataSource = new MatTableDataSource(data)),
+          error: (error) => {
+            this.notificationService.error(
+              typeof error?.error === 'string' ? error?.error : error?.message
+            );
+          },
+        })
     );
   }
 
