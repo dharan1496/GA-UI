@@ -4,7 +4,9 @@
     <mat-label>Filter</mat-label>
     <input matInput (keyup)="applyFilter($event)" #input />
   </mat-form-field>
-
+  <div *ngIf="dataSource.data.length" class="text-right mb-4">
+    &ast;Click the row to see the recovery details
+  </div>
   <div class="mat-elevation-z8 overflow-auto table-container">
     <div *ngIf="loader" class="loader">
       <mat-spinner></mat-spinner>
@@ -35,12 +37,12 @@
         <td mat-cell *matCellDef="let row">{{ row.plannedQty }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="mixedQty">
+      <ng-container matColumnDef="mixedQuantity">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Fibre Mixed</th>
         <td mat-cell *matCellDef="let row">{{ row.mixedQuantity }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="lot">
+      <ng-container matColumnDef="yarnLot">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Lot(s)</th>
         <td mat-cell *matCellDef="let row">{{ row.yarnLot }}</td>
       </ng-container>
@@ -52,12 +54,12 @@
         <td mat-cell *matCellDef="let row">{{ row.productionQty }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="wasteQty">
+      <ng-container matColumnDef="wasteQuantity">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Waste Qty</th>
         <td mat-cell *matCellDef="let row">{{ row.wasteQuantity }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="recoveryPercent">
+      <ng-container matColumnDef="yarnRecoveryPercent">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
           Yarn Recovery %
         </th>

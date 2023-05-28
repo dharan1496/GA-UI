@@ -138,9 +138,9 @@
         <td mat-cell *matCellDef="let row">{{ row.orderId }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="party">
+      <ng-container matColumnDef="partyName">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Party Name</th>
-        <td mat-cell *matCellDef="let row">{{ getParty(row.partyId) }}</td>
+        <td mat-cell *matCellDef="let row">{{ row.partyName }}</td>
       </ng-container>
 
       <ng-container matColumnDef="orderDate">
@@ -157,7 +157,7 @@
         <td mat-cell *matCellDef="let row">{{ row.receivedDate }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="broker">
+      <ng-container matColumnDef="brokerName">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Broker Name</th>
         <td mat-cell *matCellDef="let row">{{ row.brokerName }}</td>
       </ng-container>

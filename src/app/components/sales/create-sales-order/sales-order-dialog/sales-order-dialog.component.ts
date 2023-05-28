@@ -52,7 +52,7 @@ export class SalesOrderDialogComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       orderNo: typeof this.data === 'number' ? +this.data + 1 : '',
       countsId: ['', Validators.required],
-      countsName: '',
+      counts: '',
       blendId: ['', Validators.required],
       blendName: '',
       shadeId: ['', Validators.required],
@@ -71,7 +71,7 @@ export class SalesOrderDialogComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.form.get('countsId')?.valueChanges.subscribe((countsId) => {
         this.form
-          .get('countsName')
+          .get('counts')
           ?.setValue(
             this.countsList.find((data) => data.countsId === countsId)?.counts
           );

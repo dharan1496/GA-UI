@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { environment } from 'src/environment/environment';
 import { YarnShade } from '../models/yarnShade';
 import { YarnCounts } from '../models/yarnCounts';
@@ -148,8 +148,8 @@ export class YarnService {
     );
   }
 
-  getYarnOrderDetailsById(id: string): Observable<YarnOrder[]> {
-    return this.http.get<YarnOrder[]>(
+  getYarnOrderDetailsById(id: string): Observable<YarnOrder> {
+    return this.http.get<YarnOrder>(
       `${environment.api}/YarnOrder/GetYarnOrderDetailsById?orderId=${id}`
     );
   }
@@ -186,7 +186,7 @@ export class YarnService {
   }
 
   updateYarnOrder(order: YarnOrder): Observable<any> {
-    return this.http.post(
+    return this.http.put(
       `${environment.api}/YarnOrder/UpdateYarnOrder`,
       order,
       {

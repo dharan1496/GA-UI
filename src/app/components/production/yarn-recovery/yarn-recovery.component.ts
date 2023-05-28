@@ -29,13 +29,13 @@ export class YarnRecoveryComponent implements OnInit, AfterViewInit, OnDestroy {
     'shadeName',
     'blendName',
     'plannedQty',
-    'mixedQty',
-    'lot',
+    'mixedQuantity',
+    'yarnLot',
     'productionQty',
-    'wasteQty',
-    'recoveryPercent',
+    'wasteQuantity',
+    'yarnRecoveryPercent',
   ];
-  dataSource!: MatTableDataSource<any>;
+  dataSource = new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   subscription = new Subscription();
@@ -59,7 +59,10 @@ export class YarnRecoveryComponent implements OnInit, AfterViewInit, OnDestroy {
         .getYarnRecoverySummary()
         .pipe(finalize(() => (this.loader = false)))
         .subscribe({
-          next: (data) => (this.dataSource = new MatTableDataSource(data)),
+          next: (data) => {
+            this.dataSource = new MatTableDataSource(data);
+            this.dataSource.sort = this.sort;
+          },
           error: (error) => {
             this.notificationService.error(
               typeof error?.error === 'string' ? error?.error : error?.message
@@ -71,7 +74,6 @@ export class YarnRecoveryComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   ngOnDestroy() {

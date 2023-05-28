@@ -17,6 +17,7 @@ import { YarnOrder } from 'src/app/models/yarnOrder';
 import { YarnOrderDetails } from 'src/app/models/yarnOrderDetails';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
+import { YarnCounts } from 'src/app/models/yarnCounts';
 
 @Component({
   selector: 'app-create-sales-order',
@@ -40,6 +41,7 @@ export class CreateSalesOrderComponent implements OnInit, OnDestroy {
   @ViewChild(MatTable) table!: MatTable<any>;
   subscription = new Subscription();
   updateOrderDetails!: YarnOrder;
+  countsList: YarnCounts[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -67,6 +69,16 @@ export class CreateSalesOrderComponent implements OnInit, OnDestroy {
       dueDays: ['', Validators.required],
       remarks: '',
     });
+
+    this.subscription.add(
+      this.yarnService.getYarnCounts().subscribe({
+        next: (data) => (this.countsList = data),
+        error: (error) =>
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
+      })
+    );
     this.router.url.includes('update-order') && this.checkForUpdate();
   }
 
@@ -74,12 +86,40 @@ export class CreateSalesOrderComponent implements OnInit, OnDestroy {
     const orderDetails = sessionStorage.getItem('order');
     if (orderDetails) {
       this.updateOrderDetails = JSON.parse(orderDetails);
-      this.form.patchValue(this.updateOrderDetails);
-      this.dataSource = this.updateOrderDetails.orderDts as never[];
+      this.patchAndDisableField();
+      this.setDatasource();
       sessionStorage.clear();
     } else {
       this.router.navigateByUrl('sales/new-order');
     }
+  }
+
+  patchAndDisableField() {
+    const orderDate = this.updateOrderDetails.orderDate.split('/');
+    this.updateOrderDetails.orderDate = new Date(
+      `${orderDate[1]}/${orderDate[0]}/${orderDate[2]}`
+    ).toISOString();
+    const receivedDate = this.updateOrderDetails.receivedDate.split('/');
+    this.updateOrderDetails.receivedDate = new Date(
+      `${receivedDate[1]}/${receivedDate[0]}/${receivedDate[2]}`
+    ).toISOString();
+    this.form.patchValue(this.updateOrderDetails);
+    this.form.get('orderNo')?.disable();
+    this.form.get('partyId')?.disable();
+    this.form.get('orderDate')?.disable();
+    this.form.get('receivedDate')?.disable();
+  }
+
+  setDatasource() {
+    const details = this.updateOrderDetails.orderDts.map((data, index) => ({
+      ...data,
+      orderNo: index + 1,
+      amount: data.rate * data.orderQuantity,
+      totalAmount:
+        data.rate * data.orderQuantity +
+        (data.rate * data.orderQuantity * data.gstPercent) / 100,
+    }));
+    this.dataSource = [...details] as never[];
   }
 
   ngOnDestroy() {
@@ -103,7 +143,7 @@ export class CreateSalesOrderComponent implements OnInit, OnDestroy {
       const orderDts: YarnOrderDetails[] = this.dataSource.map((data: any) => ({
         ordetDetailId: 0,
         countsId: data.countsId,
-        counts: data.countsName,
+        counts: data.counts,
         blendId: data.blendId,
         blendName: data.blendName,
         shadeId: data.shadeId,
@@ -113,20 +153,26 @@ export class CreateSalesOrderComponent implements OnInit, OnDestroy {
         gstPercent: data.gstPercent,
       }));
       const yarnOrder: YarnOrder = {
-        ...this.form.value,
+        ...this.form.getRawValue(),
         orderDate: this.datePipe.transform(
-          this.form.value?.orderDate,
+          this.form.getRawValue()?.orderDate,
           'dd/MM/yyyy'
         ),
         receivedDate: this.datePipe.transform(
-          this.form.value?.receivedDate,
+          this.form.getRawValue()?.receivedDate,
           'dd/MM/yyyy'
         ),
         orderId: 0,
         receivedByUserId: 0,
         orderDts,
       };
-      this.yarnService.receiveYarnOrder(yarnOrder).subscribe({
+      let observable;
+      if (this.updateOrderDetails) {
+        observable = this.yarnService.updateYarnOrder(yarnOrder);
+      } else {
+        observable = this.yarnService.receiveYarnOrder(yarnOrder);
+      }
+      observable?.subscribe({
         next: (response) => {
           this.notificationService.success(response);
           this.resetData();

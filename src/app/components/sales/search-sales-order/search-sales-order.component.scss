@@ -17,6 +17,9 @@
 
 .row {
   cursor: pointer;
+  &:hover {
+    background-color: whitesmoke !important;
+  }
 }
 
 .no-rows {

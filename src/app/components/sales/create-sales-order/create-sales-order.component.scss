@@ -65,27 +65,3 @@
   display: flex;
   justify-content: flex-end;
 }
-
-.sales-no-container {
-  margin-left: 14px;
-}
-
-.sales-no {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-
-  mat-icon {
-    scale: 0.8;
-    border-radius: 50%;
-    transition: all 0.15s;
-
-    &:hover {
-      transform: scale(1.1);
-    }
-
-    &:active {
-      transform: rotate(180deg) scale(1.1);
-    }
-  }
-}

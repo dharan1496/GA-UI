@@ -41,10 +41,10 @@ export class SearchSalesOrderComponent
   columnsToDisplay = [
     'orderId',
     'orderNo',
-    'party',
+    'partyName',
     'orderDate',
     'receivedDate',
-    'broker',
+    'brokerName',
   ];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -68,7 +68,6 @@ export class SearchSalesOrderComponent
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   ngOnInit(): void {
@@ -86,25 +85,10 @@ export class SearchSalesOrderComponent
     this.form = this.formBuilder.group({
       filterBy: ['', Validators.required],
     });
-    this.setCustomSort();
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-  }
-
-  setCustomSort() {
-    this.dataSource.sortingDataAccessor = (item, property) => {
-      if (property === 'orderDate' || property === 'receivedDate') {
-        const split = item[property].split('/');
-        if (split?.length === 3) {
-          const date = `${split[1]}/${split[0]}/${split[2]}`;
-          return new Date(date);
-        }
-        return item[property];
-      }
-      return item[property];
-    };
   }
 
   onChange(value: string) {
@@ -150,9 +134,18 @@ export class SearchSalesOrderComponent
         this.form.get('partyId')?.value
       );
     } else if (filter === 'orderId') {
-      observable = this.yarnService.getYarnOrderDetailsById(
-        this.form.get('orderId')?.value
-      );
+      this.yarnService
+        .getYarnOrderDetailsById(this.form.get('orderId')?.value)
+        .pipe(finalize(() => (this.loader = false)))
+        ?.subscribe({
+          next: (data) =>
+            (this.dataSource = new MatTableDataSource<any>([data])),
+          error: (error) => {
+            this.notificationService.error(
+              typeof error?.error === 'string' ? error?.error : error?.message
+            );
+          },
+        });
     } else if (filter === 'date') {
       observable = this.yarnService.getYarnOrderListByDate(
         this.datePipe.transform(
@@ -166,7 +159,14 @@ export class SearchSalesOrderComponent
       );
     }
     observable?.pipe(finalize(() => (this.loader = false)))?.subscribe({
-      next: (data) => (this.dataSource = new MatTableDataSource<any>(data)),
+      next: (data) => {
+        const orders = data.map((order) => ({
+          ...order,
+          partyName: this.getParty(order.partyId),
+        }));
+        this.dataSource = new MatTableDataSource<any>(orders);
+        this.dataSource.sort = this.sort;
+      },
       error: (error) => {
         this.notificationService.error(
           typeof error?.error === 'string' ? error?.error : error?.message

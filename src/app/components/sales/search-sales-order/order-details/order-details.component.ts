@@ -112,19 +112,26 @@ export class OrderDetailsComponent implements OnDestroy {
 
   getAmount() {
     return this.orderDetails.orderDts
-      .map((data: any) => data?.amount)
+      .map((data: any) => data?.rate * data?.orderQuantity)
       .reduce((acc, value) => acc + value, 0);
   }
 
   getTaxAmount() {
     return this.orderDetails.orderDts
-      .map((data: any) => (data?.amount * data?.gstPercent) / 100)
+      .map(
+        (data: any) =>
+          (data?.rate * data?.orderQuantity * data?.gstPercent) / 100
+      )
       .reduce((acc, value) => acc + value, 0);
   }
 
   getTotalAmount() {
     return this.orderDetails.orderDts
-      .map((data: any) => data?.totalAmount)
+      .map(
+        (data: any) =>
+          (data?.rate * data?.orderQuantity * data?.gstPercent) / 100 +
+          data.rate * data.orderQuantity
+      )
       .reduce((acc, value) => acc + value, 0);
   }
 }
