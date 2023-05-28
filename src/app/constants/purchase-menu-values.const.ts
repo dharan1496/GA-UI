@@ -3,7 +3,7 @@ export const PURCHASE = [
     title: 'Fibre',
     submenu: [
       { title: 'Fibre Dashboard', route: 'purchases/fibre' },
-      { title: 'Search Fibre PO', route: 'purchases/fibre/search' },
+      // { title: 'Search Fibre PO', route: 'purchases/fibre/search' },
       {
         title: 'New Fibre PO',
         route: 'purchases/fibre/new-purchase-order',
