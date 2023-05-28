@@ -137,7 +137,7 @@ export class SearchSalesOrderComponent
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       this.notificationService.notify(
-        'Please correct the filter to search',
+        'Please select the filter to search',
         NotifyType.ERROR
       );
       return;
