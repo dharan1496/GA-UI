@@ -13,6 +13,10 @@ import { NotificationService } from 'src/app/shared/notification.service';
 import { UserActionConfirmationComponent } from '../../user-action-confirmation/user-action-confirmation.component';
 import { SalesOrderDialogComponent } from './sales-order-dialog/sales-order-dialog.component';
 import { YarnService } from 'src/app/services/yarn.service';
+import { YarnOrder } from 'src/app/models/yarnOrder';
+import { YarnOrderDetails } from 'src/app/models/yarnOrderDetails';
+import { DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-sales-order',
@@ -35,7 +39,7 @@ export class CreateSalesOrderComponent implements OnInit, OnDestroy {
   dataSource = [];
   @ViewChild(MatTable) table!: MatTable<any>;
   subscription = new Subscription();
-  poNo = '';
+  updateOrderDetails!: YarnOrder;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -44,7 +48,9 @@ export class CreateSalesOrderComponent implements OnInit, OnDestroy {
     public appSharedService: AppSharedService,
     private navigationService: NavigationService,
     public partyService: PartyService,
-    private yarnService: YarnService
+    private yarnService: YarnService,
+    private datePipe: DatePipe,
+    private router: Router
   ) {
     this.navigationService.setFocus(Constants.SALES);
     this.navigationService.menu = SALES;
@@ -53,30 +59,31 @@ export class CreateSalesOrderComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getPartyList();
     this.form = this.formBuilder.group({
-      orderNo: '',
+      orderNo: ['', Validators.required],
       partyId: ['', Validators.required],
       brokerName: ['', Validators.required],
       orderDate: ['', Validators.required],
+      receivedDate: ['', Validators.required],
       dueDays: ['', Validators.required],
       remarks: '',
     });
-    this.getOrderNo();
+    this.router.url.includes('update-order') && this.checkForUpdate();
+  }
+
+  checkForUpdate() {
+    const orderDetails = sessionStorage.getItem('order');
+    if (orderDetails) {
+      this.updateOrderDetails = JSON.parse(orderDetails);
+      this.form.patchValue(this.updateOrderDetails);
+      this.dataSource = this.updateOrderDetails.orderDts as never[];
+      sessionStorage.clear();
+    } else {
+      this.router.navigateByUrl('sales/new-order');
+    }
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-  }
-
-  getOrderNo() {
-    this.subscription.add(
-      this.yarnService.getYarnOrderNo().subscribe({
-        next: (data) => this.form.get('orderNo')?.setValue(data),
-        error: (error) =>
-          this.notificationService.error(
-            typeof error?.error === 'string' ? error?.error : error?.message
-          ),
-      })
-    );
   }
 
   getPartyList() {
@@ -93,7 +100,43 @@ export class CreateSalesOrderComponent implements OnInit, OnDestroy {
 
   submitOrder() {
     if (!this.hasError()) {
-      //
+      const orderDts: YarnOrderDetails[] = this.dataSource.map((data: any) => ({
+        ordetDetailId: 0,
+        countsId: data.countsId,
+        counts: data.countsName,
+        blendId: data.blendId,
+        blendName: data.blendName,
+        shadeId: data.shadeId,
+        shadeName: data.shadeName,
+        orderQuantity: data.orderQuantity,
+        rate: data.rate,
+        gstPercent: data.gstPercent,
+      }));
+      const yarnOrder: YarnOrder = {
+        ...this.form.value,
+        orderDate: this.datePipe.transform(
+          this.form.value?.orderDate,
+          'dd/MM/yyyy'
+        ),
+        receivedDate: this.datePipe.transform(
+          this.form.value?.receivedDate,
+          'dd/MM/yyyy'
+        ),
+        orderId: 0,
+        receivedByUserId: 0,
+        orderDts,
+      };
+      this.yarnService.receiveYarnOrder(yarnOrder).subscribe({
+        next: (response) => {
+          this.notificationService.success(response);
+          this.resetData();
+        },
+        error: (error) => {
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          );
+        },
+      });
     }
   }
 
@@ -118,7 +161,6 @@ export class CreateSalesOrderComponent implements OnInit, OnDestroy {
 
   resetData() {
     this.form.reset();
-    this.getOrderNo();
     this.dataSource = [];
     this.table.renderRows();
   }

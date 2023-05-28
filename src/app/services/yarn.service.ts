@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environment/environment';
 import { YarnShade } from '../models/yarnShade';
 import { YarnCounts } from '../models/yarnCounts';
@@ -13,6 +13,7 @@ import { ProgramForProductionEntry } from '../models/programForProductionEntry';
 import { ProductionEntry } from '../models/productionEntry';
 import { ProgramWaste } from '../models/programWaste';
 import { YarnRecoverySummary } from '../models/yarnRecoverySummary';
+import { YarnOrder } from '../models/yarnOrder';
 
 @Injectable({
   providedIn: 'root',
@@ -137,10 +138,60 @@ export class YarnService {
     );
   }
 
-  getYarnOrderNo(): Observable<string> {
-    return of('1/YPO/GA/23');
-    // return this.http.get(`${environment.api}/Fiber/`, {
-    //   responseType: 'text',
-    // });
+  receiveYarnOrder(order: YarnOrder): Observable<any> {
+    return this.http.post(
+      `${environment.api}/YarnOrder/ReceiveYarnOrder`,
+      order,
+      {
+        responseType: 'text',
+      }
+    );
+  }
+
+  getYarnOrderDetailsById(id: string): Observable<YarnOrder[]> {
+    return this.http.get<YarnOrder[]>(
+      `${environment.api}/YarnOrder/GetYarnOrderDetailsById?orderId=${id}`
+    );
+  }
+
+  getYarnOrderListByParty(id: string): Observable<YarnOrder[]> {
+    return this.http.get<YarnOrder[]>(
+      `${environment.api}/YarnOrder/GetYarnOrderListByParty?partyId=${id}`
+    );
+  }
+
+  getYarnOrderListByDate(
+    fromDate: string,
+    toDate: string
+  ): Observable<YarnOrder[]> {
+    return this.http.get<YarnOrder[]>(
+      `${environment.api}/YarnOrder/GetYarnOrderListByDate?fromDate=${fromDate}&toDate=${toDate}`
+    );
+  }
+
+  closeYarnOrder(order: any): Observable<string> {
+    return this.http.put(`${environment.api}/YarnOrder/CloseYarnOrder`, order, {
+      responseType: 'text',
+    });
+  }
+
+  reopenYarnOrder(order: any): Observable<string> {
+    return this.http.put(
+      `${environment.api}/YarnOrder/ReOpenYarnOrder`,
+      order,
+      {
+        responseType: 'text',
+      }
+    );
+  }
+
+  updateYarnOrder(order: YarnOrder): Observable<any> {
+    return this.http.post(
+      `${environment.api}/YarnOrder/UpdateYarnOrder`,
+      order,
+      {
+        responseType: 'text',
+      }
+    );
   }
 }

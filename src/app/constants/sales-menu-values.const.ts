@@ -7,16 +7,16 @@ export const SALES = [
         route: 'sales',
       },
       {
+        title: 'Search Sales order',
+        route: 'sales/search-order',
+      },
+      {
         title: 'New Sales order',
         route: 'sales/new-order',
       },
       {
         title: 'Sales order Delivery',
         route: 'sales/order-delivery',
-      },
-      {
-        title: 'Master',
-        route: 'sales/master',
       },
     ],
   },

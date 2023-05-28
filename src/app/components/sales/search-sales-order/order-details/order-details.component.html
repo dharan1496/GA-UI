@@ -1,0 +1,131 @@
+<div class="header">
+  <h1 mat-dialog-title>Order Details</h1>
+  <button mat-icon-button (click)="close()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<div mat-dialog-content class="container">
+  <section class="details">
+    <div>
+      <div class="text-dark pb-4">Order Id</div>
+      <div>{{ orderDetails.orderId }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-4">Order No</div>
+      <div>{{ orderDetails.orderNo }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-4">Party Name</div>
+      <div>{{ getParty(orderDetails.partyId) }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-4">Party Order Date</div>
+      <div>{{ orderDetails.orderDate }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-4">Order Creation Date</div>
+      <div>{{ orderDetails.receivedDate }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-4">Broker Name</div>
+      <div>{{ orderDetails.brokerName }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-4">Due Days</div>
+      <div>{{ orderDetails.dueDays }}</div>
+    </div>
+    <div *ngIf="orderDetails.remarks">
+      <div class="text-dark pb-4">Remarks</div>
+      <div>{{ orderDetails.remarks }}</div>
+    </div>
+  </section>
+  <table mat-table [dataSource]="orderDetails.orderDts" class="table">
+    <ng-container matColumnDef="counts">
+      <th mat-header-cell *matHeaderCellDef>Counts</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.counts }}
+      </td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <ng-container matColumnDef="shade">
+      <th mat-header-cell *matHeaderCellDef>Shade</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.shadeName }}
+      </td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <ng-container matColumnDef="blend">
+      <th mat-header-cell *matHeaderCellDef>Blend</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.blendName }}
+      </td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <ng-container matColumnDef="orderQty">
+      <th mat-header-cell *matHeaderCellDef class="text-right">Quantity</th>
+      <td mat-cell *matCellDef="let element" class="text-right">
+        {{ element.orderQuantity }}
+      </td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <ng-container matColumnDef="rate">
+      <th mat-header-cell *matHeaderCellDef class="text-right">Rate</th>
+      <td mat-cell *matCellDef="let element" class="text-right">
+        {{ element.rate }}
+      </td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef class="text-right">Amount</th>
+      <td mat-cell *matCellDef="let element" class="text-right">
+        {{ element.rate * element.orderQuantity | currency : "INR" }}
+      </td>
+      <td mat-footer-cell *matFooterCellDef class="text-right">
+        {{ getAmount() | currency : "INR" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="gstPercent">
+      <th mat-header-cell *matHeaderCellDef class="text-right">GST%</th>
+      <td mat-cell *matCellDef="let element" class="text-right">
+        {{ element.gstPercent | number : "1.2-2" }}%
+      </td>
+      <td mat-footer-cell *matFooterCellDef class="text-right">
+        {{ getTaxAmount() | currency : "INR" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="totalAmount">
+      <th mat-header-cell *matHeaderCellDef class="text-right">Total Amount</th>
+      <td mat-cell *matCellDef="let element" class="text-right">
+        {{
+          (element.rate * element.orderQuantity * element.gstPercent) / 100
+            | currency : "INR"
+        }}
+      </td>
+      <td mat-footer-cell *matFooterCellDef class="text-right">
+        {{ getTotalAmount() | currency : "INR" }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
+    <tr mat-footer-row *matFooterRowDef="columnsToDisplay; sticky: true"></tr>
+  </table>
+</div>
+<div mat-dialog-actions class="footer">
+  <button mat-raised-button color="primary" (click)="updateOrder()">
+    Update Order
+  </button>
+  <button mat-raised-button color="primary" (click)="closeOrder()">
+    Close Order
+  </button>
+  <button mat-raised-button color="primary" (click)="reopenOrder()">
+    Reopen Order
+  </button>
+</div>

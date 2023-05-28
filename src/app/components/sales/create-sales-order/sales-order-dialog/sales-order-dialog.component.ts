@@ -9,11 +9,10 @@ import {
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription, ObservableInput, startWith, combineLatest } from 'rxjs';
 import { MaterialModule } from 'src/app/material.module';
-import { FibreShade } from 'src/app/models/fibreShade';
 import { NotifyType } from 'src/app/models/notify';
 import { YarnBlend } from 'src/app/models/yarnBlend';
 import { YarnCounts } from 'src/app/models/yarnCounts';
-import { FibreService } from 'src/app/services/fibre.service';
+import { YarnShade } from 'src/app/models/yarnShade';
 import { YarnService } from 'src/app/services/yarn.service';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { DecimalDirective } from 'src/app/shared/decimalNumberDirective';
@@ -33,7 +32,7 @@ import { NotificationService } from 'src/app/shared/notification.service';
 })
 export class SalesOrderDialogComponent implements OnInit, OnDestroy {
   form!: FormGroup;
-  fibreShadeList!: FibreShade[];
+  yarnShadeList!: YarnShade[];
   countsList!: YarnCounts[];
   blendList!: YarnBlend[];
   subscription = new Subscription();
@@ -43,7 +42,6 @@ export class SalesOrderDialogComponent implements OnInit, OnDestroy {
     private dialogRef: MatDialogRef<void>,
     @Inject(MAT_DIALOG_DATA) private data: any,
     private notificationService: NotificationService,
-    private fibreService: FibreService,
     private yarnService: YarnService,
     public appSharedService: AppSharedService
   ) {}
@@ -95,7 +93,7 @@ export class SalesOrderDialogComponent implements OnInit, OnDestroy {
         this.form
           .get('shadeName')
           ?.setValue(
-            this.fibreShadeList?.find((shade) => shade.shadeId === shadeId)
+            this.yarnShadeList?.find((shade) => shade.shadeId === shadeId)
               ?.shadeName
           );
       })
@@ -149,8 +147,8 @@ export class SalesOrderDialogComponent implements OnInit, OnDestroy {
 
   fetchValues() {
     this.subscription.add(
-      this.fibreService.getFibreShade().subscribe({
-        next: (data) => (this.fibreShadeList = data),
+      this.yarnService.getYarnShade().subscribe({
+        next: (data) => (this.yarnShadeList = data),
         error: (error) =>
           this.notificationService.error(
             typeof error?.error === 'string' ? error?.error : error?.message
