@@ -220,7 +220,12 @@
   </div>
 
   <div class="footer">
-    <button mat-raised-button class="mr-16" (click)="resetData()">
+    <button
+      *ngIf="!updateOrderDetails"
+      mat-raised-button
+      class="mr-16"
+      (click)="resetData()"
+    >
       <mat-icon>refresh</mat-icon>Reset
     </button>
     <button mat-raised-button color="primary" (click)="submitOrder()">
