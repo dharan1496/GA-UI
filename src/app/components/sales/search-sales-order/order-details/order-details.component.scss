@@ -9,15 +9,15 @@
 
 .details {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  row-gap: 16px;
-  column-gap: 24px;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 20px;
+  column-gap: 32px;
 }
 
 .table {
   border: 1px solid #e0e0e0;
   margin-top: 24px;
-  margin-bottom: 20px;
+  margin-bottom: 4px;
 }
 
 .mat-mdc-header-row {

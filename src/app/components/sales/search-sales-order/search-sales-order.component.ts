@@ -16,7 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Subscription, finalize } from 'rxjs';
+import { Subscription, finalize, map } from 'rxjs';
 import { Constants } from 'src/app/constants/constants';
 import { SALES } from 'src/app/constants/sales-menu-values.const';
 import { NotifyType } from 'src/app/models/notify';
@@ -134,18 +134,9 @@ export class SearchSalesOrderComponent
         this.form.get('partyId')?.value
       );
     } else if (filter === 'orderId') {
-      this.yarnService
+      observable = this.yarnService
         .getYarnOrderDetailsById(this.form.get('orderId')?.value)
-        .pipe(finalize(() => (this.loader = false)))
-        ?.subscribe({
-          next: (data) =>
-            (this.dataSource = new MatTableDataSource<any>([data])),
-          error: (error) => {
-            this.notificationService.error(
-              typeof error?.error === 'string' ? error?.error : error?.message
-            );
-          },
-        });
+        .pipe(map((data) => [data]));
     } else if (filter === 'date') {
       observable = this.yarnService.getYarnOrderListByDate(
         this.datePipe.transform(
@@ -168,6 +159,7 @@ export class SearchSalesOrderComponent
         this.dataSource.sort = this.sort;
       },
       error: (error) => {
+        this.dataSource = new MatTableDataSource<any>([]);
         this.notificationService.error(
           typeof error?.error === 'string' ? error?.error : error?.message
         );
