@@ -14,6 +14,9 @@ import { ProductionEntry } from '../models/productionEntry';
 import { ProgramWaste } from '../models/programWaste';
 import { YarnRecoverySummary } from '../models/yarnRecoverySummary';
 import { YarnOrder } from '../models/yarnOrder';
+import { OrdersPendingDelivery } from '../models/ordersPendingDelivery';
+import { YarnStockByOrderId } from '../models/yarnStockByOrderId';
+import { YarnDelivery } from '../models/yarnDelivery';
 
 @Injectable({
   providedIn: 'root',
@@ -192,6 +195,34 @@ export class YarnService {
       {
         responseType: 'text',
       }
+    );
+  }
+
+  getOrdersPendingDelivery(id: string): Observable<OrdersPendingDelivery[]> {
+    return this.http.get<OrdersPendingDelivery[]>(
+      `${environment.api}/YarnOrder/GetOrdersPendingDelivery?partyId=${id}`
+    );
+  }
+
+  getYarnStockByOrderId(id: string): Observable<YarnStockByOrderId[]> {
+    return this.http.get<YarnStockByOrderId[]>(
+      `${environment.api}/YarnOrder/GetYarnStockByOrderId?orderId=${id}`
+    );
+  }
+
+  createYarnDelivery(order: YarnDelivery): Observable<string> {
+    return this.http.post(
+      `${environment.api}/YarnOrder/CreateYarnDelivery`,
+      order,
+      {
+        responseType: 'text',
+      }
+    );
+  }
+
+  getYarnDeliveries(id: string): Observable<YarnStockByOrderId[]> {
+    return this.http.get<YarnStockByOrderId[]>(
+      `${environment.api}/YarnOrder/GetYarnDeliveries?orderId=${id}`
     );
   }
 }

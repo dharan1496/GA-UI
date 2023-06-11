@@ -1,3 +1,239 @@
 <section class="container">
-  <h1 class="header letter-spacing-1">Yarn Sales Order Delivery</h1>
+  <div class="header-container">
+    <h1 class="header letter-spacing-1">Yarn Sales Order Delivery</h1>
+    <button mat-raised-button color="primary" (click)="chooseOrder()">
+      Choose Order for Delivery
+    </button>
+  </div>
+  <div class="details-container">
+    <mat-card class="card w-100">
+      <mat-card-header>
+        <mat-card-title>Delivery Details</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="form">
+          <div class="form-container">
+            <div class="w-25 ml-16">
+              <label class="font-weight-bold">Order No</label>
+              <div class="font-size-16 text-gray pt-4">
+                <span *ngIf="orderSelected?.orderNo">{{
+                  orderSelected?.orderNo
+                }}</span>
+                <span *ngIf="!orderSelected?.orderNo">_</span>
+              </div>
+            </div>
+            <div class="w-25 ml-8">
+              <label class="font-weight-bold">Order Date</label>
+              <div class="font-size-16 text-gray pt-4">
+                <span *ngIf="orderSelected?.orderDate">{{
+                  orderSelected?.orderDate
+                }}</span>
+                <span *ngIf="!orderSelected?.orderDate">_</span>
+              </div>
+            </div>
+            <div class="w-50 ml-4">
+              <label class="font-weight-bold">Party</label>
+              <div class="font-size-16 text-gray pt-4">
+                <span *ngIf="orderSelected?.partyName">{{
+                  orderSelected?.partyName
+                }}</span>
+                <span *ngIf="!orderSelected?.partyName">_</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-container">
+            <div class="w-25">
+              <mat-form-field appearance="fill" class="w-100">
+                <mat-label>Vehicle No</mat-label>
+                <input type="text" matInput formControlName="vehicleNo" />
+                <mat-error>This field is required.</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="w-25">
+              <mat-form-field appearance="fill" class="w-100">
+                <mat-label>Delivery Date</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="picker"
+                  formControlName="deliveryDate"
+                  (dateChange)="
+                    appSharedService.formatDate(
+                      $event,
+                      form.controls['deliveryDate']
+                    )
+                  "
+                />
+                <mat-hint>DD/MM/YYYY</mat-hint>
+                <mat-datepicker-toggle
+                  matIconSuffix
+                  [for]="picker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error>This field is required.</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="w-50">
+              <mat-form-field class="w-100">
+                <mat-label>Remarks</mat-label>
+                <textarea matInput formControlName="remarks"></textarea>
+                <mat-hint>Optional</mat-hint>
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div>
+    <div class="stock-btn mb-16" *ngIf="orderSelected">
+      <button mat-raised-button color="primary" (click)="yarnStock()">
+        <mat-icon>playlist_add</mat-icon> Select Yarn Stock
+      </button>
+    </div>
+    <div class="overflow-auto mat-elevation-z8">
+      <table mat-table [dataSource]="stockDetails">
+        <ng-container matColumnDef="programNo">
+          <th mat-header-cell *matHeaderCellDef>Program No</th>
+          <td mat-cell *matCellDef="let element">{{ element.programNo }}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="programDate">
+          <th mat-header-cell *matHeaderCellDef>Program Date</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.programDate }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="shade">
+          <th mat-header-cell *matHeaderCellDef>Shade</th>
+          <td mat-cell *matCellDef="let element">{{ element.shadeName }}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="counts">
+          <th mat-header-cell *matHeaderCellDef>Counts</th>
+          <td mat-cell *matCellDef="let element">{{ element.counts }}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="blend">
+          <th mat-header-cell *matHeaderCellDef>Blend</th>
+          <td mat-cell *matCellDef="let element">{{ element.blendName }}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="lot">
+          <th mat-header-cell *matHeaderCellDef>Lot</th>
+          <td mat-cell *matCellDef="let element">{{ element.lot }}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="productionQuantity">
+          <th mat-header-cell *matHeaderCellDef class="text-right">
+            Production Qty
+          </th>
+          <td mat-cell *matCellDef="let element" class="text-right">
+            {{ element.productionQuantity }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="stockQuantity">
+          <th mat-header-cell *matHeaderCellDef class="text-right">
+            Stock Qty
+          </th>
+          <td mat-cell *matCellDef="let element" class="text-right">
+            {{ element.stockQuantity }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="rate">
+          <th mat-header-cell *matHeaderCellDef class="text-right">Rate</th>
+          <td mat-cell *matCellDef="let element" class="text-right">
+            {{ orderSelected?.rate }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef class="text-right">Amount</th>
+          <td mat-cell *matCellDef="let element" class="text-right">
+            {{
+              (orderSelected?.rate || 0) * element.productionQuantity
+                | currency : "INR"
+            }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="text-right">
+            {{ getSumOfAmount() | currency : "INR" }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="gstpercent">
+          <th mat-header-cell *matHeaderCellDef class="text-right">GST%</th>
+          <td mat-cell *matCellDef="let element" class="text-right">
+            {{ orderSelected?.gstPercent | number : "1.0-2" }}%
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="text-right">
+            {{ getSumOfTax() | currency : "INR" }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="totalAmount">
+          <th mat-header-cell *matHeaderCellDef class="text-right">
+            Total Amount
+          </th>
+          <td mat-cell *matCellDef="let element" class="text-right">
+            {{ getTotalAmount(element.productionQuantity) | currency : "INR" }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="text-right">
+            {{ getSumOfTotalAmount() | currency : "INR" }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef class="text-right">Action</th>
+          <td mat-cell *matCellDef="let element" class="text-right">
+            <button
+              mat-icon-button
+              color="warn"
+              matTooltip="Remove"
+              aria-label="button with a delete icon"
+              (click)="removeStock(element)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="stockDisplayedColumns"></tr>
+        <tr
+          class="mixing-row"
+          mat-row
+          *matRowDef="let row; columns: stockDisplayedColumns"
+        ></tr>
+        <tr
+          [hidden]="!stockDetails.length"
+          mat-footer-row
+          *matFooterRowDef="stockDisplayedColumns; sticky: true"
+        ></tr>
+        <tr *matNoDataRow>
+          <td class="no-rows" [attr.colspan]="stockDisplayedColumns.length">
+            No rows to display
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="footer">
+    <button mat-raised-button class="mr-16" (click)="resetData()">
+      <mat-icon>refresh</mat-icon>Reset
+    </button>
+    <button mat-raised-button color="primary" (click)="submit()">
+      <mat-icon>save_alt</mat-icon>Submit
+    </button>
+  </div>
 </section>
