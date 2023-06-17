@@ -98,14 +98,6 @@
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
-        <ng-container matColumnDef="programDate">
-          <th mat-header-cell *matHeaderCellDef>Program Date</th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.programDate }}
-          </td>
-          <td mat-footer-cell *matFooterCellDef></td>
-        </ng-container>
-
         <ng-container matColumnDef="shade">
           <th mat-header-cell *matHeaderCellDef>Shade</th>
           <td mat-cell *matCellDef="let element">{{ element.shadeName }}</td>
@@ -150,6 +142,38 @@
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
+        <ng-container matColumnDef="issueQuantity">
+          <th mat-header-cell *matHeaderCellDef class="text-right">
+            Issue Qty
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            class="w-15 text-right input-container"
+          >
+            <input
+              [ngClass]="{
+                'issue-qty-border-error':
+                  checkIssueQty(element) || checkZeroInIssueQty(element)
+              }"
+              #issuedQty
+              type="number"
+              class="cell-input w-70"
+              (input)="element.issueQuantity = issuedQty.value"
+              decimal="3"
+            />
+            <p *ngIf="checkIssueQty(element)" class="error-alert">
+              Greater than Stock Qty
+            </p>
+            <p *ngIf="checkZeroInIssueQty(element)" class="error-alert">
+              Issue qty should not be zero
+            </p>
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="text-right">
+            {{ getTotalIssueQty() || 0 | number : "1.0-3" }}
+          </td>
+        </ng-container>
+
         <ng-container matColumnDef="rate">
           <th mat-header-cell *matHeaderCellDef class="text-right">Rate</th>
           <td mat-cell *matCellDef="let element" class="text-right">
@@ -162,7 +186,7 @@
           <th mat-header-cell *matHeaderCellDef class="text-right">Amount</th>
           <td mat-cell *matCellDef="let element" class="text-right">
             {{
-              (orderSelected?.rate || 0) * element.productionQuantity
+              (orderSelected?.rate || 0) * (element.issueQuantity || 0)
                 | currency : "INR"
             }}
           </td>
@@ -186,7 +210,7 @@
             Total Amount
           </th>
           <td mat-cell *matCellDef="let element" class="text-right">
-            {{ getTotalAmount(element.productionQuantity) | currency : "INR" }}
+            {{ getTotalAmount(element.issueQuantity) | currency : "INR" }}
           </td>
           <td mat-footer-cell *matFooterCellDef class="text-right">
             {{ getSumOfTotalAmount() | currency : "INR" }}

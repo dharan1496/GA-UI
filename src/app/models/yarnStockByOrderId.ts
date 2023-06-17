@@ -12,4 +12,5 @@ export interface YarnStockByOrderId {
   lot: string;
   productionQuantity: number;
   stockQuantity: number;
+  issueQuantity: number;
 }

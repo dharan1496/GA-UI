@@ -78,7 +78,8 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-.border-error {
+.bales-border-error,
+.issue-qty-border-error {
   border: 2px solid rgba(223, 29, 29);
   &:focus-visible {
     outline-color: rgba(223, 29, 29);

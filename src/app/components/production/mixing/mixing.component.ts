@@ -184,7 +184,14 @@ export class MixingComponent {
       );
       return true;
     }
-    if (document.getElementsByClassName('border-error').length > 0) {
+    if (document.getElementsByClassName('bales-border-error').length > 0) {
+      this.notificationService.notify(
+        'Please correct the Bales to proceed',
+        NotifyType.ERROR
+      );
+      return true;
+    }
+    if (document.getElementsByClassName('issue-qty-border-error').length > 0) {
       this.notificationService.notify(
         'Please correct the IssueQty to proceed',
         NotifyType.ERROR
@@ -243,7 +250,7 @@ export class MixingComponent {
     );
   }
 
-  getTotalBale(): number {
+  getTotalBales(): number {
     return this.mixingDetails.reduce(
       (acc, curr) => acc + (+curr['bales'] || 0),
       0
@@ -259,5 +266,13 @@ export class MixingComponent {
 
   checkIssueQty(element: any): boolean {
     return element.issueQuantity > element.stock;
+  }
+
+  checkZeroInIssueQty(element: any): boolean {
+    return element.issueQuantity == 0;
+  }
+
+  checkZeroInBales(element: any): boolean {
+    return element.bales == 0;
   }
 }

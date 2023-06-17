@@ -155,8 +155,15 @@
           <th mat-header-cell *matHeaderCellDef class="text-right">
             Issued No of Bales
           </th>
-          <td mat-cell *matCellDef="let element" class="w-15 text-right">
+          <td
+            mat-cell
+            *matCellDef="let element"
+            class="w-15 text-right input-container"
+          >
             <input
+              [ngClass]="{
+                'bales-border-error': checkZeroInBales(element)
+              }"
               #bales
               type="number"
               class="cell-input w-70"
@@ -165,9 +172,12 @@
                 element.bales = bales.value
               "
             />
+            <p *ngIf="checkZeroInBales(element)" class="error-alert">
+              Bales should not be zero
+            </p>
           </td>
           <td mat-footer-cell *matFooterCellDef class="text-right">
-            {{ getTotalBale() || 0 }}
+            {{ getTotalBales() || 0 }}
           </td>
         </ng-container>
 
@@ -181,7 +191,10 @@
             class="w-15 text-right input-container"
           >
             <input
-              [ngClass]="{ 'border-error': checkIssueQty(element) }"
+              [ngClass]="{
+                'issue-qty-border-error':
+                  checkIssueQty(element) || checkZeroInIssueQty(element)
+              }"
               #issuedQty
               type="number"
               class="cell-input w-70"
@@ -191,6 +204,9 @@
             />
             <p *ngIf="checkIssueQty(element)" class="error-alert">
               Greater than Stock Qty
+            </p>
+            <p *ngIf="checkZeroInIssueQty(element)" class="error-alert">
+              Issue qty should not be zero
             </p>
           </td>
           <td mat-footer-cell *matFooterCellDef class="text-right">

@@ -29,13 +29,13 @@ export class DeliverySalesOrderComponent implements OnInit {
   stockDetails = [];
   stockDisplayedColumns = [
     'programNo',
-    'programDate',
     'counts',
     'shade',
     'blend',
     'lot',
     'productionQuantity',
     'stockQuantity',
+    'issueQuantity',
     'rate',
     'amount',
     'gstpercent',
@@ -100,7 +100,7 @@ export class DeliverySalesOrderComponent implements OnInit {
         (stock: YarnStockByOrderId) => ({
           deliveryDtsId: 0,
           productionDtsId: stock.productionYarnDtsId,
-          deliveryQuantity: stock.productionQuantity,
+          deliveryQuantity: +stock.issueQuantity,
         })
       );
       const deliveryRequest: YarnDelivery = {
@@ -158,6 +158,20 @@ export class DeliverySalesOrderComponent implements OnInit {
       );
       return true;
     }
+    if (!this.stockDetails.every((data) => data['issueQuantity'])) {
+      this.notificationService.notify(
+        'Please enter the IssueQty',
+        NotifyType.ERROR
+      );
+      return true;
+    }
+    if (document.getElementsByClassName('issue-qty-border-error').length > 0) {
+      this.notificationService.notify(
+        'Please correct the IssueQty to proceed',
+        NotifyType.ERROR
+      );
+      return true;
+    }
     return false;
   }
 
@@ -180,8 +194,8 @@ export class DeliverySalesOrderComponent implements OnInit {
       });
   }
 
-  getTotalAmount(productionQty: number) {
-    const amount = productionQty * (this.orderSelected?.rate || 0);
+  getTotalAmount(issueQuantity: number) {
+    const amount = (issueQuantity || 0) * (this.orderSelected?.rate || 0);
     const tax = (amount * (this.orderSelected?.gstPercent || 0)) / 100;
     return amount + tax;
   }
@@ -190,7 +204,7 @@ export class DeliverySalesOrderComponent implements OnInit {
     return this.stockDetails
       .map(
         (data: any) =>
-          data?.productionQuantity * (this.orderSelected?.rate || 0)
+          (data?.issueQuantity || 0) * (this.orderSelected?.rate || 0)
       )
       .reduce((acc, value) => acc + value, 0);
   }
@@ -199,7 +213,7 @@ export class DeliverySalesOrderComponent implements OnInit {
     return this.stockDetails
       .map(
         (data: any) =>
-          (data?.productionQuantity *
+          ((data?.issueQuantity || 0) *
             (this.orderSelected?.rate || 0) *
             (this.orderSelected?.gstPercent || 0)) /
           100
@@ -209,7 +223,22 @@ export class DeliverySalesOrderComponent implements OnInit {
 
   getSumOfTotalAmount() {
     return this.stockDetails
-      .map((data: any) => this.getTotalAmount(data?.productionQuantity))
+      .map((data: any) => this.getTotalAmount(data?.issueQuantity))
       .reduce((acc, value) => acc + value, 0);
+  }
+
+  getTotalIssueQty(): number {
+    return this.stockDetails.reduce(
+      (acc, curr) => acc + (+curr['issueQuantity'] || 0),
+      0
+    );
+  }
+
+  checkIssueQty(element: any): boolean {
+    return element.issueQuantity > element.stockQuantity;
+  }
+
+  checkZeroInIssueQty(element: any): boolean {
+    return element.issueQuantity == 0;
   }
 }
