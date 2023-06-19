@@ -18,6 +18,10 @@ export const SALES = [
         title: 'Sales order Delivery',
         route: 'sales/order-delivery',
       },
+      {
+        title: 'Search Deliveries',
+        route: 'sales/search-deliveries',
+      },
     ],
   },
 ];

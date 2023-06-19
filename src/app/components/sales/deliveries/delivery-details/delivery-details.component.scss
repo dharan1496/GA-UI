@@ -1,0 +1,24 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.container {
+  padding: 0 32px 16px;
+}
+
+.details {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 20px;
+  column-gap: 32px;
+}
+
+h1 {
+  padding-right: 0;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+}

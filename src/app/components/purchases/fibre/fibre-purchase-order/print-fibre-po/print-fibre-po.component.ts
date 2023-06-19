@@ -1,7 +1,7 @@
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { MaterialModule } from 'src/app/material.module';
-import { PrintFibrePOService } from './print.fibre-po.service';
+import { PrintService } from '../../../../../services/print.service';
 
 @Component({
   selector: 'app-print-fibre-po',
@@ -12,7 +12,7 @@ import { PrintFibrePOService } from './print.fibre-po.service';
 })
 export class PrintFibrePOComponent {
   constructor(
-    public printFibreService: PrintFibrePOService,
+    public printFibreService: PrintService,
     private currencyPipe: CurrencyPipe
   ) {}
 

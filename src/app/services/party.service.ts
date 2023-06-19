@@ -20,6 +20,12 @@ export class PartyService {
     return this.http.get<Party[]>(`${environment.api}/Party/GetAllParties`);
   }
 
+  getPartyById(id: number): Observable<Party> {
+    return this.http.get<Party>(
+      `${environment.api}/Party/GetPartyById?id=${id}`
+    );
+  }
+
   addParty(party: Party): Observable<string> {
     return this.http.post<string>(`${environment.api}/Party/AddParty`, party);
   }

@@ -1,0 +1,161 @@
+<section *ngIf="printService.yarnDCPrint" class="container print">
+  <section class="header">
+    <div class="header-content">
+      <div class="logo-img"></div>
+      <div class="details text-center w-100">
+        <div class="font-size-12">OM SHRI RAMAJAYAM</div>
+        <div class="text-left">GSTIN: 33AAKCS5785R1ZC</div>
+        <div class="h1 font-weight-bold">
+          SREE GOMATHI AMMAN SPINNING MILLS PRIVATE LIMITED
+        </div>
+        <div class="font-weight-bold">High Quality OE Melange Color Yarns.</div>
+        <div>
+          Reg. Office & Factory: SF No. 6/1, Kolappalur Village, Kamaraj Nagar,
+          Gobichettipalayam. <br />Pin: 638 456.
+        </div>
+        <div>
+          Cell: 99524 25471, 25476 25473, E-mail: gomathiamman@gmail.com
+        </div>
+      </div>
+    </div>
+    <div class="title text-center">DELIVERY CHALLAN</div>
+    <div class="row-1">
+      <div class="w-20">
+        <span class="font-weight-bold">No. </span
+        >{{ printService.yarnDCData.dcId }}
+      </div>
+      <div class="w-20">
+        <span class="font-weight-bold">DATE:</span>
+        {{ now | date : "dd/MM/yyyy" }}
+      </div>
+      <div class="w-60 font-weight-bold">
+        SENT FOR FURTHER KNITTING PROCESS / SENT FOR SALE.
+      </div>
+    </div>
+    <div class="declaration-header text-center">DECLARATION</div>
+    <div class="declaration-content text-center">
+      THIS BELOW MENTIONED YARN IS SOLD TO THE BUYERS AND AS PER THE
+      INSTRUCTIONS OF THE BUYERS THIS LOT IS BEING SENT FOR FURTHER PROCESS -
+      KNITTING COMPANY MENTIONED BELOW:
+    </div>
+  </section>
+  <section class="main">
+    <div class="delivery-buyer">
+      <div class="buyer w-50">
+        <div class="buyer-address">
+          <div class="font-weight-bold font-size-16">BUYERS:</div>
+          <div>
+            {{ printService.yarnDCData.partyName }}, <br />
+            {{ printService.yarnDCData.address1 }}, <br />
+            <span *ngIf="printService.yarnDCData.address2"
+              >{{ printService.yarnDCData.address2 }}, <br
+            /></span>
+            <span *ngIf="printService.yarnDCData.address3"
+              >{{ printService.yarnDCData.address3 }}, <br
+            /></span>
+            {{ printService.yarnDCData.cityName }}, <br />
+            {{ printService.yarnDCData.stateName }} -
+            {{ printService.yarnDCData.pinCode }}.
+          </div>
+        </div>
+        <div class="gstin">
+          <span class="font-weight-bold font-size-16">GSTIN: </span
+          >{{ printService.yarnDCData.gstNo }}
+        </div>
+      </div>
+      <div class="delivery w-50">
+        <div class="text-center row font-weight-bold font-size-16">
+          DELIVERY FOR KNITTING CONVERSION
+        </div>
+        <div class="text-center row font-weight-bold font-size-16">
+          DELIVERY FOR SALE
+        </div>
+        <div class="delivery-address">
+          <div class="font-weight-bold font-size-16">DELIVERY TO:</div>
+          <div>
+            <div>
+              {{ printService.yarnDCData.deliveryPartyName }}, <br />
+              {{ printService.yarnDCData.deliveryAddress1 }}, <br />
+              <span *ngIf="printService.yarnDCData.deliveryAddress2"
+                >{{ printService.yarnDCData.deliveryAddress2 }}, <br
+              /></span>
+              <span *ngIf="printService.yarnDCData.deliveryAddress3"
+                >{{ printService.yarnDCData.deliveryAddress3 }}, <br
+              /></span>
+              {{ printService.yarnDCData.deliveryCityName }}, <br />
+              {{ printService.yarnDCData.deliveryStateName }} -
+              {{ printService.yarnDCData.deliveryPinCode }}.
+            </div>
+          </div>
+        </div>
+        <div class="gstin">
+          <span class="font-weight-bold font-size-16">GSTIN: </span
+          >{{ printService.yarnDCData.deliveryGSTNo }}
+        </div>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <th>S.No.</th>
+        <th>Counts</th>
+        <th>Shade</th>
+        <th>Blend</th>
+        <th>Lot</th>
+        <th class="text-right">Order Qty</th>
+        <th class="text-right">Delivered Qty</th>
+        <th class="text-right">Previous Delivered Qty</th>
+        <th class="text-right">Balance to Deliver</th>
+      </thead>
+      <tbody>
+        <ng-container
+          *ngFor="
+            let yarn of printService.yarnDCData.yarnDetails;
+            let i = index
+          "
+        >
+          <tr>
+            <td>{{ i + 1 }}</td>
+            <td>{{ yarn.counts }}</td>
+            <td>{{ yarn.shadeName }}</td>
+            <td>{{ yarn.blendName }}</td>
+            <td>{{ yarn.lot }}</td>
+            <td class="text-right">{{ yarn.orderQuantity }}</td>
+            <td class="text-right">{{ yarn.deliveredQuantity }}</td>
+            <td class="text-right">{{ yarn.previousDeliveredQuantity }}</td>
+            <td class="text-right">
+              {{
+                yarn.orderQuantity -
+                  (yarn.deliveredQuantity +
+                    (yarn.previousDeliveredQuantity || 0))
+              }}
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+    <div class="vehicle">
+      <span class="font-weight-bold">VEHICLE NO: </span
+      >{{ printService.yarnDCData.vehicleNo }}
+    </div>
+  </section>
+  <section class="sign">
+    <div class="prepared-by w-30">
+      <div></div>
+      <div class="text-center font-weight-bold">PREPARED BY</div>
+    </div>
+    <div class="receiver-sign w-30">
+      <div></div>
+      <div class="text-center font-weight-bold">RECEIVER'S SIGNATURE</div>
+    </div>
+    <div class="authorised-sign w-40">
+      <div class="font-size-12 pl-4">
+        For
+        <span class="font-weight-bold letter-space"
+          >SREE GOMATHI AMMAN SPINNING MILLS PRIVATE LIMITED</span
+        >
+      </div>
+      <div></div>
+      <div class="text-center font-weight-bold">AUTHORISED SIGNATURE</div>
+    </div>
+  </section>
+</section>

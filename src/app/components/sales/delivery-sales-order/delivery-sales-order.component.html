@@ -74,11 +74,25 @@
             </div>
             <div class="w-50">
               <mat-form-field class="w-100">
-                <mat-label>Remarks</mat-label>
-                <textarea matInput formControlName="remarks"></textarea>
-                <mat-hint>Optional</mat-hint>
+                <mat-label>Delivery Address</mat-label>
+                <mat-select formControlName="deliveryAddressId">
+                  <mat-option
+                    *ngFor="let party of parties"
+                    [value]="party.partyId"
+                  >
+                    {{ getAddress(party) }}
+                  </mat-option>
+                </mat-select>
+                <mat-error>This field is required.</mat-error>
               </mat-form-field>
             </div>
+          </div>
+          <div class="remarks">
+            <mat-form-field class="w-50">
+              <mat-label>Remarks</mat-label>
+              <textarea matInput formControlName="remarks"></textarea>
+              <mat-hint>Optional</mat-hint>
+            </mat-form-field>
           </div>
         </form>
       </mat-card-content>

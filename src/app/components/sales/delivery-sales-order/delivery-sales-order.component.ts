@@ -18,6 +18,8 @@ import { YarnDeliveryDts } from 'src/app/models/yarnDelivertDts';
 import { YarnStockByOrderId } from 'src/app/models/yarnStockByOrderId';
 import { YarnDelivery } from 'src/app/models/yarnDelivery';
 import { DatePipe } from '@angular/common';
+import { PartyService } from 'src/app/services/party.service';
+import { Party } from 'src/app/models/party';
 
 @Component({
   selector: 'app-deliver-sales-order',
@@ -27,6 +29,7 @@ import { DatePipe } from '@angular/common';
 export class DeliverySalesOrderComponent implements OnInit {
   orderSelected!: OrdersPendingDelivery | undefined;
   stockDetails = [];
+  parties: Party[] = [];
   stockDisplayedColumns = [
     'programNo',
     'counts',
@@ -53,7 +56,8 @@ export class DeliverySalesOrderComponent implements OnInit {
     private notificationService: NotificationService,
     public appSharedService: AppSharedService,
     private formBuilder: FormBuilder,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private partyService: PartyService
   ) {
     this.navigationService.menu = SALES;
     this.navigationService.setFocus(Constants.SALES);
@@ -63,7 +67,18 @@ export class DeliverySalesOrderComponent implements OnInit {
     this.form = this.formBuilder.group({
       vehicleNo: ['', Validators.required],
       deliveryDate: ['', Validators.required],
+      deliveryAddressId: ['', Validators.required],
       remarks: '',
+    });
+  }
+
+  getPartiesForAddress() {
+    this.partyService.getParties().subscribe({
+      next: (parties) => (this.parties = parties),
+      error: (error) =>
+        this.notificationService.error(
+          typeof error?.error === 'string' ? error?.error : error?.message
+        ),
     });
   }
 
@@ -75,6 +90,10 @@ export class DeliverySalesOrderComponent implements OnInit {
         if (order) {
           this.stockDetails = [];
           this.orderSelected = order;
+          this.getPartiesForAddress();
+          this.form
+            .get('deliveryAddressId')
+            ?.setValue(this.orderSelected.partyId);
         }
       });
   }
@@ -99,13 +118,16 @@ export class DeliverySalesOrderComponent implements OnInit {
       const deliveryDts: YarnDeliveryDts[] = this.stockDetails.map(
         (stock: YarnStockByOrderId) => ({
           deliveryDtsId: 0,
+          orderDtsId: this.orderSelected?.orderDtsId || 0,
+          shadeId: stock.shadeId,
+          blendId: stock.blendId,
+          countsId: stock.countsId,
           productionDtsId: stock.productionYarnDtsId,
           deliveryQuantity: +stock.issueQuantity,
         })
       );
       const deliveryRequest: YarnDelivery = {
         ...this.form.value,
-        dcId: 0,
         dcNo: '',
         deliveryDate:
           this.datePipe.transform(
@@ -113,18 +135,22 @@ export class DeliverySalesOrderComponent implements OnInit {
             'dd/MM/yyyy'
           ) || '',
         orderId: this.orderSelected?.orderId,
-        orderDtsId: this.orderSelected?.orderDtsId,
-        shadeId: this.orderSelected?.shadeId,
-        blendId: this.orderSelected?.blendId,
-        countsId: this.orderSelected?.countsId,
+        deliveryPartyId: this.orderSelected?.partyId,
         createdByUserId: 0,
         deliveryDts,
       };
 
       this.yarnService.createYarnDelivery(deliveryRequest).subscribe({
         next: (response) => {
-          this.notificationService.success(response);
           this.resetData();
+          this.notificationService.success(
+            {
+              printDC: true,
+              dcId: response.dcId,
+              message: `${response.dcNo} - Delivery submitted successfully`,
+            },
+            true
+          );
         },
         error: (error) => {
           this.notificationService.error(
@@ -240,5 +266,9 @@ export class DeliverySalesOrderComponent implements OnInit {
 
   checkZeroInIssueQty(element: any): boolean {
     return element.issueQuantity == 0;
+  }
+
+  getAddress(party: Party) {
+    return `${party.address1} ${party.address2} ${party.address3} ${party.cityName} ${party.stateName} - ${party.pinCode}`;
   }
 }

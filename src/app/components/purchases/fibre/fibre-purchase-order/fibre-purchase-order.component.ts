@@ -7,7 +7,7 @@ import { NotifyType } from 'src/app/models/notify';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { PURCHASE } from 'src/app/constants/purchase-menu-values.const';
 import { OrderDetailsDialogComponent } from './order-details-dialog/order-details-dialog.component';
-import { PrintFibrePOService } from './print-fibre-po/print.fibre-po.service';
+import { PrintService } from '../../../../services/print.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
 import { PartyService } from 'src/app/services/party.service';
 import { Subscription } from 'rxjs';
@@ -46,7 +46,7 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     public appSharedService: AppSharedService,
     private navigationService: NavigationService,
-    private printFibrePOService: PrintFibrePOService,
+    private PrintService: PrintService,
     public partyService: PartyService,
     private fibreService: FibreService,
     private router: Router
@@ -65,10 +65,6 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
       partyId: ['', Validators.required],
       pOdate: ['', Validators.required],
     });
-
-    window.onafterprint = () => {
-      this.printFibrePOService.print = false;
-    };
   }
 
   ngOnDestroy() {

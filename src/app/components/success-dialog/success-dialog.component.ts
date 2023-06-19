@@ -2,10 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, Inject, OnDestroy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MaterialModule } from 'src/app/material.module';
-import { PrintFibrePOService } from '../purchases/fibre/fibre-purchase-order/print-fibre-po/print.fibre-po.service';
+import { PrintService } from '../../services/print.service';
 import { FibreService } from 'src/app/services/fibre.service';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { Subscription } from 'rxjs';
+import { YarnService } from 'src/app/services/yarn.service';
 
 @Component({
   selector: 'app-success-dialog',
@@ -20,9 +21,10 @@ export class SuccessDialogComponent implements OnDestroy {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private matDialogRef: MatDialogRef<void>,
-    private printFibrePOService: PrintFibrePOService,
+    private printService: PrintService,
     private fibreService: FibreService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private yarnService: YarnService
   ) {}
 
   close() {
@@ -33,15 +35,38 @@ export class SuccessDialogComponent implements OnDestroy {
     this.getPODetails();
   }
 
+  printDC() {
+    this.getYarnDCDdetails();
+  }
+
   getPODetails() {
     this.subscription.add(
       this.fibreService.getPOByID(this.data?.poId).subscribe({
         next: (response) => {
-          this.printFibrePOService.fibrePOData = response;
-          this.printFibrePOService.print = true;
+          this.printService.fibrePOData = response;
+          this.printService.fibrePOprint = true;
           setTimeout(() => window.print());
         },
-        error: (error) => this.notificationService.error(error.message),
+        error: (error) =>
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
+      })
+    );
+  }
+
+  getYarnDCDdetails() {
+    this.subscription.add(
+      this.yarnService.getYarnDCDetailsById(this.data?.dcId).subscribe({
+        next: (response) => {
+          this.printService.yarnDCData = response;
+          this.printService.yarnDCPrint = true;
+          setTimeout(() => window.print());
+        },
+        error: (error) =>
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
       })
     );
   }

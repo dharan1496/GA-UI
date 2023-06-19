@@ -1,14 +1,11 @@
 import { YarnDeliveryDts } from './yarnDelivertDts';
 
 export interface YarnDelivery {
-  dcId: number;
   dcNo: string;
   deliveryDate: string;
   orderId: number;
-  orderDtsId: number;
-  shadeId: number;
-  blendId: number;
-  countsId: number;
+  deliveryPartyId: number;
+  deliveryAddressId: number;
   vehicleNo: string;
   remarks: string;
   createdByUserId: number;

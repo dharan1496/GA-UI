@@ -17,6 +17,8 @@ import { YarnOrder } from '../models/yarnOrder';
 import { OrdersPendingDelivery } from '../models/ordersPendingDelivery';
 import { YarnStockByOrderId } from '../models/yarnStockByOrderId';
 import { YarnDelivery } from '../models/yarnDelivery';
+import { YarnDC } from '../models/yarnDC';
+import { YarnDeliverySummary } from '../models/yarnDeliverySummary';
 
 @Injectable({
   providedIn: 'root',
@@ -210,19 +212,36 @@ export class YarnService {
     );
   }
 
-  createYarnDelivery(order: YarnDelivery): Observable<string> {
-    return this.http.post(
+  createYarnDelivery(order: YarnDelivery): Observable<YarnDC> {
+    return this.http.post<YarnDC>(
       `${environment.api}/YarnOrder/CreateYarnDelivery`,
-      order,
-      {
-        responseType: 'text',
-      }
+      order
     );
   }
 
-  getYarnDeliveries(id: string): Observable<YarnStockByOrderId[]> {
-    return this.http.get<YarnStockByOrderId[]>(
-      `${environment.api}/YarnOrder/GetYarnDeliveries?orderId=${id}`
+  getYarnDeliveriesByOrderId(id: string): Observable<YarnDeliverySummary[]> {
+    return this.http.get<YarnDeliverySummary[]>(
+      `${environment.api}/YarnOrder/GetYarnDeliveriesByOrderId?orderId=${id}`
+    );
+  }
+
+  getYarnDeliveries(
+    partyId: string,
+    fromDate: string,
+    toDate: string
+  ): Observable<YarnDeliverySummary[]> {
+    let endpoint = '';
+    if (partyId) {
+      endpoint = `&partyId=${partyId}`;
+    }
+    return this.http.get<YarnDeliverySummary[]>(
+      `${environment.api}/YarnOrder/GetYarnDeliveries?fromDate=${fromDate}&toDate=${toDate}${endpoint}`
+    );
+  }
+
+  getYarnDCDetailsById(id: string): Observable<YarnDC> {
+    return this.http.get<YarnDC>(
+      `${environment.api}/YarnOrder/GetYarnDCDetailsById?dcId=${id}`
     );
   }
 }

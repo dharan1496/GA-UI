@@ -1,0 +1,69 @@
+<div class="header">
+  <div class="title">
+    <h1 mat-dialog-title>Order Details</h1>
+    <button
+      mat-icon-button
+      matTooltip="print"
+      color="accent"
+      (click)="printDC()"
+    >
+      <mat-icon>print</mat-icon>
+    </button>
+  </div>
+
+  <button mat-icon-button (click)="close()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<div mat-dialog-content class="container word-break-all">
+  <section class="details">
+    <div>
+      <div class="text-dark pb-2">DC Id</div>
+      <div>{{ deliveryDetails.dcId }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">DC No</div>
+      <div>{{ deliveryDetails.dcNo }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Order Id</div>
+      <div>{{ deliveryDetails.orderId }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Order No</div>
+      <div>{{ deliveryDetails.orderNo }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Party Name</div>
+      <div>{{ deliveryDetails.partyName }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Counts</div>
+      <div>{{ deliveryDetails.counts }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Shade</div>
+      <div>{{ deliveryDetails.shadeName }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Blend</div>
+      <div>{{ deliveryDetails.blendName }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Order Quantity</div>
+      <div>{{ deliveryDetails.orderQuantity }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Delivered Quantity</div>
+      <div>{{ deliveryDetails.deliveredQuantity }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Vehicle No</div>
+      <div>{{ deliveryDetails.vehicleNo }}</div>
+    </div>
+    <div *ngIf="deliveryDetails.remarks">
+      <div class="text-dark pb-2">Remarks</div>
+      <div>{{ deliveryDetails.remarks }}</div>
+    </div>
+  </section>
+</div>
