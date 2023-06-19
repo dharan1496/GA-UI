@@ -71,6 +71,7 @@ export class DeliveriesComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   ngOnInit() {

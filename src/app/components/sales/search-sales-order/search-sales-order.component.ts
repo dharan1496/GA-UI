@@ -68,6 +68,7 @@ export class SearchSalesOrderComponent
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   ngOnInit(): void {
