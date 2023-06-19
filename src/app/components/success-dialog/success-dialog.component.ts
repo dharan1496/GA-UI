@@ -43,7 +43,10 @@ export class SuccessDialogComponent implements OnDestroy {
     this.subscription.add(
       this.fibreService.getPOByID(this.data?.poId).subscribe({
         next: (response) => {
-          this.printService.fibrePOData = response;
+          // temp - result
+          this.printService.fibrePOData = response['result']
+            ? response['result']
+            : response;
           this.printService.fibrePOprint = true;
           setTimeout(() => window.print());
         },
