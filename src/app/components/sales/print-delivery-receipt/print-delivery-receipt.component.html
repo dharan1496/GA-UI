@@ -46,6 +46,7 @@
           <div class="font-weight-bold font-size-16">BUYERS:</div>
           <div>
             {{ printService.yarnDCData.partyName }}, <br />
+            {{ printService.yarnDCData.branchName }}, <br />
             {{ printService.yarnDCData.address1 }}, <br />
             <span *ngIf="printService.yarnDCData.address2"
               >{{ printService.yarnDCData.address2 }}, <br
@@ -75,6 +76,7 @@
           <div>
             <div>
               {{ printService.yarnDCData.deliveryPartyName }}, <br />
+              {{ printService.yarnDCData.deliveryBranchName }}, <br />
               {{ printService.yarnDCData.deliveryAddress1 }}, <br />
               <span *ngIf="printService.yarnDCData.deliveryAddress2"
                 >{{ printService.yarnDCData.deliveryAddress2 }}, <br
