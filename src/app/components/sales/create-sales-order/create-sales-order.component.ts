@@ -63,6 +63,7 @@ export class CreateSalesOrderComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       orderNo: ['', Validators.required],
       partyId: ['', Validators.required],
+      deliveryPartyId: ['', Validators.required],
       brokerName: ['', Validators.required],
       orderDate: ['', Validators.required],
       receivedDate: ['', Validators.required],

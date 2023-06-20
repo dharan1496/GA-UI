@@ -88,7 +88,19 @@
           </mat-form-field>
         </div>
         <div class="form-container">
-          <mat-form-field class="w-50">
+          <mat-form-field appearance="fill" class="w-40">
+            <mat-label>Delivery Party</mat-label>
+            <mat-select formControlName="deliveryPartyId">
+              <ng-container *ngFor="let party of partyService.parties">
+                <mat-option [value]="party.partyId">{{
+                  party.partyName
+                }}</mat-option>
+              </ng-container>
+            </mat-select>
+            <mat-error>This field is required.</mat-error>
+            <mat-hint *ngIf="updateOrderDetails">Disabled</mat-hint>
+          </mat-form-field>
+          <mat-form-field class="w-60">
             <mat-label>Remarks</mat-label>
             <textarea matInput formControlName="remarks"></textarea>
             <mat-hint>Optional</mat-hint>

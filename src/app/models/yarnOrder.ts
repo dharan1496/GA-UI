@@ -6,6 +6,7 @@ export interface YarnOrder {
   orderDate: string;
   receivedDate: string;
   partyId: number;
+  deliveryPartyId: number;
   dueDays: number;
   brokerName: string;
   orderDts: YarnOrderDetails[];
