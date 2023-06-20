@@ -269,8 +269,10 @@ export class DeliverySalesOrderComponent implements OnInit {
   }
 
   getAddress(party: Party) {
-    return `${party.address1}, ${party.address2 ? party.address2 + ',' : ''} ${
-      party.address3 ? party.address3 + ',' : ''
-    } ${party.cityName}, ${party.stateName} - ${party.pinCode}`;
+    return `${party.partyName}, ${party.branchName}, ${party.address1}, ${
+      party.address2 ? party.address2 + ',' : ''
+    } ${party.address3 ? party.address3 + ',' : ''} ${party.cityName}, ${
+      party.stateName
+    } - ${party.pinCode}`;
   }
 }
