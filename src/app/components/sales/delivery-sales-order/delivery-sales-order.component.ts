@@ -118,7 +118,7 @@ export class DeliverySalesOrderComponent implements OnInit {
       const deliveryDts: YarnDeliveryDts[] = this.stockDetails.map(
         (stock: YarnStockByOrderId) => ({
           deliveryDtsId: 0,
-          orderDtsId: this.orderSelected?.orderDtsId || 0,
+          orderDtsId: stock.orderDtsId,
           shadeId: stock.shadeId,
           blendId: stock.blendId,
           countsId: stock.countsId,

@@ -9,6 +9,7 @@ export interface YarnStockByOrderId {
   countsId: number;
   counts: string;
   productionYarnDtsId: number;
+  orderDtsId: number;
   lot: string;
   productionQuantity: number;
   stockQuantity: number;
