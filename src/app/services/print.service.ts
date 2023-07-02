@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { YarnDC } from '../models/yarnDC';
+import { YarnInvoice } from '../models/yarnInvoice';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +10,8 @@ export class PrintService {
   fibrePOData: any;
   yarnDCPrint = false;
   yarnDCData!: YarnDC;
+  yarnInvoice!: YarnInvoice;
+  yarnInvoicePrint = false;
 
   constructor() {
     window.onafterprint = () => {

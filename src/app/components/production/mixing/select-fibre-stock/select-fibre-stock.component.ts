@@ -1,7 +1,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Subscription, finalize } from 'rxjs';
 import { MaterialModule } from 'src/app/material.module';
 import { FibreStock } from 'src/app/models/fibreStock';
@@ -10,13 +10,13 @@ import { FibreService } from 'src/app/services/fibre.service';
 import { NotificationService } from 'src/app/shared/notification.service';
 
 @Component({
-  selector: 'app-fibre-stock',
+  selector: 'app-select-fibre-stock',
   standalone: true,
   imports: [CommonModule, MaterialModule],
-  templateUrl: './fibre-stock.component.html',
-  styleUrls: ['./fibre-stock.component.scss'],
+  templateUrl: './select-fibre-stock.component.html',
+  styleUrls: ['./select-fibre-stock.component.scss'],
 })
-export class FibreStockComponent implements OnInit, OnDestroy {
+export class SelectFibreStockComponent implements OnInit, OnDestroy {
   dataSource: FibreStock[] = [];
   displayedColumns = [
     'receivedDCNo',
@@ -34,14 +34,15 @@ export class FibreStockComponent implements OnInit, OnDestroy {
   constructor(
     private notificationService: NotificationService,
     private matDialogRef: MatDialogRef<any>,
-    private fibreService: FibreService
+    private fibreService: FibreService,
+    @Inject(MAT_DIALOG_DATA) private data: any
   ) {}
 
   ngOnInit() {
     this.loader = true;
     this.subscription.add(
       this.fibreService
-        .getFibreStock()
+        .getFibreStockForMixing(this.data)
         .pipe(finalize(() => (this.loader = false)))
         .subscribe({
           next: (fibreStock) => (this.dataSource = fibreStock),

@@ -1,0 +1,49 @@
+.form-container {
+  padding: 0 24px;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 24px;
+}
+
+.table {
+  border: 1px solid #e0e0e0;
+  margin-bottom: 24px;
+}
+
+.table-container {
+  position: relative;
+}
+
+.loader {
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mat-mdc-header-row {
+  background: rgb(225, 225, 225);
+}
+
+.no-rows {
+  padding: 16px 0;
+  text-align: center;
+}
+
+.row {
+  cursor: pointer;
+
+  &:hover {
+    background-color: whitesmoke;
+  }
+}

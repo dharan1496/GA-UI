@@ -22,6 +22,10 @@ export const SALES = [
         title: 'Search Deliveries',
         route: 'sales/search-deliveries',
       },
+      {
+        title: 'Delivery Invoice',
+        route: 'sales/delivery-invoice',
+      },
     ],
   },
 ];

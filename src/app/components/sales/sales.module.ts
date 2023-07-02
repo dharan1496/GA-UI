@@ -9,6 +9,7 @@ import { SalesDashboardComponent } from './sales-dashboard/sales-dashboard.compo
 import { DeliverySalesOrderComponent } from './delivery-sales-order/delivery-sales-order.component';
 import { SearchSalesOrderComponent } from './search-sales-order/search-sales-order.component';
 import { DeliveriesComponent } from './deliveries/deliveries.component';
+import { DeliveryInvoiceComponent } from './delivery-invoice/delivery-invoice.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { DeliveriesComponent } from './deliveries/deliveries.component';
     DeliverySalesOrderComponent,
     SearchSalesOrderComponent,
     DeliveriesComponent,
+    DeliveryInvoiceComponent,
   ],
   imports: [
     CommonModule,

@@ -10,6 +10,7 @@ import { FibreDashboardComponent } from './fibre/fibre-dashboard/fibre-dashboard
 import { FibreListComponent } from './fibre/fibre-master/fibre-list/fibre-list.component';
 import { FibreMasterComponent } from './fibre/fibre-master/fibre-master.component';
 import { FibreShadeComponent } from './fibre/fibre-master/fibre-shade/fibre-shade.component';
+import { FibreStockComponent } from './fibre/fibre-stock/fibre-stock.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { FibreShadeComponent } from './fibre/fibre-master/fibre-shade/fibre-shad
     FibreListComponent,
     FibreMasterComponent,
     FibreShadeComponent,
+    FibreStockComponent,
   ],
   imports: [
     CommonModule,

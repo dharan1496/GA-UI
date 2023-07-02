@@ -19,6 +19,10 @@ import { YarnStockByOrderId } from '../models/yarnStockByOrderId';
 import { YarnDelivery } from '../models/yarnDelivery';
 import { YarnDC } from '../models/yarnDC';
 import { YarnDeliverySummary } from '../models/yarnDeliverySummary';
+import { OrdersPendingInvoice } from '../models/ordersPendingInvoice';
+import { DCsPendingInvoice } from '../models/dcsPendingInvoice';
+import { YarnInvoice } from '../models/yarnInvoice';
+import { CreateYarnInvoice } from '../models/createYarnInvoice';
 
 @Injectable({
   providedIn: 'root',
@@ -242,6 +246,27 @@ export class YarnService {
   getYarnDCDetailsById(id: string): Observable<YarnDC> {
     return this.http.get<YarnDC>(
       `${environment.api}/YarnOrder/GetYarnDCDetailsById?dcId=${id}`
+    );
+  }
+
+  ordersPendingInvoiceByPartyId(
+    id: string
+  ): Observable<OrdersPendingInvoice[]> {
+    return this.http.get<OrdersPendingInvoice[]>(
+      `${environment.api}/YarnOrder/OrdersPendingInvoiceByPartyId?partyId=${id}`
+    );
+  }
+
+  ordersPendingInvoiceByOrderId(id: number): Observable<DCsPendingInvoice[]> {
+    return this.http.get<DCsPendingInvoice[]>(
+      `${environment.api}/YarnOrder/OrdersPendingInvoiceByOrderId?orderId=${id}`
+    );
+  }
+
+  createYarnOrderInvoice(order: CreateYarnInvoice): Observable<YarnInvoice> {
+    return this.http.post<YarnInvoice>(
+      `${environment.api}/YarnOrder/CreateYarnOrderInvoice`,
+      order
     );
   }
 }

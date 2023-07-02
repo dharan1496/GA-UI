@@ -1,0 +1,280 @@
+<section *ngIf="printService.yarnInvoicePrint" class="container print">
+  <section class="header">
+    <div class="header-content">
+      <div class="logo-img"></div>
+      <div class="details text-center w-100">
+        <div class="font-size-12">
+          <span class="purple">OM SHRI RAMAJAYAM</span>
+        </div>
+        <div class="h1 font-weight-bold">
+          <span class="green"
+            >SREE GOMATHI AMMAN SPINNING MILLS PRIVATE LIMITED</span
+          >
+        </div>
+        <div class="font-weight-bold">High Quality OE Melange Color Yarns.</div>
+        <div>
+          Reg. Office & Factory: SF No. 6/1, Kolappalur Village, Kamaraj Nagar,
+          Gobichettipalayam. <br />Pin: 638 456.
+        </div>
+        <div>
+          <span class="green"
+            >Cell: 99524 25471, 25476 25473, E-mail: gomathiamman@gmail.com
+          </span>
+        </div>
+        <div class="title text-center">
+          <span class="green">GST INVOICE</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row-1 font-weight-bold">
+      <div class="w-35 text-center">GSTIN 33AAKCS5785R1ZC</div>
+      <div class="w-30 text-center">I.T PAN NO. : AAKCS5785R</div>
+      <div class="w-35 text-center">CIN NO: U17111TZ2006PTC013158</div>
+    </div>
+  </section>
+  <section class="main">
+    <div class="delivery-buyer">
+      <div class="buyer w-50">
+        <div class="buyer-address">
+          <div class="font-weight-bold font-size-16">TO:</div>
+          <div>
+            <span class="blue">{{ printService.yarnInvoice.partyName }}</span
+            >, <br />
+            {{ printService.yarnInvoice.partyAddress1 }}, <br />
+            <span *ngIf="printService.yarnInvoice.partyAddress2"
+              >{{ printService.yarnInvoice.partyAddress2 }}, <br
+            /></span>
+            <span *ngIf="printService.yarnInvoice.partyAddress3"
+              >{{ printService.yarnInvoice.partyAddress3 }}, <br
+            /></span>
+            <span class="blue">{{ printService.yarnInvoice.city }} - </span>
+          </div>
+        </div>
+      </div>
+      <div class="to w-50">
+        <div class="authenticated-seal">
+          <div class="text-center font-weight-bold font-size-16">
+            AUTHENTICATED SEAL
+          </div>
+          <div></div>
+        </div>
+        <div class="it-pan-no">
+          <div class="text-center font-weight-bold font-size-16">
+            I.T PAN NO. : AAKCS5785R
+          </div>
+          <div class="text-center mt-8 font-weight-bold">
+            <div class="purple">
+              NO. {{ printService.yarnInvoice.invoiceNo }}
+            </div>
+            <div class="purple mt-8">
+              DATE: {{ printService.yarnInvoice.invoiceDate }}
+            </div>
+            <div class="mt-8 mb-8">
+              STATE: {{ printService.yarnInvoice.state }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="delivery-buyer">
+      <div class="buyer w-50">
+        <div class="buyer-address w-100">
+          <div class="w-100 text-center font-weight-bold font-size-16 blue">
+            DELIVERY ADDRESS
+          </div>
+          <div></div>
+        </div>
+      </div>
+      <div class="to w-50">
+        <div class="vehicle-no">
+          <div class="text-center font-weight-bold font-size-16">
+            VEHICLE NO
+          </div>
+          <div class="text-center mt-24 font-weight-bold">
+            <div></div>
+          </div>
+        </div>
+        <div class="purchase-order-no">
+          <div class="text-center font-weight-bold font-size-16">
+            PURCHASE ORDER NO
+          </div>
+          <div></div>
+        </div>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <th>S.No.</th>
+        <th>Counts</th>
+        <th>Shade</th>
+        <th>Blend</th>
+        <th class="text-right">Quantity (Kg)</th>
+        <th class="text-right">Rate</th>
+        <th class="text-right">GST%</th>
+        <th class="text-right">Amount</th>
+      </thead>
+      <tbody>
+        <ng-container
+          *ngFor="
+            let yarn of printService.yarnInvoice.invoiceDts;
+            let i = index
+          "
+        >
+          <tr>
+            <td>{{ i + 1 }}</td>
+            <td>{{ yarn.counts }}</td>
+            <td>{{ yarn.shadeName }}</td>
+            <td>{{ yarn.blendName }}</td>
+            <td class="text-right">{{ yarn.invoiceQty }}</td>
+            <td class="text-right">{{ yarn.rate | currency : "INR" }}</td>
+            <td class="text-right">{{ yarn.gstPercent }}%</td>
+            <td class="text-right">
+              {{ yarn.rate * yarn.invoiceQty | currency : "INR" }}
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td class="text-right">{{ getTotalQty() }}</td>
+          <td></td>
+          <td></td>
+          <td class="text-right">
+            {{ getAmount() | currency : "INR" }}
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </section>
+  <section class="gst">
+    <div class="amount w-100">
+      <div class="amount-words w-50 text-center">
+        <span class="red">Rupees: {{ getTotalWords() }}</span>
+      </div>
+      <div class="tax-distribution w-50">
+        <table>
+          <tbody>
+            <tr *ngIf="printService.yarnInvoice.state === 'Tamil Nadu'">
+              <td class="text-center w-50">CGST</td>
+              <td class="text-right w-50">
+                {{ getTaxAmount() / 2 | currency : "INR" }}
+              </td>
+            </tr>
+            <tr *ngIf="printService.yarnInvoice.state === 'Tamil Nadu'">
+              <td class="text-center w-50">SGST</td>
+              <td class="text-right w-50">
+                {{ getTaxAmount() / 2 | currency : "INR" }}
+              </td>
+            </tr>
+            <tr *ngIf="printService.yarnInvoice.state !== 'Tamil Nadu'">
+              <td class="text-center w-50">IGST</td>
+              <td class="text-right w-50">
+                {{ getTaxAmount() | currency : "INR" }}
+              </td>
+            </tr>
+            <tr>
+              <td class="text-center w-50">TOTAL</td>
+              <td class="text-right w-50">
+                {{ getTotalAmount() | currency : "INR" }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="amount">
+      <div class="amount-words w-50 text-center">
+        <div class="green">e-Way-Bill</div>
+        <div class="purple">0</div>
+      </div>
+      <div class="tax-distribution w-50">
+        <table>
+          <tbody>
+            <tr>
+              <td class="text-center w-50">ROUND OFF</td>
+              <td class="text-right w-50">{{ getRoundOffAmount() }}</td>
+            </tr>
+            <tr>
+              <td class="text-center w-50">NET TOTAL</td>
+              <td class="text-right w-50">
+                <span class="red font-weight-bold">{{
+                  getRoundTotal() | currency : "INR"
+                }}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  <section class="declaration">
+    <div class="header">DECLARATION</div>
+    <div class="content">
+      WE DECLARE THAT THIS INVOICE SHOWS THE ACTUAL PRICE OF THE GOODS DESCRIBED
+      AND THAT ALL PARTICULARS ARE TRUE AND CORRECT. THE SAID GOODS ARE LOADED
+      IN THE VEHICLE ARRANGED AND SENT BY YOU. WE ARE NOT RESPONSIBLE FOR ANY
+      DELAY ANY DAMAGE DURING TRANSPORT.
+    </div>
+  </section>
+  <section class="bank">
+    <div class="empty-space"></div>
+    <div class="bank-header">BANK DETAILS FOR PAYMENT BY RTGS</div>
+    <div class="bank-details">
+      <div class="w-50">
+        <div class="grid">
+          <div>BANK</div>
+          <div>:</div>
+          <div class="purple">CITY UNION BANK LTD.,</div>
+        </div>
+        <div class="grid">
+          <div>BRANCH</div>
+          <div>:</div>
+          <div class="purple">GOBICHETTIPALAYAM</div>
+        </div>
+      </div>
+      <div class="w-50">
+        <div class="grid">
+          <div>C.C. A/C NO</div>
+          <div>:</div>
+          <div class="purple">092120000168726</div>
+        </div>
+        <div class="grid">
+          <div>BANK IFS CODE</div>
+          <div>:</div>
+          <div class="purple">CIUB0000092</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="sign">
+    <div class="prepared-by w-5">
+      <div class="sign-area"></div>
+      <div class="text-center font-weight-bold">E & OE</div>
+    </div>
+    <div class="prepared-by w-20">
+      <div class="sign-area"></div>
+      <div class="text-center font-weight-bold">PREPARED BY</div>
+    </div>
+    <div class="receiver-sign w-35">
+      <div class="sign-area"></div>
+      <div class="text-center font-weight-bold">CHECKED BY</div>
+    </div>
+    <div class="authorised-sign w-40">
+      <div class="font-size-12 pl-4 text-center">
+        For
+        <span class="font-weight-bold letter-space"
+          >SREE GOMATHI AMMAN SPINNING MILLS PRIVATE LIMITED</span
+        >
+      </div>
+      <div class="sign-area"></div>
+      <div class="text-center font-weight-bold">
+        MANAGING DIRECTOR / JOINT MANAGING DIRECTOR.
+      </div>
+    </div>
+  </section>
+</section>

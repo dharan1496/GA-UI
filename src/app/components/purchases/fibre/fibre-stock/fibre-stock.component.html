@@ -1,0 +1,82 @@
+<section class="container">
+  <h1 class="font-weight-bold">Fibre Stock</h1>
+  <div class="table-container">
+    <div *ngIf="loader" class="loader">
+      <mat-spinner></mat-spinner>
+    </div>
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="sNo">
+          <th mat-header-cell *matHeaderCellDef>S No</th>
+          <td mat-cell *matCellDef="let element; let index = index">
+            {{ index + 1 }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="receivedDCNo">
+          <th mat-header-cell *matHeaderCellDef>ReceivedDC No</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.receivedDCNo }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fibreCategoryName">
+          <th mat-header-cell *matHeaderCellDef>Fibre Category</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.fibreCategoryName }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="categoryCode">
+          <th mat-header-cell *matHeaderCellDef>Category Code</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.categoryCode }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fibreType">
+          <th mat-header-cell *matHeaderCellDef>Fibre Type</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.fibreType }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="shadeName">
+          <th mat-header-cell *matHeaderCellDef>Fibre Shade</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.shadeName }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="lot">
+          <th mat-header-cell *matHeaderCellDef>Lot</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.lot }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="stock">
+          <th mat-header-cell *matHeaderCellDef class="text-right">
+            Stock Qty
+          </th>
+          <td mat-cell *matCellDef="let element" class="text-right">
+            {{ element.stock }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell no-rows" [attr.colspan]="displayedColumns.length">
+            No rows to display
+          </td>
+        </tr>
+      </table>
+      <mat-paginator
+        *ngIf="dataSource.data.length"
+        [pageSizeOptions]="[10, 25, 100]"
+        aria-label="Select page of details"
+      ></mat-paginator>
+    </div>
+  </div>
+</section>

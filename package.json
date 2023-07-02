@@ -31,6 +31,7 @@
     "chartjs-plugin-datalabels": "^2.2.0",
     "ngx-mask": "^15.1.0",
     "rxjs": "~7.8.0",
+    "to-words": "^3.6.1",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"
   },

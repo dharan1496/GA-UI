@@ -24,5 +24,13 @@
     >
       <mat-icon>print</mat-icon>Print DC
     </button>
+    <button
+      *ngIf="data?.printInvoice"
+      mat-raised-button
+      color="accent"
+      (click)="printInvoice()"
+    >
+      <mat-icon>print</mat-icon>Print Invoice
+    </button>
   </div>
 </section>

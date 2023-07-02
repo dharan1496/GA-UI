@@ -93,6 +93,12 @@ export class FibreService {
     );
   }
 
+  getFibreStockForMixing(programId: string): Observable<FibreStock[]> {
+    return this.http.get<FibreStock[]>(
+      `${environment.api}/Fiber/GetFibreStockForMixing?programId=${programId}`
+    );
+  }
+
   getFibreCategories(): Observable<FibreCategory[]> {
     return this.http.get<FibreCategory[]>(
       `${environment.api}/Fiber/GetFibreCategories`

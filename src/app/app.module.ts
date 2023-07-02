@@ -13,6 +13,7 @@ import { ToolBarComponent } from './components/tool-bar/tool-bar.component';
 import { CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { PrintDeliveryReceiptComponent } from './components/sales/print-delivery-receipt/print-delivery-receipt.component';
+import { PrintDeliveryInvoiceComponent } from './components/sales/delivery-invoice/print-delivery-invoice/print-delivery-invoice.component';
 
 @NgModule({
   declarations: [AppComponent, SideMenuComponent, ToolBarComponent],
@@ -26,6 +27,7 @@ import { PrintDeliveryReceiptComponent } from './components/sales/print-delivery
     LoginComponent,
     HttpClientModule,
     NgIdleKeepaliveModule.forRoot(),
+    PrintDeliveryInvoiceComponent,
   ],
   providers: [AuthGuard, DatePipe, DecimalPipe, CurrencyPipe],
   bootstrap: [AppComponent],

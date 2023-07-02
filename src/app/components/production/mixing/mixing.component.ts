@@ -6,7 +6,7 @@ import { YarnService } from 'src/app/services/yarn.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { ChooseProgramComponent } from './choose-program/choose-program.component';
-import { FibreStockComponent } from './fibre-stock/fibre-stock.component';
+import { SelectFibreStockComponent } from './select-fibre-stock/select-fibre-stock.component';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { MatTable } from '@angular/material/table';
 import { NotifyType } from 'src/app/models/notify';
@@ -77,7 +77,10 @@ export class MixingComponent {
 
   fibreStock() {
     this.dialog
-      .open(FibreStockComponent, { minWidth: 1000 })
+      .open(SelectFibreStockComponent, {
+        minWidth: 1000,
+        data: this.programDetails?.programId,
+      })
       .afterClosed()
       .subscribe((stock) => {
         if (stock) {

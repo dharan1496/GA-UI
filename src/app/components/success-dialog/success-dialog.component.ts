@@ -7,6 +7,7 @@ import { FibreService } from 'src/app/services/fibre.service';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { Subscription } from 'rxjs';
 import { YarnService } from 'src/app/services/yarn.service';
+import { YarnInvoice } from 'src/app/models/yarnInvoice';
 
 @Component({
   selector: 'app-success-dialog',
@@ -39,6 +40,12 @@ export class SuccessDialogComponent implements OnDestroy {
     this.getYarnDCDdetails();
   }
 
+  printInvoice() {
+    this.printService.yarnInvoice = this.data?.invoiceDetails as YarnInvoice;
+    this.printService.yarnInvoicePrint = true;
+    setTimeout(() => window.print(), 400);
+  }
+
   getPODetails() {
     this.subscription.add(
       this.fibreService.getPOByID(this.data?.poId).subscribe({
@@ -64,7 +71,7 @@ export class SuccessDialogComponent implements OnDestroy {
         next: (response) => {
           this.printService.yarnDCData = response;
           this.printService.yarnDCPrint = true;
-          setTimeout(() => window.print());
+          setTimeout(() => window.print(), 400);
         },
         error: (error) =>
           this.notificationService.error(

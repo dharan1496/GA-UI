@@ -1,0 +1,58 @@
+.container {
+  margin: 32px;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 38px 0;
+}
+
+.header {
+  font-weight: 500;
+  margin: 0;
+}
+
+.card {
+  margin-bottom: 32px;
+}
+
+.form-container {
+  padding: 24px 32px 12px;
+  display: flex;
+  gap: 48px;
+}
+
+table {
+  width: 100%;
+}
+
+.dc-row {
+  height: 70px;
+}
+
+.mat-mdc-header-row {
+  background: rgb(225, 225, 225);
+}
+
+.mat-mdc-table-sticky {
+  border-top: 1px solid #e0e0e0;
+}
+
+.no-rows {
+  padding: 16px 0;
+  text-align: center;
+}
+
+.footer {
+  margin-top: 50px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.dc-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}

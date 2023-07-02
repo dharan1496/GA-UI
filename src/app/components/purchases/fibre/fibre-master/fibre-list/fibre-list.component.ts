@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription, finalize } from 'rxjs';
 import { FibreService } from 'src/app/services/fibre.service';
@@ -12,7 +12,7 @@ import { NotificationService } from 'src/app/shared/notification.service';
   templateUrl: './fibre-list.component.html',
   styleUrls: ['./fibre-list.component.scss'],
 })
-export class FibreListComponent implements OnInit {
+export class FibreListComponent implements OnInit, OnDestroy {
   subscription = new Subscription();
   edit = false;
   dataSource: FibreType[] = [];
@@ -27,6 +27,10 @@ export class FibreListComponent implements OnInit {
 
   ngOnInit() {
     this.getFibre();
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   getFibre() {

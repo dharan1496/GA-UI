@@ -16,7 +16,8 @@ app-print-fibre-po {
   display: none;
 }
 
-app-print-delivery-receipt {
+app-print-delivery-receipt,
+app-print-delivery-invoice {
   visibility: hidden;
   opacity: 0;
 }
@@ -26,7 +27,8 @@ app-print-delivery-receipt {
     display: block;
   }
 
-  app-print-delivery-receipt {
+  app-print-delivery-receipt,
+  app-print-delivery-invoice {
     visibility: visible;
     opacity: 100;
   }
@@ -199,6 +201,10 @@ app-print-delivery-receipt {
 
 .ml-32 {
   margin-left: 24px;
+}
+
+.mt-8 {
+  margin-top: 8px;
 }
 
 .mt-16 {

@@ -5,6 +5,7 @@ import { CreateSalesOrderComponent } from './create-sales-order/create-sales-ord
 import { DeliverySalesOrderComponent } from './delivery-sales-order/delivery-sales-order.component';
 import { SearchSalesOrderComponent } from './search-sales-order/search-sales-order.component';
 import { DeliveriesComponent } from './deliveries/deliveries.component';
+import { DeliveryInvoiceComponent } from './delivery-invoice/delivery-invoice.component';
 
 const routes: Routes = [
   {
@@ -30,6 +31,10 @@ const routes: Routes = [
   {
     path: 'search-deliveries',
     component: DeliveriesComponent,
+  },
+  {
+    path: 'delivery-invoice',
+    component: DeliveryInvoiceComponent,
   },
 ];
 
