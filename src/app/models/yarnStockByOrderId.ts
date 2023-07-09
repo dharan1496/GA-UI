@@ -14,4 +14,5 @@ export interface YarnStockByOrderId {
   productionQuantity: number;
   stockQuantity: number;
   issueQuantity: number;
+  hsnCode: number;
 }

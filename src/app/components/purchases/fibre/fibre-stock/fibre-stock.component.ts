@@ -1,10 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription, finalize } from 'rxjs';
@@ -20,7 +14,7 @@ import { NotificationService } from 'src/app/shared/notification.service';
   templateUrl: './fibre-stock.component.html',
   styleUrls: ['./fibre-stock.component.scss'],
 })
-export class FibreStockComponent implements OnInit, OnDestroy, AfterViewInit {
+export class FibreStockComponent implements OnInit, OnDestroy {
   subscription = new Subscription();
   dataSource = new MatTableDataSource<FibreStock>([]);
   displayedColumns = [
@@ -34,7 +28,16 @@ export class FibreStockComponent implements OnInit, OnDestroy, AfterViewInit {
     'stock',
   ];
   loader = false;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  private paginator!: MatPaginator;
+
+  @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
+    this.paginator = mp;
+    this.setDataSourceAttributes();
+  }
+
+  setDataSourceAttributes() {
+    this.dataSource.paginator = this.paginator;
+  }
 
   constructor(
     public fibreService: FibreService,
@@ -48,10 +51,6 @@ export class FibreStockComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
     this.getFibreStock();
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
   }
 
   getFibreStock() {

@@ -11,4 +11,5 @@ export interface YarnDCDetails {
   orderQuantity: number;
   deliveredQuantity: number;
   previousDeliveredQuantity: number;
+  hsnCode: number;
 }

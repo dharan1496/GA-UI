@@ -48,7 +48,7 @@ export class PrintDeliveryInvoiceComponent {
   }
 
   getTotalWords() {
-    return this.words.convert(this.getTotalAmount(), { currency: true });
+    return this.words.convert(this.getRoundTotal(), { currency: true });
   }
 
   getTaxWords() {

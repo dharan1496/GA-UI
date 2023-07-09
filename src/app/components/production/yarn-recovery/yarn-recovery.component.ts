@@ -1,10 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -22,7 +16,7 @@ import { Subscription, finalize } from 'rxjs';
   templateUrl: './yarn-recovery.component.html',
   styleUrls: ['./yarn-recovery.component.scss'],
 })
-export class YarnRecoveryComponent implements OnInit, AfterViewInit, OnDestroy {
+export class YarnRecoveryComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = [
     'programNo',
     'programDate',
@@ -36,10 +30,25 @@ export class YarnRecoveryComponent implements OnInit, AfterViewInit, OnDestroy {
     'yarnRecoveryPercent',
   ];
   dataSource = new MatTableDataSource<any>([]);
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
   subscription = new Subscription();
   loader = false;
+  private paginator!: MatPaginator;
+  private sort!: MatSort;
+
+  @ViewChild(MatSort) set matSort(ms: MatSort) {
+    this.sort = ms;
+    this.setDataSourceAttributes();
+  }
+
+  @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
+    this.paginator = mp;
+    this.setDataSourceAttributes();
+  }
+
+  setDataSourceAttributes() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
 
   constructor(
     private navigationService: NavigationService,
@@ -70,10 +79,6 @@ export class YarnRecoveryComponent implements OnInit, AfterViewInit, OnDestroy {
           },
         })
     );
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
   }
 
   ngOnDestroy() {

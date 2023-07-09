@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
+import { Constants } from 'src/app/constants/constants';
 import { MaterialModule } from 'src/app/material.module';
 import { YarnDeliverySummary } from 'src/app/models/yarnDeliverySummary';
 import { PrintService } from 'src/app/services/print.service';
@@ -27,6 +28,7 @@ export class DeliveryDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    document.body.style.overflow = Constants.HIDDEN;
     this.subscription.add(
       this.yarnService
         .getYarnDCDetailsById(this.deliveryDetails.dcId.toString())

@@ -8,6 +8,7 @@ import { NotificationService } from 'src/app/shared/notification.service';
 import { Subscription } from 'rxjs';
 import { YarnService } from 'src/app/services/yarn.service';
 import { YarnInvoice } from 'src/app/models/yarnInvoice';
+import { Constants } from 'src/app/constants/constants';
 
 @Component({
   selector: 'app-success-dialog',
@@ -43,6 +44,7 @@ export class SuccessDialogComponent implements OnDestroy {
   printInvoice() {
     this.printService.yarnInvoice = this.data?.invoiceDetails as YarnInvoice;
     this.printService.yarnInvoicePrint = true;
+    document.body.style.overflow = Constants.HIDDEN;
     setTimeout(() => window.print(), 400);
   }
 
@@ -71,6 +73,7 @@ export class SuccessDialogComponent implements OnDestroy {
         next: (response) => {
           this.printService.yarnDCData = response;
           this.printService.yarnDCPrint = true;
+          document.body.style.overflow = Constants.HIDDEN;
           setTimeout(() => window.print(), 400);
         },
         error: (error) =>

@@ -6,4 +6,5 @@ export interface YarnDeliveryDts {
   countsId: number;
   productionDtsId: number;
   deliveryQuantity: number;
+  hsnCode: number;
 }

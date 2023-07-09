@@ -39,6 +39,7 @@ export class DeliverySalesOrderComponent implements OnInit {
     'productionQuantity',
     'stockQuantity',
     'issueQuantity',
+    'hsnCode',
     'rate',
     'amount',
     'gstpercent',
@@ -48,6 +49,8 @@ export class DeliverySalesOrderComponent implements OnInit {
   @ViewChild(MatTable) table!: MatTable<any>;
   subscription = new Subscription();
   form!: FormGroup;
+  hsnFlag = false;
+  issuedQtyFlag = false;
 
   constructor(
     private navigationService: NavigationService,
@@ -124,6 +127,7 @@ export class DeliverySalesOrderComponent implements OnInit {
           countsId: stock.countsId,
           productionDtsId: stock.productionYarnDtsId,
           deliveryQuantity: +stock.issueQuantity,
+          hsnCode: +stock.hsnCode,
         })
       );
       const deliveryRequest: YarnDelivery = {
@@ -185,13 +189,23 @@ export class DeliverySalesOrderComponent implements OnInit {
       return true;
     }
     if (!this.stockDetails.every((data) => data['issueQuantity'])) {
+      this.issuedQtyFlag = true;
       this.notificationService.notify(
         'Please enter the IssueQty',
         NotifyType.ERROR
       );
       return true;
     }
+    if (!this.stockDetails.every((data) => !!data['hsnCode'])) {
+      this.hsnFlag = true;
+      this.notificationService.notify(
+        'Please enter the HSN Code',
+        NotifyType.ERROR
+      );
+      return true;
+    }
     if (document.getElementsByClassName('issue-qty-border-error').length > 0) {
+      this.issuedQtyFlag = true;
       this.notificationService.notify(
         'Please correct the IssueQty to proceed',
         NotifyType.ERROR

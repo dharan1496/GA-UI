@@ -1,11 +1,5 @@
 import { DatePipe } from '@angular/common';
-import {
-  AfterViewInit,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -27,13 +21,14 @@ import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { DeliveryDetailsComponent } from './delivery-details/delivery-details.component';
+import { PrintService } from 'src/app/services/print.service';
 
 @Component({
   selector: 'app-deliveries',
   templateUrl: './deliveries.component.html',
   styleUrls: ['./deliveries.component.scss'],
 })
-export class DeliveriesComponent implements OnInit, OnDestroy, AfterViewInit {
+export class DeliveriesComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   minDate = new Date();
   maxDate = new Date();
@@ -47,13 +42,29 @@ export class DeliveriesComponent implements OnInit, OnDestroy, AfterViewInit {
     'counts',
     'shadeName',
     'blendName',
+    'hsnCode',
     'orderQuantity',
     'deliveredQuantity',
   ];
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
   loader = false;
   searchByOrderId = false;
+  private paginator!: MatPaginator;
+  private sort!: MatSort;
+
+  @ViewChild(MatSort) set matSort(ms: MatSort) {
+    this.sort = ms;
+    this.setDataSourceAttributes();
+  }
+
+  @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
+    this.paginator = mp;
+    this.setDataSourceAttributes();
+  }
+
+  setDataSourceAttributes() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
 
   constructor(
     public partyService: PartyService,
@@ -63,15 +74,11 @@ export class DeliveriesComponent implements OnInit, OnDestroy, AfterViewInit {
     private notificationService: NotificationService,
     private yarnService: YarnService,
     private datePipe: DatePipe,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private printService: PrintService
   ) {
     this.navigationService.menu = SALES;
     this.navigationService.setFocus(Constants.SALES);
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   ngOnInit() {
@@ -164,6 +171,11 @@ export class DeliveriesComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openDeliveryDetails(row: YarnDeliverySummary) {
-    this.dialog.open(DeliveryDetailsComponent, { data: row, minWidth: 900 });
+    this.subscription.add(
+      this.dialog
+        .open(DeliveryDetailsComponent, { data: row, minWidth: 900 })
+        .afterClosed()
+        .subscribe(() => (this.printService.yarnDCPrint = false))
+    );
   }
 }

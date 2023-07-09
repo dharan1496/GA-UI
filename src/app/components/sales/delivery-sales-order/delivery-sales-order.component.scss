@@ -118,7 +118,8 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-.issue-qty-border-error {
+.issue-qty-border-error,
+.hsn-code-border-error {
   border: 2px solid rgba(223, 29, 29);
   &:focus-visible {
     outline-color: rgba(223, 29, 29);

@@ -156,6 +156,33 @@
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
+        <ng-container matColumnDef="hsnCode">
+          <th mat-header-cell *matHeaderCellDef class="text-right">HSN Code</th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            class="w-15 text-right input-container"
+          >
+            <input
+              [ngClass]="{
+                'hsn-code-border-error': !element.hsnCode && hsnFlag
+              }"
+              #hsnCode
+              type="number"
+              class="cell-input w-70"
+              (input)="
+                element.hsnCode = hsnCode.value;
+                hsnFlag = false;
+                !hsnCode.value && (hsnFlag = true)
+              "
+            />
+            <p *ngIf="!element.hsnCode && hsnFlag" class="error-alert">
+              Enter HSN Code
+            </p>
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
         <ng-container matColumnDef="issueQuantity">
           <th mat-header-cell *matHeaderCellDef class="text-right">
             Issue Qty
@@ -173,7 +200,11 @@
               #issuedQty
               type="number"
               class="cell-input w-70"
-              (input)="element.issueQuantity = issuedQty.value"
+              (input)="
+                element.issueQuantity = issuedQty.value;
+                issuedQtyFlag = false;
+                !issuedQty.value && (issuedQtyFlag = true)
+              "
               decimal="3"
             />
             <p *ngIf="checkIssueQty(element)" class="error-alert">

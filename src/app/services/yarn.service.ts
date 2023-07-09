@@ -259,7 +259,7 @@ export class YarnService {
 
   ordersPendingInvoiceByOrderId(id: number): Observable<DCsPendingInvoice[]> {
     return this.http.get<DCsPendingInvoice[]>(
-      `${environment.api}/YarnOrder/OrdersPendingInvoiceByOrderId?orderId=${id}`
+      `${environment.api}/YarnOrder/DCsPendingInvoiceByOrderId?orderId=${id}`
     );
   }
 

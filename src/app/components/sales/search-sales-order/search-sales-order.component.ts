@@ -1,11 +1,5 @@
 import { DatePipe } from '@angular/common';
-import {
-  AfterViewInit,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   FormGroup,
   FormBuilder,
@@ -32,9 +26,7 @@ import { OrderDetailsComponent } from './order-details/order-details.component';
   templateUrl: './search-sales-order.component.html',
   styleUrls: ['./search-sales-order.component.scss'],
 })
-export class SearchSalesOrderComponent
-  implements OnInit, AfterViewInit, OnDestroy
-{
+export class SearchSalesOrderComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   subscription = new Subscription();
   dataSource = new MatTableDataSource<any>([]);
@@ -46,11 +38,26 @@ export class SearchSalesOrderComponent
     'receivedDate',
     'brokerName',
   ];
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
   loader = false;
   minDate = new Date();
   maxDate = new Date();
+  private paginator!: MatPaginator;
+  private sort!: MatSort;
+
+  @ViewChild(MatSort) set matSort(ms: MatSort) {
+    this.sort = ms;
+    this.setDataSourceAttributes();
+  }
+
+  @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
+    this.paginator = mp;
+    this.setDataSourceAttributes();
+  }
+
+  setDataSourceAttributes() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
 
   constructor(
     public partyService: PartyService,
@@ -64,11 +71,6 @@ export class SearchSalesOrderComponent
   ) {
     this.navigationService.menu = SALES;
     this.navigationService.setFocus(Constants.SALES);
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   ngOnInit(): void {

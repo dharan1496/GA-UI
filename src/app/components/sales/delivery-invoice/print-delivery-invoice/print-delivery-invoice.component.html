@@ -109,6 +109,7 @@
         <th>Counts</th>
         <th>Shade</th>
         <th>Blend</th>
+        <th>HSN Code</th>
         <th class="text-right">Quantity (Kg)</th>
         <th class="text-right">Rate</th>
         <th class="text-right">GST%</th>
@@ -126,6 +127,7 @@
             <td>{{ yarn.counts }}</td>
             <td>{{ yarn.shadeName }}</td>
             <td>{{ yarn.blendName }}</td>
+            <td></td>
             <td class="text-right">{{ yarn.invoiceQty }}</td>
             <td class="text-right">{{ yarn.rate | currency : "INR" }}</td>
             <td class="text-right">{{ yarn.gstPercent }}%</td>
@@ -141,10 +143,13 @@
           <td></td>
           <td></td>
           <td></td>
-          <td class="text-right">{{ getTotalQty() }}</td>
           <td></td>
+          <td class="text-right border-right border-left">
+            {{ getTotalQty() }}
+          </td>
+          <td class="border-right"></td>
           <td></td>
-          <td class="text-right">
+          <td class="text-right border-left">
             {{ getAmount() | currency : "INR" }}
           </td>
         </tr>
@@ -229,7 +234,7 @@
         <div class="grid">
           <div>BANK</div>
           <div>:</div>
-          <div class="purple">CITY UNION BANK LTD.,</div>
+          <div class="purple">CITY UNION BANK LTD.</div>
         </div>
         <div class="grid">
           <div>BRANCH</div>
@@ -254,7 +259,10 @@
   <section class="sign">
     <div class="prepared-by w-5">
       <div class="sign-area"></div>
-      <div class="text-center font-weight-bold">E & OE</div>
+      <div class="text-center font-weight-bold">
+        E & <br />
+        OE
+      </div>
     </div>
     <div class="prepared-by w-20">
       <div class="sign-area"></div>

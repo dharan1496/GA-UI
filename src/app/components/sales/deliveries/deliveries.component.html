@@ -147,6 +147,11 @@
         <td mat-cell *matCellDef="let row">{{ row.blendName }}</td>
       </ng-container>
 
+      <ng-container matColumnDef="hsnCode">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>HSN Code</th>
+        <td mat-cell *matCellDef="let row">{{ row.hsnCode }}</td>
+      </ng-container>
+
       <ng-container matColumnDef="orderQuantity">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Order Qty</th>
         <td mat-cell *matCellDef="let row">

@@ -1,10 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -41,7 +35,7 @@ import { NotifyType } from 'src/app/models/notify';
     ]),
   ],
 })
-export class FibreSearchComponent implements OnInit, OnDestroy, AfterViewInit {
+export class FibreSearchComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   subscription = new Subscription();
   dataSource = new MatTableDataSource<any>(ELEMENT_DATA);
@@ -56,11 +50,26 @@ export class FibreSearchComponent implements OnInit, OnDestroy, AfterViewInit {
     'amount',
   ];
   expandedElement: any;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
   loader = false;
   minDate = new Date();
   maxDate = new Date();
+  private paginator!: MatPaginator;
+  private sort!: MatSort;
+
+  @ViewChild(MatSort) set matSort(ms: MatSort) {
+    this.sort = ms;
+    this.setDataSourceAttributes();
+  }
+
+  @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
+    this.paginator = mp;
+    this.setDataSourceAttributes();
+  }
+
+  setDataSourceAttributes() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
 
   constructor(
     public partyService: PartyService,
@@ -72,11 +81,6 @@ export class FibreSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {
     this.navigationService.setFocus(Constants.PURCHASES);
     this.navigationService.menu = PURCHASE;
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   ngOnInit(): void {

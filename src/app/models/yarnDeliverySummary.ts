@@ -18,4 +18,5 @@ export interface YarnDeliverySummary {
   vehicleNo: string;
   remarks: string;
   createdByUserId: number;
+  hsnCode: number;
 }
