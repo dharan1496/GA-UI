@@ -14,6 +14,8 @@ export interface YarnInvoice {
   district: string;
   state: string;
   stateCode: number;
+  partyPinCode: string;
+  partyGSTNo: string;
   invoiceDts: InvoiceDts[];
   invoiceDCDts: InvoiceDCDts[];
 }

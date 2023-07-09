@@ -13,4 +13,5 @@ export interface InvoiceDCDts {
   dcDate: string;
   orderDtsId: number;
   deliveryQty: number;
+  hsnCode: number;
 }

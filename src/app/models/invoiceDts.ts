@@ -8,4 +8,5 @@ export interface InvoiceDts {
   invoiceQty: number;
   rate: number;
   gstPercent: number;
+  hsnCode: number;
 }

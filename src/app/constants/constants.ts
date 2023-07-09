@@ -5,5 +5,4 @@ export const Constants = {
   DELIVERABLE: 'DELIVERABLE',
   PARTY: 'party',
   HIDDEN: 'hidden',
-  AUTO: 'auto',
 };

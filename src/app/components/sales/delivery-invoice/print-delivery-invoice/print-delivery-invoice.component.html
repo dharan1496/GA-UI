@@ -48,7 +48,15 @@
             <span *ngIf="printService.yarnInvoice.partyAddress3"
               >{{ printService.yarnInvoice.partyAddress3 }}, <br
             /></span>
-            <span class="blue">{{ printService.yarnInvoice.city }} - </span>
+            <span class="blue"
+              >{{ printService.yarnInvoice.city }} -
+              {{ printService.yarnInvoice.partyPinCode }}</span
+            >
+            <div class="mt-16 font-weight-bold">
+              <span
+                >BUYER GSTIN: {{ printService.yarnInvoice.partyGSTNo }}</span
+              >
+            </div>
           </div>
         </div>
       </div>
@@ -109,7 +117,7 @@
         <th>Counts</th>
         <th>Shade</th>
         <th>Blend</th>
-        <th>HSN Code</th>
+        <th class="text-right">HSN Code</th>
         <th class="text-right">Quantity (Kg)</th>
         <th class="text-right">Rate</th>
         <th class="text-right">GST%</th>
@@ -127,7 +135,7 @@
             <td>{{ yarn.counts }}</td>
             <td>{{ yarn.shadeName }}</td>
             <td>{{ yarn.blendName }}</td>
-            <td></td>
+            <td class="text-right">{{ yarn.hsnCode }}</td>
             <td class="text-right">{{ yarn.invoiceQty }}</td>
             <td class="text-right">{{ yarn.rate | currency : "INR" }}</td>
             <td class="text-right">{{ yarn.gstPercent }}%</td>
