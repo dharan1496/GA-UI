@@ -42,7 +42,6 @@ export class DeliveriesComponent implements OnInit, OnDestroy {
     'counts',
     'shadeName',
     'blendName',
-    'hsnCode',
     'orderQuantity',
     'deliveredQuantity',
   ];
