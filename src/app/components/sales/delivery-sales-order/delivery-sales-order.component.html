@@ -12,8 +12,8 @@
       </mat-card-header>
       <mat-card-content>
         <form [formGroup]="form">
-          <div class="form-container">
-            <div class="w-25 ml-16">
+          <div class="form-container space-between ml-16">
+            <div class="w-100">
               <label class="font-weight-bold">Order No</label>
               <div class="font-size-16 text-gray pt-4">
                 <span *ngIf="orderSelected?.orderNo">{{
@@ -22,7 +22,7 @@
                 <span *ngIf="!orderSelected?.orderNo">_</span>
               </div>
             </div>
-            <div class="w-25 ml-8">
+            <div class="w-100">
               <label class="font-weight-bold">Order Date</label>
               <div class="font-size-16 text-gray pt-4">
                 <span *ngIf="orderSelected?.orderDate">{{
@@ -31,13 +31,22 @@
                 <span *ngIf="!orderSelected?.orderDate">_</span>
               </div>
             </div>
-            <div class="w-50 ml-4">
+            <div class="w-100">
               <label class="font-weight-bold">Party</label>
               <div class="font-size-16 text-gray pt-4">
                 <span *ngIf="orderSelected?.partyName">{{
                   orderSelected?.partyName
                 }}</span>
                 <span *ngIf="!orderSelected?.partyName">_</span>
+              </div>
+            </div>
+            <div class="w-100">
+              <label class="font-weight-bold">Order Qty</label>
+              <div class="font-size-16 text-gray pt-4">
+                <span *ngIf="orderSelected?.orderQuantity">{{
+                  orderSelected?.orderQuantity
+                }}</span>
+                <span *ngIf="!orderSelected?.orderQuantity">_</span>
               </div>
             </div>
           </div>

@@ -127,11 +127,7 @@
             <td class="text-right">{{ yarn.deliveredQuantity }}</td>
             <td class="text-right">{{ yarn.previousDeliveredQuantity }}</td>
             <td class="text-right">
-              {{
-                yarn.orderQuantity -
-                  (yarn.deliveredQuantity +
-                    (yarn.previousDeliveredQuantity || 0))
-              }}
+              {{ getBalanceToDeliver(yarn) }}
             </td>
           </tr>
         </ng-container>
