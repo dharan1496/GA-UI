@@ -105,6 +105,15 @@ export class FibreService {
     );
   }
 
+  addWasteCategory(
+    wasteCategoryName: string
+  ): Observable<FibreWasteCategory[]> {
+    return this.http.post<FibreWasteCategory[]>(
+      `${environment.api}/Master/AddWasteCategory?wasteCategoryName=${wasteCategoryName}&createdByUserId=0`,
+      {}
+    );
+  }
+
   getWasteCategory(): Observable<FibreWasteCategory[]> {
     return this.http.get<FibreWasteCategory[]>(
       `${environment.api}/Fiber/GetFibreWasteCategories`

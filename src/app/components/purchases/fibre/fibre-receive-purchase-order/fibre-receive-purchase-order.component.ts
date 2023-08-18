@@ -145,6 +145,8 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
         receivedBales: data?.receivedBales,
         rate: data?.rate,
         gstPercent: data?.gstpercent,
+        fiberShadeId: data?.shadeId,
+        fiberTypeId: data?.fibreTypeId,
       } as ReceiveFibrePODts);
     });
     this.subscription.add(

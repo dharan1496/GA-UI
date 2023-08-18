@@ -142,6 +142,7 @@ export class MixingComponent {
         fibreTypeId: data?.fibreTypeId,
         issueQuantity: +data?.issueQuantity,
         shadeId: data?.shadeId,
+        lot: data?.lot,
       };
     });
     const fibreMixing: FibreMixing = {

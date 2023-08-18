@@ -14,6 +14,7 @@ import { ProductionEntryComponent } from './entry/production-entry/production-en
 import { WasteEntryComponent } from './entry/waste-entry/waste-entry.component';
 import { DecimalDirective } from 'src/app/shared/decimalNumberDirective';
 import { YarnRecoveryComponent } from './yarn-recovery/yarn-recovery.component';
+import { WasteComponent } from './production-master/waste/waste.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { YarnRecoveryComponent } from './yarn-recovery/yarn-recovery.component';
     ProductionEntryComponent,
     WasteEntryComponent,
     YarnRecoveryComponent,
+    WasteComponent,
   ],
   imports: [
     CommonModule,
