@@ -42,9 +42,10 @@ export class RecoveryDetailsComponent implements OnInit, OnDestroy {
   fibreCategories!: FibreCategory[];
   fibreTypes!: FibreType[];
   loader = true;
+  expanded = false;
 
   constructor(
-    private matDialogRef: MatDialogRef<any>,
+    private matDialogRef: MatDialogRef<RecoveryDetailsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private yarnService: YarnService,
     private notificationService: NotificationService,
@@ -111,7 +112,18 @@ export class RecoveryDetailsComponent implements OnInit, OnDestroy {
   }
 
   expand() {
-    this.matDialogRef.addPanelClass('full-screen-modal');
+    this.expanded = !this.expanded;
+    if (this.expanded) {
+      this.matDialogRef.updateSize('100vw', '100vh');
+      document
+        .querySelector('.mat-mdc-dialog-content')
+        ?.classList.add('max-height-90');
+    } else {
+      this.matDialogRef.updateSize('75vw');
+      document
+        .querySelector('.mat-mdc-dialog-content')
+        ?.classList.remove('max-height-90');
+    }
   }
 
   print() {

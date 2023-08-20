@@ -88,7 +88,7 @@ export class YarnRecoveryComponent implements OnInit, OnDestroy {
   openRecoveryDetails(row: any) {
     this.dialog.open(RecoveryDetailsComponent, {
       data: row,
-      minWidth: '75vw',
+      minWidth: '70vw',
     });
   }
 }
