@@ -188,7 +188,7 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
         closedByUserId: 0,
         createdByUserId: 0,
         yarnCounts,
-        mixingSummary: [],
+        mixingDetails: [],
       };
       this.yarnService.createProgram(program).subscribe({
         next: () => {

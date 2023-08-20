@@ -78,7 +78,7 @@ export class MixingComponent {
   fibreStock() {
     this.dialog
       .open(SelectFibreStockComponent, {
-        minWidth: '75vw',
+        minWidth: '70vw',
         data: this.programDetails?.programId,
       })
       .afterClosed()
