@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Constants } from 'src/app/constants/constants';
 import { PRODUCTION } from 'src/app/constants/production-menu-values.const';
@@ -22,9 +21,9 @@ export class YarnRecoveryComponent implements OnInit, OnDestroy {
     'programDate',
     'shadeName',
     'blendName',
+    'yarnLot',
     'plannedQty',
     'mixedQuantity',
-    'yarnLot',
     'productionQty',
     'wasteQuantity',
     'yarnRecoveryPercent',
@@ -33,12 +32,6 @@ export class YarnRecoveryComponent implements OnInit, OnDestroy {
   subscription = new Subscription();
   loader = false;
   private paginator!: MatPaginator;
-  private sort!: MatSort;
-
-  @ViewChild(MatSort) set matSort(ms: MatSort) {
-    this.sort = ms;
-    this.setDataSourceAttributes();
-  }
 
   @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
@@ -47,7 +40,6 @@ export class YarnRecoveryComponent implements OnInit, OnDestroy {
 
   setDataSourceAttributes() {
     this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   constructor(
@@ -70,7 +62,6 @@ export class YarnRecoveryComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (data) => {
             this.dataSource = new MatTableDataSource(data);
-            this.dataSource.sort = this.sort;
           },
           error: (error) => {
             this.notificationService.error(
@@ -95,6 +86,9 @@ export class YarnRecoveryComponent implements OnInit, OnDestroy {
   }
 
   openRecoveryDetails(row: any) {
-    this.dialog.open(RecoveryDetailsComponent, { data: row, minWidth: 500 });
+    this.dialog.open(RecoveryDetailsComponent, {
+      data: row,
+      minWidth: '75vw',
+    });
   }
 }

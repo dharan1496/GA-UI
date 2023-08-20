@@ -12,6 +12,7 @@ import { FibreShade } from '../models/fibreShade';
 import { FibreStock } from '../models/fibreStock';
 import { FibreCategory } from '../models/fibreCategory';
 import { FibreWasteCategory } from '../models/fibreWasteCategory';
+import { FibreIssueDetails } from '../models/fibreIssueDetails';
 
 @Injectable({
   providedIn: 'root',
@@ -93,6 +94,17 @@ export class FibreService {
     );
   }
 
+  searchFibreStock(
+    asOnDate: string,
+    partyId = '',
+    fibreTypeId = ''
+  ): Observable<FibreStock[]> {
+    let endpoint = `/Fiber/GetFibreStockSearch?asOnDate=${asOnDate}`;
+    partyId && (endpoint = endpoint + `&partyId=${partyId}`);
+    fibreTypeId && (endpoint = endpoint + `&fiberTypeId=${fibreTypeId}`);
+    return this.http.get<FibreStock[]>(`${environment.api}${endpoint}`);
+  }
+
   getFibreStockForMixing(programId: string): Observable<FibreStock[]> {
     return this.http.get<FibreStock[]>(
       `${environment.api}/Fiber/GetFibreStockForMixing?programId=${programId}`
@@ -117,6 +129,12 @@ export class FibreService {
   getWasteCategory(): Observable<FibreWasteCategory[]> {
     return this.http.get<FibreWasteCategory[]>(
       `${environment.api}/Fiber/GetFibreWasteCategories`
+    );
+  }
+
+  getFiberConsumption(receivedDtsId: number): Observable<FibreIssueDetails[]> {
+    return this.http.get<FibreIssueDetails[]>(
+      `${environment.api}/Fiber/GetFiberConsumptionByRecdDtsId?receivedDtsId=${receivedDtsId}`
     );
   }
 }

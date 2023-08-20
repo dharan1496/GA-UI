@@ -1,0 +1,43 @@
+<section class="print" *ngIf="printService.fibreStockPrint">
+  <section class="header">
+    <h1>
+      Fibre Stock as on date
+      {{ printService.fibreStockAsOnDate | date : "dd/MM/yyyy" }}
+    </h1>
+  </section>
+  <table>
+    <thead>
+      <th>S.No.</th>
+      <th>Received DC No</th>
+      <th>Fibre Type</th>
+      <th>Fibre Shade</th>
+      <th>Lot</th>
+      <th class="text-right">Received Qty (kg)</th>
+      <th class="text-right">Issued Qty (kg)</th>
+      <th class="text-right">Stock Qty (kg)</th>
+      <th class="text-right">Rate</th>
+      <th class="text-right">Amount</th>
+    </thead>
+    <tbody>
+      <ng-container
+        *ngFor="let stock of printService.fibreStocks; let i = index"
+      >
+        <tr>
+          <td>{{ i + 1 }}</td>
+          <td>{{ stock.receivedDCNo }}</td>
+          <td>{{ stock.fibreType }}</td>
+          <td>{{ stock.shadeName }}</td>
+          <td>{{ stock.lot }}</td>
+          <td class="text-right">{{ stock.receivedQty }}</td>
+          <td class="text-right">{{ stock.issuedQty }}</td>
+          <td class="text-right">{{ stock.stock }}</td>
+          <td class="text-right">{{ stock.rate | currency : "INR" }}</td>
+          <td class="text-right">
+            {{ stock.stock * stock.rate | currency : "INR" }}
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+  <div>Print Date: {{ today | date : "dd/MM/yyyy" }}</div>
+</section>

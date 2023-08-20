@@ -182,6 +182,6 @@ export class SearchSalesOrderComponent implements OnInit, OnDestroy {
   }
 
   openOrderDetails(row: any) {
-    this.dialog.open(OrderDetailsComponent, { data: row, minWidth: 900 });
+    this.dialog.open(OrderDetailsComponent, { data: row, minWidth: '75vw' });
   }
 }

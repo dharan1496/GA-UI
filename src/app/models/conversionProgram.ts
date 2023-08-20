@@ -15,5 +15,5 @@ export interface ConversionProgram {
   createdByUserId: number;
   closedByUserId: number;
   yarnCounts: ConversionYarn[];
-  mixingSummary: ProgramFibresMixed[];
+  mixingDetails: ProgramFibresMixed[];
 }

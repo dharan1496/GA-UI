@@ -61,7 +61,7 @@ export class MixingComponent {
 
   chooseProgram() {
     this.dialog
-      .open(ChooseProgramComponent, { minWidth: 1000 })
+      .open(ChooseProgramComponent, { minWidth: '75vw' })
       .afterClosed()
       .subscribe((programId: number) => {
         if (programId) {
@@ -78,7 +78,7 @@ export class MixingComponent {
   fibreStock() {
     this.dialog
       .open(SelectFibreStockComponent, {
-        minWidth: 1000,
+        minWidth: '75vw',
         data: this.programDetails?.programId,
       })
       .afterClosed()
@@ -116,7 +116,7 @@ export class MixingComponent {
     const addedStockType = [
       ...new Set(
         this.mixingDetails
-          .sort((a, b) => a['categoryOrder'] - b['categoryOrder'])
+          .sort((a, b) => a['fibreCategoryId'] - b['fibreCategoryId'])
           .map((data) => data['fibreCategoryName'])
       ),
     ];

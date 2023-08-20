@@ -1,19 +1,10 @@
-.container {
-  padding: 0 32px 16px;
-}
-
 .header {
   display: flex;
   justify-content: space-between;
 }
 
-.title {
-  display: flex;
-  align-items: center;
-}
-
-h1 {
-  padding-right: 0;
+.container {
+  padding: 0 32px 16px;
 }
 
 .details {
@@ -21,25 +12,26 @@ h1 {
   grid-template-columns: repeat(3, 1fr);
   row-gap: 20px;
   column-gap: 32px;
-  margin-bottom: 24px;
-}
-
-.table-header {
-  margin-top: 16px;
 }
 
 .table {
   border: 1px solid #e0e0e0;
-  margin-top: 8px;
-  margin-bottom: 20px;
+  margin-top: 16px;
+  margin-bottom: 4px;
 }
 
 .mat-mdc-header-row {
   background: rgb(225, 225, 225);
 }
 
-.spinner {
+.mat-mdc-table-sticky {
+  border-top: 1px solid #e0e0e0;
+}
+
+.footer {
   display: flex;
   justify-content: center;
-  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  margin-bottom: 16px;
 }

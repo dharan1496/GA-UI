@@ -43,7 +43,7 @@ export class WasteEntryComponent {
 
   chooseProgram() {
     this.dialog
-      .open(ChooseProgramForEntryComponent, { minWidth: 1000 })
+      .open(ChooseProgramForEntryComponent, { minWidth: '75vw' })
       .afterClosed()
       .subscribe((program: ProgramForProductionEntry) => {
         if (program) {

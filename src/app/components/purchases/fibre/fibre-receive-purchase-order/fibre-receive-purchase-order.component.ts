@@ -16,6 +16,9 @@ import { Router } from '@angular/router';
 import { PendingFibrePoComponent } from './pending-fibre-po/pending-fibre-po.component';
 import { ReceiveFibrePODts } from 'src/app/models/receiveFibrePODts';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
+import { PendingPODetailsByParty } from 'src/app/models/pendingPODtsByParty';
+import { DatePipe } from '@angular/common';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-fibre-receive-purchase-order',
@@ -44,6 +47,7 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
   @ViewChild(MatTable) table!: MatTable<any>;
   selection = new SelectionModel<any>(true, []);
   subscription = new Subscription();
+  poDate!: Date;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -53,7 +57,8 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
     public partyService: PartyService,
     private fibreService: FibreService,
     private router: Router,
-    public appSharedService: AppSharedService
+    public appSharedService: AppSharedService,
+    private datePipe: DatePipe
   ) {
     this.navigationService.setFocus('purchases');
     this.navigationService.menu = PURCHASE;
@@ -65,6 +70,7 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       poNo: [{ value: '', disabled: true }],
       partyId: '',
+      poDate: [{ value: '', disabled: true }],
       recdDate: ['', Validators.required],
       recdDCNo: ['', Validators.required],
       dcDate: ['', Validators.required],
@@ -238,6 +244,7 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
     this.form.patchValue({
       poNo: poNo,
       partyId: data.partyId,
+      poDate: this.getPODate(data?.po),
     });
     this.dataSource = po as never[];
   }
@@ -246,6 +253,14 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
     const partyId = this.form.get('partyId')?.value;
     return this.partyService.parties.find((data) => data.partyId === partyId)
       ?.partyName;
+  }
+
+  getPODate(details: PendingPODetailsByParty[]) {
+    const dates = details.map((data) =>
+      moment(data.poDate, 'DD/MM/YYYY').toDate()
+    );
+    this.poDate = dates.reduce((a, b) => (a > b ? a : b));
+    return this.poDate;
   }
 
   getAmount() {

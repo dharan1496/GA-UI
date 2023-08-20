@@ -25,6 +25,13 @@
           </div>
         </div>
 
+        <div class="min-w-25 max-w-50">
+          <label for="poNo" class="font-weight-bold">PO Date</label>
+          <div id="poNo" class="font-size-16 text-gray pt-4">
+            {{ (form.get("poDate")?.value | date : "dd/MM/yyyy") || "_" }}
+          </div>
+        </div>
+
         <div class="form-container w-100">
           <mat-form-field appearance="fill" class="w-25">
             <mat-label>Received Date</mat-label>
@@ -32,6 +39,7 @@
               matInput
               [matDatepicker]="receivedDatePicker"
               formControlName="recdDate"
+              [min]="poDate"
               (dateChange)="
                 appSharedService.formatDate($event, form.controls['recdDate'])
               "
@@ -42,7 +50,13 @@
               [for]="receivedDatePicker"
             ></mat-datepicker-toggle>
             <mat-datepicker #receivedDatePicker></mat-datepicker>
-            <mat-error>This field is required.</mat-error>
+            <mat-error *ngIf="form.get('recdDate')?.hasError('required')"
+              >This field is required.</mat-error
+            >
+            <mat-error
+              *ngIf="form.get('recdDate')?.hasError('matDatepickerMin')"
+              >Date should be greater than PO Date</mat-error
+            >
           </mat-form-field>
 
           <mat-form-field appearance="fill" class="w-25">

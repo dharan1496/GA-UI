@@ -1,0 +1,174 @@
+<section class="print" *ngIf="printService.yarnRecoveryPrint">
+  <section class="header">
+    <h1>Yarn Recovery Details</h1>
+  </section>
+  <section class="details word-break-all">
+    <div>
+      <div class="text-dark pb-4">Program No</div>
+      <div class="font-size-16">
+        {{ printService.yarnRecoveryDetails.programDetails.programNo }}
+      </div>
+    </div>
+    <div>
+      <div class="text-dark pb-4">Program Date</div>
+      <div class="font-size-16">
+        {{ printService.yarnRecoveryDetails.programDetails.programDate }}
+      </div>
+    </div>
+    <div>
+      <div class="text-dark pb-4">Shade</div>
+      <div class="font-size-16">
+        {{ printService.yarnRecoveryDetails.programDetails.shadeName }}
+      </div>
+    </div>
+    <div>
+      <div class="text-dark pb-4">Blend</div>
+      <div class="font-size-16">
+        {{ printService.yarnRecoveryDetails.programDetails.blendName }}
+      </div>
+    </div>
+    <div>
+      <div class="text-dark pb-4">Lot</div>
+      <div class="font-size-16">
+        {{ printService.yarnRecoveryDetails.data.yarnLot }}
+      </div>
+    </div>
+    <div>
+      <div class="text-dark pb-4">Mixed Quantity</div>
+      <div class="font-size-16">
+        {{
+          printService.yarnRecoveryDetails.data.mixedQuantity | number : "1.0-3"
+        }}
+        kg
+      </div>
+    </div>
+    <div>
+      <div class="text-dark pb-4">Produced Quantity</div>
+      <div class="font-size-16">
+        {{
+          printService.yarnRecoveryDetails.data.productionQty | number : "1.0-3"
+        }}
+        kg
+      </div>
+    </div>
+    <div>
+      <div class="text-dark pb-4">Yarn Recovery Percentage</div>
+      <div class="font-size-16">
+        {{
+          printService.yarnRecoveryDetails.data.yarnRecoveryPercent || 0
+            | number : "1.2-2"
+        }}%
+      </div>
+    </div>
+    <div>
+      <div class="text-dark pb-4">Waste Quantity</div>
+      <div class="font-size-16">
+        {{
+          printService.yarnRecoveryDetails.data.wasteQuantity | number : "1.0-3"
+        }}
+        kg
+      </div>
+    </div>
+    <div>
+      <div class="text-dark pb-4">Waste Percentage</div>
+      <div class="font-size-16">
+        {{
+          (printService.yarnRecoveryDetails.data.wasteQuantity /
+            printService.yarnRecoveryDetails.data.mixedQuantity) *
+            100 || 0 | number : "1.2-2"
+        }}%
+      </div>
+    </div>
+  </section>
+  <section class="mt-32">
+    <div class="text-dark">Mixing Details:</div>
+    <table>
+      <thead>
+        <th>S.No.</th>
+        <th>Received DC No</th>
+        <th>Received Date</th>
+        <th>Fibre Type</th>
+        <th>Fibre Shade</th>
+        <th>Lot</th>
+        <th class="text-right">Issued Qty (kg)</th>
+        <th class="text-right">Rate</th>
+        <th class="text-right">Amount</th>
+      </thead>
+      <tbody>
+        <ng-container
+          *ngFor="
+            let mixing of printService.yarnRecoveryDetails.programDetails
+              .mixingDetails;
+            let i = index
+          "
+        >
+          <tr>
+            <td>{{ i + 1 }}</td>
+            <td>{{ mixing.receivedDCNo }}</td>
+            <td>{{ mixing.receivedDate }}</td>
+            <td>{{ mixing.fiberType }}</td>
+            <td>{{ mixing.fiberShade }}</td>
+            <td>{{ mixing.lot }}</td>
+            <td class="text-right">{{ mixing.issuedQuantity }}</td>
+            <td class="text-right">{{ mixing.rate | currency : "INR" }}</td>
+            <td class="text-right">
+              {{ mixing.issuedQuantity * mixing.rate | currency : "INR" }}
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </section>
+  <section class="mt-24">
+    <div class="text-dark">Yarn Counts:</div>
+    <table>
+      <thead>
+        <th>S.No.</th>
+        <th>Counts</th>
+        <th>Program Qty (kg)</th>
+        <th>Produced Qty (kg)</th>
+      </thead>
+      <tbody>
+        <ng-container
+          *ngFor="
+            let counts of printService.yarnRecoveryDetails.programDetails
+              .yarnCounts;
+            let i = index
+          "
+        >
+          <tr>
+            <td>{{ i + 1 }}</td>
+            <td>{{ counts.counts }}</td>
+            <td>{{ counts.programQuantity }}</td>
+            <td>{{ counts.productionQuantity }}</td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </section>
+  <section class="mt-24">
+    <div class="text-dark">Waste Details:</div>
+    <table>
+      <thead>
+        <th>S.No.</th>
+        <th>Waste Category</th>
+        <th>Waste Qty (kg)</th>
+      </thead>
+      <tbody>
+        <ng-container
+          *ngFor="
+            let waste of printService.yarnRecoveryDetails.wasteDetails;
+            let i = index
+          "
+        >
+          <tr>
+            <td>{{ i + 1 }}</td>
+            <td>{{ waste.wasteCategoryName }}</td>
+            <td>{{ waste.wasteQuantity }}</td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </section>
+  <div class="mt-24">Print Date: {{ today | date : "dd/MM/yyyy" }}</div>
+</section>

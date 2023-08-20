@@ -7,9 +7,22 @@ h1 {
   margin: 40px 0;
 }
 
+.form-container {
+  display: inline;
+}
+
+.filter-section {
+  margin-bottom: 32px;
+}
+
 .add-btn {
   display: flex;
   margin-bottom: 16px;
+}
+
+.search-btn {
+  display: inline-block;
+  padding-top: 16px;
 }
 
 .card {
@@ -29,6 +42,13 @@ h1 {
   padding: 8px 0;
 }
 
+.row {
+  cursor: pointer;
+  &:hover {
+    background-color: whitesmoke !important;
+  }
+}
+
 .loader {
   width: 100%;
   height: 100%;
@@ -46,4 +66,14 @@ h1 {
 .no-rows {
   padding: 16px 0;
   text-align: center;
+}
+
+.stocks-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.ml-40 {
+  margin-left: 60px;
 }

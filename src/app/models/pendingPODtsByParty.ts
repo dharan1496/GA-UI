@@ -2,6 +2,7 @@ export interface PendingPODetailsByParty {
   poId: number;
   poNo: string;
   poDtsId: number;
+  poDate: string;
   fibreTypeId: number;
   fibreType: string;
   shade: string;

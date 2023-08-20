@@ -1,0 +1,70 @@
+<div class="header">
+  <h1 mat-dialog-title>Stock Details</h1>
+  <button mat-icon-button (click)="close()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<div mat-dialog-content class="container word-break-all">
+  <section class="details">
+    <div>
+      <div class="text-dark pb-2">Received DC No</div>
+      <div>{{ fibreStock.receivedDCNo }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Fibre Name</div>
+      <div>{{ fibreStock.fibreType }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Received Date</div>
+      <div>{{ fibreStock.receivedDate | date : "dd/MM/yyyy" }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Received Qty</div>
+      <div>{{ fibreStock.receivedQty }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Stock Qty</div>
+      <div>{{ fibreStock.stock }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Party</div>
+      <div>{{ fibreStock.partyName }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Lot</div>
+      <div>{{ fibreStock.lot }}</div>
+    </div>
+  </section>
+  <section *ngIf="!loader && dataSource.length" class="mt-24">
+    <div class="text-dark">Issued Details:</div>
+    <table mat-table [dataSource]="dataSource" class="table">
+      <ng-container matColumnDef="issuedDate">
+        <th mat-header-cell *matHeaderCellDef>Issued Date</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.issuedDate }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="ProgramNo">
+        <th mat-header-cell *matHeaderCellDef>Program No</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.issuedProgramNo }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="issuedQty">
+        <th mat-header-cell *matHeaderCellDef>Issued Qty</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.issuedQty }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
+    </table>
+  </section>
+  <section *ngIf="!loader && !dataSource.length" class="mt-24 text-dark">
+    *No issued details
+  </section>
+</div>

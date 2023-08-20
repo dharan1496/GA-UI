@@ -14,9 +14,13 @@ import { CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { PrintDeliveryReceiptComponent } from './components/sales/print-delivery-receipt/print-delivery-receipt.component';
 import { PrintDeliveryInvoiceComponent } from './components/sales/delivery-invoice/print-delivery-invoice/print-delivery-invoice.component';
+import { PrintFibreStockComponent } from './components/purchases/fibre/fibre-stock/print-fibre-stock/print-fibre-stock.component';
+import { PrintRecoveryDetailsComponent } from './components/production/yarn-recovery/print-recovery-details/print-recovery-details.component';
 
 @NgModule({
   declarations: [AppComponent, SideMenuComponent, ToolBarComponent],
+  providers: [AuthGuard, DatePipe, DecimalPipe, CurrencyPipe],
+  bootstrap: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -28,8 +32,8 @@ import { PrintDeliveryInvoiceComponent } from './components/sales/delivery-invoi
     HttpClientModule,
     NgIdleKeepaliveModule.forRoot(),
     PrintDeliveryInvoiceComponent,
+    PrintFibreStockComponent,
+    PrintRecoveryDetailsComponent,
   ],
-  providers: [AuthGuard, DatePipe, DecimalPipe, CurrencyPipe],
-  bootstrap: [AppComponent],
 })
 export class AppModule {}

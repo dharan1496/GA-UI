@@ -172,7 +172,7 @@ export class DeliveriesComponent implements OnInit, OnDestroy {
   openDeliveryDetails(row: YarnDeliverySummary) {
     this.subscription.add(
       this.dialog
-        .open(DeliveryDetailsComponent, { data: row, minWidth: 900 })
+        .open(DeliveryDetailsComponent, { data: row, minWidth: '75vw' })
         .afterClosed()
         .subscribe(() => (this.printService.yarnDCPrint = false))
     );

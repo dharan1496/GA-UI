@@ -65,7 +65,7 @@ export class DeliveryInvoiceComponent {
 
   chooseOrder() {
     this.dialog
-      .open(ChooseOrderForInvoiceComponent, { minWidth: 1000 })
+      .open(ChooseOrderForInvoiceComponent, { minWidth: '75vw' })
       .afterClosed()
       .subscribe((order: chooseOrder) => {
         if (order) {
@@ -115,7 +115,7 @@ export class DeliveryInvoiceComponent {
   yarnDC() {
     this.dialog
       .open(SelectDcComponent, {
-        minWidth: 1000,
+        minWidth: '75vw',
         data: this.orderSelected?.orderId,
       })
       .afterClosed()

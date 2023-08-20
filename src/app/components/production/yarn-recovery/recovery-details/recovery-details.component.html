@@ -1,33 +1,74 @@
-<h1 mat-dialog-title>Recovery Details</h1>
+<div class="header">
+  <div class="title">
+    <h1 mat-dialog-title>Recovery Details</h1>
+    <button
+      *ngIf="!loader"
+      mat-icon-button
+      matTooltip="print"
+      color="accent"
+      (click)="print()"
+    >
+      <mat-icon>print</mat-icon>
+    </button>
+  </div>
+  <button mat-icon-button (click)="close()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
 <div mat-dialog-content class="container">
-  <div *ngIf="!programDetails" class="spinner">
+  <div *ngIf="loader" class="spinner">
     <mat-spinner></mat-spinner>
   </div>
-  <section class="details" *ngIf="programDetails">
+  <section class="details word-break-all" *ngIf="!loader">
     <div>
-      <div class="text-dark">Program No</div>
+      <div class="text-dark pb-2">Program No</div>
       <div>{{ programDetails.programNo }}</div>
     </div>
     <div>
-      <div class="text-dark">Program Date</div>
+      <div class="text-dark pb-2">Program Date</div>
       <div>{{ programDetails.programDate }}</div>
     </div>
     <div>
-      <div class="text-dark">Shade</div>
+      <div class="text-dark pb-2">Shade</div>
       <div>{{ programDetails.shadeName }}</div>
     </div>
     <div>
-      <div class="text-dark">Blend</div>
+      <div class="text-dark pb-2">Blend</div>
       <div>{{ programDetails.blendName }}</div>
     </div>
     <div>
-      <div class="text-dark">Lot</div>
+      <div class="text-dark pb-2">Lot</div>
       <div>{{ data.yarnLot }}</div>
     </div>
+    <div>
+      <div class="text-dark pb-2">Mixed Quantity</div>
+      <div>{{ data.mixedQuantity | number : "1.0-3" }} kg</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Produced Quantity</div>
+      <div>{{ data.productionQty | number : "1.0-3" }} kg</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Yarn Recovery Percentage</div>
+      <div>{{ data.yarnRecoveryPercent || 0 | number : "1.2-2" }}%</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Waste Quantity</div>
+      <div>{{ data.wasteQuantity | number : "1.0-3" }} kg</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Waste Percentage</div>
+      <div>
+        {{
+          (data.wasteQuantity / data.mixedQuantity) * 100 || 0
+            | number : "1.2-2"
+        }}%
+      </div>
+    </div>
   </section>
-  <div *ngIf="programDetails?.mixingSummary?.length">
-    <div class="table-header text-dark">Mixing Summary:</div>
-    <table mat-table [dataSource]="programDetails.mixingSummary" class="table">
+  <div *ngIf="programDetails?.mixingDetails?.length">
+    <div class="table-header text-dark">Mixing Details:</div>
+    <table mat-table [dataSource]="programDetails.mixingDetails" class="table">
       <ng-container matColumnDef="sNo">
         <th mat-header-cell *matHeaderCellDef>S No</th>
         <td mat-cell *matCellDef="let element; let index = index">
@@ -36,24 +77,59 @@
         <td mat-footer-cell *matFooterCellDef></td>
       </ng-container>
 
-      <ng-container matColumnDef="fibreType">
-        <th mat-header-cell *matHeaderCellDef>Fibre Type</th>
+      <ng-container matColumnDef="receivedDCNo">
+        <th mat-header-cell *matHeaderCellDef>Received DC No</th>
         <td mat-cell *matCellDef="let element">
-          {{ getFibreType(element.fibreTypeId) }}
+          {{ element.receivedDCNo }}
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="fibreCategory">
-        <th mat-header-cell *matHeaderCellDef>Fibre Category</th>
+      <ng-container matColumnDef="receivedDate">
+        <th mat-header-cell *matHeaderCellDef>Received Date</th>
         <td mat-cell *matCellDef="let element">
-          {{ getFibreCategory(element.fibreCategoryId) }}
+          {{ element.receivedDate }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="fibreType">
+        <th mat-header-cell *matHeaderCellDef>Fibre Type</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.fiberType }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="fibreShade">
+        <th mat-header-cell *matHeaderCellDef>Fibre Shade</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.fiberShade }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="lot">
+        <th mat-header-cell *matHeaderCellDef>Lot</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.lot }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="issueQty">
         <th mat-header-cell *matHeaderCellDef class="text-right">Issue Qty</th>
         <td mat-cell *matCellDef="let element" class="text-right">
-          {{ element.issueQuantity }}
+          {{ element.issuedQuantity }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="rate">
+        <th mat-header-cell *matHeaderCellDef class="text-right">Rate</th>
+        <td mat-cell *matCellDef="let element" class="text-right">
+          {{ element.rate | currency : "INR" }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef class="text-right">Amount</th>
+        <td mat-cell *matCellDef="let element" class="text-right">
+          {{ element.issuedQuantity * element.rate | currency : "INR" }}
         </td>
       </ng-container>
 
@@ -61,12 +137,6 @@
       <tr mat-row *matRowDef="let row; columns: mixingSummaryColumns"></tr>
     </table>
   </div>
-  <section class="details" *ngIf="programDetails">
-    <div class="my-16">
-      <div class="text-dark">Mixed Quantity</div>
-      <div>{{ data.mixedQuantity | number : "1.0-3" }} kg</div>
-    </div>
-  </section>
   <div *ngIf="programDetails?.yarnCounts?.length">
     <div class="table-header text-dark">Yarn Counts:</div>
     <table mat-table [dataSource]="programDetails.yarnCounts" class="table">
@@ -107,16 +177,6 @@
       <tr mat-row *matRowDef="let row; columns: yarnCountsColumns"></tr>
     </table>
   </div>
-  <section class="details" *ngIf="programDetails">
-    <div class="my-16">
-      <div class="text-dark">Produced Quantity</div>
-      <div>{{ data.productionQty | number : "1.0-3" }} kg</div>
-    </div>
-    <div>
-      <div class="text-dark">Yarn Recovery Percentage</div>
-      <div>{{ data.yarnRecoveryPercent || 0 | number : "1.2-2" }}%</div>
-    </div>
-  </section>
   <div *ngIf="wasteDetails.length">
     <div class="table-header text-dark">Waste Details:</div>
     <table mat-table [dataSource]="wasteDetails" class="table">
@@ -146,22 +206,4 @@
       <tr mat-row *matRowDef="let row; columns: wasteColumns"></tr>
     </table>
   </div>
-  <section class="details" *ngIf="programDetails">
-    <div class="my-16">
-      <div class="text-dark">Waste Quantity</div>
-      <div>{{ data.wasteQuantity | number : "1.0-3" }} kg</div>
-    </div>
-    <div>
-      <div class="text-dark">Waste Percentage</div>
-      <div>
-        {{
-          (data.wasteQuantity / data.mixedQuantity) * 100 || 0
-            | number : "1.2-2"
-        }}%
-      </div>
-    </div>
-  </section>
-</div>
-<div mat-dialog-actions class="footer">
-  <button mat-raised-button (click)="close()">Close</button>
 </div>

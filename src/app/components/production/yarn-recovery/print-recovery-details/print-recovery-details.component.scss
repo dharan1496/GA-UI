@@ -1,0 +1,36 @@
+.print {
+  padding: 24px;
+}
+
+.header {
+  margin-bottom: 32px;
+}
+
+.details {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  row-gap: 20px;
+  column-gap: 32px;
+  margin-bottom: 24px;
+}
+
+table {
+  margin-top: 4px;
+  border-collapse: collapse;
+  width: 100%;
+  border-top: 1px solid;
+  border-left: 1px solid;
+  border-right: 1px solid;
+}
+
+td,
+th {
+  border-bottom: 1px solid;
+  text-align: left;
+  padding: 10px;
+}
+
+td:not(:last-child),
+th:not(:last-child) {
+  border-right: 1px solid;
+}

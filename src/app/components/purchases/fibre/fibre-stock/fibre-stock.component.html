@@ -1,10 +1,82 @@
 <section class="container">
   <h1 class="font-weight-bold">Fibre Stock</h1>
+  <section class="filter-section">
+    <form class="form-container" [formGroup]="form">
+      <mat-form-field>
+        <mat-label>Date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="asOnDate" />
+        <mat-hint>DD/MM/YYYY</mat-hint>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error
+          *ngIf="!form.controls['asOnDate'].hasError('matDatepickerParse')"
+          >This field is required.</mat-error
+        >
+        <mat-error
+          *ngIf="form.controls['asOnDate'].hasError('matDatepickerParse')"
+          >Invalid date</mat-error
+        >
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-25 ml-24">
+        <mat-label>Party</mat-label>
+        <mat-select formControlName="partyId">
+          <ng-container *ngFor="let party of partyService.parties">
+            <mat-option [value]="party.partyId">{{
+              party.partyName
+            }}</mat-option>
+          </ng-container>
+        </mat-select>
+        <mat-hint>Optional</mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-20 ml-24 mr-24">
+        <mat-label>Fibre Type</mat-label>
+        <mat-select formControlName="fibreTypeId">
+          <ng-container *ngFor="let fibre of fibreTypes">
+            <mat-option [value]="fibre.fibreTypeId">{{
+              fibre.fibreType
+            }}</mat-option>
+          </ng-container>
+        </mat-select>
+        <mat-hint>Optional</mat-hint>
+      </mat-form-field>
+    </form>
+    <div class="search-btn">
+      <button mat-raised-button (click)="onReset()">
+        <mat-icon>refresh</mat-icon>Reset
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="onSearch()"
+        class="ml-16"
+      >
+        <mat-icon>search</mat-icon>Search
+      </button>
+    </div>
+  </section>
+  <section class="stocks-btn" *ngIf="dataSource.data.length">
+    <div>
+      <mat-checkbox (change)="stockAboveZero($event)"
+        >Stocks above 0 only</mat-checkbox
+      >
+      <div *ngIf="dataSource.data.length" class="text-right mt-8 ml-8 mb-4">
+        &ast;Click the row to see the details
+      </div>
+    </div>
+    <button mat-button (click)="printStocks()" class="ml-40">
+      <mat-icon>print</mat-icon>Print
+    </button>
+  </section>
   <div class="table-container">
     <div *ngIf="loader" class="loader">
       <mat-spinner></mat-spinner>
     </div>
-    <div class="mat-elevation-z8">
+    <div class="overflow-auto mat-elevation-z8">
       <table mat-table [dataSource]="dataSource">
         <ng-container matColumnDef="sNo">
           <th mat-header-cell *matHeaderCellDef>S No</th>
@@ -17,20 +89,6 @@
           <th mat-header-cell *matHeaderCellDef>ReceivedDC No</th>
           <td mat-cell *matCellDef="let element">
             {{ element.receivedDCNo }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="fibreCategoryName">
-          <th mat-header-cell *matHeaderCellDef>Fibre Category</th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.fibreCategoryName }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="categoryCode">
-          <th mat-header-cell *matHeaderCellDef>Category Code</th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.categoryCode }}
           </td>
         </ng-container>
 
@@ -55,6 +113,24 @@
           </td>
         </ng-container>
 
+        <ng-container matColumnDef="receivedQty">
+          <th mat-header-cell *matHeaderCellDef class="text-right">
+            Received Qty
+          </th>
+          <td mat-cell *matCellDef="let element" class="text-right">
+            {{ element.receivedQty }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="issuedQty">
+          <th mat-header-cell *matHeaderCellDef class="text-right">
+            Issued Qty
+          </th>
+          <td mat-cell *matCellDef="let element" class="text-right">
+            {{ element.issuedQty }}
+          </td>
+        </ng-container>
+
         <ng-container matColumnDef="stock">
           <th mat-header-cell *matHeaderCellDef class="text-right">
             Stock Qty
@@ -64,8 +140,27 @@
           </td>
         </ng-container>
 
+        <ng-container matColumnDef="rate">
+          <th mat-header-cell *matHeaderCellDef class="text-right">Rate</th>
+          <td mat-cell *matCellDef="let element" class="text-right">
+            {{ element.rate | currency : "INR" }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef class="text-right">Amount</th>
+          <td mat-cell *matCellDef="let element" class="text-right">
+            {{ element.rate * element.stock | currency : "INR" }}
+          </td>
+        </ng-container>
+
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr
+          mat-row
+          class="row"
+          (click)="openStockDetails(row)"
+          *matRowDef="let row; columns: displayedColumns"
+        ></tr>
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell no-rows" [attr.colspan]="displayedColumns.length">
             No rows to display

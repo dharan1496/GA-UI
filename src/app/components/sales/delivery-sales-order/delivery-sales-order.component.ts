@@ -87,7 +87,7 @@ export class DeliverySalesOrderComponent implements OnInit {
 
   chooseOrder() {
     this.dialog
-      .open(ChooseOrderForDeliveryComponent, { minWidth: 1000 })
+      .open(ChooseOrderForDeliveryComponent, { minWidth: '75vw' })
       .afterClosed()
       .subscribe((order: OrdersPendingDelivery) => {
         if (order) {
@@ -104,7 +104,7 @@ export class DeliverySalesOrderComponent implements OnInit {
   yarnStock() {
     this.dialog
       .open(SelectYarnStockComponent, {
-        minWidth: 1000,
+        minWidth: '75vw',
         data: this.orderSelected?.orderId,
       })
       .afterClosed()
