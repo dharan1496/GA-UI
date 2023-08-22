@@ -77,7 +77,7 @@
       </div>
     </div>
   </section>
-  <div *ngIf="programDetails?.mixingDetails?.length">
+  <div *ngIf="programDetails?.mixingDetails?.length && !loader">
     <div class="table-header text-dark">Mixing Details:</div>
     <table mat-table [dataSource]="programDetails.mixingDetails" class="table">
       <ng-container matColumnDef="sNo">
@@ -150,7 +150,7 @@
       <tr mat-row *matRowDef="let row; columns: mixingSummaryColumns"></tr>
     </table>
   </div>
-  <div *ngIf="programDetails?.yarnCounts?.length">
+  <div *ngIf="programDetails?.yarnCounts?.length && !loader">
     <div class="table-header text-dark">Yarn Counts:</div>
     <table mat-table [dataSource]="programDetails.yarnCounts" class="table">
       <ng-container matColumnDef="sNo">
@@ -190,7 +190,7 @@
       <tr mat-row *matRowDef="let row; columns: yarnCountsColumns"></tr>
     </table>
   </div>
-  <div *ngIf="wasteDetails.length">
+  <div *ngIf="wasteDetails.length && !loader">
     <div class="table-header text-dark">Waste Details:</div>
     <table mat-table [dataSource]="wasteDetails" class="table">
       <ng-container matColumnDef="sNo">
