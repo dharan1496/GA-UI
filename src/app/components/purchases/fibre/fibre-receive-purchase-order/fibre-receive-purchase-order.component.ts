@@ -17,7 +17,6 @@ import { PendingFibrePoComponent } from './pending-fibre-po/pending-fibre-po.com
 import { ReceiveFibrePODts } from 'src/app/models/receiveFibrePODts';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { PendingPODetailsByParty } from 'src/app/models/pendingPODtsByParty';
-import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 
 @Component({
@@ -57,8 +56,7 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
     public partyService: PartyService,
     private fibreService: FibreService,
     private router: Router,
-    public appSharedService: AppSharedService,
-    private datePipe: DatePipe
+    public appSharedService: AppSharedService
   ) {
     this.navigationService.setFocus('purchases');
     this.navigationService.menu = PURCHASE;
@@ -212,6 +210,11 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
             ...new Set(this.dataSource.map((po: any) => po.poNo)),
           ].concat();
           this.form.patchValue({ poNo: poNo });
+          if (this.dataSource.length === 0) {
+            this.form.get('poNo')?.reset();
+            this.form.get('partyId')?.reset();
+            this.form.get('poDate')?.reset();
+          }
         }
       });
   }

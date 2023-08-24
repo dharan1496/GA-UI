@@ -122,7 +122,7 @@ export class FibreStockComponent implements OnInit, OnDestroy {
   }
 
   openStockDetails(row: FibreStock) {
-    this.dialog.open(StockDetailsComponent, { data: row, minWidth: '75vw' });
+    this.dialog.open(StockDetailsComponent, { data: row, minWidth: '65vw' });
   }
 
   onReset() {

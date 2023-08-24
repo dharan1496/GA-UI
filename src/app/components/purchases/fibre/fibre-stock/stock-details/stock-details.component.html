@@ -11,12 +11,16 @@
       <div>{{ fibreStock.receivedDCNo }}</div>
     </div>
     <div>
+      <div class="text-dark pb-2">Received Date</div>
+      <div>{{ fibreStock.receivedDate | date : "dd/MM/yyyy" }}</div>
+    </div>
+    <div>
       <div class="text-dark pb-2">Fibre Name</div>
       <div>{{ fibreStock.fibreType }}</div>
     </div>
     <div>
-      <div class="text-dark pb-2">Received Date</div>
-      <div>{{ fibreStock.receivedDate | date : "dd/MM/yyyy" }}</div>
+      <div class="text-dark pb-2">Fibre Shade</div>
+      <div>{{ fibreStock.shadeName }}</div>
     </div>
     <div>
       <div class="text-dark pb-2">Received Qty</div>
@@ -33,6 +37,14 @@
     <div>
       <div class="text-dark pb-2">Lot</div>
       <div>{{ fibreStock.lot }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Rate</div>
+      <div>{{ fibreStock.rate | currency : "INR" }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Amount</div>
+      <div>{{ fibreStock.rate * fibreStock.stock | currency : "INR" }}</div>
     </div>
   </section>
   <section *ngIf="!loader && dataSource.length" class="mt-24">
