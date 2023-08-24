@@ -27,6 +27,7 @@ export class FibreStockComponent implements OnInit, OnDestroy {
   displayedColumns = [
     'sNo',
     'receivedDCNo',
+    'party',
     'fibreType',
     'shadeName',
     'lot',

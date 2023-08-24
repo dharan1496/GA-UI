@@ -92,6 +92,13 @@
           </td>
         </ng-container>
 
+        <ng-container matColumnDef="party">
+          <th mat-header-cell *matHeaderCellDef>Party</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.partyName }}
+          </td>
+        </ng-container>
+
         <ng-container matColumnDef="fibreType">
           <th mat-header-cell *matHeaderCellDef>Fibre Type</th>
           <td mat-cell *matCellDef="let element">
