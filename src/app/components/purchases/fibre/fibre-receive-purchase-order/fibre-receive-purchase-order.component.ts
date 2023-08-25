@@ -18,6 +18,7 @@ import { ReceiveFibrePODts } from 'src/app/models/receiveFibrePODts';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { PendingPODetailsByParty } from 'src/app/models/pendingPODtsByParty';
 import * as moment from 'moment';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-fibre-receive-purchase-order',
@@ -56,7 +57,8 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
     public partyService: PartyService,
     private fibreService: FibreService,
     private router: Router,
-    public appSharedService: AppSharedService
+    public appSharedService: AppSharedService,
+    private datePipe: DatePipe
   ) {
     this.navigationService.setFocus('purchases');
     this.navigationService.menu = PURCHASE;
@@ -138,6 +140,8 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
       ...this.form.value,
       receivedByUserId: 0,
       fibrePODts: [],
+      recdDate: this.datePipe.transform(this.form.value.recdDate, 'dd/MM/yyyy'),
+      dcDate: this.datePipe.transform(this.form.value.dcDate, 'dd/MM/yyyy'),
     };
 
     this.dataSource.forEach((data: any) => {
