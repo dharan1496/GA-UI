@@ -61,9 +61,11 @@ export class FibreDashboardComponent implements OnInit, OnDestroy {
   }
 
   createChart(data: FibreGraph[]) {
-    const receivedQty = data.map((data) => data.receivedQty || '');
+    const receivedQty = data.map(
+      (data) => Number(data.receivedQty.toFixed(2)) || ''
+    );
     const pendingQty = data.map(
-      (data) => data.poQuantity - data.receivedQty || ''
+      (data) => Number((data.poQuantity - data.receivedQty).toFixed(2)) || ''
     );
     this.grace = this.getGrace(data);
     const months = data.map((data) => data.poMonthYear);
