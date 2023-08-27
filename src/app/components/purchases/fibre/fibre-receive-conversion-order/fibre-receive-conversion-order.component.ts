@@ -1,36 +1,38 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable } from '@angular/material/table';
-import { AppSharedService } from 'src/app/shared/app-shared.service';
-import { NotifyType } from 'src/app/models/notify';
-import { NotificationService } from 'src/app/shared/notification.service';
-import { PURCHASE } from 'src/app/constants/purchase-menu-values.const';
-import { OrderDetailsDialogComponent } from './order-details-dialog/order-details-dialog.component';
-import { NavigationService } from 'src/app/shared/navigation.service';
-import { PartyService } from 'src/app/services/party.service';
 import { Subscription } from 'rxjs';
-import { FibreService } from 'src/app/services/fibre.service';
 import { UserActionConfirmationComponent } from 'src/app/components/user-action-confirmation/user-action-confirmation.component';
 import { Constants } from 'src/app/constants/constants';
-import { Router } from '@angular/router';
-import { CreateFibrePO } from 'src/app/models/createFibrePO';
-import { CreateFibrePODts } from 'src/app/models/createFibrePODts';
+import { PURCHASE } from 'src/app/constants/purchase-menu-values.const';
+import { NotifyType } from 'src/app/models/notify';
+import { FibreService } from 'src/app/services/fibre.service';
+import { PartyService } from 'src/app/services/party.service';
+import { AppSharedService } from 'src/app/shared/app-shared.service';
+import { NavigationService } from 'src/app/shared/navigation.service';
+import { NotificationService } from 'src/app/shared/notification.service';
+import { ReceiveConversionDetailsComponent } from './receive-conversion-details/receive-conversion-details.component';
+import { ReceiveFibrePODts } from 'src/app/models/receiveFibrePODts';
+import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-fibre-purchase-order',
-  templateUrl: './fibre-purchase-order.component.html',
-  styleUrls: ['./fibre-purchase-order.component.scss'],
+  selector: 'app-fibre-receive-conversion-order',
+  templateUrl: './fibre-receive-conversion-order.component.html',
+  styleUrls: ['./fibre-receive-conversion-order.component.scss'],
 })
-export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
+export class FibreReceiveConversionOrderComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   displayedColumns: string[] = [
-    'fibreName',
+    'fibreType',
     'shade',
-    'weight',
+    'receivedQty',
+    'receivedBales',
+    'lot',
+    'hsnCode',
     'rate',
     'amount',
-    'gstPercent',
+    'gstpercent',
     'totalAmount',
     'button',
   ];
@@ -46,38 +48,26 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
     private navigationService: NavigationService,
     public partyService: PartyService,
     private fibreService: FibreService,
-    private router: Router
+    private datePipe: DatePipe
   ) {
     this.navigationService.setFocus(Constants.PURCHASES);
     this.navigationService.menu = PURCHASE;
   }
 
   ngOnInit(): void {
-    this.getPoNo();
     this.getPartyList();
     this.getFibreList();
 
     this.form = this.formBuilder.group({
-      poNo: [{ value: '', disabled: true }],
       partyId: ['', Validators.required],
-      pOdate: ['', Validators.required],
+      recdDate: ['', Validators.required],
+      recdDCNo: ['', Validators.required],
+      dcDate: ['', Validators.required],
     });
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-  }
-
-  getPoNo() {
-    this.subscription.add(
-      this.fibreService.getPONo().subscribe({
-        next: (data) => this.form.get('poNo')?.setValue(data),
-        error: (error) =>
-          this.notificationService.error(
-            typeof error?.error === 'string' ? error?.error : error?.message
-          ),
-      })
-    );
   }
 
   getPartyList() {
@@ -105,77 +95,64 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
   }
 
   submitOrder() {
-    if (!this.hasError()) {
-      const fibrePODts = this.dataSource.map((data: CreateFibrePODts) => {
-        return {
-          fibreTypeId: data.fibreTypeId,
-          shadeId: data.shadeId,
-          weight: data.weight,
-          rate: data.rate,
-          gstPercent: data.gstPercent,
-        };
-      });
-      const orderDetails = {
-        ...this.form.getRawValue(),
-        createdBy: 0,
-        fibrePODts: fibrePODts,
-      } as CreateFibrePO;
-
-      this.subscription.add(
-        this.fibreService.submitFibrePO(orderDetails).subscribe({
-          next: (response) => {
-            this.resetData();
-            this.notificationService.success(
-              {
-                printPO: true,
-                poId: response,
-                message: 'Purchase order submitted successfully',
-              },
-              true
-            );
-          },
-          error: (error) => {
-            this.notificationService.error(
-              typeof error?.error === 'string' ? error?.error : error?.message
-            );
-          },
-        })
-      );
-    }
-  }
-
-  goToSearch() {
-    this.router.navigateByUrl('purchases/fibre/search');
-  }
-
-  hasError() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       this.notificationService.notify(
-        'Error occured in PO details!',
+        'Error occured in order details!',
         NotifyType.ERROR
       );
-      return true;
+      return;
     }
+
     if (!this.dataSource.length) {
       this.notificationService.notify(
-        'Please add the order details!',
+        'Please add the receive order details!',
         NotifyType.ERROR
       );
-      return true;
+      return;
     }
-    return false;
+
+    const request = {
+      ...this.form.value,
+      receivedByUserId: 0,
+      fibrePODts: [],
+      recdDate: this.datePipe.transform(this.form.value.recdDate, 'dd/MM/yyyy'),
+      dcDate: this.datePipe.transform(this.form.value.dcDate, 'dd/MM/yyyy'),
+    };
+
+    this.dataSource.forEach((data: any) => {
+      request.fibrePODts.push({
+        lot: data?.lot,
+        hsnCode: data?.hsnCode,
+        receivedWeight: data?.receivedQty,
+        receivedBales: data?.receivedBales,
+        rate: data?.rate,
+        gstPercent: data?.gstpercent,
+        fiberShadeId: data?.shadeId,
+        fiberTypeId: data?.fibreTypeId,
+      } as ReceiveFibrePODts);
+    });
+    this.subscription.add(
+      this.fibreService.submitReceiveFibre(request).subscribe({
+        next: (response) => {
+          this.notificationService.success(response);
+          this.resetData();
+        },
+        error: (error) => {
+          this.notificationService.error(error.message);
+        },
+      })
+    );
   }
 
   resetData() {
     this.form.reset();
-    this.getPoNo();
     this.dataSource = [];
     this.table.renderRows();
   }
 
   addData(): void {
-    const dialogRef = this.dialog.open(OrderDetailsDialogComponent, {
+    const dialogRef = this.dialog.open(ReceiveConversionDetailsComponent, {
       data: this.dataSource.length,
     });
 
@@ -188,7 +165,7 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
   }
 
   updateData(selectedRow: any) {
-    const dialogRef = this.dialog.open(OrderDetailsDialogComponent, {
+    const dialogRef = this.dialog.open(ReceiveConversionDetailsComponent, {
       data: selectedRow,
     });
     dialogRef.afterClosed().subscribe((result) => {

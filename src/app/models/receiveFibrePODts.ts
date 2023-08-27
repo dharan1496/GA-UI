@@ -1,5 +1,5 @@
 export interface ReceiveFibrePODts {
-  poDtsId: number;
+  poDtsId?: number;
   fiberTypeId: number;
   fiberShadeId: number;
   lot: string;

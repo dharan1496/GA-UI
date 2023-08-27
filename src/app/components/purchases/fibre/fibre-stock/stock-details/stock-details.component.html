@@ -6,6 +6,10 @@
 </div>
 <div mat-dialog-content class="container word-break-all">
   <section class="details">
+    <div *ngIf="fibreStock.poNo">
+      <div class="text-dark pb-2">PO No</div>
+      <div>{{ fibreStock.poNo }}</div>
+    </div>
     <div>
       <div class="text-dark pb-2">Received DC No</div>
       <div>{{ fibreStock.receivedDCNo }}</div>
@@ -24,11 +28,11 @@
     </div>
     <div>
       <div class="text-dark pb-2">Received Qty</div>
-      <div>{{ fibreStock.receivedQty }}</div>
+      <div>{{ fibreStock.receivedQty }} kg</div>
     </div>
     <div>
       <div class="text-dark pb-2">Stock Qty</div>
-      <div>{{ fibreStock.stock }}</div>
+      <div>{{ fibreStock.stock }} kg</div>
     </div>
     <div>
       <div class="text-dark pb-2">Party</div>

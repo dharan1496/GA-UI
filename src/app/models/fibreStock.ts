@@ -1,6 +1,7 @@
 export interface FibreStock {
   receivedDCNo: string;
   receivedDtsId: number;
+  poNo: string;
   fibreCategoryId: number;
   partyName: string;
   fibreCategoryName: string;

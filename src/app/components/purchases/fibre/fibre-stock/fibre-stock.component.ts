@@ -1,5 +1,10 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
@@ -27,6 +32,7 @@ export class FibreStockComponent implements OnInit, OnDestroy {
   displayedColumns = [
     'sNo',
     'receivedDCNo',
+    'poNo',
     'party',
     'fibreType',
     'shadeName',
@@ -43,6 +49,8 @@ export class FibreStockComponent implements OnInit, OnDestroy {
   fibreTypes!: FibreType[];
   @ViewChild(MatTable) table!: MatTable<any>;
   dataSourceBackup = new MatTableDataSource<FibreStock>([]);
+  stockAbove0Checkbox = new FormControl();
+  conversionOrderCheckbox = new FormControl();
 
   @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
@@ -108,7 +116,10 @@ export class FibreStockComponent implements OnInit, OnDestroy {
         .searchFibreStock(asOnDate, partyId, fibreTypeId)
         .pipe(finalize(() => (this.loader = false)))
         .subscribe({
-          next: (data) => (this.dataSource.data = data),
+          next: (data) => {
+            this.dataSource.data = data;
+            this.dataSourceBackup.data = data;
+          },
           error: (error) =>
             this.notificationService.error(
               typeof error?.error === 'string' ? error?.error : error?.message
@@ -137,15 +148,15 @@ export class FibreStockComponent implements OnInit, OnDestroy {
     }
   }
 
-  stockAboveZero(event: any) {
-    const checked = event?.checked;
-    if (checked) {
-      this.dataSourceBackup.data = this.dataSource.data;
+  filterStocks() {
+    this.dataSource.data = this.dataSourceBackup.data;
+    if (this.stockAbove0Checkbox.value) {
       this.dataSource.data = this.dataSource.data.filter(
         (data) => data.stock > 0
       );
-    } else {
-      this.dataSource.data = this.dataSourceBackup.data;
+    }
+    if (this.conversionOrderCheckbox.value) {
+      this.dataSource.data = this.dataSource.data.filter((data) => !data.poNo);
     }
     this.table.renderRows();
   }

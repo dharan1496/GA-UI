@@ -7,16 +7,18 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { combineLatest, ObservableInput, startWith, Subscription } from 'rxjs';
+import { Subscription, ObservableInput, startWith, combineLatest } from 'rxjs';
 import { MaterialModule } from 'src/app/material.module';
 import { NotifyType } from 'src/app/models/notify';
-import { NotificationService } from 'src/app/shared/notification.service';
 import { FibreService } from 'src/app/services/fibre.service';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { DecimalDirective } from 'src/app/shared/decimalNumberDirective';
+import { NotificationService } from 'src/app/shared/notification.service';
+import { ReceiveOrderDetailsComponent } from '../../fibre-receive-purchase-order/receive-order-details/receive-order-details.component';
+import { FibreShade } from 'src/app/models/fibreShade';
 
 @Component({
-  selector: 'app-receive-order-details',
+  selector: 'app-receive-conversion-details',
   standalone: true,
   imports: [
     CommonModule,
@@ -24,13 +26,13 @@ import { DecimalDirective } from 'src/app/shared/decimalNumberDirective';
     ReactiveFormsModule,
     DecimalDirective,
   ],
-  templateUrl: './receive-order-details.component.html',
-  styleUrls: ['./receive-order-details.component.scss'],
+  templateUrl: './receive-conversion-details.component.html',
+  styleUrls: ['./receive-conversion-details.component.scss'],
 })
-export class ReceiveOrderDetailsComponent implements OnInit, OnDestroy {
+export class ReceiveConversionDetailsComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   subscription = new Subscription();
-  actualPendingQty = 0;
+  fibreShadeList!: FibreShade[];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -43,16 +45,12 @@ export class ReceiveOrderDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
-      poDtsId: '',
       orderNo: typeof this.data === 'number' ? +this.data + 1 : '',
-      poNo: '',
-      fibreTypeId: '',
+      fibreTypeId: ['', Validators.required],
       fibreType: '',
       shadeName: '',
-      shadeId: '',
+      shadeId: ['', Validators.required],
       hsnCode: ['', Validators.required],
-      orderQty: '',
-      pendingQty: '',
       receivedQty: ['', Validators.required],
       receivedBales: ['', Validators.required],
       lot: ['', Validators.required],
@@ -61,6 +59,38 @@ export class ReceiveOrderDetailsComponent implements OnInit, OnDestroy {
       gstpercent: ['', Validators.required],
       totalAmount: '',
     });
+
+    this.subscription.add(
+      this.fibreService.getFibreShade().subscribe({
+        next: (data) => (this.fibreShadeList = data),
+        error: (error) =>
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
+      })
+    );
+
+    this.subscription.add(
+      this.form.get('fibreTypeId')?.valueChanges.subscribe((fibreTypeId) => {
+        const filteredFibre = this.fibreService.fibres.filter(
+          (fibre) => fibre.fibreTypeId === fibreTypeId
+        );
+        this.form
+          .get('fibreType')
+          ?.setValue(filteredFibre.reduce((p, c) => c.fibreType, ''));
+      })
+    );
+
+    this.subscription.add(
+      this.form.get('shadeId')?.valueChanges.subscribe((shadeId) => {
+        const filteredShade = this.fibreShadeList.filter(
+          (shade) => shade.shadeId === shadeId
+        );
+        this.form
+          .get('shadeName')
+          ?.setValue(filteredShade.reduce((p, c) => c.shadeName, ''));
+      })
+    );
 
     const amount: Record<string, ObservableInput<any>> = {
       receivedQty:
@@ -101,33 +131,12 @@ export class ReceiveOrderDetailsComponent implements OnInit, OnDestroy {
     );
 
     if (typeof this.data === 'object') {
-      this.form.patchValue({
-        ...this.data,
-        pendingQty: this.data?.orderQty - this.data?.receivedQty,
-        receivedQty: '',
-      });
-      this.actualPendingQty = this.data?.orderQty - this.data?.receivedQty;
+      this.form.patchValue({ ...this.data });
     }
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
-  }
-
-  receivedQtyChange() {
-    const received = +this.form.get('receivedQty')?.value;
-    const pending = this.actualPendingQty - received;
-    this.form.get('pendingQty')?.setValue(this.actualPendingQty);
-    if (received <= 0) {
-      this.form.get('receivedQty')?.setErrors({ zero: true });
-      return;
-    }
-    if (received > this.actualPendingQty) {
-      this.form.get('receivedQty')?.setErrors({ moreThanOrder: true });
-      return;
-    }
-    this.form.get('pendingQty')?.setValue(pending);
-    this.form.get('receivedQty')?.setErrors(null);
   }
 
   onSubmit() {
@@ -139,7 +148,7 @@ export class ReceiveOrderDetailsComponent implements OnInit, OnDestroy {
       );
       return;
     }
-    this.dialogRef.close({ ...this.form.getRawValue(), isValid: true });
+    this.dialogRef.close(this.form.getRawValue());
   }
 
   onCancel() {

@@ -11,6 +11,7 @@ import { FibreListComponent } from './fibre/fibre-master/fibre-list/fibre-list.c
 import { FibreMasterComponent } from './fibre/fibre-master/fibre-master.component';
 import { FibreShadeComponent } from './fibre/fibre-master/fibre-shade/fibre-shade.component';
 import { FibreStockComponent } from './fibre/fibre-stock/fibre-stock.component';
+import { FibreReceiveConversionOrderComponent } from './fibre/fibre-receive-conversion-order/fibre-receive-conversion-order.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { FibreStockComponent } from './fibre/fibre-stock/fibre-stock.component';
     FibreMasterComponent,
     FibreShadeComponent,
     FibreStockComponent,
+    FibreReceiveConversionOrderComponent,
   ],
   imports: [
     CommonModule,
