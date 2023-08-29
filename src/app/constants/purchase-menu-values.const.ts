@@ -13,7 +13,7 @@ export const PURCHASE = [
         route: 'purchases/fibre/receive-purchase-order',
       },
       {
-        title: 'Receive Conversion order',
+        title: 'Receive Fibre CO',
         route: 'purchases/fibre/receive-conversion-order',
       },
       {
