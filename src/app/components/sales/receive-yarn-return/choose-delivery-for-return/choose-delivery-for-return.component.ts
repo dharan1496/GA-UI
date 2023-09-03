@@ -138,7 +138,7 @@ export class ChooseDeliveryForReturnComponent implements OnInit, OnDestroy {
     }
     if (this.selection.selected.length === 0) {
       this.notificationService.notify(
-        'Please select a order to continue',
+        'Please select delivery to continue',
         NotifyType.ERROR
       );
       return;
