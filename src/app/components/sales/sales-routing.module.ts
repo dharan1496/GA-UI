@@ -6,6 +6,7 @@ import { DeliverySalesOrderComponent } from './delivery-sales-order/delivery-sal
 import { SearchSalesOrderComponent } from './search-sales-order/search-sales-order.component';
 import { DeliveriesComponent } from './deliveries/deliveries.component';
 import { DeliveryInvoiceComponent } from './delivery-invoice/delivery-invoice.component';
+import { ReceiveYarnReturnComponent } from './receive-yarn-return/receive-yarn-return.component';
 
 const routes: Routes = [
   {
@@ -35,6 +36,10 @@ const routes: Routes = [
   {
     path: 'delivery-invoice',
     component: DeliveryInvoiceComponent,
+  },
+  {
+    path: 'receive-yarn-return',
+    component: ReceiveYarnReturnComponent,
   },
 ];
 

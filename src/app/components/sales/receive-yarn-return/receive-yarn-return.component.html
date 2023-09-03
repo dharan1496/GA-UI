@@ -1,0 +1,192 @@
+<section class="container">
+  <div class="header-container">
+    <h1 class="header letter-spacing-1">Receive Yarn Return</h1>
+    <button mat-raised-button color="primary" (click)="chooseDelivery()">
+      Choose Delivery for Return
+    </button>
+  </div>
+  <mat-card class="party-card">
+    <mat-card-header>
+      <mat-card-title>Return Details</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form class="form" [formGroup]="form">
+        <div class="form-container">
+          <div class="w-20 ml-16">
+            <label class="font-weight-bold">Party</label>
+            <div class="font-size-16 text-gray pt-4">
+              <span *ngIf="dataSource.length">{{
+                dataSource[0]["partyName"]
+              }}</span>
+              <span *ngIf="!dataSource.length">_</span>
+            </div>
+          </div>
+          <mat-form-field appearance="fill" class="w-40">
+            <mat-label>Return Date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="returnDate"
+              formControlName="returnDate"
+              (dateChange)="
+                appSharedService.formatDate($event, form.controls['returnDate'])
+              "
+            />
+            <mat-hint>DD/MM/YYYY</mat-hint>
+            <mat-datepicker-toggle
+              matIconSuffix
+              [for]="returnDate"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #returnDate></mat-datepicker>
+            <mat-error>This field is required.</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="fill" class="w-40">
+            <mat-label>Return DC No</mat-label>
+            <input matInput formControlName="returnDCNo" />
+            <mat-error>This field is required.</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-container">
+          <mat-form-field class="w-50">
+            <mat-label>Return Reason</mat-label>
+            <textarea matInput formControlName="returnReason"></textarea>
+            <mat-hint>Optional</mat-hint>
+          </mat-form-field>
+          <mat-form-field class="w-50">
+            <mat-label>Remarks</mat-label>
+            <textarea matInput formControlName="remarks"></textarea>
+            <mat-hint>Optional</mat-hint>
+          </mat-form-field>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="mat-elevation-z8 table overflow-auto">
+    <table mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="issuedDCNo">
+        <th mat-header-cell *matHeaderCellDef>IssuedDC No</th>
+        <td mat-cell *matCellDef="let element">{{ element.dcNo }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <ng-container matColumnDef="dcDate">
+        <th mat-header-cell *matHeaderCellDef>DC Date</th>
+        <td mat-cell *matCellDef="let element">{{ element.dcDate }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <ng-container matColumnDef="counts">
+        <th mat-header-cell *matHeaderCellDef>Counts</th>
+        <td mat-cell *matCellDef="let element">{{ element.counts }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <ng-container matColumnDef="blend">
+        <th mat-header-cell *matHeaderCellDef>Blend</th>
+        <td mat-cell *matCellDef="let element">{{ element.blendName }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <ng-container matColumnDef="shade">
+        <th mat-header-cell *matHeaderCellDef>Shade</th>
+        <td mat-cell *matCellDef="let element">{{ element.shadeName }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <ng-container matColumnDef="lot">
+        <th mat-header-cell *matHeaderCellDef>Lot</th>
+        <td mat-cell *matCellDef="let element">{{ element.lot }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <ng-container matColumnDef="issuedQty">
+        <th mat-header-cell *matHeaderCellDef class="text-right">
+          Issued Qty(Kg)
+        </th>
+        <td mat-cell *matCellDef="let element" class="text-right">
+          {{ element.deliveredQuantity | number : "1.0-3" }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <ng-container matColumnDef="returnQty">
+        <th mat-header-cell *matHeaderCellDef class="text-right">
+          Return Qty(kg)
+        </th>
+        <td
+          mat-cell
+          *matCellDef="let element"
+          class="w-15 text-right input-container"
+        >
+          <input
+            [ngClass]="{
+              'return-qty-border-error':
+                greaterThanIssuedQty(element) || checkZeroReturnQty(element)
+            }"
+            #returnQty
+            type="number"
+            class="cell-input w-70"
+            (input)="element.returnQty = returnQty.value"
+            decimal="3"
+          />
+          <p *ngIf="greaterThanIssuedQty(element)" class="error-alert">
+            Greater than IssuedQty
+          </p>
+          <p *ngIf="checkZeroReturnQty(element)" class="error-alert">
+            Qty should not be zero
+          </p>
+        </td>
+        <td mat-footer-cell *matFooterCellDef class="text-right"></td>
+      </ng-container>
+
+      <ng-container matColumnDef="button">
+        <th mat-header-cell *matHeaderCellDef class="text-right">Action</th>
+        <td mat-cell *matCellDef="let element" class="text-right">
+          <button
+            mat-icon-button
+            (click)="removeData(element)"
+            color="warn"
+            matTooltip="Remove"
+            aria-label="button with a delete icon"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+        class="return-row"
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+      ></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell no-rows" [attr.colspan]="displayedColumns.length">
+          No rows to display
+        </td>
+      </tr>
+      <tr
+        [hidden]="!dataSource.length"
+        mat-footer-row
+        *matFooterRowDef="displayedColumns; sticky: true"
+      ></tr>
+    </table>
+  </div>
+
+  <div class="footer">
+    <button
+      *ngIf="!updateOrderDetails"
+      mat-raised-button
+      class="mr-16"
+      (click)="resetData()"
+    >
+      <mat-icon>refresh</mat-icon>Reset
+    </button>
+    <button mat-raised-button color="primary" (click)="submitOrder()">
+      <mat-icon>save_alt</mat-icon
+      ><span *ngIf="!updateOrderDetails">Submit</span
+      ><span *ngIf="updateOrderDetails">Update</span>
+    </button>
+  </div>
+</section>

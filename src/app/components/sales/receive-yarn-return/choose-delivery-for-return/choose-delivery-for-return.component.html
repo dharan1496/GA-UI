@@ -1,0 +1,148 @@
+<h1 mat-dialog-title>Choose Deliveries</h1>
+<div mat-dialog-content class="form-container">
+  <div class="mb-24">
+    <form class="search-fields" [formGroup]="form">
+      <mat-form-field appearance="fill" class="w-40">
+        <mat-label>Party</mat-label>
+        <mat-select formControlName="partyId">
+          <ng-container *ngFor="let party of partyService.parties">
+            <mat-option [value]="party?.partyId">{{
+              party?.partyName
+            }}</mat-option>
+          </ng-container>
+        </mat-select>
+        <mat-error>This field is required.</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="w-20">
+        <mat-label>Shade</mat-label>
+        <mat-select formControlName="shadeId">
+          <ng-container *ngFor="let shade of shadeList">
+            <mat-option [value]="shade.shadeId">{{
+              shade.shadeName
+            }}</mat-option>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="w-20">
+        <mat-label>Blend</mat-label>
+        <mat-select formControlName="blendId">
+          <ng-container *ngFor="let blend of blendList">
+            <mat-option [value]="blend.blendId">{{
+              blend.blendName
+            }}</mat-option>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="w-20">
+        <mat-label>Counts</mat-label>
+        <mat-select formControlName="countsId">
+          <ng-container *ngFor="let counts of countsList">
+            <mat-option [value]="counts.countsId">{{
+              counts.counts
+            }}</mat-option>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
+    </form>
+    <div class="btns">
+      <button mat-raised-button (click)="onReset()" class="ml-32">
+        <mat-icon>refresh</mat-icon>Reset
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="onSearch()"
+        class="ml-16"
+      >
+        <mat-icon>search</mat-icon>Search
+      </button>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <div *ngIf="loader" class="loader">
+      <mat-spinner></mat-spinner>
+    </div>
+    <table mat-table [dataSource]="dataSource" class="table">
+      <ng-container matColumnDef="dcNo">
+        <th mat-header-cell *matHeaderCellDef>DC No</th>
+        <td mat-cell *matCellDef="let element">{{ element.dcNo }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="dcDate">
+        <th mat-header-cell *matHeaderCellDef>DC Date</th>
+        <td mat-cell *matCellDef="let element">{{ element.dcDate }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="partyName">
+        <th mat-header-cell *matHeaderCellDef>Party</th>
+        <td mat-cell *matCellDef="let element">{{ element.partyName }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="shade">
+        <th mat-header-cell *matHeaderCellDef>Shade</th>
+        <td mat-cell *matCellDef="let element">{{ element.shadeName }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="blend">
+        <th mat-header-cell *matHeaderCellDef>Blend</th>
+        <td mat-cell *matCellDef="let element">{{ element.blendName }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="counts">
+        <th mat-header-cell *matHeaderCellDef>Counts</th>
+        <td mat-cell *matCellDef="let element">{{ element.counts }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="lot">
+        <th mat-header-cell *matHeaderCellDef>Counts</th>
+        <td mat-cell *matCellDef="let element">{{ element.lot }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="deliveredQuantity">
+        <th mat-header-cell *matHeaderCellDef>Delivered Qty(kg)</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.deliveredQuantity }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef class="text-center">
+          <mat-checkbox
+            matTooltip="Select all"
+            [disabled]="dataSource.length ? null : true"
+            (change)="$event ? toggleAllRows() : null"
+            [checked]="selection.hasValue() && isAllSelected()"
+            [indeterminate]="selection.hasValue() && !isAllSelected()"
+          >
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row" class="text-center">
+          <mat-checkbox
+            (click)="$event.stopPropagation()"
+            (change)="$event ? selection.toggle(row) : null"
+            [checked]="selection.isSelected(row)"
+          >
+          </mat-checkbox>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr
+        class="row"
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        (click)="selection.toggle(row)"
+      ></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell no-rows" [attr.colspan]="displayedColumns.length">
+          No rows to display
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div mat-dialog-actions class="footer">
+  <button mat-raised-button (click)="submit()" color="primary">Choose</button>
+  <button mat-button (click)="close()">Cancel</button>
+</div>

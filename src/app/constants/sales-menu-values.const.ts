@@ -26,6 +26,10 @@ export const SALES = [
         title: 'Delivery Invoice',
         route: 'sales/delivery-invoice',
       },
+      {
+        title: 'Receive Yarn Return',
+        route: 'sales/receive-yarn-return',
+      },
     ],
   },
 ];

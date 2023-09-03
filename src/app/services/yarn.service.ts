@@ -23,6 +23,8 @@ import { OrdersPendingInvoice } from '../models/ordersPendingInvoice';
 import { DCsPendingInvoice } from '../models/dcsPendingInvoice';
 import { YarnInvoice } from '../models/yarnInvoice';
 import { CreateYarnInvoice } from '../models/createYarnInvoice';
+import { YarnReturn } from '../models/yarnReturn';
+import { YarnDeliverySearchResult } from '../models/yarnDeliverySearchResult';
 
 @Injectable({
   providedIn: 'root',
@@ -267,6 +269,25 @@ export class YarnService {
     return this.http.post<YarnInvoice>(
       `${environment.api}/YarnOrder/CreateYarnOrderInvoice`,
       order
+    );
+  }
+
+  receiveYarnReturn(yarnReturn: YarnReturn): Observable<any> {
+    return this.http.post<any>(
+      `${environment.api}/YarnOrder/ReceiveYarnReturn?createdUserId=0`,
+      yarnReturn
+    );
+  }
+
+  searchYarnDeliveries(fields: any): Observable<YarnDeliverySearchResult[]> {
+    let endpoint = '';
+    const { partyId, countsId, blendId, shadeId } = fields;
+    partyId && (endpoint = endpoint + `partyId=${partyId}`);
+    countsId && (endpoint = endpoint + `&countsId=${countsId}`);
+    blendId && (endpoint = endpoint + `&blendId=${blendId}`);
+    shadeId && (endpoint = endpoint + `&shadeId=${shadeId}`);
+    return this.http.get<YarnDeliverySearchResult[]>(
+      `${environment.api}/YarnOrder/SearchYarnDeliveries?${endpoint}`
     );
   }
 }
