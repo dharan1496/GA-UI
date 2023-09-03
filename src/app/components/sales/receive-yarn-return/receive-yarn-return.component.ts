@@ -191,4 +191,11 @@ export class ReceiveYarnReturnComponent implements OnInit, OnDestroy {
   greaterThanIssuedQty(element: any) {
     return element.returnQty > element.deliveredQuantity;
   }
+
+  getTotalReturnQty(): number {
+    return this.dataSource.reduce(
+      (acc, curr) => acc + (+curr['returnQty'] || 0),
+      0
+    );
+  }
 }

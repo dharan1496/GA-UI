@@ -136,7 +136,9 @@
             Qty should not be zero
           </p>
         </td>
-        <td mat-footer-cell *matFooterCellDef class="text-right"></td>
+        <td mat-footer-cell *matFooterCellDef class="text-right">
+          {{ getTotalReturnQty() | number : "1.0-3" }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="button">
