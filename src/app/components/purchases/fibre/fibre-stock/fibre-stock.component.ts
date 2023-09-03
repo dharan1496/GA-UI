@@ -149,6 +149,8 @@ export class FibreStockComponent implements OnInit, OnDestroy {
   }
 
   filterStocks() {
+    this.printService.fibreStockConversionOnly =
+      !this.printService.fibreStockConversionOnly;
     this.dataSource.data = this.dataSourceBackup.data;
     if (this.stockAbove0Checkbox.value) {
       this.dataSource.data = this.dataSource.data.filter(

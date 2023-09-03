@@ -20,6 +20,7 @@ export class PrintService {
   fibreStockPrint = false;
   fibreStocks!: FibreStock[];
   fibreStockAsOnDate!: string;
+  fibreStockConversionOnly = false;
   yarnDCPrint = false;
   yarnDCData!: YarnDC;
   yarnInvoice!: YarnInvoice;

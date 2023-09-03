@@ -5,6 +5,9 @@
       {{ printService.fibreStockAsOnDate | date : "dd/MM/yyyy" }}
     </h1>
   </section>
+  <div *ngIf="printService.fibreStockConversionOnly">
+    *Conversion stock only
+  </div>
   <table>
     <thead>
       <th>S.No.</th>
