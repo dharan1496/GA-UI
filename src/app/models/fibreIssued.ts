@@ -4,4 +4,5 @@ export interface FibreIssued {
   shadeId: number;
   lot: string;
   issueQuantity: number;
+  productionWasteDtsId: number;
 }
