@@ -33,6 +33,7 @@ export class MixingComponent {
   mixingDisplayedColumns = [
     'receivedDCNo',
     'fibreCategory',
+    'wasteCategory',
     'fibre',
     'fibreShade',
     'lot',

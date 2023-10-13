@@ -17,4 +17,6 @@ export interface FibreStock {
   rate: number;
   receivedDate: string;
   productionWasteDtsId: number;
+  blendName: string;
+  wasteCategoryName: string;
 }

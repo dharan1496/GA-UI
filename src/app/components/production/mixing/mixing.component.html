@@ -118,7 +118,15 @@
         <ng-container matColumnDef="fibreCategory">
           <th mat-header-cell *matHeaderCellDef>Fibre Category</th>
           <td mat-cell *matCellDef="let element">
-            {{ element.fibreCategoryName }}
+            {{ element.fibreCategoryName || "_" }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="wasteCategory">
+          <th mat-header-cell *matHeaderCellDef>Waste Category</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.wasteCategoryName || "_" }}
           </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
