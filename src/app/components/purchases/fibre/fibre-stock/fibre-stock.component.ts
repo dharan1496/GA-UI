@@ -51,6 +51,7 @@ export class FibreStockComponent implements OnInit, OnDestroy {
   dataSourceBackup = new MatTableDataSource<FibreStock>([]);
   stockAbove0Checkbox = new FormControl();
   conversionOrderCheckbox = new FormControl();
+  showFilterCheckbox = false;
 
   @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
@@ -119,11 +120,14 @@ export class FibreStockComponent implements OnInit, OnDestroy {
           next: (data) => {
             this.dataSource.data = data;
             this.dataSourceBackup.data = data;
+            this.showFilterCheckbox = data?.length > 0;
           },
-          error: (error) =>
+          error: (error) => {
             this.notificationService.error(
               typeof error?.error === 'string' ? error?.error : error?.message
-            ),
+            );
+            this.showFilterCheckbox = false;
+          },
         })
     );
   }

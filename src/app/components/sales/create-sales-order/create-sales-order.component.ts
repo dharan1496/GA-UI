@@ -18,6 +18,7 @@ import { YarnOrderDetails } from 'src/app/models/yarnOrderDetails';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { YarnCounts } from 'src/app/models/yarnCounts';
+import { MasterService } from 'src/app/services/master.service';
 
 @Component({
   selector: 'app-create-sales-order',
@@ -51,6 +52,7 @@ export class CreateSalesOrderComponent implements OnInit, OnDestroy {
     private navigationService: NavigationService,
     public partyService: PartyService,
     private yarnService: YarnService,
+    private masterService: MasterService,
     private datePipe: DatePipe,
     private router: Router
   ) {
@@ -72,7 +74,7 @@ export class CreateSalesOrderComponent implements OnInit, OnDestroy {
     });
 
     this.subscription.add(
-      this.yarnService.getYarnCounts().subscribe({
+      this.masterService.getYarnCounts().subscribe({
         next: (data) => (this.countsList = data),
         error: (error) =>
           this.notificationService.error(

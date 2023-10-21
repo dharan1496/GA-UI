@@ -6,6 +6,7 @@ import { Subscription, finalize } from 'rxjs';
 import { YarnService } from 'src/app/services/yarn.service';
 import { YarnShade } from 'src/app/models/yarnShade';
 import { UserActionConfirmationComponent } from 'src/app/components/user-action-confirmation/user-action-confirmation.component';
+import { MasterService } from 'src/app/services/master.service';
 
 @Component({
   selector: 'app-yarn-shade',
@@ -21,7 +22,7 @@ export class YarnShadeComponent implements OnInit, OnDestroy {
   constructor(
     private dialog: MatDialog,
     private notificationService: NotificationService,
-    private yarnService: YarnService
+    private masterService: MasterService
   ) {}
 
   ngOnInit() {
@@ -35,7 +36,7 @@ export class YarnShadeComponent implements OnInit, OnDestroy {
   getYarnShade() {
     this.loader = true;
     this.subscription.add(
-      this.yarnService
+      this.masterService
         .getYarnShade()
         .pipe(finalize(() => (this.loader = false)))
         .subscribe({

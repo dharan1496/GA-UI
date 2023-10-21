@@ -18,6 +18,8 @@ import { YarnBlend } from 'src/app/models/yarnBlend';
 import { ConversionProgram } from 'src/app/models/conversionProgram';
 import { ConversionYarn } from 'src/app/models/conversionYarn';
 import { DatePipe } from '@angular/common';
+import { MasterService } from 'src/app/services/master.service';
+import { ConversionService } from 'src/app/services/conversion.service';
 
 @Component({
   selector: 'app-create-program',
@@ -36,7 +38,8 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
 
   constructor(
     private navigationService: NavigationService,
-    public yarnService: YarnService,
+    private masterService: MasterService,
+    private conversionService: ConversionService,
     public appSharedService: AppSharedService,
     private dialog: MatDialog,
     private formBuilder: FormBuilder,
@@ -58,7 +61,7 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
     });
 
     this.subscription.add(
-      this.yarnService.getYarnShade().subscribe({
+      this.masterService.getYarnShade().subscribe({
         next: (data) => (this.shadeList = data),
         error: (error) => {
           this.notificationService.error(
@@ -69,7 +72,7 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
     );
 
     this.subscription.add(
-      this.yarnService.getYarnBlend().subscribe({
+      this.masterService.getYarnBlend().subscribe({
         next: (data) => (this.blendList = data),
         error: (error) => {
           this.notificationService.error(
@@ -80,7 +83,7 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
     );
 
     this.subscription.add(
-      this.yarnService.getYarnCounts().subscribe({
+      this.masterService.getYarnCounts().subscribe({
         next: (data) => (this.countsList = data),
         error: (error) => {
           this.notificationService.error(
@@ -190,7 +193,7 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
         yarnCounts,
         mixingDetails: [],
       };
-      this.yarnService.createProgram(program).subscribe({
+      this.conversionService.createProgram(program).subscribe({
         next: () => {
           this.notificationService.success('Program created successfully');
           this.resetData();

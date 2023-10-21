@@ -7,6 +7,7 @@ import { YarnService } from 'src/app/services/yarn.service';
 import { AddBlendComponent } from './add-blend/add-blend.component';
 import { UserActionConfirmationComponent } from 'src/app/components/user-action-confirmation/user-action-confirmation.component';
 import { NotificationService } from 'src/app/shared/notification.service';
+import { MasterService } from 'src/app/services/master.service';
 
 @Component({
   selector: 'app-yarn-blend',
@@ -21,7 +22,7 @@ export class YarnBlendComponent implements OnInit, OnDestroy {
   subscription = new Subscription();
 
   constructor(
-    private yarnService: YarnService,
+    private masterService: MasterService,
     private dialog: MatDialog,
     private notificationService: NotificationService
   ) {}
@@ -36,7 +37,7 @@ export class YarnBlendComponent implements OnInit, OnDestroy {
 
   getBlend() {
     this.subscription.add(
-      this.yarnService.getYarnBlend().subscribe({
+      this.masterService.getYarnBlend().subscribe({
         next: (data) => (this.blendList = data),
         error: (error) => {
           this.notificationService.error(

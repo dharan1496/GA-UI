@@ -19,6 +19,7 @@ import { FibreIssued } from 'src/app/models/fibreIssued';
 import { Subscription } from 'rxjs';
 import { BlendMismatchComponent } from './blend-mismatch/blend-mismatch.component';
 import { UserActionConfirmationComponent } from '../../user-action-confirmation/user-action-confirmation.component';
+import { ConversionService } from 'src/app/services/conversion.service';
 
 @Component({
   selector: 'app-mixing',
@@ -50,7 +51,7 @@ export class MixingComponent {
 
   constructor(
     private navigationService: NavigationService,
-    public yarnService: YarnService,
+    public conversionService: ConversionService,
     private dialog: MatDialog,
     private notificationService: NotificationService,
     public appSharedService: AppSharedService,
@@ -66,7 +67,7 @@ export class MixingComponent {
       .afterClosed()
       .subscribe((programId: number) => {
         if (programId) {
-          this.yarnService
+          this.conversionService
             .getProgramDetailsById(programId)
             .subscribe((data) => {
               this.programDetails = data;
@@ -154,7 +155,7 @@ export class MixingComponent {
       issuedByUseId: 0,
       fibres,
     };
-    this.yarnService.issueFibreForMixing(fibreMixing).subscribe({
+    this.conversionService.issueFibreForMixing(fibreMixing).subscribe({
       next: (response) => {
         this.notificationService.success(response);
         this.resetData();

@@ -5,6 +5,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { MaterialModule } from 'src/app/material.module';
 import { FibreService } from 'src/app/services/fibre.service';
+import { MasterService } from 'src/app/services/master.service';
 import { NotificationService } from 'src/app/shared/notification.service';
 
 @Component({
@@ -20,7 +21,7 @@ export class AddWasteComponent implements OnDestroy {
 
   constructor(
     private matDialogRef: MatDialogRef<any>,
-    private fibreService: FibreService,
+    private masterService: MasterService,
     private notificationService: NotificationService
   ) {}
 
@@ -30,7 +31,7 @@ export class AddWasteComponent implements OnDestroy {
       return;
     }
     this.subscription.add(
-      this.fibreService.addWasteCategory(this.waste.value || '').subscribe({
+      this.masterService.addWasteCategory(this.waste.value || '').subscribe({
         next: () => this.close(),
         error: (error) =>
           this.notificationService.error(

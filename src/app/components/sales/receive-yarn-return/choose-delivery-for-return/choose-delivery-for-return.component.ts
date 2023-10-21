@@ -16,6 +16,7 @@ import { YarnBlend } from 'src/app/models/yarnBlend';
 import { YarnCounts } from 'src/app/models/yarnCounts';
 import { YarnDeliverySearchResult } from 'src/app/models/yarnDeliverySearchResult';
 import { YarnShade } from 'src/app/models/yarnShade';
+import { MasterService } from 'src/app/services/master.service';
 import { PartyService } from 'src/app/services/party.service';
 import { YarnService } from 'src/app/services/yarn.service';
 import { NotificationService } from 'src/app/shared/notification.service';
@@ -52,6 +53,7 @@ export class ChooseDeliveryForReturnComponent implements OnInit, OnDestroy {
   constructor(
     private notificationService: NotificationService,
     private matDialogRef: MatDialogRef<any>,
+    private masterService: MasterService,
     private yarnService: YarnService,
     public partyService: PartyService,
     private formBuilder: FormBuilder
@@ -76,7 +78,7 @@ export class ChooseDeliveryForReturnComponent implements OnInit, OnDestroy {
     );
 
     this.subscription.add(
-      this.yarnService.getYarnShade().subscribe({
+      this.masterService.getYarnShade().subscribe({
         next: (data) => (this.shadeList = data),
         error: (error) => {
           this.notificationService.error(
@@ -87,7 +89,7 @@ export class ChooseDeliveryForReturnComponent implements OnInit, OnDestroy {
     );
 
     this.subscription.add(
-      this.yarnService.getYarnBlend().subscribe({
+      this.masterService.getYarnBlend().subscribe({
         next: (data) => (this.blendList = data),
         error: (error) => {
           this.notificationService.error(
@@ -98,7 +100,7 @@ export class ChooseDeliveryForReturnComponent implements OnInit, OnDestroy {
     );
 
     this.subscription.add(
-      this.yarnService.getYarnCounts().subscribe({
+      this.masterService.getYarnCounts().subscribe({
         next: (data) => (this.countsList = data),
         error: (error) => {
           this.notificationService.error(

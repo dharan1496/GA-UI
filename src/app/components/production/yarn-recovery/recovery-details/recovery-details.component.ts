@@ -7,6 +7,7 @@ import { ConversionProgram } from 'src/app/models/conversionProgram';
 import { FibreCategory } from 'src/app/models/fibreCategory';
 import { FibreType } from 'src/app/models/fibreType';
 import { ProgramWaste } from 'src/app/models/programWaste';
+import { ConversionService } from 'src/app/services/conversion.service';
 import { FibreService } from 'src/app/services/fibre.service';
 import {
   PrintService,
@@ -47,7 +48,7 @@ export class RecoveryDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private matDialogRef: MatDialogRef<RecoveryDetailsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private yarnService: YarnService,
+    private conversionService: ConversionService,
     private notificationService: NotificationService,
     private fibreService: FibreService,
     private printService: PrintService
@@ -77,7 +78,7 @@ export class RecoveryDetailsComponent implements OnInit, OnDestroy {
     );
 
     this.subscription.add(
-      this.yarnService
+      this.conversionService
         .getProgramDetailsById(this.data?.programId)
         .pipe(finalize(() => (this.loader = false)))
         .subscribe({
@@ -92,14 +93,16 @@ export class RecoveryDetailsComponent implements OnInit, OnDestroy {
     );
 
     this.subscription.add(
-      this.yarnService.getProgramWasteById(this.data?.programId).subscribe({
-        next: (response) => (this.wasteDetails = response),
-        error: (error) => {
-          this.notificationService.error(
-            typeof error?.error === 'string' ? error?.error : error?.message
-          );
-        },
-      })
+      this.conversionService
+        .getProgramWasteById(this.data?.programId)
+        .subscribe({
+          next: (response) => (this.wasteDetails = response),
+          error: (error) => {
+            this.notificationService.error(
+              typeof error?.error === 'string' ? error?.error : error?.message
+            );
+          },
+        })
     );
   }
 

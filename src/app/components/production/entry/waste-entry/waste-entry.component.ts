@@ -15,6 +15,7 @@ import { NotifyType } from 'src/app/models/notify';
 import { AddWasteEntryComponent } from './add-waste-entry/add-waste-entry.component';
 import { UserActionConfirmationComponent } from 'src/app/components/user-action-confirmation/user-action-confirmation.component';
 import { ProgramWaste } from 'src/app/models/programWaste';
+import { ConversionService } from 'src/app/services/conversion.service';
 
 @Component({
   selector: 'app-waste-entry',
@@ -32,7 +33,7 @@ export class WasteEntryComponent {
 
   constructor(
     private navigationService: NavigationService,
-    public yarnService: YarnService,
+    public conversionService: ConversionService,
     private dialog: MatDialog,
     private notificationService: NotificationService,
     public appSharedService: AppSharedService
@@ -48,7 +49,7 @@ export class WasteEntryComponent {
       .subscribe((program: ProgramForProductionEntry) => {
         if (program) {
           this.programDetails = program;
-          this.yarnService
+          this.conversionService
             .getProgramDetailsById(program.programId)
             .subscribe((data) => {
               this.yarnDetails = data.yarnCounts;
@@ -65,7 +66,7 @@ export class WasteEntryComponent {
         wasteQuantity: data.wasteQuantity,
       }));
       this.subscription.add(
-        this.yarnService
+        this.conversionService
           .conversionWaste(wasteEntry, this.programDetails?.programId || 0)
           .subscribe({
             next: (response) => {

@@ -17,6 +17,7 @@ import { NotifyType } from 'src/app/models/notify';
 import { ProductionEntry } from 'src/app/models/productionEntry';
 import { FormControl, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
+import { ConversionService } from 'src/app/services/conversion.service';
 
 @Component({
   selector: 'app-production-entry',
@@ -35,7 +36,7 @@ export class ProductionEntryComponent {
 
   constructor(
     private navigationService: NavigationService,
-    public yarnService: YarnService,
+    public conversionService: ConversionService,
     private dialog: MatDialog,
     private notificationService: NotificationService,
     public appSharedService: AppSharedService,
@@ -52,7 +53,7 @@ export class ProductionEntryComponent {
       .subscribe((program: ProgramForProductionEntry) => {
         if (program) {
           this.programDetails = program;
-          this.yarnService
+          this.conversionService
             .getProgramDetailsById(program.programId)
             .subscribe((data) => {
               this.yarnDetails = data.yarnCounts;
@@ -77,7 +78,7 @@ export class ProductionEntryComponent {
           isWinded: data.winding === 'Yes',
         })),
       };
-      this.yarnService.conversionProduction(entry).subscribe({
+      this.conversionService.conversionProduction(entry).subscribe({
         next: (response) => {
           this.notificationService.success(response);
           this.resetData();

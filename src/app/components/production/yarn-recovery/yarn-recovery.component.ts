@@ -9,6 +9,7 @@ import { RecoveryDetailsComponent } from './recovery-details/recovery-details.co
 import { YarnService } from 'src/app/services/yarn.service';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { Subscription, finalize } from 'rxjs';
+import { ConversionService } from 'src/app/services/conversion.service';
 
 @Component({
   selector: 'app-yarn-recovery',
@@ -45,7 +46,7 @@ export class YarnRecoveryComponent implements OnInit, OnDestroy {
   constructor(
     private navigationService: NavigationService,
     private dialog: MatDialog,
-    private yarnService: YarnService,
+    private conversionService: ConversionService,
     private notificationService: NotificationService
   ) {
     this.navigationService.menu = PRODUCTION;
@@ -56,7 +57,7 @@ export class YarnRecoveryComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loader = true;
     this.subscription.add(
-      this.yarnService
+      this.conversionService
         .getYarnRecoverySummary()
         .pipe(finalize(() => (this.loader = false)))
         .subscribe({

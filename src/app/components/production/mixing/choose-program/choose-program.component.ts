@@ -6,6 +6,7 @@ import { Subscription, finalize } from 'rxjs';
 import { MaterialModule } from 'src/app/material.module';
 import { NotifyType } from 'src/app/models/notify';
 import { ProgramForMixing } from 'src/app/models/programForMixing';
+import { ConversionService } from 'src/app/services/conversion.service';
 import { YarnService } from 'src/app/services/yarn.service';
 import { NotificationService } from 'src/app/shared/notification.service';
 
@@ -34,13 +35,13 @@ export class ChooseProgramComponent implements OnInit, OnDestroy {
   constructor(
     private notificationService: NotificationService,
     private matDialogRef: MatDialogRef<any>,
-    private yarnService: YarnService
+    private conversionService: ConversionService
   ) {}
 
   ngOnInit() {
     this.loader = true;
     this.subscription.add(
-      this.yarnService
+      this.conversionService
         .getProgramsForMixing()
         .pipe(finalize(() => (this.loader = false)))
         .subscribe({

@@ -13,6 +13,7 @@ import { NotifyType } from 'src/app/models/notify';
 import { YarnBlend } from 'src/app/models/yarnBlend';
 import { YarnCounts } from 'src/app/models/yarnCounts';
 import { YarnShade } from 'src/app/models/yarnShade';
+import { MasterService } from 'src/app/services/master.service';
 import { YarnService } from 'src/app/services/yarn.service';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { DecimalDirective } from 'src/app/shared/decimalNumberDirective';
@@ -42,7 +43,7 @@ export class SalesOrderDialogComponent implements OnInit, OnDestroy {
     private dialogRef: MatDialogRef<void>,
     @Inject(MAT_DIALOG_DATA) private data: any,
     private notificationService: NotificationService,
-    private yarnService: YarnService,
+    private masterService: MasterService,
     public appSharedService: AppSharedService
   ) {}
 
@@ -147,7 +148,7 @@ export class SalesOrderDialogComponent implements OnInit, OnDestroy {
 
   fetchValues() {
     this.subscription.add(
-      this.yarnService.getYarnShade().subscribe({
+      this.masterService.getYarnShade().subscribe({
         next: (data) => (this.yarnShadeList = data),
         error: (error) =>
           this.notificationService.error(
@@ -157,7 +158,7 @@ export class SalesOrderDialogComponent implements OnInit, OnDestroy {
     );
 
     this.subscription.add(
-      this.yarnService.getYarnCounts().subscribe({
+      this.masterService.getYarnCounts().subscribe({
         next: (data) => (this.countsList = data),
         error: (error) =>
           this.notificationService.error(
@@ -167,7 +168,7 @@ export class SalesOrderDialogComponent implements OnInit, OnDestroy {
     );
 
     this.subscription.add(
-      this.yarnService.getYarnBlend().subscribe({
+      this.masterService.getYarnBlend().subscribe({
         next: (data) => (this.blendList = data),
         error: (error) =>
           this.notificationService.error(

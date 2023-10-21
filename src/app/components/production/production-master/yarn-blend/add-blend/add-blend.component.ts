@@ -15,6 +15,7 @@ import { NotifyType } from 'src/app/models/notify';
 import { YarnBlendCreate } from 'src/app/models/yarnBlendCreate';
 import { YarnBlendFibres } from 'src/app/models/yarnBlendFibres';
 import { FibreService } from 'src/app/services/fibre.service';
+import { MasterService } from 'src/app/services/master.service';
 import { YarnService } from 'src/app/services/yarn.service';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { DecimalDirective } from 'src/app/shared/decimalNumberDirective';
@@ -44,7 +45,7 @@ export class AddBlendComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private formBuilder: FormBuilder,
     private matDialogRef: MatDialogRef<any>,
-    private yarnService: YarnService,
+    private masterService: MasterService,
     public appSharedService: AppSharedService,
     private fibreService: FibreService
   ) {}
@@ -124,7 +125,7 @@ export class AddBlendComponent implements OnInit, OnDestroy {
         createdByUserId: 0,
       };
       this.subscription.add(
-        this.yarnService.addYarnBlend(blend).subscribe({
+        this.masterService.addYarnBlend(blend).subscribe({
           next: () => this.close(),
           error: (error) => {
             this.notificationService.error(
