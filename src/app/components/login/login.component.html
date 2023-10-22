@@ -32,7 +32,7 @@
         </mat-form-field>
         <mat-error class="credentials-error" *ngIf="credentialsError">
           <mat-icon aria-label="error icon">error</mat-icon>
-          <span>The username or password you entered is incorrect.</span>
+          <span>{{ validationError }}</span>
         </mat-error>
         <button mat-raised-button color="primary" (click)="submit()">
           Login

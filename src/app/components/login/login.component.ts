@@ -12,6 +12,8 @@ import { NotifyType } from 'src/app/models/notify';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NotificationService } from '../../shared/notification.service';
 import { SendEmailService } from 'src/app/shared/sendEmail.service';
+import { HttpClient } from '@angular/common/http';
+import { Credential } from 'src/app/models/credential';
 
 @Component({
   selector: 'app-login',
@@ -24,6 +26,7 @@ export class LoginComponent implements OnInit {
   form!: FormGroup;
   showPassword = false;
   credentialsError = false;
+  validationError = '';
 
   get password() {
     return this.form.get('password');
@@ -37,7 +40,8 @@ export class LoginComponent implements OnInit {
     private notificationService: NotificationService,
     private router: Router,
     private appSharedService: AppSharedService,
-    private emailService: SendEmailService
+    private emailService: SendEmailService,
+    private httpClient: HttpClient
   ) {}
 
   ngOnInit() {
@@ -66,18 +70,34 @@ export class LoginComponent implements OnInit {
       );
       return;
     }
-    // TEMP - start
-    if (this.username?.value !== 'admin' || this.password?.value !== '@admin') {
-      this.credentialsError = true;
-      return;
-    }
     this.credentialsError = false;
-    // TEMP - end
-    this.router.navigateByUrl('/home');
-    this.appSharedService.logout = false;
-    this.appSharedService.username = this.username?.value;
-    localStorage.setItem('loggedIn', 'true');
-    localStorage.setItem('username', this.username?.value);
+    this.httpClient
+      .get<Credential[]>('./assets/json/credentials.json')
+      .subscribe({
+        next: (data) => {
+          const credential = data.find(
+            (item) => item?.username === this.username?.value
+          );
+          if (!credential) {
+            this.credentialsError = true;
+            this.validationError = 'The username you entered is incorrect.';
+            return;
+          }
+          if (credential.password !== this.password?.value) {
+            this.credentialsError = true;
+            this.validationError = 'The password you entered is incorrect.';
+            return;
+          }
+          this.router.navigateByUrl('/home');
+          this.appSharedService.logout = false;
+          this.appSharedService.username = this.username?.value;
+          localStorage.setItem('loggedIn', 'true');
+          localStorage.setItem('username', this.username?.value);
+        },
+        error: (error) => {
+          this.notificationService.error(error?.error);
+        },
+      });
   }
 
   forgotPassword() {
