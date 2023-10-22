@@ -7,20 +7,28 @@ export const SALES = [
         route: 'sales',
       },
       {
-        title: 'Search Sales order',
+        title: 'Search Sales Order',
         route: 'sales/search-order',
       },
       {
-        title: 'New Sales order',
+        title: 'New Yarn Order',
         route: 'sales/new-order',
       },
       {
-        title: 'Sales order Delivery',
+        title: 'Yarn Order Delivery',
         route: 'sales/order-delivery',
+      },
+      {
+        title: 'Waste Order Delivery',
+        route: 'sales/waste-order-delivery',
       },
       {
         title: 'Search Deliveries',
         route: 'sales/search-deliveries',
+      },
+      {
+        title: 'Search Waste',
+        route: 'sales/search-waste',
       },
       {
         title: 'Delivery Invoice',

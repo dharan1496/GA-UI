@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription, finalize } from 'rxjs';
-import { YarnService } from 'src/app/services/yarn.service';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { YarnCounts } from 'src/app/models/yarnCounts';
 import { AddYarnCountsComponent } from './add-yarn-counts/add-yarn-counts.component';

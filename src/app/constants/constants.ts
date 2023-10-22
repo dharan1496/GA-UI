@@ -4,5 +4,6 @@ export const Constants = {
   SALES: 'sales',
   DELIVERABLE: 'DELIVERABLE',
   PARTY: 'party',
+  WASTE: 'waste',
   HIDDEN: 'hidden',
 };

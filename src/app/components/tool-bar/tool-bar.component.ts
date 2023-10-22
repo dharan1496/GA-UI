@@ -5,6 +5,7 @@ import { PARTY } from 'src/app/constants/party-menu-values.const';
 import { PRODUCTION } from 'src/app/constants/production-menu-values.const';
 import { PURCHASE } from 'src/app/constants/purchase-menu-values.const';
 import { SALES } from 'src/app/constants/sales-menu-values.const';
+import { TOOLBAR } from 'src/app/constants/toolbar-values.const';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
 import { TimeoutService } from 'src/app/shared/timeout.service';
@@ -16,6 +17,7 @@ import { TimeoutService } from 'src/app/shared/timeout.service';
 })
 export class ToolBarComponent {
   @Input() sidenav!: MatSidenav;
+  toolbarList = TOOLBAR;
 
   constructor(
     public navigationService: NavigationService,

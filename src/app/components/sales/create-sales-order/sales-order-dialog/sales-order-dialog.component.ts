@@ -14,7 +14,6 @@ import { YarnBlend } from 'src/app/models/yarnBlend';
 import { YarnCounts } from 'src/app/models/yarnCounts';
 import { YarnShade } from 'src/app/models/yarnShade';
 import { MasterService } from 'src/app/services/master.service';
-import { YarnService } from 'src/app/services/yarn.service';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { DecimalDirective } from 'src/app/shared/decimalNumberDirective';
 import { NotificationService } from 'src/app/shared/notification.service';

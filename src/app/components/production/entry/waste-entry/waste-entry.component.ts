@@ -64,6 +64,8 @@ export class WasteEntryComponent {
         wasteCategoryId: +data.wasteCategoryId,
         wasteCategoryName: data.wasteCategoryName,
         wasteQuantity: data.wasteQuantity,
+        blendId: this.programDetails ? this.programDetails.blendId : 0,
+        shadeId: this.programDetails ? this.programDetails.shadeId : 0,
       }));
       this.subscription.add(
         this.conversionService

@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { Subscription } from 'rxjs';
 import { YarnBlend } from 'src/app/models/yarnBlend';
-import { YarnService } from 'src/app/services/yarn.service';
 import { AddBlendComponent } from './add-blend/add-blend.component';
 import { UserActionConfirmationComponent } from 'src/app/components/user-action-confirmation/user-action-confirmation.component';
 import { NotificationService } from 'src/app/shared/notification.service';

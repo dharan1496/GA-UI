@@ -11,6 +11,8 @@ import { SearchSalesOrderComponent } from './search-sales-order/search-sales-ord
 import { DeliveriesComponent } from './deliveries/deliveries.component';
 import { DeliveryInvoiceComponent } from './delivery-invoice/delivery-invoice.component';
 import { ReceiveYarnReturnComponent } from './receive-yarn-return/receive-yarn-return.component';
+import { WasteOrderDeliveryComponent } from './waste-order-delivery/waste-order-delivery.component';
+import { SearchWasteDeliveryComponent } from './search-waste-delivery/search-waste-delivery.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,8 @@ import { ReceiveYarnReturnComponent } from './receive-yarn-return/receive-yarn-r
     DeliveriesComponent,
     DeliveryInvoiceComponent,
     ReceiveYarnReturnComponent,
+    WasteOrderDeliveryComponent,
+    SearchWasteDeliveryComponent,
   ],
   imports: [
     CommonModule,

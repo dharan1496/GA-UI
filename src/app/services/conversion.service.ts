@@ -91,14 +91,14 @@ export class ConversionService {
     );
   }
 
-  GetProductionWasteStock(fields: any): Observable<ProgramWasteStock[]> {
+  getProductionWasteStock(fields: any): Observable<ProgramWasteStock[]> {
     const { fromDate, toDate, blendId, shadeId } = fields;
     return this.http.get<ProgramWasteStock[]>(
       `${environment.api}/Conversion/GetProductionWasteStock?wasteEntryFromDate=${fromDate}&wasteEntryToDate=${toDate}&shadeId=${shadeId}&blendId=${blendId}`
     );
   }
 
-  GetConversionProgramStatus(
+  getConversionProgramStatus(
     blendId: number,
     shadeId: number,
     countsId: number

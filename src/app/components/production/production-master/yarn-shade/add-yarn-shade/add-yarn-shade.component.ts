@@ -5,7 +5,6 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { MaterialModule } from 'src/app/material.module';
 import { MasterService } from 'src/app/services/master.service';
-import { YarnService } from 'src/app/services/yarn.service';
 import { NotificationService } from 'src/app/shared/notification.service';
 
 @Component({

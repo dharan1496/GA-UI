@@ -46,6 +46,14 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: 'waste',
+    loadChildren: () =>
+      import('./components/waste-management/waste-management.module').then(
+        (m) => m.WasteManagementModule
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'change-password',
     loadChildren: () =>
       import('./components/change-password/change-password.module').then(

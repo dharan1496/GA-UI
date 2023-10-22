@@ -7,6 +7,8 @@ import { SearchSalesOrderComponent } from './search-sales-order/search-sales-ord
 import { DeliveriesComponent } from './deliveries/deliveries.component';
 import { DeliveryInvoiceComponent } from './delivery-invoice/delivery-invoice.component';
 import { ReceiveYarnReturnComponent } from './receive-yarn-return/receive-yarn-return.component';
+import { WasteOrderDeliveryComponent } from './waste-order-delivery/waste-order-delivery.component';
+import { SearchWasteDeliveryComponent } from './search-waste-delivery/search-waste-delivery.component';
 
 const routes: Routes = [
   {
@@ -30,8 +32,16 @@ const routes: Routes = [
     component: DeliverySalesOrderComponent,
   },
   {
+    path: 'waste-order-delivery',
+    component: WasteOrderDeliveryComponent,
+  },
+  {
     path: 'search-deliveries',
     component: DeliveriesComponent,
+  },
+  {
+    path: 'search-waste',
+    component: SearchWasteDeliveryComponent,
   },
   {
     path: 'delivery-invoice',

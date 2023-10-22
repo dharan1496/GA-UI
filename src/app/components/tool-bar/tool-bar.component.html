@@ -9,38 +9,16 @@
   </button>
   <span class="font-weight-normal">Menu</span>
   <div class="nav-btn px-32">
-    <button
-      id="purchases"
-      mat-button
-      (click)="selectSection('purchases')"
-      routerLink="/purchases/fibre"
-    >
-      Purchases
-    </button>
-    <button
-      id="production"
-      mat-button
-      (click)="selectSection('production')"
-      routerLink="/production"
-    >
-      Production
-    </button>
-    <button
-      id="sales"
-      mat-button
-      (click)="selectSection('sales')"
-      routerLink="/sales"
-    >
-      Sales
-    </button>
-    <button
-      id="party"
-      mat-button
-      (click)="selectSection('party')"
-      routerLink="/party"
-    >
-      Party
-    </button>
+    <ng-container *ngFor="let toolbar of toolbarList">
+      <button
+        [id]="toolbar.value"
+        mat-button
+        (click)="selectSection(toolbar.value)"
+        [routerLink]="toolbar.route"
+      >
+        {{ toolbar.label }}
+      </button>
+    </ng-container>
   </div>
   <span class="toolbar-item-spacer"></span>
   <span class="pr-4 font-weight-normal">{{

@@ -14,6 +14,9 @@ import { FibreCategory } from '../models/fibreCategory';
 import { FibreWasteCategory } from '../models/fibreWasteCategory';
 import { FibreIssueDetails } from '../models/fibreIssueDetails';
 import { FibrePO } from '../models/fibrePO';
+import { CreateFibreWaste } from '../models/createFibreWaste';
+import { FibreWasteStock } from '../models/fibreWasteStock';
+import { FibreSalesDC } from '../models/fibreSalesDC';
 
 @Injectable({
   providedIn: 'root',
@@ -130,19 +133,55 @@ export class FibreService {
     );
   }
 
-  GetFibreOrdersPendingToReceive(): Observable<FibrePO[]> {
+  getFibreOrdersPendingToReceive(): Observable<FibrePO[]> {
     return this.http.get<FibrePO[]>(
       `${environment.api}/Fiber/GetFibreOrdersPendingToReceive`
     );
   }
 
-  GetFiberPODetails_WitStatus(
+  getFiberPODetails_WitStatus(
     partyId: number,
     fromDate: string,
     toDate: string
   ): Observable<FibrePO[]> {
     return this.http.get<FibrePO[]>(
       `${environment.api}/Fiber/GetFiberPODetails_WitStatus?partyId=${partyId}&fromDate=${fromDate}&toDate=${toDate}`
+    );
+  }
+
+  saveFiberWaste(fibreWastes: CreateFibreWaste[]) {
+    return this.http.post(
+      `${environment.api}/Fiber/SaveFiberWaste?createdByUserId=0`,
+      fibreWastes,
+      {
+        responseType: 'text',
+      }
+    );
+  }
+
+  getFibreWasteStock(): Observable<FibreWasteStock[]> {
+    return this.http.get<FibreWasteStock[]>(
+      `${environment.api}/Fiber/GetFibreWasteStock`
+    );
+  }
+
+  getFiberWasteSalesByParty(
+    partyId: number,
+    fromDate: string,
+    toDate: string
+  ): Observable<FibreSalesDC[]> {
+    return this.http.get<FibreSalesDC[]>(
+      `${environment.api}/Fiber/GetFiberWasteSalesByParty?partyId=${partyId}&fromDate=${fromDate}&toDate=${toDate}`
+    );
+  }
+
+  createWasteSalesDC(fibreWaste: FibreSalesDC) {
+    return this.http.post(
+      `${environment.api}/Fiber/CreateWasteSalesDC`,
+      fibreWaste,
+      {
+        responseType: 'text',
+      }
     );
   }
 }

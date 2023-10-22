@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { AddYarnShadeComponent } from './add-yarn-shade/add-yarn-shade.component';
 import { Subscription, finalize } from 'rxjs';
-import { YarnService } from 'src/app/services/yarn.service';
 import { YarnShade } from 'src/app/models/yarnShade';
 import { UserActionConfirmationComponent } from 'src/app/components/user-action-confirmation/user-action-confirmation.component';
 import { MasterService } from 'src/app/services/master.service';
