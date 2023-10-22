@@ -1,6 +1,5 @@
 <mat-nav-list>
-  <h3 mat-subheader class="pt-24 pl-12">General</h3>
-  <mat-list-item class="mb-24" routerLink="/home" (click)="onHome()">
+  <mat-list-item class="mt-24" routerLink="/home" (click)="onHome()">
     <div class="home-btn pl-12">
       <mat-icon
         aria-hidden="false"
@@ -10,9 +9,6 @@
       <span class="font-weight-bold">Home</span>
     </div>
   </mat-list-item>
-  <h3 *ngIf="navigationService.menu?.length" mat-subheader class="pl-12">
-    Navigation
-  </h3>
   <ng-container *ngFor="let item of navigationService.menu">
     <mat-list-item *ngIf="!item?.submenu" [routerLink]="item.route">
       <div class="navigation-btn pl-20">

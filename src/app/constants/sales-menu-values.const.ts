@@ -2,10 +2,10 @@ export const SALES = [
   {
     title: 'Sales',
     submenu: [
-      {
-        title: 'Dashboard',
-        route: 'sales',
-      },
+      // {
+      //   title: 'Dashboard',
+      //   route: 'sales',
+      // },
       {
         title: 'Search Sales Order',
         route: 'sales/search-order',
