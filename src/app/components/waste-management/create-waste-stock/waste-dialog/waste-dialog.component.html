@@ -3,7 +3,7 @@
   <div mat-dialog-content>
     <div class="flex-container">
       <mat-form-field appearance="fill">
-        <mat-label>Waste</mat-label>
+        <mat-label>Waste Category</mat-label>
         <mat-select formControlName="wasteCategoryId">
           <ng-container *ngFor="let waste of wasteList">
             <mat-option [value]="waste.wasteCategoryId">{{

@@ -1,18 +1,18 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription, finalize } from 'rxjs';
-import { UserActionConfirmationComponent } from 'src/app/components/user-action-confirmation/user-action-confirmation.component';
+import { FibreWasteCategory } from 'src/app/models/fibreWasteCategory';
 import { FibreService } from 'src/app/services/fibre.service';
 import { NotificationService } from 'src/app/shared/notification.service';
-import { FibreWasteCategory } from 'src/app/models/fibreWasteCategory';
+import { UserActionConfirmationComponent } from '../../user-action-confirmation/user-action-confirmation.component';
 import { AddWasteComponent } from './add-waste/add-waste.component';
 
 @Component({
-  selector: 'app-waste',
-  templateUrl: './waste.component.html',
-  styleUrls: ['./waste.component.scss'],
+  selector: 'app-waste-master',
+  templateUrl: './waste-master.component.html',
+  styleUrls: ['./waste-master.component.scss'],
 })
-export class WasteComponent implements OnInit, OnDestroy {
+export class WasteMasterComponent {
   dataSource: FibreWasteCategory[] = [];
   displayedColumns = ['sNo', 'wasteName', 'button'];
   loader = false;
