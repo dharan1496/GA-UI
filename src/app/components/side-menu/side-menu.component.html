@@ -21,9 +21,9 @@
       class="mat-elevation-z0"
     >
       <mat-expansion-panel-header>
-        <span class="font-size-16 pl-12"> {{ item?.title }} </span>
+        <span class="font-size-16 pl-10"> {{ item?.title }} </span>
       </mat-expansion-panel-header>
-      <mat-nav-list class="pl-12">
+      <mat-nav-list class="pl-10">
         <ng-container *ngFor="let submenu of item?.submenu">
           <a mat-list-item [routerLink]="submenu.route">
             <span class="font-size-14">{{ submenu.title }}</span>

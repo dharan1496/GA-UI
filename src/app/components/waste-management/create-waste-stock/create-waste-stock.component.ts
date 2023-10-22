@@ -120,4 +120,10 @@ export class CreateWasteStockComponent implements OnDestroy {
     this.dataSource = [];
     this.table.renderRows();
   }
+
+  getTotalQuantity() {
+    return this.dataSource
+      .map((data: any) => data?.quantity)
+      .reduce((acc, value) => acc + value, 0);
+  }
 }
