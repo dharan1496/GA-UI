@@ -12,7 +12,6 @@ import { MaterialModule } from 'src/app/material.module';
 import { NotifyType } from 'src/app/models/notify';
 import { YarnCounts } from 'src/app/models/yarnCounts';
 import { MasterService } from 'src/app/services/master.service';
-import { YarnService } from 'src/app/services/yarn.service';
 import { DecimalDirective } from 'src/app/shared/decimalNumberDirective';
 import { NotificationService } from 'src/app/shared/notification.service';
 

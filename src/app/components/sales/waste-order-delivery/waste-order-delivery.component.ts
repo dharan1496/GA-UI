@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable } from '@angular/material/table';
@@ -23,7 +23,7 @@ import { SalesWasteOrderDialogComponent } from './sales-waste-order-dialog/sales
   templateUrl: './waste-order-delivery.component.html',
   styleUrls: ['./waste-order-delivery.component.scss'],
 })
-export class WasteOrderDeliveryComponent {
+export class WasteOrderDeliveryComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   displayedColumns: string[] = ['wasteCategoryName', 'quantity', 'action'];
   dataSource = [];

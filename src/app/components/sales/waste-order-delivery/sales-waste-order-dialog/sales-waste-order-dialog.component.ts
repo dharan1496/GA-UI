@@ -1,6 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { CommonModule } from '@angular/common';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription, finalize } from 'rxjs';
 import { MaterialModule } from 'src/app/material.module';
@@ -17,7 +17,7 @@ import { NotificationService } from 'src/app/shared/notification.service';
   templateUrl: './sales-waste-order-dialog.component.html',
   styleUrls: ['./sales-waste-order-dialog.component.scss'],
 })
-export class SalesWasteOrderDialogComponent {
+export class SalesWasteOrderDialogComponent implements OnInit, OnDestroy {
   dataSource: FibreWasteStock[] = [];
   displayedColumns = ['wasteCategoryName', 'stockQuantity', 'select'];
   subscription = new Subscription();
@@ -76,12 +76,12 @@ export class SalesWasteOrderDialogComponent {
       );
       return;
     }
-    const stock = this.selection.selected?.map((item) => ({
+    const stocks = this.selection.selected?.map((item) => ({
       wasteCategoryName: item.wasteCategoryName,
       wasteCategoryId: item.wasteCategoryId,
       quantity: item.stockQuantity,
     }));
-    this.matDialogRef.close();
+    this.matDialogRef.close(stocks);
   }
 
   close() {

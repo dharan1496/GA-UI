@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable } from '@angular/material/table';
 import { Subscription } from 'rxjs';
@@ -18,7 +18,7 @@ import { WasteDialogComponent } from './waste-dialog/waste-dialog.component';
   templateUrl: './create-waste-stock.component.html',
   styleUrls: ['./create-waste-stock.component.scss'],
 })
-export class CreateWasteStockComponent {
+export class CreateWasteStockComponent implements OnDestroy {
   displayedColumns = ['sNo', 'wasteCategoryName', 'quantity', 'button'];
   dataSource: CreateFibreWaste[] = [];
   subscription = new Subscription();

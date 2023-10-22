@@ -2,7 +2,6 @@ import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Constants } from 'src/app/constants/constants';
 import { PRODUCTION } from 'src/app/constants/production-menu-values.const';
-import { YarnService } from 'src/app/services/yarn.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { ChooseProgramComponent } from './choose-program/choose-program.component';

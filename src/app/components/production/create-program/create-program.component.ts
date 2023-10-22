@@ -5,7 +5,6 @@ import { Subscription } from 'rxjs';
 import { Constants } from 'src/app/constants/constants';
 import { PRODUCTION } from 'src/app/constants/production-menu-values.const';
 import { YarnShade } from 'src/app/models/yarnShade';
-import { YarnService } from 'src/app/services/yarn.service';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
 import { AddYarnComponent } from './add-yarn/add-yarn.component';

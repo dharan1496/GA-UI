@@ -6,7 +6,6 @@ import { UserActionConfirmationComponent } from 'src/app/components/user-action-
 import { Constants } from 'src/app/constants/constants';
 import { PRODUCTION } from 'src/app/constants/production-menu-values.const';
 import { ConversionYarn } from 'src/app/models/conversionYarn';
-import { YarnService } from 'src/app/services/yarn.service';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
 import { NotificationService } from 'src/app/shared/notification.service';

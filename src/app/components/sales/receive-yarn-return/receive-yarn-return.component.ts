@@ -121,7 +121,7 @@ export class ReceiveYarnReturnComponent implements OnInit, OnDestroy {
         yarnReturnDetails,
       };
       this.yarnService.receiveYarnReturn(yarnReturn).subscribe({
-        next: (response) => {
+        next: () => {
           this.resetData();
           this.notificationService.success('Return submitted successfully');
         },

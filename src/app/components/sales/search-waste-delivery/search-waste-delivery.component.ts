@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -8,12 +8,11 @@ import {
 } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { Subscription, finalize, map } from 'rxjs';
+import { Subscription, finalize } from 'rxjs';
 import { Constants } from 'src/app/constants/constants';
 import { SALES } from 'src/app/constants/sales-menu-values.const';
 import { NotifyType } from 'src/app/models/notify';
 import { PartyService } from 'src/app/services/party.service';
-import { YarnService } from 'src/app/services/yarn.service';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
 import { NotificationService } from 'src/app/shared/notification.service';
@@ -21,7 +20,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { YarnDeliverySummary } from 'src/app/models/yarnDeliverySummary';
 import { PrintService } from 'src/app/services/print.service';
-import { DeliveryDetailsComponent } from '../deliveries/delivery-details/delivery-details.component';
 import { FibreService } from 'src/app/services/fibre.service';
 import { FibreSalesDC } from 'src/app/models/fibreSalesDC';
 import { WasteDetailsComponent } from './waste-details/waste-details.component';
@@ -31,7 +29,7 @@ import { WasteDetailsComponent } from './waste-details/waste-details.component';
   templateUrl: './search-waste-delivery.component.html',
   styleUrls: ['./search-waste-delivery.component.scss'],
 })
-export class SearchWasteDeliveryComponent {
+export class SearchWasteDeliveryComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   minDate = new Date();
   maxDate = new Date();

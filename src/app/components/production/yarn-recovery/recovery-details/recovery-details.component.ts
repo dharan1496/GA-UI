@@ -13,7 +13,6 @@ import {
   PrintService,
   YarnRecoveryDetails,
 } from 'src/app/services/print.service';
-import { YarnService } from 'src/app/services/yarn.service';
 import { NotificationService } from 'src/app/shared/notification.service';
 
 @Component({

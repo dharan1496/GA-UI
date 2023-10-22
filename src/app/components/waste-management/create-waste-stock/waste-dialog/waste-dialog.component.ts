@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import {
   ReactiveFormsModule,
   Validators,
@@ -20,7 +20,7 @@ import { NotificationService } from 'src/app/shared/notification.service';
   templateUrl: './waste-dialog.component.html',
   styleUrls: ['./waste-dialog.component.scss'],
 })
-export class WasteDialogComponent implements OnInit {
+export class WasteDialogComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   subscription = new Subscription();
   wasteList!: FibreWasteCategory[];

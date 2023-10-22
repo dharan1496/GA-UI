@@ -7,7 +7,6 @@ import { MaterialModule } from 'src/app/material.module';
 import { NotifyType } from 'src/app/models/notify';
 import { ProgramForProductionEntry } from 'src/app/models/programForProductionEntry';
 import { ConversionService } from 'src/app/services/conversion.service';
-import { YarnService } from 'src/app/services/yarn.service';
 import { NotificationService } from 'src/app/shared/notification.service';
 
 @Component({
