@@ -6,6 +6,9 @@ import { FibreService } from 'src/app/services/fibre.service';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { UserActionConfirmationComponent } from '../../user-action-confirmation/user-action-confirmation.component';
 import { AddWasteComponent } from './add-waste/add-waste.component';
+import { NavigationService } from 'src/app/shared/navigation.service';
+import { Constants } from 'src/app/constants/constants';
+import { WASTE } from 'src/app/constants/waste-menu-values.const';
 
 @Component({
   selector: 'app-waste-master',
@@ -21,8 +24,12 @@ export class WasteMasterComponent {
   constructor(
     private dialog: MatDialog,
     private notificationService: NotificationService,
-    private fibreService: FibreService
-  ) {}
+    private fibreService: FibreService,
+    private navigationService: NavigationService
+  ) {
+    this.navigationService.setFocus(Constants.WASTE);
+    this.navigationService.menu = WASTE;
+  }
 
   ngOnInit() {
     this.getWaste();
