@@ -19,7 +19,6 @@ import { NotificationService } from 'src/app/shared/notification.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { YarnDeliverySummary } from 'src/app/models/yarnDeliverySummary';
-import { PrintService } from 'src/app/services/print.service';
 import { FibreService } from 'src/app/services/fibre.service';
 import { FibreSalesDC } from 'src/app/models/fibreSalesDC';
 import { WasteDetailsComponent } from './waste-details/waste-details.component';
@@ -63,8 +62,7 @@ export class SearchWasteDeliveryComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private fibreService: FibreService,
     private datePipe: DatePipe,
-    private dialog: MatDialog,
-    private printService: PrintService
+    private dialog: MatDialog
   ) {
     this.navigationService.menu = SALES;
     this.navigationService.setFocus(Constants.SALES);

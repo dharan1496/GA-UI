@@ -5,6 +5,20 @@
       <mat-spinner></mat-spinner>
     </div>
     <table mat-table [dataSource]="dataSource" class="table">
+      <ng-container matColumnDef="programNo">
+        <th mat-header-cell *matHeaderCellDef>Program No</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.programNo || "_" }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="programDate">
+        <th mat-header-cell *matHeaderCellDef>Program Date</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.programDate || "_" }}
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="wasteCategoryName">
         <th mat-header-cell *matHeaderCellDef>Waste Category</th>
         <td mat-cell *matCellDef="let element">

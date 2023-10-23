@@ -19,7 +19,13 @@ import { NotificationService } from 'src/app/shared/notification.service';
 })
 export class SalesWasteOrderDialogComponent implements OnInit, OnDestroy {
   dataSource: FibreWasteStock[] = [];
-  displayedColumns = ['wasteCategoryName', 'stockQuantity', 'select'];
+  displayedColumns = [
+    'programNo',
+    'programDate',
+    'wasteCategoryName',
+    'stockQuantity',
+    'select',
+  ];
   subscription = new Subscription();
   selection = new SelectionModel<FibreWasteStock>(true, []);
   loader = false;
@@ -76,12 +82,8 @@ export class SalesWasteOrderDialogComponent implements OnInit, OnDestroy {
       );
       return;
     }
-    const stocks = this.selection.selected?.map((item) => ({
-      wasteCategoryName: item.wasteCategoryName,
-      wasteCategoryId: item.wasteCategoryId,
-      quantity: item.stockQuantity,
-    }));
-    this.matDialogRef.close(stocks);
+
+    this.matDialogRef.close(this.selection.selected);
   }
 
   close() {

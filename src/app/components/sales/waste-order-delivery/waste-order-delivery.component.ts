@@ -17,6 +17,7 @@ import { NavigationService } from 'src/app/shared/navigation.service';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { UserActionConfirmationComponent } from '../../user-action-confirmation/user-action-confirmation.component';
 import { SalesWasteOrderDialogComponent } from './sales-waste-order-dialog/sales-waste-order-dialog.component';
+import { FibreWasteStock } from 'src/app/models/fibreWasteStock';
 
 @Component({
   selector: 'app-waste-order-delivery',
@@ -146,12 +147,17 @@ export class WasteOrderDeliveryComponent implements OnInit, OnDestroy {
     this.dialog
       .open(SalesWasteOrderDialogComponent, {
         data: this.dataSource.length,
-        minWidth: '50vw',
+        minWidth: '60vw',
       })
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          this.dataSource.push(result as never);
+          const stock = result?.map((item: FibreWasteStock) => ({
+            wasteCategoryName: item.wasteCategoryName,
+            wasteCategoryId: item.wasteCategoryId,
+            quantity: item.stockQuantity,
+          }));
+          this.dataSource = stock;
           this.table.renderRows();
         }
       });
