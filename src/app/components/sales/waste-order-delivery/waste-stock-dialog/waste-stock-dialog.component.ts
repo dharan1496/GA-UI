@@ -11,18 +11,19 @@ import { DecimalDirective } from 'src/app/shared/decimalNumberDirective';
 import { NotificationService } from 'src/app/shared/notification.service';
 
 @Component({
-  selector: 'app-sales-waste-order-dialog',
+  selector: 'app-waste-stock-dialog',
   standalone: true,
   imports: [CommonModule, MaterialModule, DecimalDirective],
-  templateUrl: './sales-waste-order-dialog.component.html',
-  styleUrls: ['./sales-waste-order-dialog.component.scss'],
+  templateUrl: './waste-stock-dialog.component.html',
+  styleUrls: ['./waste-stock-dialog.component.scss'],
 })
-export class SalesWasteOrderDialogComponent implements OnInit, OnDestroy {
+export class WasteStockDialogComponent implements OnInit, OnDestroy {
   dataSource: FibreWasteStock[] = [];
   displayedColumns = [
     'programNo',
     'programDate',
     'wasteCategoryName',
+    'shadeName',
     'stockQuantity',
     'select',
   ];

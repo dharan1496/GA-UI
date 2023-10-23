@@ -26,6 +26,13 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="shadeName">
+        <th mat-header-cell *matHeaderCellDef>Shade</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.shadeName || "_" }}
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="stockQuantity">
         <th mat-header-cell *matHeaderCellDef>Quantity</th>
         <td mat-cell *matCellDef="let element">{{ element.stockQuantity }}</td>

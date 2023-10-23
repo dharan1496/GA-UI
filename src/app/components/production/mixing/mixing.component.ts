@@ -16,9 +16,9 @@ import { FibreMixing } from 'src/app/models/fibreMixing';
 import { DatePipe } from '@angular/common';
 import { FibreIssued } from 'src/app/models/fibreIssued';
 import { Subscription } from 'rxjs';
-import { BlendMismatchComponent } from './blend-mismatch/blend-mismatch.component';
 import { UserActionConfirmationComponent } from '../../user-action-confirmation/user-action-confirmation.component';
 import { ConversionService } from 'src/app/services/conversion.service';
+import { WasteStockDialogComponent } from '../../sales/waste-order-delivery/waste-stock-dialog/waste-stock-dialog.component';
 
 @Component({
   selector: 'app-mixing',
@@ -47,6 +47,8 @@ export class MixingComponent {
   mixingDate = new FormControl('', Validators.required);
   subscription = new Subscription();
   mixedBlend = '';
+  fibreStocks = [];
+  wasteStocks = [];
 
   constructor(
     private navigationService: NavigationService,
@@ -85,86 +87,60 @@ export class MixingComponent {
       .afterClosed()
       .subscribe((stock) => {
         if (stock) {
-          this.mixingDetails = stock;
+          this.fibreStocks = stock;
+          this.mixingDetails = [...this.wasteStocks, ...this.fibreStocks];
           this.table.renderRows();
-          this.getMixedBlend();
+        }
+      });
+  }
+
+  wasteStock() {
+    this.dialog
+      .open(WasteStockDialogComponent, {
+        data: this.mixingDetails.length,
+        minWidth: '60vw',
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.wasteStocks = result;
+          this.mixingDetails = [...this.fibreStocks, ...this.wasteStocks];
+          this.table.renderRows();
         }
       });
   }
 
   submit() {
     if (!this.hasError()) {
-      this.checkBlend();
-    }
-  }
-
-  checkBlend() {
-    const mixedBlend = this.getMixedBlend();
-    if (mixedBlend !== this.programDetails?.blendName) {
-      this.dialog
-        .open(BlendMismatchComponent, {
-          data: { expected: this.programDetails?.blendName, mixed: mixedBlend },
-        })
-        .afterClosed()
-        .subscribe((response) => response && this.issueFibre());
-      return;
-    }
-    this.issueFibre();
-  }
-
-  getMixedBlend(): string {
-    const mixingBlend: string[] = [];
-    const addedStockType = [
-      ...new Set(
-        this.mixingDetails
-          .sort((a, b) => a['fibreCategoryId'] - b['fibreCategoryId'])
-          .map((data) => data['fibreCategoryName'])
-      ),
-    ];
-    addedStockType.forEach((fibreName: string) => {
-      mixingBlend.push(
-        fibreName[0] +
-          Math.round(
-            this.mixingDetails
-              .filter((data) => data['fibreCategoryName'] === fibreName)
-              .map((data) => this.getPercentUsed(data))
-              .reduce((acc, curr) => acc + curr, 0) || 0
-          )
-      );
-    });
-    this.mixedBlend = mixingBlend.join(':');
-    return this.mixedBlend;
-  }
-
-  issueFibre() {
-    const fibres: FibreIssued[] = this.mixingDetails.map((data: any) => {
-      return {
-        receivedDtsId: data?.receivedDtsId,
-        fibreTypeId: data?.fibreTypeId,
-        issueQuantity: +data?.issueQuantity,
-        shadeId: data?.shadeId,
-        lot: data?.lot,
-        productionWasteDtsId: data?.productionWasteDtsId,
+      const fibres: FibreIssued[] = this.mixingDetails.map((data: any) => {
+        return {
+          receivedDtsId: data?.receivedDtsId || 0,
+          fibreTypeId: data?.fibreTypeId || 0,
+          issueQuantity: +data?.issueQuantity || +data?.stockQuantity,
+          shadeId: data?.shadeId || data?.mixedForShadeId || 0,
+          lot: data?.lot || null,
+          productionWasteDtsId: data?.productionWasteDtsId || 0,
+        };
+      });
+      const fibreMixing: FibreMixing = {
+        programId: this.programDetails?.programId || 0,
+        mixingDate:
+          this.datePipe.transform(this.mixingDate.value, 'dd/MM/yyyy') || '',
+        issuedByUseId: 0,
+        fibres,
       };
-    });
-    const fibreMixing: FibreMixing = {
-      programId: this.programDetails?.programId || 0,
-      mixingDate:
-        this.datePipe.transform(this.mixingDate.value, 'dd/MM/yyyy') || '',
-      issuedByUseId: 0,
-      fibres,
-    };
-    this.conversionService.issueFibreForMixing(fibreMixing).subscribe({
-      next: (response) => {
-        this.notificationService.success(response);
-        this.resetData();
-      },
-      error: (error) => {
-        this.notificationService.error(
-          typeof error?.error === 'string' ? error?.error : error?.message
-        );
-      },
-    });
+      this.conversionService.issueFibreForMixing(fibreMixing).subscribe({
+        next: (response) => {
+          this.notificationService.success(response);
+          this.resetData();
+        },
+        error: (error) => {
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          );
+        },
+      });
+    }
   }
 
   hasError(): boolean {
@@ -231,10 +207,15 @@ export class MixingComponent {
       .afterClosed()
       .subscribe((response) => {
         if (response) {
+          this.fibreStocks = this.fibreStocks.filter(
+            (data) => data !== element
+          );
+          this.wasteStocks = this.wasteStocks.filter(
+            (data) => data !== element
+          );
           this.mixingDetails = this.mixingDetails.filter(
             (data) => data !== element
           );
-          this.getMixedBlend();
         }
       });
   }

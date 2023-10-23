@@ -91,27 +91,21 @@
     </div>
   </div>
   <div>
-    <div class="fibre-stock-btn mb-16" *ngIf="programDetails">
+    <div class="stock-btn mb-16" *ngIf="programDetails">
       <button mat-raised-button color="primary" (click)="fibreStock()">
-        <mat-icon>playlist_add</mat-icon> Select Fibre Stock
+        <mat-icon>playlist_add</mat-icon> Fibre Stock
       </button>
-      <mat-card>
-        <div
-          *ngIf="mixingDetails?.length && mixedBlend"
-          class="font-weight-bold px-16 py-10"
-        >
-          <span class="text-gray font-size-14 mr-8">Mixed Blend</span>-<span
-            class="font-size-18 ml-8"
-            >{{ mixedBlend }}</span
-          >
-        </div>
-      </mat-card>
+      <button mat-raised-button color="primary" (click)="wasteStock()">
+        <mat-icon>playlist_add</mat-icon> Waste Stock
+      </button>
     </div>
     <div class="overflow-auto mat-elevation-z8">
       <table mat-table [dataSource]="mixingDetails">
         <ng-container matColumnDef="receivedDCNo">
           <th mat-header-cell *matHeaderCellDef>Received DC No</th>
-          <td mat-cell *matCellDef="let element">{{ element.receivedDCNo }}</td>
+          <td mat-cell *matCellDef="let element">
+            {{ element.receivedDCNo || "_" }}
+          </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
@@ -132,20 +126,24 @@
         </ng-container>
 
         <ng-container matColumnDef="fibre">
-          <th mat-header-cell *matHeaderCellDef>Fibre</th>
-          <td mat-cell *matCellDef="let element">{{ element.fibreType }}</td>
+          <th mat-header-cell *matHeaderCellDef>Fibre Name</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.fibreType || "_" }}
+          </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="fibreShade">
-          <th mat-header-cell *matHeaderCellDef>Fibre Shade</th>
-          <td mat-cell *matCellDef="let element">{{ element.shadeName }}</td>
+          <th mat-header-cell *matHeaderCellDef>Shade</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.shadeName || "_" }}
+          </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="lot">
           <th mat-header-cell *matHeaderCellDef>Lot</th>
-          <td mat-cell *matCellDef="let element">{{ element.lot }}</td>
+          <td mat-cell *matCellDef="let element">{{ element.lot || "_" }}</td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
@@ -154,7 +152,7 @@
             Stock Qty
           </th>
           <td mat-cell *matCellDef="let element" class="text-right">
-            {{ element.stock }}
+            {{ element.stock || element.stockQuantity }}
           </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
@@ -206,7 +204,6 @@
               #issuedQty
               type="number"
               class="cell-input w-70"
-              (keyup)="getMixedBlend()"
               (input)="element.issueQuantity = issuedQty.value"
               decimal="3"
             />

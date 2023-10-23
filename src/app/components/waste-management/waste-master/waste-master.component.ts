@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription, finalize } from 'rxjs';
 import { FibreWasteCategory } from 'src/app/models/fibreWasteCategory';
@@ -15,7 +15,7 @@ import { WASTE } from 'src/app/constants/waste-menu-values.const';
   templateUrl: './waste-master.component.html',
   styleUrls: ['./waste-master.component.scss'],
 })
-export class WasteMasterComponent {
+export class WasteMasterComponent implements OnInit, OnDestroy {
   dataSource: FibreWasteCategory[] = [];
   displayedColumns = ['sNo', 'wasteName', 'button'];
   loader = false;

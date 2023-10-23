@@ -16,8 +16,8 @@ import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { UserActionConfirmationComponent } from '../../user-action-confirmation/user-action-confirmation.component';
-import { SalesWasteOrderDialogComponent } from './sales-waste-order-dialog/sales-waste-order-dialog.component';
 import { FibreWasteStock } from 'src/app/models/fibreWasteStock';
+import { WasteStockDialogComponent } from './waste-stock-dialog/waste-stock-dialog.component';
 
 @Component({
   selector: 'app-waste-order-delivery',
@@ -145,7 +145,7 @@ export class WasteOrderDeliveryComponent implements OnInit, OnDestroy {
 
   addData(): void {
     this.dialog
-      .open(SalesWasteOrderDialogComponent, {
+      .open(WasteStockDialogComponent, {
         data: this.dataSource.length,
         minWidth: '60vw',
       })

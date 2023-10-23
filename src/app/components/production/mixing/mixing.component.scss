@@ -99,8 +99,7 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-.fibre-stock-btn {
+.stock-btn {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
+  gap: 8px;
 }
