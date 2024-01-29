@@ -73,24 +73,24 @@
               *ngIf="printFibreService.fibrePOData?.stateName === 'Tamil Nadu'"
               class="text-right"
             >
-              {{ order?.gstpercent / 2 | number : "1.2-2" }}%
+              {{ order?.gstPercent / 2 | number : "1.2-2" }}%
             </td>
             <td
               *ngIf="printFibreService.fibrePOData?.stateName === 'Tamil Nadu'"
               class="text-right"
             >
-              {{ order?.gstpercent / 2 | number : "1.2-2" }}%
+              {{ order?.gstPercent / 2 | number : "1.2-2" }}%
             </td>
             <td
               *ngIf="printFibreService.fibrePOData?.stateName !== 'Tamil Nadu'"
               class="text-right"
             >
-              {{ order?.gstpercent | number : "1.2-2" }}%
+              {{ order?.gstPercent | number : "1.2-2" }}%
             </td>
             <td class="text-right">
               {{
                 order?.rate * order?.weight +
-                  (order?.rate * order?.weight * order?.gstpercent) / 100
+                  (order?.rate * order?.weight * order?.gstPercent) / 100
                   | currency : "INR"
               }}
             </td>

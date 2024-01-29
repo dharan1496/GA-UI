@@ -1,5 +1,10 @@
 <section class="container">
-  <h1 class="header letter-spacing-1">Fibre New Purchase Order</h1>
+  <h1 class="header letter-spacing-1">
+    <span *ngIf="!updatePoDetails; else updateHeader"
+      >Create Fibre Purchase Order</span
+    >
+    <ng-template #updateHeader>Update Fibre Purchase Order</ng-template>
+  </h1>
   <mat-card class="party-card">
     <mat-card-header>
       <mat-card-title>PO Details</mat-card-title>
@@ -10,7 +15,10 @@
           <label for="poNo" class="font-weight-bold">PONo</label>
           <div id="poNo" class="po-no font-size-16 text-gray pt-4">
             {{ form.get("poNo")?.value ? form.get("poNo")?.value : "_" }}
-            <mat-icon matTooltip="Refresh" (click)="getPoNo()"
+            <mat-icon
+              *ngIf="!updatePoDetails"
+              matTooltip="Refresh"
+              (click)="getPoNo()"
               >refresh</mat-icon
             >
           </div>
@@ -25,6 +33,7 @@
               }}</mat-option>
             </ng-container>
           </mat-select>
+          <mat-hint *ngIf="updatePoDetails">Disabled</mat-hint>
           <mat-error>This field is required.</mat-error>
         </mat-form-field>
 
@@ -38,7 +47,10 @@
               appSharedService.formatDate($event, form.controls['pOdate'])
             "
           />
-          <mat-hint>DD/MM/YYYY</mat-hint>
+          <mat-hint>
+            <span *ngIf="!updatePoDetails; else disabled">DD/MM/YYYY</span>
+            <ng-template #disabled>Disabled</ng-template>
+          </mat-hint>
           <mat-datepicker-toggle
             matIconSuffix
             [for]="picker"
@@ -164,10 +176,10 @@
   </div>
 
   <div class="footer">
-    <!-- <button mat-raised-button (click)="goToSearch()">
+    <button mat-raised-button (click)="goToSearch()">
       <mat-icon>arrow_back</mat-icon>Go to Search
-    </button> -->
-    <div>
+    </button>
+    <div *ngIf="!updatePoDetails; else updateBtn">
       <button mat-raised-button class="mr-16" (click)="resetData()">
         <mat-icon>refresh</mat-icon>Reset
       </button>
@@ -175,5 +187,10 @@
         <mat-icon>save_alt</mat-icon>Submit
       </button>
     </div>
+    <ng-template #updateBtn>
+      <button mat-raised-button color="primary" (click)="updateOrder()">
+        <mat-icon>save_alt</mat-icon>Update
+      </button>
+    </ng-template>
   </div>
 </section>

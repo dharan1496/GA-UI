@@ -40,7 +40,7 @@ tr.row:not(.expanded-row) {
 }
 
 .element-detail {
-  overflow: hidden;
+  overflow: auto;
   display: flex;
   margin-bottom: 24px;
   padding-top: 8px;

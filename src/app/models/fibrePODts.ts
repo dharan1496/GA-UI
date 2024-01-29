@@ -7,7 +7,7 @@ export interface FibrePODts {
   shadeName: string;
   weight: number;
   rate: number;
-  gstpercent: number;
+  gstPercent: number;
   length: number;
   length_Unit: string;
   counts: number;

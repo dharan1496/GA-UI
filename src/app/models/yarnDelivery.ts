@@ -8,6 +8,7 @@ export interface YarnDelivery {
   deliveryAddressId: number;
   vehicleNo: string;
   remarks: string;
+  eWayBillNo: string;
   createdByUserId: number;
   deliveryDts: YarnDeliveryDts[];
 }

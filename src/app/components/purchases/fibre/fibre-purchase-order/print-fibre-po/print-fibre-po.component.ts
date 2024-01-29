@@ -2,6 +2,7 @@ import { CommonModule, CurrencyPipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { MaterialModule } from 'src/app/material.module';
 import { PrintService } from '../../../../../services/print.service';
+import { FibrePODts } from 'src/app/models/fibrePODts';
 
 @Component({
   selector: 'app-print-fibre-po',
@@ -24,16 +25,19 @@ export class PrintFibrePOComponent {
 
   getTaxAmount() {
     return this.printFibreService.fibrePOData?.fibrePODts
-      .map((data: any) => (data?.rate * data?.weight * data?.gstpercent) / 100)
+      .map(
+        (data: FibrePODts) =>
+          (data?.rate * data?.weight * data?.gstPercent) / 100
+      )
       .reduce((acc: number, value: number) => acc + value, 0);
   }
 
   getTotalAmount() {
     return this.printFibreService.fibrePOData?.fibrePODts
       .map(
-        (data: any) =>
+        (data: FibrePODts) =>
           data?.rate * data?.weight +
-          (data?.rate * data?.weight * data?.gstpercent) / 100
+          (data?.rate * data?.weight * data?.gstPercent) / 100
       )
       .reduce((acc: number, value: number) => acc + value, 0);
   }

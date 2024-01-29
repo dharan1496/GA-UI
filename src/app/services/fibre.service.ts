@@ -48,6 +48,28 @@ export class FibreService {
     });
   }
 
+  updateFibrePO(request: FibrePO): Observable<string> {
+    return this.http.post(`${environment.api}/Fiber/UpdateFiberPO`, request, {
+      responseType: 'text',
+    });
+  }
+
+  getFiberPOsByParty(partyId: number, poStartDate: string, poEndDate: string) {
+    return this.http.get<FibrePO[]>(
+      `${environment.api}/Fiber/GetFiberPOsByParty?partyId=${partyId}&fromDate=${poStartDate}&toDate=${poEndDate}`
+    );
+  }
+
+  getFibersPurchasedByParty(
+    partyId: number,
+    poStartDate: string,
+    poEndDate: string
+  ) {
+    return this.http.get<FibrePO[]>(
+      `${environment.api}/Fiber/GetFibersPurchasedByParty?partyId=${partyId}&fromDate=${poStartDate}&toDate=${poEndDate}`
+    );
+  }
+
   getPONo(): Observable<string> {
     return this.http.get(`${environment.api}/Fiber/GetPONo`, {
       responseType: 'text',
@@ -74,6 +96,16 @@ export class FibreService {
     return this.http.post(`${environment.api}/Fiber/ReceiveFibre`, request, {
       responseType: 'text',
     });
+  }
+
+  UpdateReceiveFibre(request: ReceiveFibrePO) {
+    return this.http.post(
+      `${environment.api}/Fiber/UpdateFibersPurchased`,
+      request,
+      {
+        responseType: 'text',
+      }
+    );
   }
 
   getFibreShade(): Observable<FibreShade[]> {

@@ -128,6 +128,7 @@ export class DeliverySalesOrderComponent implements OnInit {
           productionDtsId: stock.productionYarnDtsId,
           deliveryQuantity: +stock.issueQuantity,
           hsnCode: +stock.hsnCode,
+          yarnReturnDtsId: 0,
         })
       );
       const deliveryRequest: YarnDelivery = {
@@ -142,6 +143,7 @@ export class DeliverySalesOrderComponent implements OnInit {
         deliveryPartyId: this.orderSelected?.partyId,
         createdByUserId: 0,
         deliveryDts,
+        eWayBillNo: '',
       };
 
       this.yarnService.createYarnDelivery(deliveryRequest).subscribe({

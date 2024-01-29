@@ -19,6 +19,7 @@ import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { PendingPODetailsByParty } from 'src/app/models/pendingPODtsByParty';
 import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
+import { ReceiveFibrePO } from 'src/app/models/receiveFibrePO';
 
 @Component({
   selector: 'app-fibre-receive-purchase-order',
@@ -48,6 +49,7 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
   selection = new SelectionModel<any>(true, []);
   subscription = new Subscription();
   poDate!: Date;
+  updateReceivedPODetails?: ReceiveFibrePO;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -75,10 +77,79 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
       recdDCNo: ['', Validators.required],
       dcDate: ['', Validators.required],
     });
+
+    if (this.router.url.includes('update-received-purchase-order')) {
+      this.checkForUpdate();
+    }
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  checkForUpdate() {
+    const poDetails = sessionStorage.getItem('receivedPODetails');
+    if (poDetails) {
+      this.updateReceivedPODetails = JSON.parse(poDetails);
+      this.patchUpdateDetails();
+      sessionStorage.clear();
+    } else {
+      this.router.navigateByUrl('fibre/receive-purchase-order');
+    }
+  }
+
+  patchUpdateDetails() {
+    const poNo = [
+      ...new Set(
+        this.updateReceivedPODetails?.fibrePODts?.map((po: any) => po.poNo)
+      ),
+    ]
+      ?.concat()
+      .toString()
+      ?.replaceAll(',', ', ');
+    this.form.get('poNo')?.setValue(poNo);
+    this.form.get('partyId')?.setValue(this.updateReceivedPODetails?.partyId);
+    this.form.get('partyId')?.disable();
+    this.form
+      .get('poDate')
+      ?.setValue(
+        this.getPODate(this.updateReceivedPODetails?.fibrePODts as any)
+      );
+    this.form.get('recdDCNo')?.setValue(this.updateReceivedPODetails?.recdDCNo);
+    this.form.get('recdDCNo')?.disable();
+    this.form
+      .get('recdDate')
+      ?.setValue(new Date(this.updateReceivedPODetails?.recdDate || ''));
+    this.form.get('recdDate')?.disable();
+    this.form
+      .get('dcDate')
+      ?.setValue(new Date(this.updateReceivedPODetails?.dcDate || ''));
+    this.form.get('dcDate')?.disable();
+
+    this.dataSource = this.updateReceivedPODetails?.fibrePODts?.map(
+      (data, index) => {
+        return {
+          orderNo: index + 1,
+          poNo: data?.poNo,
+          fibreType: data?.fiberTypeName,
+          fibreTypeId: data?.fiberTypeId,
+          shadeName: data?.fiberShadeName,
+          shadeId: data?.fiberShadeId,
+          // orderQty: data?.,
+          // pendingQty: data?.
+          receivedQty: data?.receivedWeight,
+          receivedBales: data?.receivedBales,
+          lot: data?.lot,
+          hsnCode: data?.hsnCode,
+          rate: data?.rate,
+          gstpercent: data?.gstPercent,
+          amount: data?.rate * data?.receivedWeight,
+          totalAmount:
+            data?.rate * data?.receivedWeight +
+            (data?.rate * data?.receivedWeight * data?.gstPercent) / 100,
+        };
+      }
+    ) as never[];
   }
 
   getParty() {
@@ -137,7 +208,9 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
     }
 
     const request = {
+      receivedDCId: 0,
       ...this.form.value,
+      partyName: this.getPartyName(),
       receivedByUserId: 0,
       fibrePODts: [],
       recdDate: this.datePipe.transform(this.form.value.recdDate, 'dd/MM/yyyy'),
@@ -146,7 +219,10 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
 
     this.dataSource.forEach((data: any) => {
       request.fibrePODts.push({
+        receivedDCId: 0,
+        receivedDtsId: 0,
         poDtsId: data?.poDtsId,
+        poNo: data?.poNo,
         lot: data?.lot,
         hsnCode: data?.hsnCode,
         receivedWeight: data?.receivedQty,
@@ -154,20 +230,39 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
         rate: data?.rate,
         gstPercent: data?.gstpercent,
         fiberShadeId: data?.shadeId,
+        fiberShadeName: data?.shadeName,
         fiberTypeId: data?.fibreTypeId,
+        fiberTypeName: data?.fibreType,
       } as ReceiveFibrePODts);
     });
-    this.subscription.add(
-      this.fibreService.submitReceiveFibre(request).subscribe({
-        next: (response) => {
-          this.notificationService.success(response);
-          this.resetData();
-        },
-        error: (error) => {
-          this.notificationService.error(error.message);
-        },
-      })
-    );
+
+    if (this.updateReceivedPODetails) {
+      this.subscription.add(
+        this.fibreService.UpdateReceiveFibre(request).subscribe({
+          next: (response) => {
+            this.notificationService.success(response);
+            this.resetData();
+          },
+          error: (error) =>
+            this.notificationService.error(
+              typeof error?.error === 'string' ? error?.error : error?.message
+            ),
+        })
+      );
+    } else {
+      this.subscription.add(
+        this.fibreService.submitReceiveFibre(request).subscribe({
+          next: (response) => {
+            this.notificationService.success(response);
+            this.resetData();
+          },
+          error: (error) =>
+            this.notificationService.error(
+              typeof error?.error === 'string' ? error?.error : error?.message
+            ),
+        })
+      );
+    }
   }
 
   resetData() {
@@ -177,7 +272,7 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
   }
 
   goToSearch() {
-    this.router.navigateByUrl('purchases/fibre/search');
+    this.router.navigateByUrl('purchases/fibre/search-received-po');
   }
 
   updateData(selectedRow: any) {
@@ -262,7 +357,7 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
       ?.partyName;
   }
 
-  getPODate(details: PendingPODetailsByParty[]) {
+  getPODate(details: any[]) {
     const dates = details.map((data) =>
       moment(data.poDate, 'DD/MM/YYYY').toDate()
     );

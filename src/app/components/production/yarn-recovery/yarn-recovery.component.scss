@@ -9,6 +9,12 @@
 
 table {
   width: 100%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.table-container {
+  position: relative;
+  background-color: #fff;
 }
 
 .mat-mdc-form-field {
@@ -29,12 +35,7 @@ table {
 }
 
 .mat-mdc-paginator {
-  border-top: 1px solid #e0e0e0;
   padding: 8px 0;
-}
-
-.table-container {
-  position: relative;
 }
 
 .loader {

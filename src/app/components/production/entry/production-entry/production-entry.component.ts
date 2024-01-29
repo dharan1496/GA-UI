@@ -70,11 +70,20 @@ export class ProductionEntryComponent {
           this.datePipe.transform(this.productionDate.value, 'dd/MM/yyyy') ||
           '',
         createdByUserId: 0,
+        productionId: 0,
+        programNo: this.programDetails?.programNo || '',
+        programDate: this.programDetails?.programDate || '',
+        shadeId: this.programDetails?.shadeId || 0,
+        shadeName: this.programDetails?.shadeName || '',
+        blendId: this.programDetails?.blendId || 0,
+        blendName: this.programDetails?.blendName || '',
         yarnDetails: this.entryDetails.map((data) => ({
           countsId: data.countsId,
           lot: data.lot,
           productionQuantity: data.productionQty,
           isWinded: data.winding === 'Yes',
+          deliveredQuantity: 0,
+          productionDtsId: 0,
         })),
       };
       this.conversionService.conversionProduction(entry).subscribe({

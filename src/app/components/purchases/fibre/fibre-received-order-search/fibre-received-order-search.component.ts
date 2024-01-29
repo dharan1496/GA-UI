@@ -1,34 +1,33 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { Subscription, finalize } from 'rxjs';
-import { Constants } from 'src/app/constants/constants';
-import { PURCHASE } from 'src/app/constants/purchase-menu-values.const';
-import { PartyService } from 'src/app/services/party.service';
-import { NavigationService } from 'src/app/shared/navigation.service';
 import {
-  animate,
+  trigger,
   state,
   style,
   transition,
-  trigger,
+  animate,
 } from '@angular/animations';
-import { Router } from '@angular/router';
-import { MatSort } from '@angular/material/sort';
-import { AppSharedService } from 'src/app/shared/app-shared.service';
-import { NotificationService } from 'src/app/shared/notification.service';
-import { NotifyType } from 'src/app/models/notify';
-import { FibreService } from 'src/app/services/fibre.service';
 import { DatePipe } from '@angular/common';
-import { FibrePODts } from 'src/app/models/fibrePODts';
-import { FibrePO } from 'src/app/models/fibrePO';
-import { PrintService } from 'src/app/services/print.service';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
+import { Subscription, finalize } from 'rxjs';
+import { Constants } from 'src/app/constants/constants';
+import { PURCHASE } from 'src/app/constants/purchase-menu-values.const';
+import { NotifyType } from 'src/app/models/notify';
+import { ReceiveFibrePO } from 'src/app/models/receiveFibrePO';
+import { ReceiveFibrePODts } from 'src/app/models/receiveFibrePODts';
+import { FibreService } from 'src/app/services/fibre.service';
+import { PartyService } from 'src/app/services/party.service';
+import { AppSharedService } from 'src/app/shared/app-shared.service';
+import { NavigationService } from 'src/app/shared/navigation.service';
+import { NotificationService } from 'src/app/shared/notification.service';
 
 @Component({
-  selector: 'app-fibre-dashboard',
-  templateUrl: './fibre-search.component.html',
-  styleUrls: ['./fibre-search.component.scss'],
+  selector: 'app-fibre-received-order-search',
+  templateUrl: './fibre-received-order-search.component.html',
+  styleUrls: ['./fibre-received-order-search.component.scss'],
   animations: [
     trigger('detailExpand', [
       state('collapsed, void', style({ height: '0px', minHeight: '0' })),
@@ -40,25 +39,27 @@ import { PrintService } from 'src/app/services/print.service';
     ]),
   ],
 })
-export class FibreSearchComponent implements OnInit, OnDestroy {
+export class FibreReceivedOrderSearchComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   subscription = new Subscription();
   dataSource = new MatTableDataSource<any>();
   columnsToDisplay = [
     'expand',
-    'pono',
-    'podate',
+    'recdDCNo',
+    'recdDate',
     'partyName',
-    'gstNo',
-    'cityName',
-    'emailId',
+    'dcDate',
     'actions',
   ];
   innerDisplayedColumns = [
-    'fibreType',
-    'shadeName',
+    'poNo',
+    'fibreTypeName',
+    'fiberShadeName',
+    'lot',
+    'receivedBales',
+    'hsnCode',
     'rate',
-    'weight',
+    'receivedWeight',
     'amountBeforeTax',
     'gstPercent',
     'amountAfterTax',
@@ -88,13 +89,12 @@ export class FibreSearchComponent implements OnInit, OnDestroy {
   constructor(
     public partyService: PartyService,
     private formBuilder: FormBuilder,
-    private navigationService: NavigationService,
+    public navigationService: NavigationService,
     private router: Router,
     public appSharedService: AppSharedService,
     private notificationService: NotificationService,
     private fibreService: FibreService,
-    private datePipe: DatePipe,
-    private printService: PrintService
+    private datePipe: DatePipe
   ) {
     this.navigationService.setFocus(Constants.PURCHASES);
     this.navigationService.menu = PURCHASE;
@@ -153,7 +153,7 @@ export class FibreSearchComponent implements OnInit, OnDestroy {
     this.loader = true;
     const { partyId, poStartDate, poEndDate } = this.form.value;
     this.fibreService
-      .getFiberPOsByParty(
+      .getFibersPurchasedByParty(
         partyId,
         this.datePipe.transform(poStartDate, 'dd/MM/yyyy') || '',
         this.datePipe.transform(poEndDate, 'dd/MM/yyyy') || ''
@@ -174,48 +174,44 @@ export class FibreSearchComponent implements OnInit, OnDestroy {
     this.form.reset();
   }
 
-  updatePO(fibrePO: FibrePO) {
-    sessionStorage.setItem('poDetails', JSON.stringify(fibrePO));
-    this.router.navigateByUrl('/purchases/fibre/update-purchase-order');
-  }
-
-  printPO(fibrePO: FibrePO, event: any) {
-    event.stopPropagation();
-    this.printService.fibrePOData = fibrePO;
-    this.printService.fibrePOprint = true;
-    setTimeout(() => window.print());
-  }
-
-  getTotalWeight(fibrePODts: FibrePODts[]) {
-    return fibrePODts
-      .map((data: any) => data.weight)
-      .reduce((acc, value) => acc + value, 0);
-  }
-
-  getTotalAmount(fibrePODts: FibrePODts[]) {
-    return fibrePODts
-      .map((data: FibrePODts) => data.rate * data.weight)
-      .reduce((acc, value) => acc + value, 0);
-  }
-
-  getAmountAfterTax(fibrePODt: FibrePODts) {
-    return (
-      fibrePODt.rate * fibrePODt.weight +
-      fibrePODt.rate * fibrePODt.weight * (fibrePODt.gstPercent / 100)
+  updatePO(fibrePO: ReceiveFibrePO) {
+    sessionStorage.setItem('receivedPODetails', JSON.stringify(fibrePO));
+    this.router.navigateByUrl(
+      '/purchases/fibre/update-received-purchase-order'
     );
   }
 
-  getTotalTaxAmount(fibrePODts: FibrePODts[]) {
+  getTotalWeight(fibrePODts: ReceiveFibrePODts[]) {
+    return fibrePODts
+      .map((data: ReceiveFibrePODts) => data.receivedWeight)
+      .reduce((acc, value) => acc + value, 0);
+  }
+
+  getTotalAmount(fibrePODts: ReceiveFibrePODts[]) {
+    return fibrePODts
+      .map((data: ReceiveFibrePODts) => data.rate * data.receivedWeight)
+      .reduce((acc, value) => acc + value, 0);
+  }
+
+  getAmountAfterTax(fibrePODt: ReceiveFibrePODts) {
+    return (
+      fibrePODt.rate * fibrePODt.receivedWeight +
+      fibrePODt.rate * fibrePODt.receivedWeight * (fibrePODt.gstPercent / 100)
+    );
+  }
+
+  getTotalTaxAmount(fibrePODts: ReceiveFibrePODts[]) {
     return fibrePODts
       .map(
-        (data: FibrePODts) => data.rate * data.weight * (data.gstPercent / 100)
+        (data: ReceiveFibrePODts) =>
+          data.rate * data.receivedWeight * (data.gstPercent / 100)
       )
       .reduce((acc, value) => acc + value, 0);
   }
 
-  getTotalAmountAfterTax(fibrePODts: FibrePODts[]) {
+  getTotalAmountAfterTax(fibrePODts: ReceiveFibrePODts[]) {
     return fibrePODts
-      .map((data: FibrePODts) => this.getAmountAfterTax(data))
+      .map((data: ReceiveFibrePODts) => this.getAmountAfterTax(data))
       .reduce((acc, value) => acc + value, 0);
   }
 

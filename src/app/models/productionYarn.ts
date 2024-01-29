@@ -3,4 +3,6 @@ export interface ProductionYarn {
   lot: string;
   productionQuantity: number;
   isWinded: boolean;
+  productionDtsId: number;
+  deliveredQuantity: number;
 }

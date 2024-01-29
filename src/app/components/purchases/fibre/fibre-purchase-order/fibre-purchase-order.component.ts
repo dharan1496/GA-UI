@@ -16,6 +16,7 @@ import { Constants } from 'src/app/constants/constants';
 import { Router } from '@angular/router';
 import { CreateFibrePO } from 'src/app/models/createFibrePO';
 import { CreateFibrePODts } from 'src/app/models/createFibrePODts';
+import { FibrePO } from 'src/app/models/fibrePO';
 
 @Component({
   selector: 'app-fibre-purchase-order',
@@ -34,9 +35,10 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
     'totalAmount',
     'button',
   ];
-  dataSource = [];
+  dataSource: any[] = [];
   @ViewChild(MatTable) table!: MatTable<any>;
   subscription = new Subscription();
+  updatePoDetails?: FibrePO;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -53,19 +55,58 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.getPoNo();
-    this.getPartyList();
-    this.getFibreList();
-
     this.form = this.formBuilder.group({
       poNo: [{ value: '', disabled: true }],
       partyId: ['', Validators.required],
       pOdate: ['', Validators.required],
     });
+
+    this.getPartyList();
+    this.getFibreList();
+    if (this.router.url.includes('update-purchase-order')) {
+      this.checkForUpdate();
+    } else {
+      this.getPoNo();
+    }
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  checkForUpdate() {
+    const poDetails = sessionStorage.getItem('poDetails');
+    if (poDetails) {
+      this.updatePoDetails = JSON.parse(poDetails);
+      this.patchUpdateDetails();
+      sessionStorage.clear();
+    } else {
+      this.router.navigateByUrl('fibre/create-purchase-order');
+    }
+  }
+
+  patchUpdateDetails() {
+    this.form.get('poNo')?.setValue(this.updatePoDetails?.pono);
+    this.form.get('partyId')?.setValue(this.updatePoDetails?.partyId);
+    this.form.get('partyId')?.disable();
+    this.form.get('pOdate')?.setValue(this.updatePoDetails?.podate);
+    this.form.get('pOdate')?.disable();
+    this.dataSource = this.updatePoDetails?.fibrePODts?.map((data, index) => {
+      return {
+        orderNo: index + 1,
+        fibreName: data?.fibreType,
+        fibreTypeId: data?.fibreTypeId,
+        shadeName: data?.shadeName,
+        shadeId: data?.shadeId,
+        weight: data?.weight,
+        rate: data?.rate,
+        gstPercent: data?.gstPercent,
+        amount: data?.rate * data?.weight,
+        totalAmount:
+          data?.rate * data?.weight +
+          (data?.rate * data?.weight * data?.gstPercent) / 100,
+      };
+    }) as never[];
   }
 
   getPoNo() {
@@ -146,6 +187,34 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
 
   goToSearch() {
     this.router.navigateByUrl('purchases/fibre/search');
+  }
+
+  updateOrder() {
+    if (!this.hasError() && this.updatePoDetails) {
+      this.updatePoDetails?.fibrePODts.forEach((data, index) => {
+        data.fibreType = this.dataSource[index]?.fibreName;
+        data.fibreTypeId = this.dataSource[index]?.fibreTypeId;
+        data.shadeName = this.dataSource[index]?.shadeName;
+        data.shadeId = this.dataSource[index]?.shadeId;
+        data.weight = this.dataSource[index]?.weight;
+        data.rate = this.dataSource[index]?.rate;
+        data.gstPercent = this.dataSource[index]?.gstPercent;
+      });
+      this.fibreService.updateFibrePO(this.updatePoDetails).subscribe({
+        next: () => {
+          this.resetData();
+          this.notificationService.success(
+            'Purchase order updated successfully',
+            true
+          );
+        },
+        error: (error) => {
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          );
+        },
+      });
+    }
   }
 
   hasError() {

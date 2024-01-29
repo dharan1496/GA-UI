@@ -5,6 +5,7 @@ export interface YarnDeliveryDts {
   blendId: number;
   countsId: number;
   productionDtsId: number;
+  yarnReturnDtsId: number;
   deliveryQuantity: number;
   hsnCode: number;
 }

@@ -113,7 +113,10 @@ export class FibreReceiveConversionOrderComponent implements OnInit, OnDestroy {
     }
 
     const request = {
+      receivedDCId: 0,
       ...this.form.value,
+      partyName: this.getPartyName(),
+      poNo: '',
       receivedByUserId: 0,
       fibrePODts: [],
       recdDate: this.datePipe.transform(this.form.value.recdDate, 'dd/MM/yyyy'),
@@ -122,6 +125,10 @@ export class FibreReceiveConversionOrderComponent implements OnInit, OnDestroy {
 
     this.dataSource.forEach((data: any) => {
       request.fibrePODts.push({
+        receivedDCId: 0,
+        receivedDtsId: 0,
+        poDtsId: data?.poDtsId,
+        poNo: data?.poNo,
         lot: data?.lot,
         hsnCode: data?.hsnCode,
         receivedWeight: data?.receivedQty,
@@ -129,7 +136,9 @@ export class FibreReceiveConversionOrderComponent implements OnInit, OnDestroy {
         rate: data?.rate,
         gstPercent: data?.gstpercent,
         fiberShadeId: data?.shadeId,
+        fiberShadeName: data?.shadeName,
         fiberTypeId: data?.fibreTypeId,
+        fiberTypeName: data?.fibreType,
       } as ReceiveFibrePODts);
     });
     this.subscription.add(
@@ -149,6 +158,12 @@ export class FibreReceiveConversionOrderComponent implements OnInit, OnDestroy {
     this.form.reset();
     this.dataSource = [];
     this.table.renderRows();
+  }
+
+  getPartyName() {
+    const partyId = this.form.get('partyId')?.value;
+    return this.partyService.parties.find((data) => data.partyId === partyId)
+      ?.partyName;
   }
 
   addData(): void {

@@ -1,7 +1,19 @@
 <section class="container">
   <div class="header-container">
-    <h1 class="header">Receive Fibre Purchase Order</h1>
-    <button mat-raised-button color="primary" (click)="choosePending()">
+    <h1 class="header">
+      <span *ngIf="!updateReceivedPODetails; else updateHeader"
+        >Receive Fibre Purchase Order</span
+      >
+      <ng-template #updateHeader
+        >Update Received Fibre Purchase Order</ng-template
+      >
+    </h1>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="choosePending()"
+      *ngIf="!updateReceivedPODetails"
+    >
       Choose from Pending PO
     </button>
   </div>
@@ -248,10 +260,10 @@
   </div>
 
   <div class="footer">
-    <!-- <button mat-raised-button (click)="goToSearch()">
+    <button mat-raised-button (click)="goToSearch()">
       <mat-icon>arrow_back</mat-icon>Go to Search
-    </button> -->
-    <div>
+    </button>
+    <div *ngIf="!updateReceivedPODetails; else updateBtn">
       <button mat-raised-button class="mr-16" (click)="resetData()">
         <mat-icon>refresh</mat-icon>Reset
       </button>
@@ -259,5 +271,10 @@
         <mat-icon>save_alt</mat-icon>Submit
       </button>
     </div>
+    <ng-template #updateBtn>
+      <button mat-raised-button color="primary" (click)="submitOrder()">
+        <mat-icon>save_alt</mat-icon>Update
+      </button>
+    </ng-template>
   </div>
 </section>
