@@ -39,6 +39,10 @@ const routes: Routes = [
     component: FibreReceiveConversionOrderComponent,
   },
   {
+    path: 'fibre/update-received-conversion-order',
+    component: FibreReceiveConversionOrderComponent,
+  },
+  {
     path: 'fibre/search-received-po',
     component: FibreReceivedOrderSearchComponent,
   },

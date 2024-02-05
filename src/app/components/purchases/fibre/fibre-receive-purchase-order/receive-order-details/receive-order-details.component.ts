@@ -104,9 +104,11 @@ export class ReceiveOrderDetailsComponent implements OnInit, OnDestroy {
       this.form.patchValue({
         ...this.data,
         pendingQty: this.data?.orderQty - this.data?.receivedQty,
-        receivedQty: '',
+        receivedQty: this.data?.update ? this.data?.receivedQty : '',
       });
-      this.actualPendingQty = this.data?.orderQty - this.data?.receivedQty;
+      this.actualPendingQty = this.data?.update
+        ? this.data.orderQty
+        : this.data?.orderQty - this.data?.receivedQty;
     }
   }
 

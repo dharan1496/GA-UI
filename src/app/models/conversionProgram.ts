@@ -12,6 +12,7 @@ export interface ConversionProgram {
   remarks: string;
   isDeleted: boolean;
   isClosed: boolean;
+  isMixed: boolean;
   createdByUserId: number;
   closedByUserId: number;
   yarnCounts: ConversionYarn[];

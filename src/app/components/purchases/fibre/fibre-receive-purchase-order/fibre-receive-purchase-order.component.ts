@@ -16,7 +16,6 @@ import { Router } from '@angular/router';
 import { PendingFibrePoComponent } from './pending-fibre-po/pending-fibre-po.component';
 import { ReceiveFibrePODts } from 'src/app/models/receiveFibrePODts';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
-import { PendingPODetailsByParty } from 'src/app/models/pendingPODtsByParty';
 import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
 import { ReceiveFibrePO } from 'src/app/models/receiveFibrePO';
@@ -94,7 +93,7 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
       this.patchUpdateDetails();
       sessionStorage.clear();
     } else {
-      this.router.navigateByUrl('fibre/receive-purchase-order');
+      this.router.navigateByUrl('/purchases/fibre/receive-purchase-order');
     }
   }
 
@@ -131,12 +130,13 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
         return {
           orderNo: index + 1,
           poNo: data?.poNo,
+          poDtsId: data?.poDtsId,
           fibreType: data?.fiberTypeName,
           fibreTypeId: data?.fiberTypeId,
           shadeName: data?.fiberShadeName,
           shadeId: data?.fiberShadeId,
-          // orderQty: data?.,
-          // pendingQty: data?.
+          orderQty: data?.orderQty,
+          pendingQty: (data?.orderQty || 0) - data?.receivedWeight || 0,
           receivedQty: data?.receivedWeight,
           receivedBales: data?.receivedBales,
           lot: data?.lot,
@@ -147,6 +147,8 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
           totalAmount:
             data?.rate * data?.receivedWeight +
             (data?.rate * data?.receivedWeight * data?.gstPercent) / 100,
+          isValid: true,
+          update: true,
         };
       }
     ) as never[];
@@ -223,6 +225,7 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
         receivedDtsId: 0,
         poDtsId: data?.poDtsId,
         poNo: data?.poNo,
+        poDate: this.form.value?.poDate,
         lot: data?.lot,
         hsnCode: data?.hsnCode,
         receivedWeight: data?.receivedQty,
@@ -237,11 +240,22 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
     });
 
     if (this.updateReceivedPODetails) {
+      this;
       this.subscription.add(
         this.fibreService.UpdateReceiveFibre(request).subscribe({
           next: (response) => {
-            this.notificationService.success(response);
-            this.resetData();
+            if (response === 'true') {
+              this.notificationService
+                .success('Updated successfully!')
+                .afterClosed()
+                .subscribe(() =>
+                  this.router.navigateByUrl(
+                    '/purchases/fibre/search-received-po'
+                  )
+                );
+            } else {
+              this.notificationService.error('Unable to update the order!');
+            }
           },
           error: (error) =>
             this.notificationService.error(

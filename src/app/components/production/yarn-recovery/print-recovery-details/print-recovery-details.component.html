@@ -30,7 +30,7 @@
     <div>
       <div class="text-dark pb-4">Lot</div>
       <div class="font-size-16">
-        {{ printService.yarnRecoveryDetails.data.yarnLot }}
+        {{ printService.yarnRecoveryDetails.data.yarnLot || "_" }}
       </div>
     </div>
     <div>
@@ -52,7 +52,7 @@
       </div>
     </div>
     <div>
-      <div class="text-dark pb-4">Yarn Recovery Percentage</div>
+      <div class="text-dark pb-4">Recovery Percentage</div>
       <div class="font-size-16">
         {{
           printService.yarnRecoveryDetails.data.yarnRecoveryPercent || 0
@@ -80,7 +80,12 @@
       </div>
     </div>
   </section>
-  <section class="mt-32">
+  <section
+    class="mt-32"
+    *ngIf="
+      printService.yarnRecoveryDetails?.programDetails?.mixingDetails?.length
+    "
+  >
     <div class="text-dark">Mixing Details:</div>
     <table>
       <thead>
@@ -119,7 +124,10 @@
       </tbody>
     </table>
   </section>
-  <section class="mt-24">
+  <section
+    class="mt-24"
+    *ngIf="printService.yarnRecoveryDetails?.programDetails?.yarnCounts?.length"
+  >
     <div class="text-dark">Yarn Counts:</div>
     <table>
       <thead>
@@ -146,7 +154,10 @@
       </tbody>
     </table>
   </section>
-  <section class="mt-24">
+  <section
+    class="mt-24"
+    *ngIf="printService.yarnRecoveryDetails?.wasteDetails?.length"
+  >
     <div class="text-dark">Waste Details:</div>
     <table>
       <thead>

@@ -107,4 +107,14 @@ export class ConversionService {
       `${environment.api}/Conversion/GetConversionProgramStatus?shadeId=${shadeId}&blendId=${blendId}&countsId=${countsId}`
     );
   }
+
+  getConversionProgramsByShade(
+    shadeId: number,
+    fromDate: string,
+    toDate: string
+  ): Observable<ConversionProgram[]> {
+    return this.http.get<ConversionProgram[]>(
+      `${environment.api}/Conversion/GetConversionProgramsByShade?shadeId=${shadeId}&fromDate=${fromDate}&toDate=${toDate}`
+    );
+  }
 }

@@ -38,7 +38,16 @@
               [for]="picker"
             ></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
-            <mat-error>This field is required.</mat-error>
+            <mat-error
+              *ngIf="
+                form.get('programDate')?.hasError('matDatepickerParse');
+                else required
+              "
+              >Invalid date.</mat-error
+            >
+            <ng-template #required
+              ><mat-error>This field is required.</mat-error></ng-template
+            >
           </mat-form-field>
 
           <mat-form-field appearance="fill" class="w-50">

@@ -1,5 +1,12 @@
 <section class="container">
-  <h1 class="header letter-spacing-1">Receive Fibre Conversion Order</h1>
+  <h1 class="header letter-spacing-1">
+    <span *ngIf="!updateReceivedCODetails; else updateHeader"
+      >Receive Fibre Conversion Order</span
+    >
+    <ng-template #updateHeader
+      >Update Receive Fibre Conversion Order</ng-template
+    >
+  </h1>
   <mat-card class="party-card">
     <mat-card-header>
       <mat-card-title>CO Details</mat-card-title>
@@ -206,7 +213,7 @@
   </div>
 
   <div class="footer">
-    <div>
+    <div *ngIf="!updateReceivedCODetails; else updateBtn">
       <button mat-raised-button class="mr-16" (click)="resetData()">
         <mat-icon>refresh</mat-icon>Reset
       </button>
@@ -214,5 +221,10 @@
         <mat-icon>save_alt</mat-icon>Submit
       </button>
     </div>
+    <ng-template #updateBtn>
+      <button mat-raised-button color="primary" (click)="submitOrder()">
+        <mat-icon>save_alt</mat-icon>Update
+      </button>
+    </ng-template>
   </div>
 </section>

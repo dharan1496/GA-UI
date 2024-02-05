@@ -53,6 +53,7 @@ export class FibreReceivedOrderSearchComponent implements OnInit, OnDestroy {
   ];
   innerDisplayedColumns = [
     'poNo',
+    'poDate',
     'fibreTypeName',
     'fiberShadeName',
     'lot',
@@ -175,10 +176,19 @@ export class FibreReceivedOrderSearchComponent implements OnInit, OnDestroy {
   }
 
   updatePO(fibrePO: ReceiveFibrePO) {
-    sessionStorage.setItem('receivedPODetails', JSON.stringify(fibrePO));
-    this.router.navigateByUrl(
-      '/purchases/fibre/update-received-purchase-order'
-    );
+    const isPO = fibrePO.fibrePODts.some((fibre) => fibre?.poNo);
+
+    if (isPO) {
+      sessionStorage.setItem('receivedPODetails', JSON.stringify(fibrePO));
+      this.router.navigateByUrl(
+        '/purchases/fibre/update-received-purchase-order'
+      );
+    } else {
+      sessionStorage.setItem('receivedCODetails', JSON.stringify(fibrePO));
+      this.router.navigateByUrl(
+        '/purchases/fibre/update-received-conversion-order'
+      );
+    }
   }
 
   getTotalWeight(fibrePODts: ReceiveFibrePODts[]) {

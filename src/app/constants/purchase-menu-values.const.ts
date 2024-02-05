@@ -17,7 +17,7 @@ export const PURCHASE = [
         route: 'purchases/fibre/receive-conversion-order',
       },
       {
-        title: 'Search Received PO',
+        title: 'Received Fibre',
         route: 'purchases/fibre/search-received-po',
       },
       {

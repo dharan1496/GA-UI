@@ -171,6 +171,7 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
   submitProgram() {
     if (!this.hasError()) {
       const yarnCounts: ConversionYarn[] = this.dataSource.map((data) => ({
+        programId: 0,
         conversionYarnId: 0,
         countsId: data.countsId,
         counts: data.counts,
@@ -187,6 +188,7 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
         programNo: '',
         isDeleted: false,
         isClosed: false,
+        isMixed: false,
         closedByUserId: 0,
         createdByUserId: 0,
         yarnCounts,

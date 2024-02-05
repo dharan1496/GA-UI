@@ -15,6 +15,8 @@ import { NotificationService } from 'src/app/shared/notification.service';
 import { ReceiveConversionDetailsComponent } from './receive-conversion-details/receive-conversion-details.component';
 import { ReceiveFibrePODts } from 'src/app/models/receiveFibrePODts';
 import { DatePipe } from '@angular/common';
+import { ReceiveFibrePO } from 'src/app/models/receiveFibrePO';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-fibre-receive-conversion-order',
@@ -39,6 +41,7 @@ export class FibreReceiveConversionOrderComponent implements OnInit, OnDestroy {
   dataSource = [];
   @ViewChild(MatTable) table!: MatTable<any>;
   subscription = new Subscription();
+  updateReceivedCODetails?: ReceiveFibrePO;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -48,7 +51,8 @@ export class FibreReceiveConversionOrderComponent implements OnInit, OnDestroy {
     private navigationService: NavigationService,
     public partyService: PartyService,
     private fibreService: FibreService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private router: Router
   ) {
     this.navigationService.setFocus(Constants.PURCHASES);
     this.navigationService.menu = PURCHASE;
@@ -64,10 +68,44 @@ export class FibreReceiveConversionOrderComponent implements OnInit, OnDestroy {
       recdDCNo: ['', Validators.required],
       dcDate: ['', Validators.required],
     });
+
+    if (this.router.url.includes('update-received-conversion-order')) {
+      this.checkForUpdate();
+    }
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  checkForUpdate() {
+    const poDetails = sessionStorage.getItem('receivedCODetails');
+    if (poDetails) {
+      this.updateReceivedCODetails = JSON.parse(poDetails);
+      this.patchUpdateDetails();
+      sessionStorage.clear();
+    } else {
+      this.router.navigateByUrl(
+        '/purchases/fibre/update-received-conversion-order'
+      );
+    }
+  }
+
+  patchUpdateDetails() {
+    this.form.get('partyId')?.setValue(this.updateReceivedCODetails?.partyId);
+    this.form.get('partyId')?.disable();
+    this.form.get('recdDCNo')?.setValue(this.updateReceivedCODetails?.recdDCNo);
+    this.form.get('recdDCNo')?.disable();
+    this.form
+      .get('recdDate')
+      ?.setValue(new Date(this.updateReceivedCODetails?.recdDate || ''));
+    this.form.get('recdDate')?.disable();
+    this.form
+      .get('dcDate')
+      ?.setValue(new Date(this.updateReceivedCODetails?.dcDate || ''));
+    this.form.get('dcDate')?.disable();
+
+    // Need to add dataSource
   }
 
   getPartyList() {
@@ -128,7 +166,8 @@ export class FibreReceiveConversionOrderComponent implements OnInit, OnDestroy {
         receivedDCId: 0,
         receivedDtsId: 0,
         poDtsId: data?.poDtsId,
-        poNo: data?.poNo,
+        poNo: '',
+        poDate: '',
         lot: data?.lot,
         hsnCode: data?.hsnCode,
         receivedWeight: data?.receivedQty,

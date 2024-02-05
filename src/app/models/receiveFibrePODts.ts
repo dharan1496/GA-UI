@@ -3,12 +3,14 @@ export interface ReceiveFibrePODts {
   receivedDtsId: number;
   poDtsId: number;
   poNo: string;
+  poDate?: string;
   fiberTypeId: number;
   fiberTypeName: string;
   fiberShadeId: number;
   fiberShadeName: string;
   lot: string;
   hsnCode: number;
+  orderQty?: number;
   receivedWeight: number;
   receivedBales: number;
   rate: number;
