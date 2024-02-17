@@ -125,7 +125,7 @@
       <tr mat-row *matRowDef="let row; columns: mixingColumnsToDisplay"></tr>
       <tr
         mat-footer-row
-        *matFooterRowDef="mixingColumnsToDisplay; sticky: true"
+        *matFooterRowDef="mixingColumnsToDisplay; sticky: false"
       ></tr>
     </table>
   </section>
@@ -176,7 +176,7 @@
       <tr mat-row *matRowDef="let row; columns: countsColumnsToDisplay"></tr>
       <tr
         mat-footer-row
-        *matFooterRowDef="countsColumnsToDisplay; sticky: true"
+        *matFooterRowDef="countsColumnsToDisplay; sticky: false"
       ></tr>
     </table>
   </section>

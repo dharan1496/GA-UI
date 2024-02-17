@@ -99,7 +99,10 @@
 
       <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
       <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
-      <tr mat-footer-row *matFooterRowDef="columnsToDisplay; sticky: true"></tr>
+      <tr
+        mat-footer-row
+        *matFooterRowDef="columnsToDisplay; sticky: false"
+      ></tr>
     </table>
   </section>
 </div>

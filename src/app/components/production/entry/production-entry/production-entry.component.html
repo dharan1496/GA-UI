@@ -1,17 +1,32 @@
 <section class="container">
-  <div class="header-container">
+  <div class="header-container" *ngIf="!isUpdate">
     <h1 class="header letter-spacing-1">Production Entry</h1>
     <button mat-raised-button color="primary" (click)="chooseProgram()">
       Choose Program for Entry
     </button>
   </div>
+  <div class="header-container" *ngIf="isUpdate">
+    <h1 class="header letter-spacing-1">Update Production Entry</h1>
+  </div>
   <div class="prog-details-container">
-    <mat-card class="card w-65">
+    <mat-card class="card w-65" [ngClass]="{ 'w-100': isUpdate }">
       <mat-card-header>
         <mat-card-title>Mixing Details</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <div class="form-container">
+          <div *ngIf="isUpdate">
+            <label class="font-weight-bold">Production Id</label>
+            <div class="font-size-16 text-gray pt-4">
+              {{ updateProductionDetails.productionId }}
+            </div>
+          </div>
+          <div *ngIf="isUpdate">
+            <label class="font-weight-bold">Production Date</label>
+            <div class="font-size-16 text-gray pt-4">
+              {{ updateProductionDetails.productionDate | date : "dd/MM/yyyy" }}
+            </div>
+          </div>
           <div>
             <label class="font-weight-bold">Program No</label>
             <div class="font-size-16 text-gray pt-4">
@@ -39,7 +54,7 @@
               <span *ngIf="!programDetails?.blendName">_</span>
             </div>
           </div>
-          <div>
+          <div *ngIf="!isUpdate">
             <label class="font-weight-bold">Mixing Date</label>
             <div class="font-size-16 text-gray pt-4">
               <span *ngIf="programDetails?.mixingDate">{{
@@ -48,7 +63,7 @@
               <span *ngIf="!programDetails?.mixingDate">_</span>
             </div>
           </div>
-          <div>
+          <div *ngIf="!isUpdate">
             <label class="font-weight-bold">Mixed Qty</label>
             <div class="font-size-16 text-gray pt-4">
               <span *ngIf="programDetails?.mixedQuantity">{{
@@ -58,7 +73,11 @@
             </div>
           </div>
         </div>
-        <mat-form-field appearance="fill" class="w-40 production-date">
+        <mat-form-field
+          appearance="fill"
+          class="w-40 production-date"
+          *ngIf="!isUpdate"
+        >
           <mat-label>Production Date</mat-label>
           <input
             matInput
@@ -76,7 +95,7 @@
         </mat-form-field>
       </mat-card-content>
     </mat-card>
-    <div class="w-35">
+    <div class="w-35" *ngIf="!isUpdate">
       <table mat-table [dataSource]="yarnDetails" class="mat-elevation-z8">
         <ng-container matColumnDef="yarnCount">
           <th mat-header-cell *matHeaderCellDef>Yarn Counts</th>
@@ -194,11 +213,29 @@
       </table>
     </div>
     <div class="footer w-35">
-      <button mat-raised-button class="mr-16" (click)="resetData()">
+      <button
+        mat-raised-button
+        class="mr-16"
+        (click)="resetData()"
+        *ngIf="!isUpdate"
+      >
         <mat-icon>refresh</mat-icon>Reset
       </button>
-      <button mat-raised-button color="primary" (click)="submit()">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="submit()"
+        *ngIf="!isUpdate"
+      >
         <mat-icon>save_alt</mat-icon>Submit
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="update()"
+        *ngIf="isUpdate"
+      >
+        <mat-icon>save_alt</mat-icon>Update
       </button>
     </div>
   </div>

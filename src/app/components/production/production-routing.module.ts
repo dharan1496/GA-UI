@@ -44,6 +44,10 @@ const routes: Routes = [
     component: ProductionEntryComponent,
   },
   {
+    path: 'update-production-entry',
+    component: ProductionEntryComponent,
+  },
+  {
     path: 'waste-entry',
     component: WasteEntryComponent,
   },

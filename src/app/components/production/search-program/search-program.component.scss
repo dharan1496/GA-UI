@@ -39,6 +39,7 @@
 
 .table-container {
   position: relative;
+  background-color: #fff;
 }
 
 .loader {
@@ -57,4 +58,8 @@
 
 mat-icon {
   font-size: 20px;
+}
+
+.outer-table {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
 }

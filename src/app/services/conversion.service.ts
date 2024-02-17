@@ -12,6 +12,7 @@ import { YarnRecoverySummary } from '../models/yarnRecoverySummary';
 import { ProgramWasteStock } from '../models/programWasteStock';
 import { ConversionProgramStatus } from '../models/conversionProgramStatus';
 import { FibreIssued } from '../models/fibreIssued';
+import { ProductionYarn } from '../models/productionYarn';
 
 @Injectable({
   providedIn: 'root',
@@ -89,6 +90,19 @@ export class ConversionService {
   conversionProduction(entry: ProductionEntry): Observable<any> {
     return this.http.post(
       `${environment.api}/Conversion/ConversionProduction`,
+      entry,
+      {
+        responseType: 'text',
+      }
+    );
+  }
+
+  updateProduction(
+    productionId: number,
+    entry: ProductionYarn[]
+  ): Observable<any> {
+    return this.http.post(
+      `${environment.api}/Conversion/UpdateProduction?productionId=${productionId}&updatedByUserId=0`,
       entry,
       {
         responseType: 'text',
