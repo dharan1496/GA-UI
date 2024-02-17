@@ -13,6 +13,7 @@ import { ProgramWasteStock } from '../models/programWasteStock';
 import { ConversionProgramStatus } from '../models/conversionProgramStatus';
 import { FibreIssued } from '../models/fibreIssued';
 import { ProductionYarn } from '../models/productionYarn';
+import { ProgramFibersMixed } from '../models/programFibersMixed';
 
 @Injectable({
   providedIn: 'root',
@@ -46,8 +47,8 @@ export class ConversionService {
     );
   }
 
-  getProgramMixingDetails(programId: number): Observable<FibreIssued[]> {
-    return this.http.get<FibreIssued[]>(
+  getProgramMixingDetails(programId: number): Observable<ProgramFibersMixed[]> {
+    return this.http.get<ProgramFibersMixed[]>(
       `${environment.api}/Conversion/GetProgramMixingDetails?programId=${programId}`
     );
   }
@@ -69,11 +70,11 @@ export class ConversionService {
   }
 
   updateMixingDetails(
-    programId: number,
+    mixingId: number,
     fibreIssued: FibreIssued[]
   ): Observable<any> {
     return this.http.post(
-      `${environment.api}/Conversion/UpdateMixingDetails?mixingId=${programId}&updatedByUserId=0`,
+      `${environment.api}/Conversion/UpdateMixingDetails?mixingId=${mixingId}&updatedByUserId=0`,
       fibreIssued,
       {
         responseType: 'text',

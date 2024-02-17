@@ -254,7 +254,7 @@ export class MixingComponent implements OnInit, OnDestroy {
         };
       });
       this.conversionService
-        .updateMixingDetails(this.programDetails?.programId, fibres)
+        .updateMixingDetails((this.mixingDetails as any)?.mixingId, fibres)
         .subscribe({
           next: (response) => {
             this.notificationService.success(response);
