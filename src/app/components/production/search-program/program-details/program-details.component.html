@@ -53,6 +53,22 @@
       class="table"
       *ngIf="programDetails.mixingDetails?.length"
     >
+      <ng-container matColumnDef="mixingId">
+        <th mat-header-cell *matHeaderCellDef>MixingId</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.mixingId }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <ng-container matColumnDef="mixingDate">
+        <th mat-header-cell *matHeaderCellDef>Mixing Date</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.mixingDate }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
       <ng-container matColumnDef="fiberCategory">
         <th mat-header-cell *matHeaderCellDef>Fiber Category</th>
         <td mat-cell *matCellDef="let element">

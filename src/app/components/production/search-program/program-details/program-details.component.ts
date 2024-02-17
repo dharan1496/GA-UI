@@ -18,6 +18,8 @@ import { ProgramFibresMixed } from 'src/app/models/programFibresMixed';
 export class ProgramDetailsComponent {
   subscription = new Subscription();
   mixingColumnsToDisplay = [
+    'mixingId',
+    'mixingDate',
     'fiberCategory',
     'fiberType',
     'fiberShade',
