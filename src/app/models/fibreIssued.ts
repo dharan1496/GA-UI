@@ -5,4 +5,5 @@ export interface FibreIssued {
   lot: string;
   issueQuantity: number;
   productionWasteDtsId: number;
+  fibreMixingDtsId: number;
 }

@@ -19,6 +19,7 @@ import { ConversionYarn } from 'src/app/models/conversionYarn';
 import { DatePipe } from '@angular/common';
 import { MasterService } from 'src/app/services/master.service';
 import { ConversionService } from 'src/app/services/conversion.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-program',
@@ -34,6 +35,7 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
   countsList!: YarnCounts[];
   blendList!: YarnBlend[];
   subscription = new Subscription();
+  updateProgramDetails!: ConversionProgram;
 
   constructor(
     private navigationService: NavigationService,
@@ -43,7 +45,8 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private formBuilder: FormBuilder,
     private notificationService: NotificationService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private router: Router
   ) {
     this.navigationService.menu = PRODUCTION;
     this.navigationService.setFocus(Constants.PRODUCTION);
@@ -113,10 +116,48 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
           );
       })
     );
+
+    if (this.router.url.includes('update-program')) {
+      this.checkForUpdate();
+    }
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  checkForUpdate() {
+    const programDetails = sessionStorage.getItem('program');
+    if (programDetails) {
+      this.updateProgramDetails = JSON.parse(programDetails);
+      this.patchUpdateDetails();
+      sessionStorage.clear();
+    } else {
+      this.router.navigateByUrl('/production/create-program');
+    }
+  }
+
+  patchUpdateDetails() {
+    this.form.get('shadeId')?.setValue(this.updateProgramDetails.shadeId);
+    this.form.get('shadeName')?.setValue(this.updateProgramDetails.shadeName);
+    this.form.get('shadeName')?.disable();
+    this.form.get('blendId')?.setValue(this.updateProgramDetails.blendId);
+    this.form.get('blendName')?.setValue(this.updateProgramDetails.blendName);
+    this.form.get('blendName')?.disable();
+    const programDate = this.updateProgramDetails.programDate.split('/');
+    this.form
+      .get('programDate')
+      ?.setValue(
+        new Date(
+          `${programDate[1]}/${programDate[0]}/${programDate[2]}`
+        ).toISOString()
+      );
+    this.form.get('programDate')?.disable();
+    this.form.get('remarks')?.setValue(this.updateProgramDetails.remarks);
+
+    this.dataSource = this.updateProgramDetails.yarnCounts?.map(
+      (data, index) => ({ ...data, orderNo: index })
+    );
   }
 
   addData() {
@@ -225,6 +266,31 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
       return true;
     }
     return false;
+  }
+
+  updateProgram() {
+    if (!this.hasError()) {
+      const program: ConversionProgram = {
+        ...this.updateProgramDetails,
+        ...this.form.value,
+        yarnCounts: this.updateProgramDetails.yarnCounts.map((data, index) => ({
+          ...data,
+          counts: this.dataSource[index]?.counts,
+          programQuantity: this.dataSource[index]?.programQuantity,
+        })),
+      };
+      this.conversionService.updateProgram(program).subscribe({
+        next: (response) => {
+          this.notificationService.success(response);
+          this.router.navigateByUrl('/production/search-program');
+        },
+        error: (error) => {
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          );
+        },
+      });
+    }
   }
 
   resetData() {

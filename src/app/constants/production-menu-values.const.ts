@@ -2,13 +2,13 @@ export const PRODUCTION = [
   {
     title: 'Production',
     submenu: [
-      // {
-      //   title: 'Dashboard',
-      //   route: 'production',
-      // },
       {
         title: 'Create program',
         route: 'production/create-program',
+      },
+      {
+        title: 'Search program',
+        route: 'production/search-program',
       },
       {
         title: 'Mixing',
@@ -17,6 +17,10 @@ export const PRODUCTION = [
       {
         title: 'Production Entry',
         route: 'production/production-entry',
+      },
+      {
+        title: 'Search production',
+        route: 'production/search-production',
       },
       {
         title: 'Waste Entry',

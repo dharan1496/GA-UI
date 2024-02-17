@@ -1,0 +1,167 @@
+<section class="container">
+  <h1 class="header letter-spacing-1">Search Program</h1>
+  <section class="filter-content">
+    <form class="form-container" [formGroup]="form">
+      <mat-form-field appearance="fill" class="w-30">
+        <mat-label>Shade</mat-label>
+        <mat-select formControlName="shadeId">
+          <ng-container *ngFor="let shade of shadeList">
+            <mat-option [value]="shade.shadeId">{{
+              shade.shadeName
+            }}</mat-option>
+          </ng-container>
+        </mat-select>
+        <mat-error>This field is required.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="ml-24">
+        <mat-label>Program Date Range</mat-label>
+        <mat-date-range-input
+          [rangePicker]="picker"
+          [min]="minDate"
+          [max]="maxDate"
+        >
+          <input
+            matStartDate
+            formControlName="startDate"
+            placeholder="Start date"
+            (dateChange)="
+              appSharedService.formatDate($event, form.controls['startDate'])
+            "
+          />
+          <input
+            matEndDate
+            formControlName="endDate"
+            placeholder="End date"
+            (dateChange)="
+              appSharedService.formatDate($event, form.controls['endDate'])
+            "
+          />
+        </mat-date-range-input>
+        <mat-error *ngIf="form.get('startDate')?.hasError('required')"
+          >Start Date is required.</mat-error
+        >
+        <mat-error *ngIf="form.get('endDate')?.hasError('required')"
+          >End Date is required.</mat-error
+        >
+        <mat-error
+          *ngIf="
+            !(
+              form.get('startDate')?.hasError('matDatepickerMin') ||
+              form.get('startDate')?.hasError('matDatepickerMax') ||
+              form.get('startDate')?.hasError('required') ||
+              form.get('endDate')?.hasError('matDatepickerMin') ||
+              form.get('endDate')?.hasError('matDatepickerMax') ||
+              form.get('endDate')?.hasError('required')
+            )
+          "
+          >Invalid format entered</mat-error
+        >
+        <mat-error
+          *ngIf="
+            form.get('startDate')?.hasError('matDatepickerMin') ||
+            form.get('startDate')?.hasError('matDatepickerMax')
+          "
+          >Start Date should be between last 12 months</mat-error
+        >
+        <mat-error
+          *ngIf="
+            form.get('endDate')?.hasError('matDatepickerMin') ||
+            form.get('endDate')?.hasError('matDatepickerMax')
+          "
+          >End Date should be between last 12 months</mat-error
+        >
+        <mat-hint>DD/MM/YYYY – DD/MM/YYYY</mat-hint>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+    </form>
+    <button mat-raised-button (click)="onReset()" class="ml-32">
+      <mat-icon>refresh</mat-icon>Reset
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="onSearch()"
+      class="ml-16"
+    >
+      <mat-icon>search</mat-icon>Search
+    </button>
+  </section>
+  <div *ngIf="dataSource.data.length" class="text-right mb-4">
+    &ast;Click the row to see the program details
+  </div>
+  <div class="mat-elevation-z8 table-container">
+    <div *ngIf="loader" class="loader">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <table mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="programId">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Program Id</th>
+        <td mat-cell *matCellDef="let row">{{ row.programId }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="programNo">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Program No</th>
+        <td mat-cell *matCellDef="let row">{{ row.programNo }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="programDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Program Date</th>
+        <td mat-cell *matCellDef="let row">{{ row.programDate }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="shadeName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Shade</th>
+        <td mat-cell *matCellDef="let row">{{ row.shadeName }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="blendName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Blend</th>
+        <td mat-cell *matCellDef="let row">{{ row.blendName }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="remarks">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Remarks</th>
+        <td mat-cell *matCellDef="let row">{{ row.remarks || "_" }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>Action</th>
+        <td mat-cell *matCellDef="let element">
+          <button
+            mat-icon-button
+            matTooltip="edit"
+            aria-label="button with a edit icon"
+            (click)="updateProgram(element)"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+      <tr
+        class="row"
+        mat-row
+        *matRowDef="let row; columns: columnsToDisplay"
+        (click)="openProgramDetails(row)"
+      ></tr>
+
+      <tr class="text-center" *matNoDataRow>
+        <td class="py-16" [attr.colspan]="columnsToDisplay.length">
+          No rows to display
+        </td>
+      </tr>
+    </table>
+    <mat-paginator
+      *ngIf="dataSource.data.length"
+      [pageSizeOptions]="[10, 25, 100]"
+      aria-label="Select page of orders"
+    ></mat-paginator>
+  </div>
+</section>

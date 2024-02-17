@@ -1,5 +1,10 @@
 <section class="container">
-  <h1 class="header letter-spacing-1">Conversion Program Creation</h1>
+  <h1 class="header letter-spacing-1">
+    <span *ngIf="!updateProgramDetails; else updateHeader"
+      >Conversion Program Creation</span
+    >
+    <ng-template #updateHeader>Update Conversion Program</ng-template>
+  </h1>
   <mat-card class="card">
     <mat-card-header>
       <mat-card-title>Program Details</mat-card-title>
@@ -143,11 +148,29 @@
     </div>
 
     <div class="footer">
-      <button mat-raised-button class="mr-16" (click)="resetData()">
+      <button
+        mat-raised-button
+        class="mr-16"
+        (click)="resetData()"
+        *ngIf="!updateProgramDetails"
+      >
         <mat-icon>refresh</mat-icon>Reset
       </button>
-      <button mat-raised-button color="primary" (click)="submitProgram()">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="submitProgram()"
+        *ngIf="!updateProgramDetails"
+      >
         <mat-icon>save_alt</mat-icon>Submit
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="updateProgram()"
+        *ngIf="updateProgramDetails"
+      >
+        <mat-icon>save_alt</mat-icon>Update
       </button>
     </div>
   </div>

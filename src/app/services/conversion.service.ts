@@ -11,6 +11,7 @@ import { ProgramWaste } from '../models/programWaste';
 import { YarnRecoverySummary } from '../models/yarnRecoverySummary';
 import { ProgramWasteStock } from '../models/programWasteStock';
 import { ConversionProgramStatus } from '../models/conversionProgramStatus';
+import { FibreIssued } from '../models/fibreIssued';
 
 @Injectable({
   providedIn: 'root',
@@ -28,9 +29,25 @@ export class ConversionService {
     );
   }
 
+  updateProgram(program: ConversionProgram): Observable<any> {
+    return this.http.post(
+      `${environment.api}/Conversion/UpdateConversionProgram`,
+      program,
+      {
+        responseType: 'text',
+      }
+    );
+  }
+
   getProgramsForMixing(): Observable<ProgramForMixing[]> {
     return this.http.get<ProgramForMixing[]>(
       `${environment.api}/Conversion/GetProgramsForMixing`
+    );
+  }
+
+  getProgramMixingDetails(programId: number): Observable<FibreIssued[]> {
+    return this.http.get<FibreIssued[]>(
+      `${environment.api}/Conversion/GetProgramMixingDetails?programId=${programId}`
     );
   }
 
@@ -44,6 +61,19 @@ export class ConversionService {
     return this.http.post(
       `${environment.api}/Conversion/IssueFibreForMixing`,
       fibreMixing,
+      {
+        responseType: 'text',
+      }
+    );
+  }
+
+  updateMixingDetails(
+    programId: number,
+    fibreIssued: FibreIssued[]
+  ): Observable<any> {
+    return this.http.post(
+      `${environment.api}/Conversion/UpdateMixingDetails?mixingId=${programId}&updatedByUserId=0`,
+      fibreIssued,
       {
         responseType: 'text',
       }
@@ -115,6 +145,22 @@ export class ConversionService {
   ): Observable<ConversionProgram[]> {
     return this.http.get<ConversionProgram[]>(
       `${environment.api}/Conversion/GetConversionProgramsByShade?shadeId=${shadeId}&fromDate=${fromDate}&toDate=${toDate}`
+    );
+  }
+
+  getProductionDetails(
+    fromDate: string,
+    toDate: string,
+    lot: string,
+    shadeId: number,
+    blendId: number
+  ): Observable<ProductionEntry[]> {
+    let endpoint = `/Conversion/GetProductionDetails?productionFromDate=${fromDate}&productionToDate=${toDate}&lot=${lot}`;
+    shadeId && (endpoint = endpoint + `&shadeId=${shadeId}`);
+    blendId && (endpoint = endpoint + `&blendId=${blendId}`);
+    return this.http.post<ProductionEntry[]>(
+      `${environment.api}${endpoint}`,
+      {}
     );
   }
 }

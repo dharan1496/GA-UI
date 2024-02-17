@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Constants } from 'src/app/constants/constants';
 import { PRODUCTION } from 'src/app/constants/production-menu-values.const';
@@ -19,13 +19,14 @@ import { Subscription } from 'rxjs';
 import { UserActionConfirmationComponent } from '../../user-action-confirmation/user-action-confirmation.component';
 import { ConversionService } from 'src/app/services/conversion.service';
 import { WasteStockDialogComponent } from '../../sales/waste-order-delivery/waste-stock-dialog/waste-stock-dialog.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-mixing',
   templateUrl: './mixing.component.html',
   styleUrls: ['./mixing.component.scss'],
 })
-export class MixingComponent {
+export class MixingComponent implements OnInit, OnDestroy {
   programDetails: ConversionProgram | undefined;
   yarnDetails: ConversionYarn[] = [];
   mixingDetails = [];
@@ -43,12 +44,13 @@ export class MixingComponent {
     'percentUsed',
     'action',
   ];
-  @ViewChild(MatTable) table!: MatTable<any>;
+  @ViewChild('mixing') table!: MatTable<any>;
   mixingDate = new FormControl('', Validators.required);
   subscription = new Subscription();
   mixedBlend = '';
   fibreStocks = [];
   wasteStocks = [];
+  updateMixing = false;
 
   constructor(
     private navigationService: NavigationService,
@@ -56,10 +58,53 @@ export class MixingComponent {
     private dialog: MatDialog,
     private notificationService: NotificationService,
     public appSharedService: AppSharedService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private router: Router
   ) {
     this.navigationService.menu = PRODUCTION;
     this.navigationService.setFocus(Constants.PRODUCTION);
+  }
+
+  ngOnInit() {
+    if (this.router.url.includes('update-mixing')) {
+      this.updateMixing = true;
+      this.checkForUpdate();
+    } else {
+      this.updateMixing = false;
+    }
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+    this.updateMixing = false;
+  }
+
+  checkForUpdate() {
+    const program = sessionStorage.getItem('program');
+    if (program) {
+      this.programDetails = JSON.parse(program) as ConversionProgram;
+      this.yarnDetails = this.programDetails?.yarnCounts || [];
+      this.getProgramMixingDetails(this.programDetails.programId);
+      sessionStorage.clear();
+    } else {
+      this.router.navigateByUrl('/production/mixing');
+    }
+  }
+
+  getProgramMixingDetails(programID: number) {
+    this.subscription.add(
+      this.conversionService.getProgramMixingDetails(programID).subscribe({
+        next: (response) => {
+          this.mixingDetails = response as never[];
+          this.table.renderRows();
+        },
+        error: (error) => {
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          );
+        },
+      })
+    );
   }
 
   chooseProgram() {
@@ -120,6 +165,7 @@ export class MixingComponent {
           shadeId: data?.shadeId || data?.mixedForShadeId || 0,
           lot: data?.lot || null,
           productionWasteDtsId: data?.productionWasteDtsId || 0,
+          fibreMixingDtsId: 0,
         };
       });
       const fibreMixing: FibreMixing = {
@@ -192,6 +238,35 @@ export class MixingComponent {
       return true;
     }
     return false;
+  }
+
+  update() {
+    if (!this.hasError() && this.programDetails) {
+      const fibres: FibreIssued[] = this.mixingDetails.map((data: any) => {
+        return {
+          receivedDtsId: data?.receivedDtsId || 0,
+          fibreTypeId: data?.fibreTypeId || 0,
+          issueQuantity: +data?.issueQuantity || +data?.stockQuantity,
+          shadeId: data?.shadeId || data?.mixedForShadeId || 0,
+          lot: data?.lot || null,
+          productionWasteDtsId: data?.productionWasteDtsId || 0,
+          fibreMixingDtsId: 0,
+        };
+      });
+      this.conversionService
+        .updateMixingDetails(this.programDetails?.programId, fibres)
+        .subscribe({
+          next: (response) => {
+            this.notificationService.success(response);
+            this.router.navigateByUrl('/production/search-program');
+          },
+          error: (error) => {
+            this.notificationService.error(
+              typeof error?.error === 'string' ? error?.error : error?.message
+            );
+          },
+        });
+    }
   }
 
   resetData() {

@@ -7,6 +7,8 @@ import { MixingComponent } from './mixing/mixing.component';
 import { ProductionEntryComponent } from './entry/production-entry/production-entry.component';
 import { WasteEntryComponent } from './entry/waste-entry/waste-entry.component';
 import { YarnRecoveryComponent } from './yarn-recovery/yarn-recovery.component';
+import { SearchProgramComponent } from './search-program/search-program.component';
+import { SearchProductionComponent } from './search-production/search-production.component';
 
 const routes: Routes = [
   {
@@ -18,7 +20,23 @@ const routes: Routes = [
     component: CreateProgramComponent,
   },
   {
+    path: 'update-program',
+    component: CreateProgramComponent,
+  },
+  {
+    path: 'search-program',
+    component: SearchProgramComponent,
+  },
+  {
+    path: 'search-production',
+    component: SearchProductionComponent,
+  },
+  {
     path: 'mixing',
+    component: MixingComponent,
+  },
+  {
+    path: 'update-mixing',
     component: MixingComponent,
   },
   {

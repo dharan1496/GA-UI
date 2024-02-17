@@ -1,7 +1,7 @@
 <section class="container">
   <h1 class="header letter-spacing-1">Search Fibre PO</h1>
   <section>
-    <form class="form-container" [formGroup]="form">
+    <form class="form-container" [formGroup]="form" #formDirective="ngForm">
       <mat-form-field appearance="fill" class="w-35">
         <mat-label>Party</mat-label>
         <mat-select formControlName="partyId">

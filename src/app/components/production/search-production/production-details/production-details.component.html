@@ -1,0 +1,105 @@
+<div class="header">
+  <h1 mat-dialog-title>Production Details</h1>
+  <button mat-icon-button matTooltip="close" (click)="close()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<div mat-dialog-content class="container word-break-all">
+  <section class="details">
+    <div>
+      <div class="text-dark pb-2">Production Id</div>
+      <div>{{ productionDetails.productionId }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Production Date</div>
+      <div>{{ productionDetails.productionDate | date : "dd/MM/yyyy" }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Program Id</div>
+      <div>{{ productionDetails.programId }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Program No</div>
+      <div>{{ productionDetails.programNo }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Program Date</div>
+      <div>{{ productionDetails.programDate | date : "dd/MM/yyyy" }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Mixing Id</div>
+      <div>{{ productionDetails.mixingId }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Shade</div>
+      <div>{{ productionDetails.shadeName }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Blend</div>
+      <div>{{ productionDetails.blendName }}</div>
+    </div>
+  </section>
+  <section class="mt-24">
+    <div class="mt-8" *ngIf="!productionDetails.yarnDetails?.length">
+      *No yarn details
+    </div>
+    <table
+      mat-table
+      [dataSource]="productionDetails.yarnDetails"
+      class="table"
+      *ngIf="productionDetails.yarnDetails?.length"
+    >
+      <ng-container matColumnDef="countsId">
+        <th mat-header-cell *matHeaderCellDef>CountsId</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.countsId }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <ng-container matColumnDef="lot">
+        <th mat-header-cell *matHeaderCellDef>Lot</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.lot }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <ng-container matColumnDef="isWinded">
+        <th mat-header-cell *matHeaderCellDef>isWinded</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.isWinded || false }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <ng-container matColumnDef="productionQuantity">
+        <th mat-header-cell *matHeaderCellDef class="text-right">
+          Production Quantity
+        </th>
+        <td mat-cell *matCellDef="let element" class="text-right">
+          {{ element.productionQuantity }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef class="text-right">
+          {{ getTotalProductionQty() }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="deliveredQuantity">
+        <th mat-header-cell *matHeaderCellDef class="text-right">
+          Delivered Quantity
+        </th>
+        <td mat-cell *matCellDef="let element" class="text-right">
+          {{ element.deliveredQuantity }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef class="text-right">
+          {{ getTotalDeliveredQty() }}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
+      <tr mat-footer-row *matFooterRowDef="columnsToDisplay; sticky: true"></tr>
+    </table>
+  </section>
+</div>
