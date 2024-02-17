@@ -44,6 +44,11 @@ tr.row:not(.expanded-row) {
   display: flex;
   margin-bottom: 24px;
   padding-top: 8px;
+
+  & .mdc-data-table__cell,
+  & .mdc-data-table__header-cell {
+    padding: 0 16px;
+  }
 }
 
 .no-rows {
@@ -57,15 +62,6 @@ tr.row:not(.expanded-row) {
 
 .border-top {
   border-top: 1px solid rgba(0, 0, 0, 0.15);
-}
-
-.mat-mdc-table-sticky {
-  border-top: 1px solid #e0e0e0;
-}
-
-.mdc-data-table__cell,
-.mdc-data-table__header-cell {
-  padding: 0 16px;
 }
 
 .mat-mdc-header-row {
