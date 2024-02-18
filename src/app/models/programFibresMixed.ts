@@ -1,4 +1,7 @@
 export interface ProgramFibresMixed {
+  mixingId: number;
+  mixingDate: string;
+  fibreMixingDtsId: number;
   fiberCategoryid: number;
   fiberCategory: string;
   fiberTypeId: number;

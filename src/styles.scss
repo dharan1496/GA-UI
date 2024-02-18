@@ -358,3 +358,7 @@ app-print-delivery-invoice {
 .d-flex {
   display: flex;
 }
+
+input:disabled {
+  cursor: not-allowed;
+}
