@@ -96,16 +96,52 @@ export class FibreReceiveConversionOrderComponent implements OnInit, OnDestroy {
     this.form.get('partyId')?.disable();
     this.form.get('recdDCNo')?.setValue(this.updateReceivedCODetails?.recdDCNo);
     this.form.get('recdDCNo')?.disable();
-    this.form
-      .get('recdDate')
-      ?.setValue(new Date(this.updateReceivedCODetails?.recdDate || ''));
-    this.form.get('recdDate')?.disable();
-    this.form
-      .get('dcDate')
-      ?.setValue(new Date(this.updateReceivedCODetails?.dcDate || ''));
-    this.form.get('dcDate')?.disable();
+    const recdDate = this.updateReceivedCODetails?.recdDate.split('/');
+    if (recdDate) {
+      this.form
+        .get('recdDate')
+        ?.setValue(
+          new Date(`${recdDate[1]}/${recdDate[0]}/${recdDate[2]}`).toISOString()
+        );
+      this.form.get('recdDate')?.disable();
+    }
+    const dcDate = this.updateReceivedCODetails?.dcDate.split('/');
+    if (dcDate) {
+      this.form
+        .get('dcDate')
+        ?.setValue(
+          new Date(`${dcDate[1]}/${dcDate[0]}/${dcDate[2]}`).toISOString()
+        );
+      this.form.get('dcDate')?.disable();
+    }
 
-    // Need to add dataSource
+    this.dataSource = this.updateReceivedCODetails?.fibrePODts?.map(
+      (data, index) => {
+        return {
+          receivedDCId: data?.receivedDCId || 0,
+          receivedDtsId: data?.receivedDtsId || 0,
+          orderNo: index + 1,
+          fibreType: data?.fiberTypeName,
+          fibreTypeId: data?.fiberTypeId,
+          shadeName: data?.fiberShadeName,
+          shadeId: data?.fiberShadeId,
+          orderQty: data?.orderQty,
+          pendingQty: (data?.orderQty || 0) - data?.receivedWeight || 0,
+          receivedQty: data?.receivedWeight,
+          receivedBales: data?.receivedBales,
+          lot: data?.lot,
+          hsnCode: data?.hsnCode,
+          rate: data?.rate,
+          gstpercent: data?.gstPercent,
+          amount: data?.rate * data?.receivedWeight,
+          totalAmount:
+            data?.rate * data?.receivedWeight +
+            (data?.rate * data?.receivedWeight * data?.gstPercent) / 100,
+          isValid: true,
+          update: true,
+        };
+      }
+    ) as never[];
   }
 
   getPartyList() {
@@ -151,7 +187,9 @@ export class FibreReceiveConversionOrderComponent implements OnInit, OnDestroy {
     }
 
     const request = {
-      receivedDCId: 0,
+      receivedDCId: this.updateReceivedCODetails
+        ? this.updateReceivedCODetails?.receivedDCId
+        : 0,
       ...this.form.value,
       partyName: this.getPartyName(),
       poNo: '',
@@ -163,8 +201,8 @@ export class FibreReceiveConversionOrderComponent implements OnInit, OnDestroy {
 
     this.dataSource.forEach((data: any) => {
       request.fibrePODts.push({
-        receivedDCId: 0,
-        receivedDtsId: 0,
+        receivedDCId: data?.receivedDCId || 0,
+        receivedDtsId: data?.receivedDtsId || 0,
         poDtsId: data?.poDtsId,
         poNo: '',
         poDate: '',
@@ -180,17 +218,43 @@ export class FibreReceiveConversionOrderComponent implements OnInit, OnDestroy {
         fiberTypeName: data?.fibreType,
       } as ReceiveFibrePODts);
     });
-    this.subscription.add(
-      this.fibreService.submitReceiveFibre(request).subscribe({
-        next: (response) => {
-          this.notificationService.success(response);
-          this.resetData();
-        },
-        error: (error) => {
-          this.notificationService.error(error.message);
-        },
-      })
-    );
+
+    if (this.updateReceivedCODetails) {
+      this.subscription.add(
+        this.fibreService.UpdateReceiveFibre(request).subscribe({
+          next: (response) => {
+            if (response === 'true') {
+              this.notificationService
+                .success('Updated successfully!')
+                .afterClosed()
+                .subscribe(() =>
+                  this.router.navigateByUrl(
+                    '/purchases/fibre/search-received-po'
+                  )
+                );
+            } else {
+              this.notificationService.error('Unable to update the order!');
+            }
+          },
+          error: (error) =>
+            this.notificationService.error(
+              typeof error?.error === 'string' ? error?.error : error?.message
+            ),
+        })
+      );
+    } else {
+      this.subscription.add(
+        this.fibreService.submitReceiveFibre(request).subscribe({
+          next: (response) => {
+            this.notificationService.success(response);
+            this.resetData();
+          },
+          error: (error) => {
+            this.notificationService.error(error.message);
+          },
+        })
+      );
+    }
   }
 
   resetData() {

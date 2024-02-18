@@ -116,18 +116,30 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
       );
     this.form.get('recdDCNo')?.setValue(this.updateReceivedPODetails?.recdDCNo);
     this.form.get('recdDCNo')?.disable();
-    this.form
-      .get('recdDate')
-      ?.setValue(new Date(this.updateReceivedPODetails?.recdDate || ''));
-    this.form.get('recdDate')?.disable();
-    this.form
-      .get('dcDate')
-      ?.setValue(new Date(this.updateReceivedPODetails?.dcDate || ''));
-    this.form.get('dcDate')?.disable();
+    const recdDate = this.updateReceivedPODetails?.recdDate.split('/');
+    if (recdDate) {
+      this.form
+        .get('recdDate')
+        ?.setValue(
+          new Date(`${recdDate[1]}/${recdDate[0]}/${recdDate[2]}`).toISOString()
+        );
+      this.form.get('recdDate')?.disable();
+    }
+    const dcDate = this.updateReceivedPODetails?.dcDate.split('/');
+    if (dcDate) {
+      this.form
+        .get('dcDate')
+        ?.setValue(
+          new Date(`${dcDate[1]}/${dcDate[0]}/${dcDate[2]}`).toISOString()
+        );
+      this.form.get('dcDate')?.disable();
+    }
 
     this.dataSource = this.updateReceivedPODetails?.fibrePODts?.map(
       (data, index) => {
         return {
+          receivedDCId: data?.receivedDCId || 0,
+          receivedDtsId: data?.receivedDtsId || 0,
           orderNo: index + 1,
           poNo: data?.poNo,
           poDtsId: data?.poDtsId,
@@ -210,7 +222,9 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
     }
 
     const request = {
-      receivedDCId: 0,
+      receivedDCId: this.updateReceivedPODetails
+        ? this.updateReceivedPODetails?.receivedDCId
+        : 0,
       ...this.form.value,
       partyName: this.getPartyName(),
       receivedByUserId: 0,
@@ -221,8 +235,8 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
 
     this.dataSource.forEach((data: any) => {
       request.fibrePODts.push({
-        receivedDCId: 0,
-        receivedDtsId: 0,
+        receivedDCId: data?.receivedDCId || 0,
+        receivedDtsId: data?.receivedDtsId || 0,
         poDtsId: data?.poDtsId,
         poNo: data?.poNo,
         poDate: this.form.value?.poDate,
@@ -240,7 +254,6 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
     });
 
     if (this.updateReceivedPODetails) {
-      this;
       this.subscription.add(
         this.fibreService.UpdateReceiveFibre(request).subscribe({
           next: (response) => {

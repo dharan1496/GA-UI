@@ -7,10 +7,15 @@ import {
 } from '@angular/animations';
 import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormControl,
+} from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Subscription, finalize } from 'rxjs';
 import { Constants } from 'src/app/constants/constants';
@@ -71,6 +76,9 @@ export class FibreReceivedOrderSearchComponent implements OnInit, OnDestroy {
   maxDate = new Date();
   private paginator!: MatPaginator;
   private sort!: MatSort;
+  conversionOrderCheckbox = new FormControl();
+  backupDatasource: any;
+  @ViewChild(MatTable) table!: MatTable<any>;
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
     this.sort = ms;
@@ -233,5 +241,17 @@ export class FibreReceivedOrderSearchComponent implements OnInit, OnDestroy {
         }),
       250
     );
+  }
+
+  filterResults() {
+    if (this.conversionOrderCheckbox.value) {
+      this.backupDatasource = this.dataSource.data;
+      this.dataSource.data = this.dataSource.data.filter((data) =>
+        data?.fibrePODts?.some((fibre: any) => !fibre.poNo)
+      );
+    } else {
+      this.dataSource.data = this.backupDatasource;
+    }
+    this.table.renderRows();
   }
 }
