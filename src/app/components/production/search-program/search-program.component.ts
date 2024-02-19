@@ -134,7 +134,8 @@ export class SearchProgramComponent {
   openProgramDetails(programDetails: ConversionProgram) {
     this.dialog.open(ProgramDetailsComponent, {
       data: programDetails,
-      minWidth: '75vw',
+      minWidth: '70vw',
+      maxWidth: '90vw',
     });
   }
 

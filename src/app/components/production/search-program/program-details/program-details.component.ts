@@ -36,6 +36,7 @@ export class ProgramDetailsComponent {
     'programQuantity',
     'productionQuantity',
   ];
+  expanded = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public programDetails: ConversionProgram,
@@ -73,5 +74,20 @@ export class ProgramDetailsComponent {
     sessionStorage.setItem('program', JSON.stringify(this.programDetails));
     this.router.navigateByUrl('/production/update-mixing');
     this.matDialogRef.close();
+  }
+
+  expand() {
+    this.expanded = !this.expanded;
+    if (this.expanded) {
+      this.matDialogRef.updateSize('100vw', '100vh');
+      document
+        .querySelector('.mat-mdc-dialog-content')
+        ?.classList.add('max-height-88');
+    } else {
+      this.matDialogRef.updateSize('75vw');
+      document
+        .querySelector('.mat-mdc-dialog-content')
+        ?.classList.remove('max-height-88');
+    }
   }
 }
