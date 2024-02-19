@@ -119,12 +119,12 @@ export class RecoveryDetailsComponent implements OnInit, OnDestroy {
       this.matDialogRef.updateSize('100vw', '100vh');
       document
         .querySelector('.mat-mdc-dialog-content')
-        ?.classList.add('max-height-90');
+        ?.classList.add('max-height-88');
     } else {
       this.matDialogRef.updateSize('75vw');
       document
         .querySelector('.mat-mdc-dialog-content')
-        ?.classList.remove('max-height-90');
+        ?.classList.remove('max-height-88');
     }
   }
 
