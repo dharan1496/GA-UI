@@ -20,6 +20,7 @@ import { UserActionConfirmationComponent } from '../../user-action-confirmation/
 import { ConversionService } from 'src/app/services/conversion.service';
 import { WasteStockDialogComponent } from '../../sales/waste-order-delivery/waste-stock-dialog/waste-stock-dialog.component';
 import { Router } from '@angular/router';
+import { ProgramFibresMixed } from 'src/app/models/programFibresMixed';
 
 @Component({
   selector: 'app-mixing',
@@ -44,6 +45,17 @@ export class MixingComponent implements OnInit, OnDestroy {
     'percentUsed',
     'action',
   ];
+  updateColumns = [
+    'receivedDCNo',
+    'fibreCategory',
+    'wasteCategory',
+    'fibre',
+    'fibreShade',
+    'lot',
+    'issueQty',
+    'percentUsed',
+    'action',
+  ];
   @ViewChild('mixing') table!: MatTable<any>;
   mixingDate = new FormControl('', Validators.required);
   subscription = new Subscription();
@@ -51,6 +63,7 @@ export class MixingComponent implements OnInit, OnDestroy {
   fibreStocks = [];
   wasteStocks = [];
   updateMixing = false;
+  mixingId!: number;
 
   constructor(
     private navigationService: NavigationService,
@@ -81,10 +94,26 @@ export class MixingComponent implements OnInit, OnDestroy {
 
   checkForUpdate() {
     const program = sessionStorage.getItem('program');
-    if (program) {
+    const mixing = sessionStorage.getItem('mixingDetails');
+    if (program && mixing) {
       this.programDetails = JSON.parse(program) as ConversionProgram;
+      const mixingData = JSON.parse(mixing) as ProgramFibresMixed[];
+      this.mixingId = mixingData[0]?.mixingId;
+      const data = mixingData[0]?.mixingDate?.split('/');
+      this.mixingDate.setValue(
+        new Date(`${data[1]}/${data[0]}/${data[2]}`).toISOString()
+      );
+      this.mixingDate.disable();
       this.yarnDetails = this.programDetails?.yarnCounts || [];
-      this.getProgramMixingDetails(this.programDetails.programId);
+      this.mixingDetails = mixingData?.map((data) => ({
+        ...data,
+        issueQuantity: data?.issuedQuantity,
+        fibreType: data?.fiberType,
+        shadeName: data?.fiberShade,
+        fibreCategoryName: data?.fiberCategory,
+        fibreTypeId: data?.fiberTypeId,
+        shadeId: data?.fiberShadeId,
+      })) as never[];
       sessionStorage.clear();
     } else {
       this.router.navigateByUrl('/production/mixing');
@@ -95,7 +124,13 @@ export class MixingComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.conversionService.getProgramMixingDetails(programID).subscribe({
         next: (response) => {
-          this.mixingDetails = response as never[];
+          this.mixingDetails = response?.map((data) => ({
+            ...data,
+            issueQuantity: data?.issuedQuantity,
+            fibreType: data?.fiberType,
+            shadeName: data?.fiberShade,
+            fibreCategoryName: data?.fiberCategory,
+          })) as never[];
           this.table.renderRows();
         },
         error: (error) => {
@@ -127,7 +162,10 @@ export class MixingComponent implements OnInit, OnDestroy {
     this.dialog
       .open(SelectFibreStockComponent, {
         minWidth: '70vw',
-        data: this.programDetails?.programId,
+        data: {
+          programId: this.programDetails?.programId,
+          existingStocks: this.fibreStocks,
+        },
       })
       .afterClosed()
       .subscribe((stock) => {
@@ -212,7 +250,10 @@ export class MixingComponent implements OnInit, OnDestroy {
       );
       return true;
     }
-    if (document.getElementsByClassName('bales-border-error').length > 0) {
+    if (
+      !this.updateMixing &&
+      document.getElementsByClassName('bales-border-error').length > 0
+    ) {
       this.notificationService.notify(
         'Please correct the Bales to proceed',
         NotifyType.ERROR
@@ -227,12 +268,23 @@ export class MixingComponent implements OnInit, OnDestroy {
       return true;
     }
     if (
+      !this.updateMixing &&
       !this.mixingDetails.every(
         (data) => data['bales'] && data['issueQuantity']
       )
     ) {
       this.notificationService.notify(
         'Please enter the Bales & IssueQuantity',
+        NotifyType.ERROR
+      );
+      return true;
+    }
+    if (
+      this.updateMixing &&
+      !this.mixingDetails.every((data) => data['issueQuantity'])
+    ) {
+      this.notificationService.notify(
+        'Please enter the IssueQuantity',
         NotifyType.ERROR
       );
       return true;
@@ -250,11 +302,11 @@ export class MixingComponent implements OnInit, OnDestroy {
           shadeId: data?.shadeId || data?.mixedForShadeId || 0,
           lot: data?.lot || null,
           productionWasteDtsId: data?.productionWasteDtsId || 0,
-          fibreMixingDtsId: 0,
+          fibreMixingDtsId: data?.fibreMixingDtsId,
         };
       });
       this.conversionService
-        .updateMixingDetails((this.mixingDetails as any)?.mixingId, fibres)
+        .updateMixingDetails(this.mixingId, fibres)
         .subscribe({
           next: (response) => {
             this.notificationService.success(response);

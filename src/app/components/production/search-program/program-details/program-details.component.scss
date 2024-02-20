@@ -38,3 +38,41 @@
   justify-content: space-between;
   align-items: center;
 }
+
+.outer-table {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.inner-table {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+tr.detail-row {
+  height: 0;
+}
+
+tr.row:not(.expanded-row) {
+  &:hover {
+    background-color: whitesmoke;
+  }
+}
+
+.row {
+  cursor: pointer;
+}
+
+.row td {
+  border-bottom-width: 0;
+}
+
+.element-detail {
+  overflow: hidden;
+  display: flex;
+  margin-bottom: 24px;
+  padding-top: 8px;
+
+  & .mat-mdc-footer-cell,
+  & .mat-mdc-cell {
+    border-top: 1px solid #e0e0e0;
+  }
+}

@@ -42,7 +42,7 @@ export class SelectFibreStockComponent implements OnInit, OnDestroy {
     this.loader = true;
     this.subscription.add(
       this.fibreService
-        .getFibreStockForMixing(this.data)
+        .getFibreStockForMixing(this.data?.programId)
         .pipe(finalize(() => (this.loader = false)))
         .subscribe({
           next: (fibreStock) => (this.dataSource = fibreStock),
@@ -89,5 +89,11 @@ export class SelectFibreStockComponent implements OnInit, OnDestroy {
 
   close() {
     this.matDialogRef.close();
+  }
+
+  isAlreadySelected(receivedDCNo: number) {
+    return this.data?.existingStocks?.some(
+      (stock: any) => stock?.receivedDCNo === receivedDCNo
+    );
   }
 }

@@ -1,11 +1,12 @@
 <section class="container">
-  <div class="header-container">
-    <h1 class="header letter-spacing-1">
-      <span *ngIf="updateMixing">Update</span> Mixing
-    </h1>
+  <div class="header-container" *ngIf="!updateMixing">
+    <h1 class="header letter-spacing-1">Mixing</h1>
     <button mat-raised-button color="primary" (click)="chooseProgram()">
       Choose Program for Mixing
     </button>
+  </div>
+  <div class="header-container" *ngIf="updateMixing">
+    <h1 class="header letter-spacing-1">Update Mixing</h1>
   </div>
   <div class="prog-details-container">
     <mat-card class="card w-60">
@@ -93,7 +94,7 @@
     </div>
   </div>
   <div>
-    <div class="stock-btn mb-16" *ngIf="programDetails">
+    <div class="stock-btn mb-16" *ngIf="programDetails && !updateMixing">
       <button mat-raised-button color="primary" (click)="fibreStock()">
         <mat-icon>playlist_add</mat-icon> Fibre Stock
       </button>
@@ -149,7 +150,7 @@
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
-        <ng-container matColumnDef="stockQty">
+        <ng-container matColumnDef="stockQty" *ngIf="!updateMixing">
           <th mat-header-cell *matHeaderCellDef class="text-right">
             Stock Qty
           </th>
@@ -159,7 +160,7 @@
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
-        <ng-container matColumnDef="bales">
+        <ng-container matColumnDef="bales" *ngIf="!updateMixing">
           <th mat-header-cell *matHeaderCellDef class="text-right">
             Issued No of Bales
           </th>
@@ -208,6 +209,7 @@
               class="cell-input w-70"
               (input)="element.issueQuantity = issuedQty.value"
               decimal="3"
+              [value]="element.issueQuantity"
             />
             <p *ngIf="checkIssueQty(element)" class="error-alert">
               Greater than Stock Qty
@@ -247,21 +249,39 @@
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="mixingDisplayedColumns"></tr>
+        <tr
+          mat-header-row
+          *matHeaderRowDef="
+            updateMixing ? updateColumns : mixingDisplayedColumns
+          "
+        ></tr>
         <tr
           class="mixing-row"
           mat-row
-          *matRowDef="let row; columns: mixingDisplayedColumns"
+          *matRowDef="
+            let row;
+            columns: updateMixing ? updateColumns : mixingDisplayedColumns
+          "
         ></tr>
         <tr *matNoDataRow>
-          <td class="no-rows" [attr.colspan]="mixingDisplayedColumns.length">
+          <td
+            class="no-rows"
+            [attr.colspan]="
+              updateMixing
+                ? updateColumns.length
+                : mixingDisplayedColumns.length
+            "
+          >
             No rows to display
           </td>
         </tr>
         <tr
           [hidden]="!mixingDetails.length"
           mat-footer-row
-          *matFooterRowDef="mixingDisplayedColumns; sticky: true"
+          *matFooterRowDef="
+            updateMixing ? updateColumns : mixingDisplayedColumns;
+            sticky: true
+          "
         ></tr>
       </table>
     </div>
