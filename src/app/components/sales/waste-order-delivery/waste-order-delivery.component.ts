@@ -92,7 +92,7 @@ export class WasteOrderDeliveryComponent implements OnInit, OnDestroy {
       const salesDCDetails: any[] = this.dataSource.map((data: any) => ({
         wasteCategoryName: data?.wasteCategoryName,
         wasteCategoryId: data?.wasteCategoryId,
-        quantity: data?.quantity,
+        quantity: data?.stockQuantity,
         yarnShade: '', // Added to avoid API validation
       }));
       const wasteOrder: FibreSalesDC = {
@@ -146,18 +146,15 @@ export class WasteOrderDeliveryComponent implements OnInit, OnDestroy {
   addData(): void {
     this.dialog
       .open(WasteStockDialogComponent, {
-        data: this.dataSource.length,
+        data: {
+          existingStocks: this.dataSource,
+        },
         minWidth: '60vw',
       })
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          const stock = result?.map((item: FibreWasteStock) => ({
-            wasteCategoryName: item.wasteCategoryName,
-            wasteCategoryId: item.wasteCategoryId,
-            quantity: item.stockQuantity,
-          }));
-          this.dataSource = stock;
+          this.dataSource = result;
           this.table.renderRows();
         }
       });
@@ -183,7 +180,7 @@ export class WasteOrderDeliveryComponent implements OnInit, OnDestroy {
 
   getTotalQuantity() {
     return this.dataSource
-      .map((data: any) => data?.quantity)
+      .map((data: any) => data?.stockQuantity)
       .reduce((acc, value) => acc + value, 0);
   }
 }

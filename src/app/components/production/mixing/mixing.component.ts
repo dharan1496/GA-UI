@@ -163,7 +163,7 @@ export class MixingComponent implements OnInit, OnDestroy {
         minWidth: '70vw',
         data: {
           programId: this.programDetails?.programId,
-          existingStocks: this.fibreStocks,
+          existingStocks: this.fibreStocks || [],
         },
       })
       .afterClosed()
@@ -179,14 +179,19 @@ export class MixingComponent implements OnInit, OnDestroy {
   wasteStock() {
     this.dialog
       .open(WasteStockDialogComponent, {
-        data: this.mixingDetails.length,
+        data: {
+          existingStocks: this.wasteStocks || [],
+        },
         minWidth: '60vw',
       })
       .afterClosed()
       .subscribe((result) => {
         if (result) {
           this.wasteStocks = result;
-          this.mixingDetails = [...this.fibreStocks, ...this.wasteStocks];
+          this.mixingDetails = [
+            ...(this.fibreStocks || []),
+            ...this.wasteStocks,
+          ];
           this.table.renderRows();
         }
       });
@@ -266,17 +271,6 @@ export class MixingComponent implements OnInit, OnDestroy {
       );
       return true;
     }
-    // if (
-    //   !this.mixingDetails.every(
-    //     (data) => data['bales'] && data['issueQuantity']
-    //   )
-    // ) {
-    //   this.notificationService.notify(
-    //     'Please enter the Bales & IssueQuantity',
-    //     NotifyType.ERROR
-    //   );
-    //   return true;
-    // }
     if (!this.mixingDetails.every((data) => data['issueQuantity'])) {
       this.notificationService.notify(
         'Please enter the IssueQuantity',
@@ -320,6 +314,8 @@ export class MixingComponent implements OnInit, OnDestroy {
     this.programDetails = undefined;
     this.yarnDetails = [];
     this.mixingDetails = [];
+    this.fibreStocks = [];
+    this.wasteStocks = [];
     this.mixingDate.reset();
   }
 

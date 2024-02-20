@@ -84,7 +84,10 @@ export class SelectFibreStockComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.matDialogRef.close(this.selection.selected);
+    this.matDialogRef.close([
+      ...(this.data?.existingStocks || []),
+      ...this.selection.selected,
+    ]);
   }
 
   close() {

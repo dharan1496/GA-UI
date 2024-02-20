@@ -84,10 +84,22 @@ export class WasteStockDialogComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.matDialogRef.close(this.selection.selected);
+    this.matDialogRef.close([
+      ...(this.data?.existingStocks || []),
+      ...this.selection.selected,
+    ]);
   }
 
   close() {
     this.matDialogRef.close();
+  }
+
+  isAlreadySelected(row: any) {
+    return this.data?.existingStocks?.some(
+      (stock: any) =>
+        stock?.fiberWasteStockId === row?.fiberWasteStockId ||
+        (stock?.programNo &&
+          stock?.productionWasteDtsId === row?.productionWasteDtsId)
+    );
   }
 }
