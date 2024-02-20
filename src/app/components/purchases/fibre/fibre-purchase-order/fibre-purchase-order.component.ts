@@ -199,6 +199,7 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
         data.weight = this.dataSource[index]?.weight;
         data.rate = this.dataSource[index]?.rate;
         data.gstPercent = this.dataSource[index]?.gstPercent;
+        (data.counts = 0), (data.length = 0);
       });
       this.fibreService.updateFibrePO(this.updatePoDetails).subscribe({
         next: () => {
