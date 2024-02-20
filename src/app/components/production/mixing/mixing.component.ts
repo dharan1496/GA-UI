@@ -40,7 +40,6 @@ export class MixingComponent implements OnInit, OnDestroy {
     'fibreShade',
     'lot',
     'stockQty',
-    'bales',
     'issueQty',
     'percentUsed',
     'action',
@@ -267,22 +266,18 @@ export class MixingComponent implements OnInit, OnDestroy {
       );
       return true;
     }
-    if (
-      !this.updateMixing &&
-      !this.mixingDetails.every(
-        (data) => data['bales'] && data['issueQuantity']
-      )
-    ) {
-      this.notificationService.notify(
-        'Please enter the Bales & IssueQuantity',
-        NotifyType.ERROR
-      );
-      return true;
-    }
-    if (
-      this.updateMixing &&
-      !this.mixingDetails.every((data) => data['issueQuantity'])
-    ) {
+    // if (
+    //   !this.mixingDetails.every(
+    //     (data) => data['bales'] && data['issueQuantity']
+    //   )
+    // ) {
+    //   this.notificationService.notify(
+    //     'Please enter the Bales & IssueQuantity',
+    //     NotifyType.ERROR
+    //   );
+    //   return true;
+    // }
+    if (!this.mixingDetails.every((data) => data['issueQuantity'])) {
       this.notificationService.notify(
         'Please enter the IssueQuantity',
         NotifyType.ERROR
