@@ -132,12 +132,10 @@ export class FibreService {
 
   searchFibreStock(
     asOnDate: string,
-    partyId = '',
-    fibreTypeId = ''
+    partyId: number,
+    fibreTypeId: number
   ): Observable<FibreStock[]> {
-    let endpoint = `/Fiber/GetFibreStockSearch?asOnDate=${asOnDate}`;
-    partyId && (endpoint = endpoint + `&partyId=${partyId}`);
-    fibreTypeId && (endpoint = endpoint + `&fiberTypeId=${fibreTypeId}`);
+    const endpoint = `/Fiber/GetFibreStockSearch?asOnDate=${asOnDate}&partyId=${partyId}&fiberTypeId=${fibreTypeId}`;
     return this.http.get<FibreStock[]>(`${environment.api}${endpoint}`);
   }
 

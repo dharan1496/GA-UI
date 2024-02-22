@@ -114,7 +114,7 @@ export class FibreStockComponent implements OnInit, OnDestroy {
     const { partyId, fibreTypeId } = this.form.value;
     this.subscription.add(
       this.fibreService
-        .searchFibreStock(asOnDate, partyId, fibreTypeId)
+        .searchFibreStock(asOnDate, partyId || 0, fibreTypeId || 0)
         .pipe(finalize(() => (this.loader = false)))
         .subscribe({
           next: (data) => {

@@ -24,6 +24,7 @@
       <mat-form-field appearance="fill" class="w-25 ml-24">
         <mat-label>Party</mat-label>
         <mat-select formControlName="partyId">
+          <mat-option [value]="0">All</mat-option>
           <ng-container *ngFor="let party of partyService.parties">
             <mat-option [value]="party.partyId">{{
               party.partyName
@@ -36,6 +37,7 @@
       <mat-form-field appearance="fill" class="w-20 ml-24 mr-24">
         <mat-label>Fibre Type</mat-label>
         <mat-select formControlName="fibreTypeId">
+          <mat-option [value]="0">All</mat-option>
           <ng-container *ngFor="let fibre of fibreTypes">
             <mat-option [value]="fibre.fibreTypeId">{{
               fibre.fibreType

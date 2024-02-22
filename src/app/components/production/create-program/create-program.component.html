@@ -12,6 +12,10 @@
     <mat-card-content>
       <form class="form-container" [formGroup]="form">
         <div class="form-first-row">
+          <div *ngIf="updateProgramDetails" class="w-20 pt-4">
+            <mat-label>Program Id</mat-label>
+            <div class="font-size-16">{{ updateProgramDetails.programId }}</div>
+          </div>
           <mat-form-field appearance="fill" class="w-50">
             <mat-label>Shade</mat-label>
             <mat-select formControlName="shadeName">
