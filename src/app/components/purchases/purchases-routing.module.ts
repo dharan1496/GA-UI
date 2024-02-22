@@ -27,7 +27,7 @@ const routes: Routes = [
     component: FibrePurchaseOrderComponent,
   },
   {
-    path: 'fibre/receive-purchase-order',
+    path: 'fibre/receive-po-fibre',
     component: FibreReceivePurchaseOrderComponent,
   },
   {
@@ -39,7 +39,7 @@ const routes: Routes = [
     component: FibreReceiveConversionOrderComponent,
   },
   {
-    path: 'fibre/update-received-conversion-order',
+    path: 'fibre/update-fibre-for-conversion',
     component: FibreReceiveConversionOrderComponent,
   },
   {

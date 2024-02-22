@@ -193,9 +193,7 @@ export class FibreReceivedOrderSearchComponent implements OnInit, OnDestroy {
       );
     } else {
       sessionStorage.setItem('receivedCODetails', JSON.stringify(fibrePO));
-      this.router.navigateByUrl(
-        '/purchases/fibre/update-received-conversion-order'
-      );
+      this.router.navigateByUrl('/purchases/fibre/update-fibre-for-conversion');
     }
   }
 

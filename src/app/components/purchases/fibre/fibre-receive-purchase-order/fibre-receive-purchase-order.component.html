@@ -2,11 +2,9 @@
   <div class="header-container">
     <h1 class="header">
       <span *ngIf="!updateReceivedPODetails; else updateHeader"
-        >Receive Fibre Purchase Order</span
+        >Receive PO Fibre</span
       >
-      <ng-template #updateHeader
-        >Update Received Fibre Purchase Order</ng-template
-      >
+      <ng-template #updateHeader>Update Received PO Fibre</ng-template>
     </h1>
     <button
       mat-raised-button
@@ -261,7 +259,7 @@
 
   <div class="footer">
     <button mat-raised-button (click)="goToSearch()">
-      <mat-icon>arrow_back</mat-icon>Go to Search
+      <mat-icon>arrow_back</mat-icon>Back to search
     </button>
     <div *ngIf="!updateReceivedPODetails; else updateBtn">
       <button mat-raised-button class="mr-16" (click)="resetData()">

@@ -32,10 +32,6 @@ export class FibreReceiveConversionOrderComponent implements OnInit, OnDestroy {
     'receivedBales',
     'lot',
     'hsnCode',
-    'rate',
-    'amount',
-    'gstpercent',
-    'totalAmount',
     'button',
   ];
   dataSource = [];
@@ -69,7 +65,7 @@ export class FibreReceiveConversionOrderComponent implements OnInit, OnDestroy {
       dcDate: ['', Validators.required],
     });
 
-    if (this.router.url.includes('update-received-conversion-order')) {
+    if (this.router.url.includes('update-fibre-for-conversion')) {
       this.checkForUpdate();
     }
   }
@@ -85,9 +81,7 @@ export class FibreReceiveConversionOrderComponent implements OnInit, OnDestroy {
       this.patchUpdateDetails();
       sessionStorage.clear();
     } else {
-      this.router.navigateByUrl(
-        '/purchases/fibre/update-received-conversion-order'
-      );
+      this.router.navigateByUrl('/purchases/fibre/update-fibre-for-conversion');
     }
   }
 
@@ -131,12 +125,6 @@ export class FibreReceiveConversionOrderComponent implements OnInit, OnDestroy {
           receivedBales: data?.receivedBales,
           lot: data?.lot,
           hsnCode: data?.hsnCode,
-          rate: data?.rate,
-          gstpercent: data?.gstPercent,
-          amount: data?.rate * data?.receivedWeight,
-          totalAmount:
-            data?.rate * data?.receivedWeight +
-            (data?.rate * data?.receivedWeight * data?.gstPercent) / 100,
           isValid: true,
           update: true,
         };
@@ -208,10 +196,10 @@ export class FibreReceiveConversionOrderComponent implements OnInit, OnDestroy {
         poDate: '',
         lot: data?.lot,
         hsnCode: data?.hsnCode,
+        rate: 0,
+        gstPercent: 0,
         receivedWeight: data?.receivedQty,
         receivedBales: data?.receivedBales,
-        rate: data?.rate,
-        gstPercent: data?.gstpercent,
         fiberShadeId: data?.shadeId,
         fiberShadeName: data?.shadeName,
         fiberTypeId: data?.fibreTypeId,

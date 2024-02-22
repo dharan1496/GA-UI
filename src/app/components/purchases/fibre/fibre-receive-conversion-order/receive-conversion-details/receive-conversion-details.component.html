@@ -63,55 +63,6 @@
         <mat-error>This field is required.</mat-error>
       </mat-form-field>
     </div>
-    <div class="flex-container">
-      <mat-form-field appearance="fill" class="w-100">
-        <span matPrefix>&nbsp;&#x20B9;&nbsp;</span>
-        <mat-label>Rate</mat-label>
-        <input
-          type="number"
-          min="0.00"
-          step=".01"
-          matInput
-          formControlName="rate"
-          decimal="2"
-        />
-        <mat-error>This field is required.</mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="fill" class="w-100">
-        <mat-label>GST%</mat-label>
-        <input
-          type="number"
-          max="100"
-          matInput
-          formControlName="gstpercent"
-          decimal="2"
-        />
-        <mat-error *ngIf="form.get('gstpercent')?.hasError('required')"
-          >This field is required.</mat-error
-        >
-        <mat-error *ngIf="form.get('gstpercent')?.hasError('max')"
-          >Value should be between 1 and 100</mat-error
-        >
-      </mat-form-field>
-      <div class="w-100">
-        <div class="pl-16">
-          <label for="amount" class="font-size-14 text-dark">Amount</label>
-          <div id="amount" class="text-gray">
-            {{ form.get("amount")?.value | currency : "INR" }}
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="flex-container">
-      <div class="w-100 pl-16">
-        <label for="total-amount" class="font-size-14 text-dark"
-          >Total Amount</label
-        >
-        <div id="total-amount" class="text-gray">
-          {{ form.get("totalAmount")?.value | currency : "INR" }}
-        </div>
-      </div>
-    </div>
   </div>
   <div mat-dialog-actions class="footer">
     <button mat-raised-button color="primary" (click)="onSubmit()">

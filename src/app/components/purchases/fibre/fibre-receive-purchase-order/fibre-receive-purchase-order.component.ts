@@ -93,7 +93,7 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
       this.patchUpdateDetails();
       sessionStorage.clear();
     } else {
-      this.router.navigateByUrl('/purchases/fibre/receive-purchase-order');
+      this.router.navigateByUrl('/purchases/fibre/receive-po-fibre');
     }
   }
 

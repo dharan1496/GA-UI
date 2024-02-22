@@ -32,7 +32,6 @@ export class SearchProductionComponent {
   shadeList!: YarnShade[];
   blendList!: YarnBlend[];
   columnsToDisplay = [
-    'productionId',
     'productionDate',
     'programId',
     'programNo',

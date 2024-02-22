@@ -1,5 +1,5 @@
 export const TOOLBAR = [
-  { label: 'Purchases', value: 'purchases', route: '/purchases/fibre' },
+  { label: 'Fibre Purchases', value: 'purchases', route: '/purchases/fibre' },
   {
     label: 'Production',
     value: 'production',

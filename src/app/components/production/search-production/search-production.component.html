@@ -109,11 +109,6 @@
     </div>
 
     <table mat-table [dataSource]="dataSource" matSort class="outer-table">
-      <ng-container matColumnDef="productionId">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Production Id</th>
-        <td mat-cell *matCellDef="let row">{{ row.productionId }}</td>
-      </ng-container>
-
       <ng-container matColumnDef="productionDate">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
           Production Date

@@ -56,9 +56,6 @@
         <mat-error *ngIf="form.get('receivedQty')?.hasError('zero')"
           >Received Qty cannot be zero or less than zero</mat-error
         >
-        <mat-error *ngIf="form.get('receivedQty')?.hasError('moreThanOrder')"
-          >Entered more than pending Qty</mat-error
-        >
       </mat-form-field>
     </div>
     <div class="flex-container">

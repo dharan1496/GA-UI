@@ -103,11 +103,16 @@ export class ReceiveOrderDetailsComponent implements OnInit, OnDestroy {
     if (typeof this.data === 'object') {
       this.form.patchValue({
         ...this.data,
-        pendingQty: this.data?.orderQty - this.data?.receivedQty,
+        pendingQty:
+          this.data?.orderQty - this.data?.receivedQty < 0
+            ? 0
+            : this.data?.orderQty - this.data?.receivedQty,
         receivedQty: this.data?.update ? this.data?.receivedQty : '',
       });
       this.actualPendingQty = this.data?.update
         ? this.data.orderQty
+        : this.data?.orderQty - this.data?.receivedQty < 0
+        ? 0
         : this.data?.orderQty - this.data?.receivedQty;
     }
   }
@@ -118,14 +123,13 @@ export class ReceiveOrderDetailsComponent implements OnInit, OnDestroy {
 
   receivedQtyChange() {
     const received = +this.form.get('receivedQty')?.value;
-    const pending = this.actualPendingQty - received;
+    const pending =
+      this.actualPendingQty - received < 0
+        ? 0
+        : this.actualPendingQty - received;
     this.form.get('pendingQty')?.setValue(this.actualPendingQty);
     if (received <= 0) {
       this.form.get('receivedQty')?.setErrors({ zero: true });
-      return;
-    }
-    if (received > this.actualPendingQty) {
-      this.form.get('receivedQty')?.setErrors({ moreThanOrder: true });
       return;
     }
     this.form.get('pendingQty')?.setValue(pending);

@@ -19,9 +19,13 @@
 }
 
 .form-container {
-  padding: 24px 32px 12px;
+  padding: 16px 32px 4px 32px;
   display: flex;
   gap: 48px;
+}
+
+.mat-mdc-card-content:last-child {
+  padding-bottom: 0;
 }
 
 .space-between {
@@ -29,7 +33,7 @@
 }
 
 .remarks {
-  padding: 12px 32px 24px;
+  padding: 12px 32px;
 }
 
 .details-container {

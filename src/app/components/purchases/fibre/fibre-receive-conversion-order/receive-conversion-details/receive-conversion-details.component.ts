@@ -50,14 +50,10 @@ export class ReceiveConversionDetailsComponent implements OnInit, OnDestroy {
       fibreType: '',
       shadeName: '',
       shadeId: ['', Validators.required],
-      hsnCode: ['', Validators.required],
+      hsnCode: '',
       receivedQty: ['', Validators.required],
       receivedBales: ['', Validators.required],
       lot: ['', Validators.required],
-      rate: ['', Validators.required],
-      amount: '',
-      gstpercent: ['', Validators.required],
-      totalAmount: '',
     });
 
     this.subscription.add(
@@ -89,44 +85,6 @@ export class ReceiveConversionDetailsComponent implements OnInit, OnDestroy {
         this.form
           .get('shadeName')
           ?.setValue(filteredShade.reduce((p, c) => c.shadeName, ''));
-      })
-    );
-
-    const amount: Record<string, ObservableInput<any>> = {
-      receivedQty:
-        this.form
-          .get('receivedQty')
-          ?.valueChanges.pipe(startWith(this.form.get('receivedQty')?.value)) ||
-        '',
-      rate:
-        this.form
-          .get('rate')
-          ?.valueChanges.pipe(startWith(this.form.get('rate')?.value)) || '',
-    };
-    this.subscription.add(
-      combineLatest(amount).subscribe((value: Record<string, number>) => {
-        this.form.get('amount')?.setValue(value['receivedQty'] * value['rate']);
-      })
-    );
-
-    const totalAmount: Record<string, ObservableInput<any>> = {
-      amount:
-        this.form
-          .get('amount')
-          ?.valueChanges.pipe(startWith(this.form.get('amount')?.value)) || '',
-      gstpercent:
-        this.form
-          .get('gstpercent')
-          ?.valueChanges.pipe(startWith(this.form.get('gstpercent')?.value)) ||
-        '',
-    };
-    this.subscription.add(
-      combineLatest(totalAmount).subscribe((value: Record<string, number>) => {
-        this.form
-          .get('totalAmount')
-          ?.setValue(
-            value['amount'] + (value['amount'] * value['gstpercent']) / 100
-          );
       })
     );
 
