@@ -183,7 +183,7 @@ export class FibreSearchComponent implements OnInit, OnDestroy {
 
   updatePO(fibrePO: FibrePO) {
     sessionStorage.setItem('poDetails', JSON.stringify(fibrePO));
-    localStorage.setItem('search-fibre-po', JSON.stringify(this.form.value));
+    sessionStorage.setItem('search-fibre-po', JSON.stringify(this.form.value));
     this.router.navigateByUrl('/purchases/fibre/update-purchase-order');
   }
 
