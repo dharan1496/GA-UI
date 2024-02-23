@@ -74,7 +74,7 @@ export class AddYarnComponent implements OnInit, OnDestroy {
   }
 
   isAlreadyAdded(counts: string): true | null {
-    const array = Array.isArray(this.data) ? this.data : this.data.countsList;
+    const array = Array.isArray(this.data) ? this.data : this.data.counts;
     return array.some((data: any) => data['counts'] === counts) || null;
   }
 
@@ -88,7 +88,13 @@ export class AddYarnComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.matDialogRef.close(this.form.value);
+    if (typeof this.data === 'object') {
+      const result = { ...this.data?.selectedRow, ...this.form.value };
+      !result?.countsId && (result.countsId = this.data?.selectedRow?.countsId);
+      this.matDialogRef.close(result);
+    } else {
+      this.matDialogRef.close(this.form.value);
+    }
   }
 
   close() {

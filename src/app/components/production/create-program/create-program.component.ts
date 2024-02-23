@@ -95,30 +95,30 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
       })
     );
 
-    this.subscription.add(
-      this.form.get('shadeName')?.valueChanges.subscribe((shadeName) => {
-        this.form
-          .get('shadeId')
-          ?.setValue(
-            this.shadeList.find((shade) => shade.shadeName === shadeName)
-              ?.shadeId
-          );
-      })
-    );
-
-    this.subscription.add(
-      this.form.get('blendName')?.valueChanges.subscribe((blendName) => {
-        this.form
-          .get('blendId')
-          ?.setValue(
-            this.blendList.find((blend) => blend.blendName === blendName)
-              ?.blendId
-          );
-      })
-    );
-
     if (this.router.url.includes('update-program')) {
       this.checkForUpdate();
+    } else {
+      this.subscription.add(
+        this.form.get('shadeName')?.valueChanges.subscribe((shadeName) => {
+          this.form
+            .get('shadeId')
+            ?.setValue(
+              this.shadeList?.find((shade) => shade.shadeName === shadeName)
+                ?.shadeId
+            );
+        })
+      );
+
+      this.subscription.add(
+        this.form.get('blendName')?.valueChanges.subscribe((blendName) => {
+          this.form
+            .get('blendId')
+            ?.setValue(
+              this.blendList?.find((blend) => blend.blendName === blendName)
+                ?.blendId
+            );
+        })
+      );
     }
   }
 
@@ -176,7 +176,7 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(AddYarnComponent, {
       data: {
         selectedRow,
-        countsList: this.dataSource,
+        counts: this.dataSource,
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
@@ -273,10 +273,13 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
       const program: ConversionProgram = {
         ...this.updateProgramDetails,
         ...this.form.value,
-        yarnCounts: this.updateProgramDetails.yarnCounts.map((data, index) => ({
-          ...data,
-          counts: this.dataSource[index]?.counts,
-          programQuantity: this.dataSource[index]?.programQuantity,
+        yarnCounts: this.dataSource.map((data) => ({
+          conversionYarnId: data.conversionYarnId || 0,
+          countsId: data.countsId,
+          counts: data.counts,
+          programQuantity: +data.programQuantity,
+          productionQuantity: data.productionQuantity || 0,
+          programId: this.updateProgramDetails.programId,
         })),
       };
       this.conversionService.updateProgram(program).subscribe({
