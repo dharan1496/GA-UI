@@ -80,6 +80,7 @@
         <mat-form-field appearance="fill" class="w-35 ml-24">
           <mat-label>Party</mat-label>
           <mat-select formControlName="partyId">
+            <mat-option [value]="0">All</mat-option>
             <ng-container *ngFor="let party of partyService.parties">
               <mat-option [value]="party.partyId">{{
                 party.partyName

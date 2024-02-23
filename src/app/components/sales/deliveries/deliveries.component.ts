@@ -124,7 +124,7 @@ export class DeliveriesComponent implements OnInit, OnDestroy {
       );
     } else {
       observable = this.yarnService.getYarnDeliveries(
-        this.form.get('partyId')?.value || '',
+        this.form.get('partyId')?.value || 0,
         this.datePipe.transform(
           this.form.get('startDate')?.value,
           'dd/MM/yyyy'

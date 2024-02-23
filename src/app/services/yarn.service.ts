@@ -109,12 +109,8 @@ export class YarnService {
     fromDate: string,
     toDate: string
   ): Observable<YarnDeliverySummary[]> {
-    let endpoint = '';
-    if (partyId) {
-      endpoint = `&partyId=${partyId}`;
-    }
     return this.http.get<YarnDeliverySummary[]>(
-      `${environment.api}/YarnOrder/GetYarnDeliveries?fromDate=${fromDate}&toDate=${toDate}${endpoint}`
+      `${environment.api}/YarnOrder/GetYarnDeliveries?fromDate=${fromDate}&toDate=${toDate}&partyId=${partyId}`
     );
   }
 
