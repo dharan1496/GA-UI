@@ -141,6 +141,16 @@ export class FibreReceivedOrderSearchComponent implements OnInit, OnDestroy {
           return item[property];
       }
     };
+
+    const savedSearch = sessionStorage.getItem('search-received-fibre-po');
+    const savedConversionOnly = sessionStorage.getItem('conversion-order-only');
+    sessionStorage.removeItem('search-received-fibre-po');
+    sessionStorage.removeItem('conversion-order-only');
+    if (savedSearch) {
+      this.form.patchValue(JSON.parse(savedSearch));
+      this.conversionOrderCheckbox.patchValue(savedConversionOnly === 'true');
+      this.onSearch();
+    }
   }
 
   ngOnDestroy() {
@@ -171,6 +181,10 @@ export class FibreReceivedOrderSearchComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           this.dataSource.data = response;
+          this.backupDatasource = this.dataSource.data;
+          if (this.conversionOrderCheckbox.value) {
+            this.filterResults();
+          }
         },
         error: (error) =>
           this.notificationService.error(
@@ -184,6 +198,14 @@ export class FibreReceivedOrderSearchComponent implements OnInit, OnDestroy {
   }
 
   updatePO(fibrePO: ReceiveFibrePO) {
+    sessionStorage.setItem(
+      'search-received-fibre-po',
+      JSON.stringify(this.form.value)
+    );
+    sessionStorage.setItem(
+      'conversion-order-only',
+      JSON.stringify(this.conversionOrderCheckbox.value)
+    );
     const isPO = fibrePO.fibrePODts.some((fibre) => fibre?.poNo);
 
     if (isPO) {

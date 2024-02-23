@@ -39,6 +39,7 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
   @ViewChild(MatTable) table!: MatTable<any>;
   subscription = new Subscription();
   updatePoDetails?: FibrePO;
+  clearSearch = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -71,6 +72,7 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.clearSearch && sessionStorage.removeItem('search-fibre-po');
     this.subscription.unsubscribe();
   }
 
@@ -79,7 +81,7 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
     if (poDetails) {
       this.updatePoDetails = JSON.parse(poDetails);
       this.patchUpdateDetails();
-      sessionStorage.clear();
+      sessionStorage.removeItem('poDetails');
     } else {
       this.router.navigateByUrl('/purchases/fibre/create-purchase-order');
     }
@@ -186,6 +188,7 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
   }
 
   goToSearch() {
+    this.clearSearch = false;
     this.router.navigateByUrl('purchases/fibre/search');
   }
 
@@ -203,11 +206,10 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
       });
       this.fibreService.updateFibrePO(this.updatePoDetails).subscribe({
         next: () => {
-          this.resetData();
-          this.notificationService.success(
-            'Purchase order updated successfully',
-            true
-          );
+          this.notificationService
+            .success('Purchase order updated successfully', true)
+            .afterClosed()
+            .subscribe(() => this.goToSearch());
         },
         error: (error) => {
           this.notificationService.error(

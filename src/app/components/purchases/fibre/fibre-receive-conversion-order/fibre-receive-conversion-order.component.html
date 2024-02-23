@@ -173,6 +173,9 @@
   </div>
 
   <div class="footer">
+    <button mat-raised-button (click)="goToSearch()">
+      <mat-icon>arrow_back</mat-icon>Back to search
+    </button>
     <div *ngIf="!updateReceivedCODetails; else updateBtn">
       <button mat-raised-button class="mr-16" (click)="resetData()">
         <mat-icon>refresh</mat-icon>Reset

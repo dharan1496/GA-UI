@@ -38,6 +38,7 @@ export class FibreReceiveConversionOrderComponent implements OnInit, OnDestroy {
   @ViewChild(MatTable) table!: MatTable<any>;
   subscription = new Subscription();
   updateReceivedCODetails?: ReceiveFibrePO;
+  clearSearch = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -71,6 +72,7 @@ export class FibreReceiveConversionOrderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.clearSearch && sessionStorage.removeItem('search-received-fibre-po');
     this.subscription.unsubscribe();
   }
 
@@ -79,10 +81,15 @@ export class FibreReceiveConversionOrderComponent implements OnInit, OnDestroy {
     if (poDetails) {
       this.updateReceivedCODetails = JSON.parse(poDetails);
       this.patchUpdateDetails();
-      sessionStorage.clear();
+      sessionStorage.removeItem('receivedCODetails');
     } else {
       this.router.navigateByUrl('/purchases/fibre/update-fibre-for-conversion');
     }
+  }
+
+  goToSearch() {
+    this.clearSearch = false;
+    this.router.navigateByUrl('purchases/fibre/search-received-po');
   }
 
   patchUpdateDetails() {
@@ -215,11 +222,7 @@ export class FibreReceiveConversionOrderComponent implements OnInit, OnDestroy {
               this.notificationService
                 .success('Updated successfully!')
                 .afterClosed()
-                .subscribe(() =>
-                  this.router.navigateByUrl(
-                    '/purchases/fibre/search-received-po'
-                  )
-                );
+                .subscribe(() => this.goToSearch());
             } else {
               this.notificationService.error('Unable to update the order!');
             }

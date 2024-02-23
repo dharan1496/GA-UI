@@ -132,6 +132,13 @@ export class FibreSearchComponent implements OnInit, OnDestroy {
           return item[property];
       }
     };
+
+    const savedSearch = sessionStorage.getItem('search-fibre-po');
+    sessionStorage.removeItem('search-fibre-po');
+    if (savedSearch) {
+      this.form.patchValue(JSON.parse(savedSearch));
+      this.onSearch();
+    }
   }
 
   ngOnDestroy() {
@@ -176,6 +183,7 @@ export class FibreSearchComponent implements OnInit, OnDestroy {
 
   updatePO(fibrePO: FibrePO) {
     sessionStorage.setItem('poDetails', JSON.stringify(fibrePO));
+    localStorage.setItem('search-fibre-po', JSON.stringify(this.form.value));
     this.router.navigateByUrl('/purchases/fibre/update-purchase-order');
   }
 
