@@ -92,6 +92,13 @@ export class SearchProgramComponent {
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
     });
+
+    const savedSearch = sessionStorage.getItem('search-program');
+    sessionStorage.removeItem('search-program');
+    if (savedSearch) {
+      this.form.patchValue(JSON.parse(savedSearch));
+      this.onSearch();
+    }
   }
 
   setMinDate() {
@@ -145,6 +152,7 @@ export class SearchProgramComponent {
 
   updateProgram(program: ConversionProgram) {
     sessionStorage.setItem('program', JSON.stringify(program));
+    sessionStorage.setItem('search-program', JSON.stringify(this.form.value));
     this.router.navigateByUrl('/production/update-program');
   }
 }

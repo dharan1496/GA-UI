@@ -36,6 +36,7 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
   blendList!: YarnBlend[];
   subscription = new Subscription();
   updateProgramDetails!: ConversionProgram;
+  clearSearch = true;
 
   constructor(
     private navigationService: NavigationService,
@@ -123,6 +124,7 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.clearSearch && sessionStorage.removeItem('search-program');
     this.subscription.unsubscribe();
   }
 
@@ -131,7 +133,7 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
     if (programDetails) {
       this.updateProgramDetails = JSON.parse(programDetails);
       this.patchUpdateDetails();
-      sessionStorage.clear();
+      sessionStorage.removeItem('program');
     } else {
       this.router.navigateByUrl('/production/create-program');
     }
@@ -284,8 +286,10 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
       };
       this.conversionService.updateProgram(program).subscribe({
         next: (response) => {
-          this.notificationService.success(response);
-          this.router.navigateByUrl('/production/search-program');
+          this.notificationService
+            .success(response)
+            .afterClosed()
+            .subscribe(() => this.goToSearch());
         },
         error: (error) => {
           this.notificationService.error(
@@ -305,5 +309,10 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
     return this.dataSource
       .map((data: ConversionYarn) => +data.programQuantity)
       .reduce((acc, value) => acc + value, 0);
+  }
+
+  goToSearch() {
+    this.clearSearch = false;
+    this.router.navigateByUrl('/production/search-program');
   }
 }
