@@ -88,6 +88,16 @@ export class SearchSalesOrderComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       filterBy: ['', Validators.required],
     });
+
+    const savedSearch = sessionStorage.getItem('search-sales-order');
+    sessionStorage.removeItem('search-sales-order');
+    if (savedSearch) {
+      const formValue = JSON.parse(savedSearch);
+      this.form.patchValue(formValue);
+      this.onChange(this.form.get('filterBy')?.value);
+      this.form.patchValue(formValue);
+      this.onSearch();
+    }
   }
 
   ngOnDestroy() {
@@ -182,6 +192,10 @@ export class SearchSalesOrderComponent implements OnInit, OnDestroy {
   }
 
   openOrderDetails(row: any) {
+    sessionStorage.setItem(
+      'search-sales-order',
+      JSON.stringify(this.form.value)
+    );
     this.dialog.open(OrderDetailsComponent, { data: row, minWidth: '75vw' });
   }
 }

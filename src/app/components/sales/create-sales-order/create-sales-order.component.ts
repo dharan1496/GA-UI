@@ -43,6 +43,7 @@ export class CreateSalesOrderComponent implements OnInit, OnDestroy {
   subscription = new Subscription();
   updateOrderDetails!: YarnOrder;
   countsList: YarnCounts[] = [];
+  clearSearch = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -91,7 +92,7 @@ export class CreateSalesOrderComponent implements OnInit, OnDestroy {
       this.updateOrderDetails = JSON.parse(orderDetails);
       this.patchAndDisableField();
       this.setDatasource();
-      sessionStorage.clear();
+      sessionStorage.removeItem('order');
     } else {
       this.router.navigateByUrl('sales/new-order');
     }
@@ -126,6 +127,7 @@ export class CreateSalesOrderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.clearSearch && sessionStorage.removeItem('search-sales-order');
     this.subscription.unsubscribe();
   }
 
@@ -169,23 +171,33 @@ export class CreateSalesOrderComponent implements OnInit, OnDestroy {
         receivedByUserId: 0,
         orderDts,
       };
-      let observable;
       if (this.updateOrderDetails) {
-        observable = this.yarnService.updateYarnOrder(yarnOrder);
+        this.yarnService.updateYarnOrder(yarnOrder)?.subscribe({
+          next: (response) => {
+            this.notificationService
+              .success(response)
+              .afterClosed()
+              .subscribe(() => this.goToSearch());
+          },
+          error: (error) => {
+            this.notificationService.error(
+              typeof error?.error === 'string' ? error?.error : error?.message
+            );
+          },
+        });
       } else {
-        observable = this.yarnService.receiveYarnOrder(yarnOrder);
+        this.yarnService.receiveYarnOrder(yarnOrder)?.subscribe({
+          next: (response) => {
+            this.notificationService.success(response);
+            this.resetData();
+          },
+          error: (error) => {
+            this.notificationService.error(
+              typeof error?.error === 'string' ? error?.error : error?.message
+            );
+          },
+        });
       }
-      observable?.subscribe({
-        next: (response) => {
-          this.notificationService.success(response);
-          this.resetData();
-        },
-        error: (error) => {
-          this.notificationService.error(
-            typeof error?.error === 'string' ? error?.error : error?.message
-          );
-        },
-      });
     }
   }
 
@@ -280,5 +292,10 @@ export class CreateSalesOrderComponent implements OnInit, OnDestroy {
     return this.dataSource
       .map((data: any) => data?.totalAmount)
       .reduce((acc, value) => acc + value, 0);
+  }
+
+  goToSearch() {
+    this.clearSearch = false;
+    this.router.navigateByUrl('/sales/search-order');
   }
 }

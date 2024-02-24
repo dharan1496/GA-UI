@@ -240,10 +240,21 @@
     >
       <mat-icon>refresh</mat-icon>Reset
     </button>
-    <button mat-raised-button color="primary" (click)="submitOrder()">
-      <mat-icon>save_alt</mat-icon
-      ><span *ngIf="!updateOrderDetails">Submit</span
-      ><span *ngIf="updateOrderDetails">Update</span>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="submitOrder()"
+      *ngIf="!updateOrderDetails"
+    >
+      <mat-icon>save_alt</mat-icon>Submit
     </button>
+    <div *ngIf="updateOrderDetails" class="update-btn w-100">
+      <button mat-raised-button (click)="goToSearch()">
+        <mat-icon>arrow_back</mat-icon>Back to search
+      </button>
+      <button mat-raised-button color="primary" (click)="submitOrder()">
+        <mat-icon>save_alt</mat-icon>Update
+      </button>
+    </div>
   </div>
 </section>
