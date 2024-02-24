@@ -139,6 +139,7 @@ export class SearchProgramComponent {
   }
 
   openProgramDetails(programDetails: ConversionProgram) {
+    sessionStorage.setItem('search-program', JSON.stringify(this.form.value));
     this.dialog.open(ProgramDetailsComponent, {
       data: programDetails,
       minWidth: '70vw',

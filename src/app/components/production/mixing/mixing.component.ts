@@ -63,6 +63,7 @@ export class MixingComponent implements OnInit, OnDestroy {
   wasteStocks = [];
   updateMixing = false;
   mixingId!: number;
+  clearSearch = true;
 
   constructor(
     private navigationService: NavigationService,
@@ -87,6 +88,7 @@ export class MixingComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.clearSearch && sessionStorage.removeItem('search-program');
     this.subscription.unsubscribe();
     this.updateMixing = false;
   }
@@ -113,7 +115,8 @@ export class MixingComponent implements OnInit, OnDestroy {
         fibreTypeId: data?.fiberTypeId,
         shadeId: data?.fiberShadeId,
       })) as never[];
-      sessionStorage.clear();
+      sessionStorage.removeItem('mixingDetails');
+      sessionStorage.removeItem('program');
     } else {
       this.router.navigateByUrl('/production/mixing');
     }
@@ -298,8 +301,10 @@ export class MixingComponent implements OnInit, OnDestroy {
         .updateMixingDetails(this.mixingId, fibres)
         .subscribe({
           next: (response) => {
-            this.notificationService.success(response);
-            this.router.navigateByUrl('/production/search-program');
+            this.notificationService
+              .success(response)
+              .afterClosed()
+              .subscribe(() => this.goToSearch());
           },
           error: (error) => {
             this.notificationService.error(
@@ -379,5 +384,10 @@ export class MixingComponent implements OnInit, OnDestroy {
 
   checkZeroInBales(element: any): boolean {
     return element.bales == 0;
+  }
+
+  goToSearch() {
+    this.clearSearch = false;
+    this.router.navigateByUrl('/production/search-program');
   }
 }

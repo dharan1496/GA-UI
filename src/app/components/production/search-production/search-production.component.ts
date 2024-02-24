@@ -108,6 +108,13 @@ export class SearchProductionComponent {
       shadeId: '',
       blendId: '',
     });
+
+    const savedSearch = sessionStorage.getItem('search-production');
+    sessionStorage.removeItem('search-production');
+    if (savedSearch) {
+      this.form.patchValue(JSON.parse(savedSearch));
+      this.onSearch();
+    }
   }
 
   setMinDate() {
@@ -162,6 +169,10 @@ export class SearchProductionComponent {
 
   updateProduction(production: ProductionEntry) {
     sessionStorage.setItem('production', JSON.stringify(production));
+    sessionStorage.setItem(
+      'search-production',
+      JSON.stringify(this.form.value)
+    );
     this.router.navigateByUrl('/production/update-production-entry');
   }
 }

@@ -39,6 +39,7 @@ export class ProductionEntryComponent implements OnInit, OnDestroy {
   isUpdate = false;
   countsList!: YarnCounts[];
   updateProductionDetails!: ProductionEntry;
+  clearSearch = true;
 
   constructor(
     private navigationService: NavigationService,
@@ -73,6 +74,7 @@ export class ProductionEntryComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.clearSearch && sessionStorage.removeItem('search-production');
     this.subscription.unsubscribe();
   }
 
@@ -97,7 +99,7 @@ export class ProductionEntryComponent implements OnInit, OnDestroy {
         winding: data.isWinded ? 'Yes' : 'No',
         productionQty: data.productionQuantity,
       }));
-      sessionStorage.clear();
+      sessionStorage.removeItem('production');
     } else {
       this.isUpdate = false;
       this.router.navigateByUrl('/production/production-entry');
@@ -175,8 +177,10 @@ export class ProductionEntryComponent implements OnInit, OnDestroy {
         .updateProduction(this.updateProductionDetails.productionId, entry)
         .subscribe({
           next: (response) => {
-            this.notificationService.success(response);
-            this.router.navigateByUrl('/production/search-production');
+            this.notificationService
+              .success(response)
+              .afterClosed()
+              .subscribe(() => this.goToSearch());
           },
           error: (error) => {
             this.notificationService.error(
@@ -289,5 +293,10 @@ export class ProductionEntryComponent implements OnInit, OnDestroy {
           );
         }
       });
+  }
+
+  goToSearch() {
+    this.clearSearch = false;
+    this.router.navigateByUrl('/production/search-production');
   }
 }

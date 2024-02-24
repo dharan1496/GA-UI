@@ -303,13 +303,13 @@
     >
       <mat-icon>save_alt</mat-icon>Submit
     </button>
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="update()"
-      *ngIf="updateMixing"
-    >
-      <mat-icon>save_alt</mat-icon>Update
-    </button>
+    <div class="update-btn w-100" *ngIf="updateMixing">
+      <button mat-raised-button (click)="goToSearch()">
+        <mat-icon>arrow_back</mat-icon>Back to search
+      </button>
+      <button mat-raised-button color="primary" (click)="update()">
+        <mat-icon>save_alt</mat-icon>Update
+      </button>
+    </div>
   </div>
 </section>

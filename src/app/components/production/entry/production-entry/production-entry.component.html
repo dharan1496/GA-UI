@@ -231,6 +231,14 @@
       </button>
       <button
         mat-raised-button
+        (click)="goToSearch()"
+        *ngIf="isUpdate"
+        class="mr-16"
+      >
+        <mat-icon>arrow_back</mat-icon>Back to search
+      </button>
+      <button
+        mat-raised-button
         color="primary"
         (click)="update()"
         *ngIf="isUpdate"
