@@ -19,6 +19,7 @@ import { NotificationService } from 'src/app/shared/notification.service';
 import { YarnBlend } from 'src/app/models/yarnBlend';
 import { ProductionEntry } from 'src/app/models/productionEntry';
 import { ProductionDetailsComponent } from './production-details/production-details.component';
+import { YarnCounts } from 'src/app/models/yarnCounts';
 
 @Component({
   selector: 'app-search-production',
@@ -31,6 +32,7 @@ export class SearchProductionComponent {
   dataSource = new MatTableDataSource<any>();
   shadeList!: YarnShade[];
   blendList!: YarnBlend[];
+  countsList!: YarnCounts[];
   columnsToDisplay = [
     'productionDate',
     'programId',
@@ -101,10 +103,21 @@ export class SearchProductionComponent {
       })
     );
 
+    this.subscription.add(
+      this.masterService.getYarnCounts().subscribe({
+        next: (data) => (this.countsList = data),
+        error: (error) => {
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          );
+        },
+      })
+    );
+
     this.form = this.formBuilder.group({
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
-      lot: ['', Validators.required],
+      lot: '',
       shadeId: '',
       blendId: '',
     });
@@ -140,7 +153,7 @@ export class SearchProductionComponent {
       .getProductionDetails(
         this.datePipe.transform(startDate, 'dd/MM/yyyy') || '',
         this.datePipe.transform(endDate, 'dd/MM/yyyy') || '',
-        lot,
+        lot || '-',
         shadeId,
         blendId
       )
@@ -158,7 +171,10 @@ export class SearchProductionComponent {
 
   openProductionDetails(production: ProductionEntry) {
     this.dialog.open(ProductionDetailsComponent, {
-      data: production,
+      data: {
+        production,
+        countsList: this.countsList,
+      },
       minWidth: '65vw',
     });
   }

@@ -50,9 +50,9 @@
       *ngIf="productionDetails.yarnDetails?.length"
     >
       <ng-container matColumnDef="countsId">
-        <th mat-header-cell *matHeaderCellDef>CountsId</th>
+        <th mat-header-cell *matHeaderCellDef>Counts</th>
         <td mat-cell *matCellDef="let element">
-          {{ element.countsId }}
+          {{ getCounts(element.countsId) }}
         </td>
         <td mat-footer-cell *matFooterCellDef></td>
       </ng-container>

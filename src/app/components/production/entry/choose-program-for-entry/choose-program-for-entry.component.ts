@@ -23,8 +23,6 @@ export class ChooseProgramForEntryComponent implements OnInit, OnDestroy {
     'programNo',
     'shade',
     'blend',
-    'mixingDate',
-    'mixedQty',
     'yarnCounts',
     'programQty',
     'productionQty',
