@@ -30,7 +30,6 @@ import { DecimalDirective } from 'src/app/shared/decimalNumberDirective';
 export class ReceiveOrderDetailsComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   subscription = new Subscription();
-  actualPendingQty = 0;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -52,7 +51,7 @@ export class ReceiveOrderDetailsComponent implements OnInit, OnDestroy {
       shadeId: '',
       hsnCode: ['', Validators.required],
       orderQty: '',
-      pendingQty: '',
+      balanceQty: '',
       receivedQty: ['', Validators.required],
       receivedBales: ['', Validators.required],
       lot: ['', Validators.required],
@@ -103,17 +102,8 @@ export class ReceiveOrderDetailsComponent implements OnInit, OnDestroy {
     if (typeof this.data === 'object') {
       this.form.patchValue({
         ...this.data,
-        pendingQty:
-          this.data?.orderQty - this.data?.receivedQty < 0
-            ? 0
-            : this.data?.orderQty - this.data?.receivedQty,
         receivedQty: this.data?.update ? this.data?.receivedQty : '',
       });
-      this.actualPendingQty = this.data?.update
-        ? this.data.orderQty
-        : this.data?.orderQty - this.data?.receivedQty < 0
-        ? 0
-        : this.data?.orderQty - this.data?.receivedQty;
     }
   }
 
@@ -123,16 +113,10 @@ export class ReceiveOrderDetailsComponent implements OnInit, OnDestroy {
 
   receivedQtyChange() {
     const received = +this.form.get('receivedQty')?.value;
-    const pending =
-      this.actualPendingQty - received < 0
-        ? 0
-        : this.actualPendingQty - received;
-    this.form.get('pendingQty')?.setValue(this.actualPendingQty);
     if (received <= 0) {
       this.form.get('receivedQty')?.setErrors({ zero: true });
       return;
     }
-    this.form.get('pendingQty')?.setValue(pending);
     this.form.get('receivedQty')?.setErrors(null);
   }
 

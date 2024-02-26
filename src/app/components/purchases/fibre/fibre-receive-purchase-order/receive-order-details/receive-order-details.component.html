@@ -33,11 +33,11 @@
       </div>
       <div class="w-100">
         <div class="pl-16">
-          <label for="pendingQty" class="font-size-14 text-dark"
-            >Pending Qty</label
+          <label for="balanceQty" class="font-size-14 text-dark"
+            >Balance Qty</label
           >
-          <div id="pendingQty" class="text-gray">
-            {{ form.get("pendingQty")?.value | number : "1.0-3" }}
+          <div id="balanceQty" class="text-gray">
+            {{ form.get("balanceQty")?.value | number : "1.0-3" }}
           </div>
         </div>
       </div>
@@ -54,7 +54,7 @@
           >This field is required.</mat-error
         >
         <mat-error *ngIf="form.get('receivedQty')?.hasError('zero')"
-          >Received Qty cannot be zero or less than zero</mat-error
+          >Zero or below not allowed</mat-error
         >
       </mat-form-field>
     </div>

@@ -28,11 +28,10 @@ import { ReceiveFibrePO } from 'src/app/models/receiveFibrePO';
 export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   displayedColumns: string[] = [
-    'poNo',
     'fibreType',
     'shade',
     'orderQty',
-    'pendingQty',
+    'balanceQty',
     'receivedQty',
     'receivedBales',
     'lot',
@@ -150,7 +149,7 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
           shadeName: data?.fiberShadeName,
           shadeId: data?.fiberShadeId,
           orderQty: data?.orderQty,
-          pendingQty: (data?.orderQty || 0) - data?.receivedWeight || 0,
+          balanceQty: (data?.orderQty || 0) - data?.receivedWeight || 0,
           receivedQty: data?.receivedWeight,
           receivedBales: data?.receivedBales,
           lot: data?.lot,
@@ -241,7 +240,7 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
         receivedDtsId: data?.receivedDtsId || 0,
         poDtsId: data?.poDtsId,
         poNo: data?.poNo,
-        poDate: this.form.value?.poDate,
+        poDate: this.form.getRawValue()?.poDate,
         lot: data?.lot,
         hsnCode: data?.hsnCode,
         receivedWeight: data?.receivedQty,
