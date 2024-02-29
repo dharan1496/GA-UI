@@ -32,7 +32,14 @@ export class ProductionEntryComponent implements OnInit, OnDestroy {
   yarnDetails: ConversionYarn[] = [];
   entryDetails: any[] = [];
   yarnDisplayedColumns = ['yarnCount', 'kgs', 'prodQty'];
-  entryDisplayedColumns = ['counts', 'lot', 'prodQty', 'winding', 'action'];
+  entryDisplayedColumns = [
+    'counts',
+    'lot',
+    'progQty',
+    'prodQty',
+    'winding',
+    'action',
+  ];
   @ViewChild('entry') table!: MatTable<any>;
   subscription = new Subscription();
   productionDate = new FormControl('', Validators.required);
@@ -81,6 +88,14 @@ export class ProductionEntryComponent implements OnInit, OnDestroy {
   checkForUpdate() {
     const production = sessionStorage.getItem('production');
     if (production) {
+      this.entryDisplayedColumns = [
+        'counts',
+        'lot',
+        'progQty',
+        'prodQty',
+        'winding',
+        'action',
+      ];
       this.isUpdate = true;
       const productionEntry: ProductionEntry = JSON.parse(production);
       this.updateProductionDetails = productionEntry;
@@ -98,6 +113,7 @@ export class ProductionEntryComponent implements OnInit, OnDestroy {
         lot: data.lot,
         winding: data.isWinded ? 'Yes' : 'No',
         productionQty: data.productionQuantity,
+        programQty: data.programQuantity,
       }));
       sessionStorage.removeItem('production');
     } else {
@@ -140,8 +156,10 @@ export class ProductionEntryComponent implements OnInit, OnDestroy {
         blendName: this.programDetails?.blendName || '',
         yarnDetails: this.entryDetails.map((data) => ({
           countsId: data.countsId,
+          counts: data.counts,
           lot: data.lot,
           productionQuantity: data.productionQty,
+          programQuantity: 0,
           isWinded: data.winding === 'Yes',
           deliveredQuantity: 0,
           productionDtsId: 0,
@@ -165,8 +183,10 @@ export class ProductionEntryComponent implements OnInit, OnDestroy {
     if (!this.hasError()) {
       const entry: ProductionYarn[] = this.entryDetails.map((data, index) => ({
         countsId: data.countsId,
+        counts: data.counts,
         lot: data.lot,
         productionQuantity: data.productionQty,
+        programQuantity: data?.programQty || 0,
         isWinded: data.winding === 'Yes',
         productionDtsId:
           this.updateProductionDetails.yarnDetails[index]?.productionDtsId,

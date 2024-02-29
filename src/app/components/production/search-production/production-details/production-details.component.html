@@ -49,10 +49,10 @@
       class="table"
       *ngIf="productionDetails.yarnDetails?.length"
     >
-      <ng-container matColumnDef="countsId">
+      <ng-container matColumnDef="counts">
         <th mat-header-cell *matHeaderCellDef>Counts</th>
         <td mat-cell *matCellDef="let element">
-          {{ getCounts(element.countsId) }}
+          {{ element.counts }}
         </td>
         <td mat-footer-cell *matFooterCellDef></td>
       </ng-container>
@@ -71,6 +71,18 @@
           {{ element.isWinded || false }}
         </td>
         <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <ng-container matColumnDef="programQuantity">
+        <th mat-header-cell *matHeaderCellDef class="text-right">
+          Program Quantity
+        </th>
+        <td mat-cell *matCellDef="let element" class="text-right">
+          {{ element.programQuantity }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef class="text-right">
+          {{ getTotalProgramQty() }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="productionQuantity">

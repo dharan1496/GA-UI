@@ -32,7 +32,6 @@ export class SearchProductionComponent {
   dataSource = new MatTableDataSource<any>();
   shadeList!: YarnShade[];
   blendList!: YarnBlend[];
-  countsList!: YarnCounts[];
   columnsToDisplay = [
     'productionDate',
     'programId',
@@ -103,17 +102,6 @@ export class SearchProductionComponent {
       })
     );
 
-    this.subscription.add(
-      this.masterService.getYarnCounts().subscribe({
-        next: (data) => (this.countsList = data),
-        error: (error) => {
-          this.notificationService.error(
-            typeof error?.error === 'string' ? error?.error : error?.message
-          );
-        },
-      })
-    );
-
     this.form = this.formBuilder.group({
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
@@ -171,10 +159,7 @@ export class SearchProductionComponent {
 
   openProductionDetails(production: ProductionEntry) {
     this.dialog.open(ProductionDetailsComponent, {
-      data: {
-        production,
-        countsList: this.countsList,
-      },
+      data: production,
       minWidth: '65vw',
     });
   }

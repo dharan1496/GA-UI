@@ -52,6 +52,7 @@ export class AddProductionEntryComponent implements OnInit, OnDestroy {
       lot: ['', Validators.required],
       productionQty: ['', Validators.required],
       winding: ['', Validators.required],
+      programQty: '',
     });
 
     this.subscription.add(

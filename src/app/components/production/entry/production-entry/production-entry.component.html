@@ -159,6 +159,13 @@
           </td>
         </ng-container>
 
+        <ng-container matColumnDef="progQty">
+          <th mat-header-cell *matHeaderCellDef>Program Qty</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.programQty }}
+          </td>
+        </ng-container>
+
         <ng-container matColumnDef="prodQty">
           <th mat-header-cell *matHeaderCellDef>Production Qty</th>
           <td mat-cell *matCellDef="let element">

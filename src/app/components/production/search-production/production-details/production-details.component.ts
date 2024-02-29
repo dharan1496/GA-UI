@@ -5,7 +5,6 @@ import { Subscription } from 'rxjs';
 import { MaterialModule } from 'src/app/material.module';
 import { ProductionEntry } from 'src/app/models/productionEntry';
 import { ProductionYarn } from 'src/app/models/productionYarn';
-import { YarnCounts } from 'src/app/models/yarnCounts';
 
 @Component({
   selector: 'app-production-details',
@@ -14,27 +13,21 @@ import { YarnCounts } from 'src/app/models/yarnCounts';
   templateUrl: './production-details.component.html',
   styleUrls: ['./production-details.component.scss'],
 })
-export class ProductionDetailsComponent implements OnInit, OnDestroy {
+export class ProductionDetailsComponent implements OnDestroy {
   subscription = new Subscription();
   columnsToDisplay = [
-    'countsId',
+    'counts',
     'lot',
     'isWinded',
+    'programQuantity',
     'productionQuantity',
     'deliveredQuantity',
   ];
-  countsList!: YarnCounts[];
-  productionDetails!: ProductionEntry;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public productionDetails: ProductionEntry,
     private matDialogRef: MatDialogRef<any>
   ) {}
-
-  ngOnInit() {
-    this.productionDetails = this.data?.production;
-    this.countsList = this.data?.countsList;
-  }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
@@ -56,8 +49,9 @@ export class ProductionDetailsComponent implements OnInit, OnDestroy {
       .reduce((acc, value) => acc + value, 0);
   }
 
-  getCounts(countsId: number) {
-    return this.countsList?.find((counts) => counts.countsId === countsId)
-      ?.counts;
+  getTotalProgramQty() {
+    return this.productionDetails.yarnDetails
+      .map((data: ProductionYarn) => +data.programQuantity)
+      .reduce((acc, value) => acc + value, 0);
   }
 }
