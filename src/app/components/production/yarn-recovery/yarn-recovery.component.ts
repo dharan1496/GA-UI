@@ -61,6 +61,9 @@ export class YarnRecoveryComponent implements OnInit, OnDestroy {
         .pipe(finalize(() => (this.loader = false)))
         .subscribe({
           next: (data) => {
+            data?.forEach(
+              (yarn) => (yarn.yarnLot = this.getUniqueLot(yarn?.yarnLot))
+            );
             this.dataSource = new MatTableDataSource(data);
           },
           error: (error) => {
@@ -91,5 +94,16 @@ export class YarnRecoveryComponent implements OnInit, OnDestroy {
       minWidth: '65vw',
       maxWidth: '90vw',
     });
+  }
+
+  getUniqueLot(lot: string) {
+    if (!lot.includes(',')) {
+      return lot;
+    }
+    const uniqueLots = [...new Set(lot.split(',')?.map((data) => data.trim()))];
+    if (uniqueLots.length > 1) {
+      return uniqueLots.join(', ');
+    }
+    return uniqueLots[0] || lot;
   }
 }
