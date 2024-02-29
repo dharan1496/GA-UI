@@ -29,7 +29,7 @@ import { Router } from '@angular/router';
 export class CreateProgramComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   dataSource: ConversionYarn[] = [];
-  displayedColumns = ['counts', 'quantity', 'button'];
+  displayedColumns = ['counts', 'programQuantity', 'button'];
   @ViewChild(MatTable) table!: MatTable<any>;
   shadeList!: YarnShade[];
   countsList!: YarnCounts[];
@@ -131,6 +131,12 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
   checkForUpdate() {
     const programDetails = sessionStorage.getItem('program');
     if (programDetails) {
+      this.displayedColumns = [
+        'counts',
+        'programQuantity',
+        'productionQuantity',
+        'button',
+      ];
       this.updateProgramDetails = JSON.parse(programDetails);
       this.patchUpdateDetails();
       sessionStorage.removeItem('program');
@@ -305,9 +311,15 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
     this.dataSource = [];
   }
 
-  getTotalKgs() {
+  getTotalProgramQty() {
     return this.dataSource
       .map((data: ConversionYarn) => +data.programQuantity)
+      .reduce((acc, value) => acc + value, 0);
+  }
+
+  getTotalProductionQty() {
+    return this.dataSource
+      .map((data: ConversionYarn) => +data.productionQuantity)
       .reduce((acc, value) => acc + value, 0);
   }
 

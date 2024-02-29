@@ -46,6 +46,7 @@ export class AddYarnComponent implements OnInit, OnDestroy {
       countsId: '',
       counts: ['', Validators.required],
       programQuantity: ['', Validators.required],
+      productionQuantity: 0,
     });
 
     this.subscription.add(
