@@ -11,14 +11,7 @@
           [for]="picker"
         ></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
-        <mat-error
-          *ngIf="!form.controls['asOnDate'].hasError('matDatepickerParse')"
-          >This field is required.</mat-error
-        >
-        <mat-error
-          *ngIf="form.controls['asOnDate'].hasError('matDatepickerParse')"
-          >Invalid date</mat-error
-        >
+        <mat-error>Please enter valid date.</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="fill" class="w-25 ml-24">

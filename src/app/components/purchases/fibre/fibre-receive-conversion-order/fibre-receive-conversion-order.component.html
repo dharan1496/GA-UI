@@ -33,6 +33,7 @@
             (dateChange)="
               appSharedService.formatDate($event, form.controls['recdDate'])
             "
+            [max]="maxDate"
           />
           <mat-hint>DD/MM/YYYY</mat-hint>
           <mat-datepicker-toggle
@@ -40,9 +41,7 @@
             [for]="receivedDatePicker"
           ></mat-datepicker-toggle>
           <mat-datepicker #receivedDatePicker></mat-datepicker>
-          <mat-error *ngIf="form.get('recdDate')?.hasError('required')"
-            >This field is required.</mat-error
-          >
+          <mat-error>Please enter valid date.</mat-error>
         </mat-form-field>
         <mat-form-field appearance="fill" class="w-25">
           <mat-label>Received DCNo</mat-label>
@@ -58,6 +57,7 @@
             (dateChange)="
               appSharedService.formatDate($event, form.controls['dcDate'])
             "
+            [max]="dcMaxDate"
           />
           <mat-hint>DD/MM/YYYY</mat-hint>
           <mat-datepicker-toggle
@@ -65,7 +65,7 @@
             [for]="dcDatePicker"
           ></mat-datepicker-toggle>
           <mat-datepicker #dcDatePicker></mat-datepicker>
-          <mat-error>This field is required.</mat-error>
+          <mat-error>Please enter valid date.</mat-error>
         </mat-form-field>
       </form>
     </mat-card-content>

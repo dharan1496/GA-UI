@@ -39,6 +39,8 @@ export class FibreReceiveConversionOrderComponent implements OnInit, OnDestroy {
   subscription = new Subscription();
   updateReceivedCODetails?: ReceiveFibrePO;
   clearSearch = true;
+  maxDate = new Date();
+  dcMaxDate = new Date();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -64,6 +66,10 @@ export class FibreReceiveConversionOrderComponent implements OnInit, OnDestroy {
       recdDate: ['', Validators.required],
       recdDCNo: ['', Validators.required],
       dcDate: ['', Validators.required],
+    });
+
+    this.form.get('recdDate')?.valueChanges.subscribe((value) => {
+      this.dcMaxDate = new Date(value);
     });
 
     if (this.router.url.includes('update-fibre-for-conversion')) {

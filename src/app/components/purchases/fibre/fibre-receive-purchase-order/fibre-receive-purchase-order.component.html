@@ -61,7 +61,7 @@
             ></mat-datepicker-toggle>
             <mat-datepicker #receivedDatePicker></mat-datepicker>
             <mat-error *ngIf="form.get('recdDate')?.hasError('required')"
-              >This field is required.</mat-error
+              >Please enter valid date.</mat-error
             >
             <mat-error
               *ngIf="form.get('recdDate')?.hasError('matDatepickerMin')"
@@ -91,7 +91,7 @@
               [for]="dcDatePicker"
             ></mat-datepicker-toggle>
             <mat-datepicker #dcDatePicker></mat-datepicker>
-            <mat-error>This field is required.</mat-error>
+            <mat-error>Please enter valid date.</mat-error>
           </mat-form-field>
         </div>
       </form>
