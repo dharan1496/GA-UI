@@ -1,0 +1,18 @@
+<section class="container">
+  <h1 mat-dialog-title>
+    Are you sure to close the '{{ data?.fibrePODts?.fibreType }}' fibre in '{{
+      data?.pono
+    }}' PO?
+  </h1>
+  <div mat-dialog-content class="form-container">
+    <mat-form-field class="w-100 mt-8">
+      <mat-label>Remarks</mat-label>
+      <textarea matInput [formControl]="remarks"></textarea>
+      <mat-hint>Optional</mat-hint>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions class="footer">
+    <button mat-raised-button color="primary" (click)="selectYes()">Yes</button>
+    <button mat-button (click)="selectNo()">No</button>
+  </div>
+</section>

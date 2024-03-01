@@ -24,6 +24,8 @@ import { DatePipe } from '@angular/common';
 import { FibrePODts } from 'src/app/models/fibrePODts';
 import { FibrePO } from 'src/app/models/fibrePO';
 import { PrintService } from 'src/app/services/print.service';
+import { MatDialog } from '@angular/material/dialog';
+import { CloseFibreComponent } from './close-fibre/close-fibre.component';
 
 @Component({
   selector: 'app-fibre-dashboard',
@@ -62,6 +64,7 @@ export class FibreSearchComponent implements OnInit, OnDestroy {
     'amountBeforeTax',
     'gstPercent',
     'amountAfterTax',
+    'actions',
   ];
   expandedElement: any;
   loader = false;
@@ -94,7 +97,8 @@ export class FibreSearchComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private fibreService: FibreService,
     private datePipe: DatePipe,
-    private printService: PrintService
+    private printService: PrintService,
+    private dialog: MatDialog
   ) {
     this.navigationService.setFocus(Constants.PURCHASES);
     this.navigationService.menu = PURCHASE;
@@ -185,6 +189,40 @@ export class FibreSearchComponent implements OnInit, OnDestroy {
     sessionStorage.setItem('poDetails', JSON.stringify(fibrePO));
     sessionStorage.setItem('search-fibre-po', JSON.stringify(this.form.value));
     this.router.navigateByUrl('/purchases/fibre/update-purchase-order');
+  }
+
+  closePO(pono: string, fibrePODts: FibrePODts) {
+    this.dialog
+      .open(CloseFibreComponent, {
+        data: {
+          pono,
+          fibrePODts,
+        },
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result?.action === 'yes') {
+          this.fibreService
+            .closeFibrePO(fibrePODts.poDtsId, result?.remarks)
+            .subscribe({
+              next: (response) => {
+                if (response === 'true') {
+                  this.notificationService.success(
+                    'Fibre closed successfully!'
+                  );
+                } else {
+                  this.notificationService.error('Unable to close the fibre');
+                }
+              },
+              error: (error) =>
+                this.notificationService.error(
+                  typeof error?.error === 'string'
+                    ? error?.error
+                    : error?.message
+                ),
+            });
+        }
+      });
   }
 
   printPO(fibrePO: FibrePO, event: any) {
