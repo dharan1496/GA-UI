@@ -70,7 +70,7 @@
             >
             <mat-error
               *ngIf="form.get('recdDate')?.hasError('matDatepickerMax')"
-              >Should not be future Date</mat-error
+              >Should not be future Date.</mat-error
             >
           </mat-form-field>
 
@@ -100,8 +100,19 @@
             <mat-error *ngIf="form.get('dcDate')?.hasError('required')"
               >Please enter valid date.</mat-error
             >
-            <mat-error *ngIf="form.get('dcDate')?.hasError('matDatepickerMax')"
+            <mat-error
+              *ngIf="
+                form.get('dcDate')?.hasError('matDatepickerMax') &&
+                form.get('recdDate')?.valid
+              "
               >Should not be greater than received date.</mat-error
+            >
+            <mat-error
+              *ngIf="
+                form.get('dcDate')?.hasError('matDatepickerMax') &&
+                form.get('recdDate')?.invalid
+              "
+              >Should not be future Date.</mat-error
             >
           </mat-form-field>
         </div>
