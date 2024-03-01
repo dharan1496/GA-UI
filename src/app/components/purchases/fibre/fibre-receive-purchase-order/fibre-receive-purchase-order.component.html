@@ -53,6 +53,7 @@
               (dateChange)="
                 appSharedService.formatDate($event, form.controls['recdDate'])
               "
+              [max]="maxDate"
             />
             <mat-hint>DD/MM/YYYY</mat-hint>
             <mat-datepicker-toggle
@@ -66,6 +67,10 @@
             <mat-error
               *ngIf="form.get('recdDate')?.hasError('matDatepickerMin')"
               >Date should be greater than PO Date</mat-error
+            >
+            <mat-error
+              *ngIf="form.get('recdDate')?.hasError('matDatepickerMax')"
+              >Should not be future Date</mat-error
             >
           </mat-form-field>
 
@@ -84,6 +89,7 @@
               (dateChange)="
                 appSharedService.formatDate($event, form.controls['dcDate'])
               "
+              [max]="dcMaxDate"
             />
             <mat-hint>DD/MM/YYYY</mat-hint>
             <mat-datepicker-toggle
@@ -91,7 +97,12 @@
               [for]="dcDatePicker"
             ></mat-datepicker-toggle>
             <mat-datepicker #dcDatePicker></mat-datepicker>
-            <mat-error>Please enter valid date.</mat-error>
+            <mat-error *ngIf="form.get('dcDate')?.hasError('required')"
+              >Please enter valid date.</mat-error
+            >
+            <mat-error *ngIf="form.get('dcDate')?.hasError('matDatepickerMax')"
+              >Should not be greater than received date.</mat-error
+            >
           </mat-form-field>
         </div>
       </form>
