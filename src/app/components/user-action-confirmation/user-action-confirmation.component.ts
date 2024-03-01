@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MaterialModule } from 'src/app/material.module';
 
 @Component({
@@ -8,11 +8,13 @@ import { MaterialModule } from 'src/app/material.module';
   standalone: true,
   imports: [CommonModule, MaterialModule],
   templateUrl: './user-action-confirmation.component.html',
-  styleUrls: ['./user-action-confirmation.component.scss']
+  styleUrls: ['./user-action-confirmation.component.scss'],
 })
 export class UserActionConfirmationComponent {
-
-  constructor(private matDialogRef: MatDialogRef<boolean>) {}
+  constructor(
+    private matDialogRef: MatDialogRef<boolean>,
+    @Inject(MAT_DIALOG_DATA) public message: string
+  ) {}
 
   selectYes() {
     this.matDialogRef.close(true);
@@ -21,5 +23,4 @@ export class UserActionConfirmationComponent {
   selectNo() {
     this.matDialogRef.close(false);
   }
-
 }
