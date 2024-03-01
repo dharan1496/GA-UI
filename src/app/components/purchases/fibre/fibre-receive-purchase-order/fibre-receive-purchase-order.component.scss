@@ -55,6 +55,10 @@
 .footer {
   margin-top: 50px;
   display: flex;
+  justify-content: flex-end;
+}
+
+.update-footer {
   justify-content: space-between;
 }
 

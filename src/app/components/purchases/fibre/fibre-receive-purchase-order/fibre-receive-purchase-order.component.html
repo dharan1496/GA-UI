@@ -257,10 +257,10 @@
     </table>
   </div>
 
-  <div class="footer">
-    <button mat-raised-button (click)="goToSearch()">
-      <mat-icon>arrow_back</mat-icon>Back to search
-    </button>
+  <div
+    class="footer"
+    [ngClass]="{ 'update-footer': !!updateReceivedPODetails }"
+  >
     <div *ngIf="!updateReceivedPODetails; else updateBtn">
       <button mat-raised-button class="mr-16" (click)="resetData()">
         <mat-icon>refresh</mat-icon>Reset
@@ -270,6 +270,9 @@
       </button>
     </div>
     <ng-template #updateBtn>
+      <button mat-raised-button (click)="goToSearch()">
+        <mat-icon>arrow_back</mat-icon>Back to search
+      </button>
       <button mat-raised-button color="primary" (click)="submitOrder()">
         <mat-icon>save_alt</mat-icon>Update
       </button>
