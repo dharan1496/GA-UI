@@ -4,11 +4,7 @@
     <form class="form-container" [formGroup]="form">
       <mat-form-field appearance="fill">
         <mat-label>Delivery Date Range</mat-label>
-        <mat-date-range-input
-          [rangePicker]="picker"
-          [min]="minDate"
-          [max]="maxDate"
-        >
+        <mat-date-range-input [rangePicker]="picker" [min]="minDate">
           <input
             matStartDate
             formControlName="startDate"

@@ -3,11 +3,7 @@
   <section class="filter-content form-container" [formGroup]="form">
     <mat-form-field appearance="fill" class="w-30">
       <mat-label>Production Date Range</mat-label>
-      <mat-date-range-input
-        [rangePicker]="picker"
-        [min]="minDate"
-        [max]="maxDate"
-      >
+      <mat-date-range-input [rangePicker]="picker" [min]="minDate">
         <input
           matStartDate
           formControlName="startDate"

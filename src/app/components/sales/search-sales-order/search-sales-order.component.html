@@ -44,11 +44,7 @@
         class="ml-24"
       >
         <mat-label>Order Date Range</mat-label>
-        <mat-date-range-input
-          [rangePicker]="picker"
-          [min]="minDate"
-          [max]="maxDate"
-        >
+        <mat-date-range-input [rangePicker]="picker" [min]="minDate">
           <input
             matStartDate
             formControlName="startDate"

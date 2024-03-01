@@ -16,11 +16,7 @@
 
       <mat-form-field appearance="fill">
         <mat-label>PO Date Range</mat-label>
-        <mat-date-range-input
-          [rangePicker]="picker"
-          [min]="minDate"
-          [max]="maxDate"
-        >
+        <mat-date-range-input [rangePicker]="picker" [min]="minDate">
           <input
             matStartDate
             formControlName="poStartDate"

@@ -214,4 +214,14 @@ export class FibreService {
       }
     );
   }
+
+  closeFibrePO(fiberPODtsId: number, remarks: string) {
+    return this.http.post(
+      `${environment.api}Fiber/CloseFiberPO?fiberPODtsId=${fiberPODtsId}&remarks=${remarks}&updatedByUserId=0`,
+      {},
+      {
+        responseType: 'text',
+      }
+    );
+  }
 }
