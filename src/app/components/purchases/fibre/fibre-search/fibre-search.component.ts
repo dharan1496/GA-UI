@@ -25,7 +25,7 @@ import { FibrePODts } from 'src/app/models/fibrePODts';
 import { FibrePO } from 'src/app/models/fibrePO';
 import { PrintService } from 'src/app/services/print.service';
 import { MatDialog } from '@angular/material/dialog';
-import { CloseFibreComponent } from './close-fibre/close-fibre.component';
+import { CloseReopenFibreComponent } from './close-reopen-fibre/close-reopen-fibre.component';
 
 @Component({
   selector: 'app-fibre-dashboard',
@@ -193,10 +193,11 @@ export class FibreSearchComponent implements OnInit, OnDestroy {
 
   closePO(pono: string, fibrePODts: FibrePODts) {
     this.dialog
-      .open(CloseFibreComponent, {
+      .open(CloseReopenFibreComponent, {
         data: {
           pono,
           fibrePODts,
+          action: 'Close',
         },
       })
       .afterClosed()
@@ -210,8 +211,45 @@ export class FibreSearchComponent implements OnInit, OnDestroy {
                   this.notificationService.success(
                     'Fibre closed successfully!'
                   );
+                  fibrePODts.isPOItemClosed = true;
                 } else {
                   this.notificationService.error('Unable to close the fibre');
+                }
+              },
+              error: (error) =>
+                this.notificationService.error(
+                  typeof error?.error === 'string'
+                    ? error?.error
+                    : error?.message
+                ),
+            });
+        }
+      });
+  }
+
+  reopenPO(pono: string, fibrePODts: FibrePODts) {
+    this.dialog
+      .open(CloseReopenFibreComponent, {
+        data: {
+          pono,
+          fibrePODts,
+          action: 'Reopen',
+        },
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result?.action === 'yes') {
+          this.fibreService
+            .reopenFibrePO(fibrePODts.poDtsId, result?.remarks)
+            .subscribe({
+              next: (response) => {
+                if (response === 'true') {
+                  this.notificationService.success(
+                    'Fibre Reopened successfully!'
+                  );
+                  fibrePODts.isPOItemClosed = false;
+                } else {
+                  this.notificationService.error('Unable to reopen the fibre');
                 }
               },
               error: (error) =>

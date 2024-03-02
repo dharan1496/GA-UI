@@ -118,6 +118,14 @@ tr.row:not(.expanded-row) {
   background: rgb(50, 166, 39);
 }
 
-mat-icon {
+.icon {
   font-size: 20px;
+}
+
+.closed-row {
+  background-color: #fff0f0;
+
+  &:hover {
+    background-color: #fff0f0 !important;
+  }
 }

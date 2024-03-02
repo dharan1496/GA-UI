@@ -8,10 +8,10 @@ import { MaterialModule } from 'src/app/material.module';
   selector: 'app-close-fibre',
   standalone: true,
   imports: [CommonModule, MaterialModule, ReactiveFormsModule],
-  templateUrl: './close-fibre.component.html',
-  styleUrls: ['./close-fibre.component.scss'],
+  templateUrl: './close-reopen-fibre.component.html',
+  styleUrls: ['./close-reopen-fibre.component.scss'],
 })
-export class CloseFibreComponent {
+export class CloseReopenFibreComponent {
   remarks = new FormControl();
 
   constructor(
@@ -20,10 +20,14 @@ export class CloseFibreComponent {
   ) {}
 
   selectYes() {
-    this.matDialogRef.close({
-      action: 'yes',
-      remarks: this.remarks.value || '',
-    });
+    if (this.remarks.valid) {
+      this.matDialogRef.close({
+        action: 'yes',
+        remarks: this.remarks.value || '',
+      });
+    } else {
+      this.remarks.markAsTouched();
+    }
   }
 
   selectNo() {

@@ -12,4 +12,5 @@ export interface FibrePODts {
   length_Unit: string;
   counts: number;
   counts_Unit: string;
+  isPOItemClosed: boolean;
 }

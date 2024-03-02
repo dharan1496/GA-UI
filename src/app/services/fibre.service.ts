@@ -224,4 +224,14 @@ export class FibreService {
       }
     );
   }
+
+  reopenFibrePO(fiberPODtsId: number, remarks: string) {
+    return this.http.post(
+      `${environment.api}/Fiber/ReOpenFiberPO?fiberPODtsId=${fiberPODtsId}&remarks=${remarks}&updatedByUserId=0`,
+      {},
+      {
+        responseType: 'text',
+      }
+    );
+  }
 }

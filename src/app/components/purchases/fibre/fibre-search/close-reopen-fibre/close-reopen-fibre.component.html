@@ -1,13 +1,14 @@
 <section class="container">
   <h1 mat-dialog-title>
-    Are you sure you want to close the '{{ data?.fibrePODts?.fibreType }}' fibre
-    in '{{ data?.pono }}' PO?
+    Are you sure you want to {{ data?.action }} the '{{
+      data?.fibrePODts?.fibreType
+    }}' fibre in '{{ data?.pono }}' PO?
   </h1>
   <div mat-dialog-content class="form-container">
     <mat-form-field class="w-100 mt-8">
       <mat-label>Remarks</mat-label>
-      <textarea matInput [formControl]="remarks"></textarea>
-      <mat-hint>Optional</mat-hint>
+      <textarea matInput [formControl]="remarks" required></textarea>
+      <mat-error>This field is required.</mat-error>
     </mat-form-field>
   </div>
   <div mat-dialog-actions class="footer">
