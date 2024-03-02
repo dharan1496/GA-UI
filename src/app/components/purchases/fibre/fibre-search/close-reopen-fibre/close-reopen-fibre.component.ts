@@ -13,11 +13,16 @@ import { MaterialModule } from 'src/app/material.module';
 })
 export class CloseReopenFibreComponent {
   remarks = new FormControl();
+  header = '';
 
   constructor(
     private matDialogRef: MatDialogRef<boolean>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
+
+  ngOnInit() {
+    this.header = `Are you sure you want to ${this.data?.action} the '${this.data?.fibrePODts?.fibreType}' fibre in '${this.data?.pono}' PO?`;
+  }
 
   selectYes() {
     if (this.remarks.valid) {
