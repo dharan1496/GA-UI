@@ -35,10 +35,10 @@
           />
         </mat-date-range-input>
         <mat-error *ngIf="form.get('startDate')?.hasError('required')"
-          >Start Date is required.</mat-error
+          >Please enter valid start date.</mat-error
         >
         <mat-error *ngIf="form.get('endDate')?.hasError('required')"
-          >End Date is required.</mat-error
+          >Please enter valid end date.</mat-error
         >
         <mat-error
           *ngIf="
