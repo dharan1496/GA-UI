@@ -9,24 +9,28 @@
       <ng-container matColumnDef="programNo">
         <th mat-header-cell *matHeaderCellDef>Program No</th>
         <td mat-cell *matCellDef="let element">{{ element.programNo }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
       </ng-container>
 
       <!-- shade Column -->
       <ng-container matColumnDef="shade">
         <th mat-header-cell *matHeaderCellDef>Shade</th>
         <td mat-cell *matCellDef="let element">{{ element.shadeName }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
       </ng-container>
 
       <!-- blend Column -->
       <ng-container matColumnDef="blend">
         <th mat-header-cell *matHeaderCellDef>Blend</th>
         <td mat-cell *matCellDef="let element">{{ element.blendName }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
       </ng-container>
 
       <!-- yarnCounts Column -->
       <ng-container matColumnDef="yarnCounts">
         <th mat-header-cell *matHeaderCellDef>Yarn Counts</th>
         <td mat-cell *matCellDef="let element">{{ element.yarnCounts }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
       </ng-container>
 
       <!-- plannedQty Column -->
@@ -35,6 +39,7 @@
         <td mat-cell *matCellDef="let element">
           {{ element.plannedQuantity }}
         </td>
+        <td mat-footer-cell *matFooterCellDef>{{ getTotalPlannedQty() }}</td>
       </ng-container>
 
       <!-- prodQty Column -->
@@ -43,6 +48,7 @@
         <td mat-cell *matCellDef="let element">
           {{ element.producedQuantity }}
         </td>
+        <td mat-footer-cell *matFooterCellDef>{{ getTotalProducedQty() }}</td>
       </ng-container>
 
       <!-- Radio -->
@@ -57,6 +63,7 @@
             [aria-label]="radioLabel(row)"
           ></mat-radio-button>
         </td>
+        <td mat-footer-cell *matFooterCellDef></td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
@@ -71,6 +78,11 @@
           No rows to display
         </td>
       </tr>
+      <tr
+        [hidden]="!programs.length"
+        mat-footer-row
+        *matFooterRowDef="displayedColumns"
+      ></tr>
     </table>
   </div>
 </div>

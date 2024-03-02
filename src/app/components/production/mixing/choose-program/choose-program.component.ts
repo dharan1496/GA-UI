@@ -83,4 +83,18 @@ export class ChooseProgramComponent implements OnInit, OnDestroy {
   selectItem(row: any) {
     this.selection.toggle(row);
   }
+
+  getTotalProducedQty() {
+    return this.programs.reduce(
+      (acc, cur) => acc + (cur.producedQuantity || 0),
+      0
+    );
+  }
+
+  getTotalPlannedQty() {
+    return this.programs.reduce(
+      (acc, cur) => acc + (cur.plannedQuantity || 0),
+      0
+    );
+  }
 }
