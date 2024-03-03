@@ -143,6 +143,7 @@
         <th mat-header-cell *matHeaderCellDef>Action</th>
         <td mat-cell *matCellDef="let element">
           <button
+            *ngIf="!element?.isPOClosed"
             mat-icon-button
             matTooltip="edit"
             aria-label="button with a edit icon"
@@ -151,6 +152,7 @@
             <mat-icon class="icon">edit</mat-icon>
           </button>
           <button
+            *ngIf="!element?.isPOClosed"
             mat-icon-button
             matTooltip="print"
             aria-label="button with a print icon"
@@ -269,8 +271,7 @@
                       matTooltip="close"
                       aria-label="button with a close icon"
                       (click)="
-                        closePO(element?.pono, fibrePODts);
-                        $event.stopPropagation()
+                        closePO(element, fibrePODts); $event.stopPropagation()
                       "
                     >
                       <mat-icon>close</mat-icon>
@@ -282,8 +283,7 @@
                       matTooltip="reopen"
                       aria-label="button with a restore icon"
                       (click)="
-                        reopenPO(element?.pono, fibrePODts);
-                        $event.stopPropagation()
+                        reopenPO(element, fibrePODts); $event.stopPropagation()
                       "
                     >
                       <mat-icon>restore</mat-icon>

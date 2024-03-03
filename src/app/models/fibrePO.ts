@@ -17,4 +17,5 @@ export interface FibrePO {
   gstNo: string;
   eMailId: string;
   fibrePODts: FibrePODts[];
+  isPOClosed: boolean;
 }

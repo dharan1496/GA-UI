@@ -191,11 +191,11 @@ export class FibreSearchComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl('/purchases/fibre/update-purchase-order');
   }
 
-  closePO(pono: string, fibrePODts: FibrePODts) {
+  closePO(fibre: FibrePO, fibrePODts: FibrePODts) {
     this.dialog
       .open(CloseReopenFibreComponent, {
         data: {
-          pono,
+          pono: fibre.pono,
           fibrePODts,
           action: 'Close',
         },
@@ -212,6 +212,9 @@ export class FibreSearchComponent implements OnInit, OnDestroy {
                     'Fibre closed successfully!'
                   );
                   fibrePODts.isPOItemClosed = true;
+                  fibre.isPOClosed = fibre.fibrePODts.every(
+                    (dts) => dts.isPOItemClosed
+                  );
                 } else {
                   this.notificationService.error('Unable to close the fibre');
                 }
@@ -227,11 +230,11 @@ export class FibreSearchComponent implements OnInit, OnDestroy {
       });
   }
 
-  reopenPO(pono: string, fibrePODts: FibrePODts) {
+  reopenPO(fibre: FibrePO, fibrePODts: FibrePODts) {
     this.dialog
       .open(CloseReopenFibreComponent, {
         data: {
-          pono,
+          pono: fibre.pono,
           fibrePODts,
           action: 'Reopen',
         },
@@ -248,6 +251,7 @@ export class FibreSearchComponent implements OnInit, OnDestroy {
                     'Fibre Reopened successfully!'
                   );
                   fibrePODts.isPOItemClosed = false;
+                  fibre.isPOClosed = false;
                 } else {
                   this.notificationService.error('Unable to reopen the fibre');
                 }
