@@ -269,7 +269,11 @@ export class FibreSearchComponent implements OnInit, OnDestroy {
 
   printPO(fibrePO: FibrePO, event: any) {
     event.stopPropagation();
-    this.printService.fibrePOData = fibrePO;
+    const printFibre = JSON.parse(JSON.stringify(fibrePO));
+    printFibre.fibrePODts = fibrePO.fibrePODts.filter(
+      (dts) => !dts.isPOItemClosed
+    );
+    this.printService.fibrePOData = printFibre;
     this.printService.fibrePOprint = true;
     setTimeout(() => window.print());
   }
