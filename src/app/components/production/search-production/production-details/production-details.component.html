@@ -12,7 +12,9 @@
     </div>
     <div>
       <div class="text-dark pb-2">Production Date</div>
-      <div>{{ productionDetails.productionDate | date : "dd/MM/yyyy" }}</div>
+      <div>
+        {{ formatDate(productionDetails.productionDate) | date : "dd/MM/yyyy" }}
+      </div>
     </div>
     <div>
       <div class="text-dark pb-2">Program Id</div>
@@ -24,7 +26,9 @@
     </div>
     <div>
       <div class="text-dark pb-2">Program Date</div>
-      <div>{{ productionDetails.programDate | date : "dd/MM/yyyy" }}</div>
+      <div>
+        {{ formatDate(productionDetails.programDate) | date : "dd/MM/yyyy" }}
+      </div>
     </div>
     <div>
       <div class="text-dark pb-2">Mixing Id</div>

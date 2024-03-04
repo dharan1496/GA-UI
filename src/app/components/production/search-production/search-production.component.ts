@@ -176,4 +176,12 @@ export class SearchProductionComponent {
     );
     this.router.navigateByUrl('/production/update-production-entry');
   }
+
+  formatDate(date: any) {
+    const formatedDate = new Date(date);
+    if (formatedDate.toString() !== 'Invalid Date') {
+      return formatedDate;
+    }
+    return new Date(date.split(' ')[0]);
+  }
 }

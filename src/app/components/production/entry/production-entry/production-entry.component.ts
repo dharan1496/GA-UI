@@ -101,7 +101,7 @@ export class ProductionEntryComponent implements OnInit, OnDestroy {
       this.updateProductionDetails = productionEntry;
       this.programDetails = productionEntry as any;
       this.productionDate.setValue(
-        new Date(productionEntry.productionDate).toISOString()
+        this.formatDate(productionEntry.productionDate).toISOString()
       );
       this.productionDate.disable();
       this.entryDetails = productionEntry.yarnDetails?.map((data, index) => ({
@@ -318,5 +318,13 @@ export class ProductionEntryComponent implements OnInit, OnDestroy {
   goToSearch() {
     this.clearSearch = false;
     this.router.navigateByUrl('/production/search-production');
+  }
+
+  formatDate(date: any) {
+    const formatedDate = new Date(date);
+    if (formatedDate.toString() !== 'Invalid Date') {
+      return formatedDate;
+    }
+    return new Date(date.split(' ')[0]);
   }
 }

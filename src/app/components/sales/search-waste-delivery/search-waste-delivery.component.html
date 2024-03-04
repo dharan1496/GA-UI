@@ -103,7 +103,7 @@
       <ng-container matColumnDef="dcDate">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>DC Date</th>
         <td mat-cell *matCellDef="let row">
-          {{ row.dcDate | date : "dd/MM/yyyy" }}
+          {{ formatDate(row.dcDate) | date : "dd/MM/yyyy" }}
         </td>
       </ng-container>
 

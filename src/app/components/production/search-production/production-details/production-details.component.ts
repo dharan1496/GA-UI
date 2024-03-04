@@ -54,4 +54,12 @@ export class ProductionDetailsComponent implements OnDestroy {
       .map((data: ProductionYarn) => +data.programQuantity)
       .reduce((acc, value) => acc + value, 0);
   }
+
+  formatDate(date: any) {
+    const formatedDate = new Date(date);
+    if (formatedDate.toString() !== 'Invalid Date') {
+      return formatedDate;
+    }
+    return new Date(date.split(' ')[0]);
+  }
 }

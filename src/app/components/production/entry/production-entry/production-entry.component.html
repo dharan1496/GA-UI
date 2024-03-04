@@ -24,7 +24,10 @@
           <div *ngIf="isUpdate">
             <label class="font-weight-bold">Production Date</label>
             <div class="font-size-16 text-gray pt-4">
-              {{ updateProductionDetails.productionDate | date : "dd/MM/yyyy" }}
+              {{
+                formatDate(updateProductionDetails.productionDate)
+                  | date : "dd/MM/yyyy"
+              }}
             </div>
           </div>
           <div>

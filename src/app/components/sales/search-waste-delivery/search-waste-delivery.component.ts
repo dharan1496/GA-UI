@@ -150,4 +150,12 @@ export class SearchWasteDeliveryComponent implements OnInit, OnDestroy {
   openWasteDetails(row: YarnDeliverySummary) {
     this.dialog.open(WasteDetailsComponent, { data: row, minWidth: '50vw' });
   }
+
+  formatDate(date: any) {
+    const formatedDate = new Date(date);
+    if (formatedDate.toString() !== 'Invalid Date') {
+      return formatedDate;
+    }
+    return new Date(date.split(' ')[0]);
+  }
 }
