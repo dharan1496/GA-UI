@@ -45,8 +45,9 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.form = this.formBuilder.group({
       orderNo: typeof this.data === 'number' ? +this.data + 1 : '',
+      poDtsId: '',
       fibreTypeId: ['', Validators.required],
-      fibreName: '',
+      fibreType: '',
       shadeId: '',
       shadeName: ['', Validators.required],
       weight: ['', Validators.required],
@@ -72,7 +73,7 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
           (fibre) => fibre.fibreTypeId === fibreTypeId
         );
         this.form
-          .get('fibreName')
+          .get('fibreType')
           ?.setValue(filteredParty.reduce((p, c) => c.fibreType, ''));
       })
     );

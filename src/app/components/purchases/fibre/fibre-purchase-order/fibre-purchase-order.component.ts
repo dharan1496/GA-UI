@@ -17,6 +17,7 @@ import { Router } from '@angular/router';
 import { CreateFibrePO } from 'src/app/models/createFibrePO';
 import { CreateFibrePODts } from 'src/app/models/createFibrePODts';
 import { FibrePO } from 'src/app/models/fibrePO';
+import { FibrePODts } from 'src/app/models/fibrePODts';
 
 @Component({
   selector: 'app-fibre-purchase-order',
@@ -26,7 +27,7 @@ import { FibrePO } from 'src/app/models/fibrePO';
 export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   displayedColumns: string[] = [
-    'fibreName',
+    'fibreType',
     'shade',
     'weight',
     'rate',
@@ -96,7 +97,8 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
     this.dataSource = this.updatePoDetails?.fibrePODts?.map((data, index) => {
       return {
         orderNo: index + 1,
-        fibreName: data?.fibreType,
+        poDtsId: data?.poDtsId,
+        fibreType: data?.fibreType,
         fibreTypeId: data?.fibreTypeId,
         shadeName: data?.shadeName,
         shadeId: data?.shadeId,
@@ -194,16 +196,23 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
 
   updateOrder() {
     if (!this.hasError() && this.updatePoDetails) {
-      this.updatePoDetails?.fibrePODts.forEach((data, index) => {
-        data.fibreType = this.dataSource[index]?.fibreName;
-        data.fibreTypeId = this.dataSource[index]?.fibreTypeId;
-        data.shadeName = this.dataSource[index]?.shadeName;
-        data.shadeId = this.dataSource[index]?.shadeId;
-        data.weight = this.dataSource[index]?.weight;
-        data.rate = this.dataSource[index]?.rate;
-        data.gstPercent = this.dataSource[index]?.gstPercent;
-        (data.counts = 0), (data.length = 0);
-      });
+      this.updatePoDetails.fibrePODts = this.dataSource.map((data) => {
+        const updateDts = this.updatePoDetails?.fibrePODts?.find(
+          (dts) => dts.poDtsId === data.poDtsId
+        );
+        return {
+          ...updateDts,
+          fibreTypeId: data.fibreTypeId,
+          fibreType: data.fibreType,
+          shadeId: data.shadeId,
+          shadeName: data.shadeName,
+          weight: data.weight,
+          rate: data.rate,
+          gstPercent: data.gstPercent,
+          counts: updateDts?.counts || 0,
+          length: updateDts?.length || 0,
+        };
+      }) as FibrePODts[];
       this.fibreService.updateFibrePO(this.updatePoDetails).subscribe({
         next: () => {
           this.notificationService
