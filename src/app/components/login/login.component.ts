@@ -11,9 +11,7 @@ import { MaterialModule } from 'src/app/material.module';
 import { NotifyType } from 'src/app/models/notify';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NotificationService } from '../../shared/notification.service';
-import { SendEmailService } from 'src/app/shared/sendEmail.service';
-import { HttpClient } from '@angular/common/http';
-import { Credential } from 'src/app/models/credential';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -40,8 +38,7 @@ export class LoginComponent implements OnInit {
     private notificationService: NotificationService,
     private router: Router,
     private appSharedService: AppSharedService,
-    private emailService: SendEmailService,
-    private httpClient: HttpClient
+    private userService: UserService
   ) {}
 
   ngOnInit() {
@@ -71,23 +68,10 @@ export class LoginComponent implements OnInit {
       return;
     }
     this.credentialsError = false;
-    this.httpClient
-      .get<Credential[]>('./assets/json/credentials.json')
+    this.userService
+      .login(this.username?.value, this.password?.value)
       .subscribe({
-        next: (data) => {
-          const credential = data.find(
-            (item) => item?.username === this.username?.value
-          );
-          if (!credential) {
-            this.credentialsError = true;
-            this.validationError = 'The username you entered is incorrect.';
-            return;
-          }
-          if (credential.password !== this.password?.value) {
-            this.credentialsError = true;
-            this.validationError = 'The password you entered is incorrect.';
-            return;
-          }
+        next: () => {
           this.router.navigateByUrl('/home');
           this.appSharedService.logout = false;
           this.appSharedService.username = this.username?.value;
