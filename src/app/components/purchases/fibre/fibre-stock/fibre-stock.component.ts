@@ -85,7 +85,7 @@ export class FibreStockComponent implements OnInit, OnDestroy {
     });
 
     this.subscription.add(
-      this.partyService.getParties().subscribe({
+      this.partyService.getFibreParties().subscribe({
         next: (data) => (this.partyService.parties = data),
         error: (error) =>
           this.notificationService.error(

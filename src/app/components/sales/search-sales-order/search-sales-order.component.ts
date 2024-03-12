@@ -76,7 +76,7 @@ export class SearchSalesOrderComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.setMinDate();
     this.subscription.add(
-      this.partyService.getParties().subscribe({
+      this.partyService.getSalesParties().subscribe({
         next: (data) => (this.partyService.parties = data),
         error: (error) =>
           this.notificationService.error(

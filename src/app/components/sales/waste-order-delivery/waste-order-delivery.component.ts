@@ -16,7 +16,6 @@ import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { UserActionConfirmationComponent } from '../../user-action-confirmation/user-action-confirmation.component';
-import { FibreWasteStock } from 'src/app/models/fibreWasteStock';
 import { WasteStockDialogComponent } from './waste-stock-dialog/waste-stock-dialog.component';
 
 @Component({
@@ -77,7 +76,7 @@ export class WasteOrderDeliveryComponent implements OnInit, OnDestroy {
 
   getPartyList() {
     this.subscription.add(
-      this.partyService.getParties().subscribe({
+      this.partyService.getSalesParties().subscribe({
         next: (data) => (this.partyService.parties = data),
         error: (error) =>
           this.notificationService.error(

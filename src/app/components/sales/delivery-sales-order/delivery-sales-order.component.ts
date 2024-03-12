@@ -76,7 +76,7 @@ export class DeliverySalesOrderComponent implements OnInit {
   }
 
   getPartiesForAddress() {
-    this.partyService.getParties().subscribe({
+    this.partyService.getSalesParties().subscribe({
       next: (parties) => (this.parties = parties),
       error: (error) =>
         this.notificationService.error(

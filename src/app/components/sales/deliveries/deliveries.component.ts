@@ -89,7 +89,7 @@ export class DeliveriesComponent implements OnInit, OnDestroy {
 
     this.setMinDate();
     this.subscription.add(
-      this.partyService.getParties().subscribe({
+      this.partyService.getSalesParties().subscribe({
         next: (data) => (this.partyService.parties = data),
         error: (error) =>
           this.notificationService.error(
