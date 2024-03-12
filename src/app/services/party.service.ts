@@ -7,6 +7,7 @@ import { State } from '../models/state';
 import { District } from '../models/district';
 import { City } from '../models/city';
 import { PartyDepartment } from '../models/partyDepartment';
+import { AppSharedService } from '../shared/app-shared.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,10 @@ export class PartyService {
   parties!: Party[];
   editPartyDetails: Party | undefined;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private appSharedService: AppSharedService
+  ) {}
 
   getParties(): Observable<Party[]> {
     return this.http.get<Party[]>(`${environment.api}/Party/GetAllParties`);
@@ -50,7 +54,7 @@ export class PartyService {
       `${environment.api}/Party/DeleteParty`,
       {
         partyId,
-        deletedByUserId: 0,
+        deletedByUserId: this.appSharedService.userId,
       },
       {
         responseType: 'text',

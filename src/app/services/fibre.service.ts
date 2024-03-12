@@ -17,6 +17,7 @@ import { FibrePO } from '../models/fibrePO';
 import { CreateFibreWaste } from '../models/createFibreWaste';
 import { FibreWasteStock } from '../models/fibreWasteStock';
 import { FibreSalesDC } from '../models/fibreSalesDC';
+import { AppSharedService } from '../shared/app-shared.service';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +25,10 @@ import { FibreSalesDC } from '../models/fibreSalesDC';
 export class FibreService {
   fibres!: FibreType[];
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private appSharedService: AppSharedService
+  ) {}
 
   getFibreGraphData(): Observable<FibreGraph[]> {
     return this.http.get<FibreGraph[]>(
@@ -181,7 +185,7 @@ export class FibreService {
 
   saveFiberWaste(fibreWastes: CreateFibreWaste[]) {
     return this.http.post(
-      `${environment.api}/Fiber/SaveFiberWaste?createdByUserId=0`,
+      `${environment.api}/Fiber/SaveFiberWaste?createdByUserId=${this.appSharedService.userId}`,
       fibreWastes,
       {
         responseType: 'text',
@@ -217,7 +221,7 @@ export class FibreService {
 
   closeFibrePO(fiberPODtsId: number, remarks: string) {
     return this.http.post(
-      `${environment.api}/Fiber/CloseFiberPO?fiberPODtsId=${fiberPODtsId}&remarks=${remarks}&updatedByUserId=0`,
+      `${environment.api}/Fiber/CloseFiberPO?fiberPODtsId=${fiberPODtsId}&remarks=${remarks}&updatedByUserId=${this.appSharedService.userId}`,
       {},
       {
         responseType: 'text',
@@ -227,7 +231,7 @@ export class FibreService {
 
   reopenFibrePO(fiberPODtsId: number, remarks: string) {
     return this.http.post(
-      `${environment.api}/Fiber/ReOpenFiberPO?fiberPODtsId=${fiberPODtsId}&remarks=${remarks}&updatedByUserId=0`,
+      `${environment.api}/Fiber/ReOpenFiberPO?fiberPODtsId=${fiberPODtsId}&remarks=${remarks}&updatedByUserId=${this.appSharedService.userId}`,
       {},
       {
         responseType: 'text',

@@ -162,7 +162,7 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
       });
       const orderDetails = {
         ...this.form.getRawValue(),
-        createdBy: 0,
+        createdBy: this.appSharedService.userId,
         fibrePODts: fibrePODts,
       } as CreateFibrePO;
 

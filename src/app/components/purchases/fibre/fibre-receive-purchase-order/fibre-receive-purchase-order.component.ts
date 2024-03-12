@@ -234,7 +234,7 @@ export class FibreReceivePurchaseOrderComponent implements OnInit, OnDestroy {
         : 0,
       ...this.form.value,
       partyName: this.getPartyName(),
-      receivedByUserId: 0,
+      receivedByUserId: this.appSharedService.userId,
       fibrePODts: [],
       recdDate: this.datePipe.transform(this.form.value.recdDate, 'dd/MM/yyyy'),
       dcDate: this.datePipe.transform(this.form.value.dcDate, 'dd/MM/yyyy'),

@@ -12,6 +12,7 @@ import { MaterialModule } from 'src/app/material.module';
 import { YarnOrder } from 'src/app/models/yarnOrder';
 import { PartyService } from 'src/app/services/party.service';
 import { YarnService } from 'src/app/services/yarn.service';
+import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NotificationService } from 'src/app/shared/notification.service';
 
 @Component({
@@ -41,7 +42,8 @@ export class OrderDetailsComponent implements OnDestroy {
     private matDialogRef: MatDialogRef<any>,
     private yarnService: YarnService,
     private notificationService: NotificationService,
-    private router: Router
+    private router: Router,
+    private appSharedService: AppSharedService
   ) {}
 
   ngOnDestroy() {
@@ -63,7 +65,7 @@ export class OrderDetailsComponent implements OnDestroy {
           if (response) {
             const closeOrder = {
               orderId: this.orderDetails.orderId,
-              closedByUserId: 0,
+              closedByUserId: this.appSharedService.userId,
             };
             this.subscription.add(
               this.yarnService.closeYarnOrder(closeOrder).subscribe({
@@ -85,7 +87,7 @@ export class OrderDetailsComponent implements OnDestroy {
   reopenOrder() {
     const reopenOrder = {
       orderId: this.orderDetails.orderId,
-      reopenedByUserId: 0,
+      reopenedByUserId: this.appSharedService.userId,
     };
     this.subscription.add(
       this.yarnService.reopenYarnOrder(reopenOrder).subscribe({

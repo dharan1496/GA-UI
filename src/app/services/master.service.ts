@@ -7,12 +7,16 @@ import { YarnCounts } from '../models/yarnCounts';
 import { YarnBlend } from '../models/yarnBlend';
 import { YarnBlendCreate } from '../models/yarnBlendCreate';
 import { FibreWasteCategory } from '../models/fibreWasteCategory';
+import { AppSharedService } from '../shared/app-shared.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MasterService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private appSharedService: AppSharedService
+  ) {}
 
   getYarnShade(): Observable<YarnShade[]> {
     return this.http.get<YarnShade[]>(
@@ -62,7 +66,7 @@ export class MasterService {
     wasteCategoryName: string
   ): Observable<FibreWasteCategory[]> {
     return this.http.post<FibreWasteCategory[]>(
-      `${environment.api}/Master/AddWasteCategory?wasteCategoryName=${wasteCategoryName}&createdByUserId=0`,
+      `${environment.api}/Master/AddWasteCategory?wasteCategoryName=${wasteCategoryName}&createdByUserId=${this.appSharedService.userId}`,
       {}
     );
   }

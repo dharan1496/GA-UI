@@ -121,7 +121,7 @@ export class AddBlendComponent implements OnInit, OnDestroy {
           : this.addedFibreCategory;
       const blend: YarnBlendCreate = {
         fibres,
-        createdByUserId: 0,
+        createdByUserId: this.appSharedService.userId,
       };
       this.subscription.add(
         this.masterService.addYarnBlend(blend).subscribe({

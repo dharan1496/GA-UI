@@ -239,7 +239,7 @@ export class CreateProgramComponent implements OnInit, OnDestroy {
         isClosed: false,
         isMixed: false,
         closedByUserId: 0,
-        createdByUserId: 0,
+        createdByUserId: this.appSharedService.userId,
         yarnCounts,
         mixingDetails: [],
       };

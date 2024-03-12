@@ -87,7 +87,7 @@ export class DeliveryInvoiceComponent {
         invoiceDate:
           this.datePipe.transform(this.invoiceDate.value, 'dd/MM/yyyy') || '',
         createYarnInvoiceDts,
-        createdByUserId: 0,
+        createdByUserId: this.appSharedService.userId,
         partyId: this.partyId,
       };
 

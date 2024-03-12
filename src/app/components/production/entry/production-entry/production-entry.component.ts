@@ -146,7 +146,7 @@ export class ProductionEntryComponent implements OnInit, OnDestroy {
         productionDate:
           this.datePipe.transform(this.productionDate.value, 'dd/MM/yyyy') ||
           '',
-        createdByUserId: 0,
+        createdByUserId: this.appSharedService.userId,
         productionId: 0,
         programNo: this.programDetails?.programNo || '',
         programDate: this.programDetails?.programDate || '',

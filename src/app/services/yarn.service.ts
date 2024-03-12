@@ -15,12 +15,16 @@ import { CreateYarnInvoice } from '../models/createYarnInvoice';
 import { YarnReturn } from '../models/yarnReturn';
 import { YarnDeliverySearchResult } from '../models/yarnDeliverySearchResult';
 import { YarnStock } from '../models/yarnStock';
+import { AppSharedService } from '../shared/app-shared.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class YarnService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private appSharedService: AppSharedService
+  ) {}
 
   receiveYarnOrder(order: YarnOrder): Observable<any> {
     return this.http.post(
@@ -143,7 +147,7 @@ export class YarnService {
 
   receiveYarnReturn(yarnReturn: YarnReturn): Observable<any> {
     return this.http.post<any>(
-      `${environment.api}/YarnOrder/ReceiveYarnReturn?createdUserId=0`,
+      `${environment.api}/YarnOrder/ReceiveYarnReturn?createdUserId=${this.appSharedService.userId}`,
       yarnReturn
     );
   }

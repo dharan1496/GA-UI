@@ -14,12 +14,16 @@ import { ConversionProgramStatus } from '../models/conversionProgramStatus';
 import { FibreIssued } from '../models/fibreIssued';
 import { ProductionYarn } from '../models/productionYarn';
 import { ProgramFibresMixed } from '../models/programFibresMixed';
+import { AppSharedService } from '../shared/app-shared.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConversionService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private appSharedService: AppSharedService
+  ) {}
 
   createProgram(program: ConversionProgram): Observable<any> {
     return this.http.post(
@@ -74,7 +78,7 @@ export class ConversionService {
     fibreIssued: FibreIssued[]
   ): Observable<any> {
     return this.http.post(
-      `${environment.api}/Conversion/UpdateMixingDetails?mixingId=${mixingId}&updatedByUserId=0`,
+      `${environment.api}/Conversion/UpdateMixingDetails?mixingId=${mixingId}&updatedByUserId=${this.appSharedService.userId}`,
       fibreIssued,
       {
         responseType: 'text',
@@ -103,7 +107,7 @@ export class ConversionService {
     entry: ProductionYarn[]
   ): Observable<any> {
     return this.http.post(
-      `${environment.api}/Conversion/UpdateProduction?productionId=${productionId}&updatedByUserId=0`,
+      `${environment.api}/Conversion/UpdateProduction?productionId=${productionId}&updatedByUserId=${this.appSharedService.userId}`,
       entry,
       {
         responseType: 'text',
@@ -116,7 +120,7 @@ export class ConversionService {
     programId: number
   ): Observable<any> {
     return this.http.post(
-      `${environment.api}/Conversion/ConversionWaste?programId=${programId}&createdByUserId=0`,
+      `${environment.api}/Conversion/ConversionWaste?programId=${programId}&createdByUserId=${this.appSharedService.userId}`,
       wasteEntry,
       {
         responseType: 'text',

@@ -168,7 +168,7 @@ export class CreateSalesOrderComponent implements OnInit, OnDestroy {
           'dd/MM/yyyy'
         ),
         orderId: 0,
-        receivedByUserId: 0,
+        receivedByUserId: this.appSharedService.userId,
         orderDts,
       };
       if (this.updateOrderDetails) {

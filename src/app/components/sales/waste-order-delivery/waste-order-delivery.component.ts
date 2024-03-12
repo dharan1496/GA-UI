@@ -98,7 +98,7 @@ export class WasteOrderDeliveryComponent implements OnInit, OnDestroy {
         ...this.form.value,
         dcDate: this.datePipe.transform(this.form.value?.dcDate, 'dd/MM/yyyy'),
         dcId: 0,
-        createdByUserId: 0,
+        createdByUserId: this.appSharedService.userId,
         salesDCDetails,
       };
       this.subscription.add(

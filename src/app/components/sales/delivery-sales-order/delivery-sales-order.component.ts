@@ -141,7 +141,7 @@ export class DeliverySalesOrderComponent implements OnInit {
           ) || '',
         orderId: this.orderSelected?.orderId,
         deliveryPartyId: this.orderSelected?.partyId,
-        createdByUserId: 0,
+        createdByUserId: this.appSharedService.userId,
         deliveryDts,
         eWayBillNo: '',
       };
