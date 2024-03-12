@@ -13,6 +13,7 @@ import { PARTY } from 'src/app/constants/party-menu-values.const';
 import { City } from 'src/app/models/city';
 import { District } from 'src/app/models/district';
 import { NotifyType } from 'src/app/models/notify';
+import { PartyDepartment } from 'src/app/models/partyDepartment';
 import { State } from 'src/app/models/state';
 import { PartyService } from 'src/app/services/party.service';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
@@ -32,6 +33,7 @@ export class AddPartyComponent implements OnInit, OnDestroy {
   edit = false;
   subscription = new Subscription();
   phoneLimit = false;
+  departmentList!: PartyDepartment[];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -67,6 +69,7 @@ export class AddPartyComponent implements OnInit, OnDestroy {
       ],
       landline: '',
       phones: this.formBuilder.array([this.formBuilder.group({ mobile: '' })]),
+      partyDepartments: ['', Validators.required],
     });
 
     if (this.partyService.editPartyDetails) {
@@ -90,9 +93,12 @@ export class AddPartyComponent implements OnInit, OnDestroy {
         .map((phone) => {
           return { mobile: phone };
         }) || [];
-
     this.form.patchValue({
       ...this.partyService.editPartyDetails,
+      partyDepartments:
+        this.partyService.editPartyDetails?.partyDepartments.map(
+          (dep) => dep.partyDepartmentId
+        ),
       phones: [phones.shift()] || [],
       landline: landlineNo,
     });
@@ -137,6 +143,16 @@ export class AddPartyComponent implements OnInit, OnDestroy {
   }
 
   getDropdownData() {
+    this.subscription.add(
+      this.partyService.getPartyDepartmentMaster().subscribe({
+        next: (res) => (this.departmentList = res),
+        error: (error) =>
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
+      })
+    );
+
     this.subscription.add(
       this.partyService.getStates().subscribe({
         next: (states) => (this.stateList = states),
@@ -183,7 +199,10 @@ export class AddPartyComponent implements OnInit, OnDestroy {
     const partyRequest = {
       ...this.form.value,
       contactNo: landline ? `${mobile.join()},${landline}` : mobile.join(),
-      createdByUserId: 0,
+      createdByUserId: this.appSharedService.userId,
+      partyDepartments: this.form.value?.partyDepartments?.map((id: number) =>
+        this.departmentList.find((data) => data.partyDepartmentId === id)
+      ),
     };
     delete partyRequest?.phones;
     delete partyRequest?.landline;

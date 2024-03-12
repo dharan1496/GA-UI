@@ -71,7 +71,8 @@ export class LoginComponent implements OnInit {
     this.userService
       .login(this.username?.value, this.password?.value)
       .subscribe({
-        next: () => {
+        next: (response) => {
+          this.appSharedService.userId = +response;
           this.router.navigateByUrl('/home');
           this.appSharedService.logout = false;
           this.appSharedService.username = this.username?.value;

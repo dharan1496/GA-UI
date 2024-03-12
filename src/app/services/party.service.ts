@@ -6,6 +6,7 @@ import { Party } from '../models/party';
 import { State } from '../models/state';
 import { District } from '../models/district';
 import { City } from '../models/city';
+import { PartyDepartment } from '../models/partyDepartment';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,14 @@ export class PartyService {
 
   getParties(): Observable<Party[]> {
     return this.http.get<Party[]>(`${environment.api}/Party/GetAllParties`);
+  }
+
+  getFibreParties(): Observable<Party[]> {
+    return this.http.get<Party[]>(`${environment.api}/Party/GetFiberParties`);
+  }
+
+  getSalesParties(): Observable<Party[]> {
+    return this.http.get<Party[]>(`${environment.api}/Party/GetSalesParties`);
   }
 
   getPartyById(id: number): Observable<Party> {
@@ -61,5 +70,21 @@ export class PartyService {
 
   getCities(): Observable<City[]> {
     return this.http.get<City[]>(`${environment.api}/Party/GetAllCities`);
+  }
+
+  getPartyDepartmentMaster(): Observable<PartyDepartment[]> {
+    return this.http.get<PartyDepartment[]>(
+      `${environment.api}/Party/GetPartyDepartmentMaster`
+    );
+  }
+
+  addPartyDepartment(
+    partyId: number,
+    partyDepartments: PartyDepartment[]
+  ): Observable<string> {
+    return this.http.post<string>(
+      `${environment.api}/Party/AddPartyDepartment?partyId=${partyId}`,
+      partyDepartments
+    );
   }
 }

@@ -21,6 +21,18 @@
           <input matInput formControlName="gstNo" />
           <mat-error>This field is required.</mat-error>
         </mat-form-field>
+        <mat-form-field>
+          <mat-label>Department</mat-label>
+          <mat-select formControlName="partyDepartments" multiple>
+            <mat-option
+              [value]="department?.partyDepartmentId"
+              *ngFor="let department of departmentList"
+            >
+              {{ department?.partyDepartmentName }}
+            </mat-option>
+          </mat-select>
+          <mat-error>This field is required.</mat-error>
+        </mat-form-field>
       </form>
     </mat-card-content>
   </mat-card>

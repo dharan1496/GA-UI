@@ -1,3 +1,5 @@
+import { PartyDepartment } from './partyDepartment';
+
 export interface Party {
   partyId: number;
   partyName: string;
@@ -17,4 +19,5 @@ export interface Party {
   eMailId: string;
   contactNo: string;
   createdByUserId: number;
+  partyDepartments: PartyDepartment[];
 }

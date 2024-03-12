@@ -11,7 +11,10 @@ export class UserService {
 
   login(loginName: string, password: string) {
     return this.http.get(
-      `${environment.api}/User/LoginUser?loginName=${loginName}&password=${password}`
+      `${environment.api}/User/LoginUser?loginName=${loginName}&password=${password}`,
+      {
+        responseType: 'text',
+      }
     );
   }
 

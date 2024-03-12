@@ -44,6 +44,12 @@
             <div id="gstNo" class="text-gray">{{ party.gstNo || "_" }}</div>
           </div>
           <div>
+            <label for="gstNo">Department(s)</label>
+            <div id="departments" class="text-gray">
+              {{ getDepartments(party.partyDepartments) || "_" }}
+            </div>
+          </div>
+          <div>
             <label for="address1">Address Line 1</label>
             <div id="address1" class="text-gray">
               {{ party.address1 || "_" }}

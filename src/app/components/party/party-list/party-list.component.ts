@@ -12,6 +12,7 @@ import { UserActionConfirmationComponent } from '../../user-action-confirmation/
 import { NotificationService } from 'src/app/shared/notification.service';
 import { NgxMaskPipe } from 'ngx-mask';
 import { MatExpansionPanel } from '@angular/material/expansion';
+import { PartyDepartment } from 'src/app/models/partyDepartment';
 
 @Component({
   selector: 'app-party-list',
@@ -101,5 +102,11 @@ export class PartyListComponent implements OnInit {
     document
       .getElementById(panel.id)
       ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  getDepartments(departments: PartyDepartment[]) {
+    return (
+      departments?.map((data) => data.partyDepartmentName)?.join(', ') || ''
+    );
   }
 }
