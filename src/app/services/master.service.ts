@@ -52,7 +52,7 @@ export class MasterService {
 
   deleteYarnCounts(countsId: number): Observable<string> {
     return this.http.put(
-      `${environment.api}/Master/DeleteYarnCounts?countsId=${countsId}`,
+      `${environment.api}/Master/DeleteYarnCounts?countsId=${countsId}&deletedByUserId=${this.appSharedService.userId}`,
       {},
       {
         responseType: 'text',
@@ -70,6 +70,16 @@ export class MasterService {
     return this.http.post(`${environment.api}/Master/AddYarnBlend`, blend, {
       responseType: 'text',
     });
+  }
+
+  deleteYarnBlend(blendId: number): Observable<string> {
+    return this.http.put(
+      `${environment.api}/Master/DeleteYarnBlend?blendId=${blendId}&deletedByUserId=${this.appSharedService.userId}`,
+      {},
+      {
+        responseType: 'text',
+      }
+    );
   }
 
   addWasteCategory(

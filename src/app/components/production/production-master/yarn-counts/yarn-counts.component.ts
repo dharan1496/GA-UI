@@ -59,8 +59,8 @@ export class YarnCountsComponent implements OnInit, OnDestroy {
     this.dialog
       .open(UserActionConfirmationComponent)
       .afterClosed()
-      .subscribe((response) => {
-        if (response) {
+      .subscribe((action) => {
+        if (action) {
           this.masterService.deleteYarnCounts(counts.countsId).subscribe({
             next: (response) => {
               if (response) {

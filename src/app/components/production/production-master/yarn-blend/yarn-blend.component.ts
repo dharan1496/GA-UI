@@ -58,17 +58,27 @@ export class YarnBlendComponent implements OnInit, OnDestroy {
     this.dialog
       .open(UserActionConfirmationComponent)
       .afterClosed()
-      .subscribe({
-        next: (action) => {
-          if (action) {
-            // delete
-            blend;
-          }
-        },
-        error: (error) =>
-          this.notificationService.error(
-            typeof error?.error === 'string' ? error?.error : error?.message
-          ),
+      .subscribe((action) => {
+        if (action) {
+          this.masterService.deleteYarnBlend(blend.blendId).subscribe({
+            next: (response) => {
+              if (response) {
+                this.getBlend();
+                this.notificationService.success(
+                  'Yarn Blend deleted successfully!'
+                );
+              } else {
+                this.notificationService.success(
+                  'Unable to delete the Yarn Blend!'
+                );
+              }
+            },
+            error: (error) =>
+              this.notificationService.error(
+                typeof error?.error === 'string' ? error?.error : error?.message
+              ),
+          });
+        }
       });
   }
 
