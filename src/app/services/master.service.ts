@@ -50,6 +50,16 @@ export class MasterService {
     );
   }
 
+  deleteYarnCounts(countsId: number): Observable<string> {
+    return this.http.put(
+      `${environment.api}/Master/DeleteYarnCounts?countsId=${countsId}`,
+      {},
+      {
+        responseType: 'text',
+      }
+    );
+  }
+
   getYarnBlend(): Observable<YarnBlend[]> {
     return this.http.get<YarnBlend[]>(
       `${environment.api}/Master/GetYarnBlendList`
