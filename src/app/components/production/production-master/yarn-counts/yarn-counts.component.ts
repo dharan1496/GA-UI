@@ -55,21 +55,6 @@ export class YarnCountsComponent implements OnInit, OnDestroy {
       .subscribe(() => this.getYarnCounts());
   }
 
-  // removeYarnCounts() {
-  //   this.dialog
-  //     .open(UserActionConfirmationComponent)
-  //     .afterClosed()
-  //     .subscribe({
-  //       next: (action) => {
-  //         if (action) {
-  //           // delete
-  //         }
-  //       },
-  //       error: (error) =>
-  //         this.notificationService.error(
-  //           typeof error?.error === 'string' ? error?.error : error?.message
-  //         ),
-  //     });
   removeYarnCounts(counts: YarnCounts) {
     this.dialog
       .open(UserActionConfirmationComponent)
@@ -80,9 +65,13 @@ export class YarnCountsComponent implements OnInit, OnDestroy {
             next: (response) => {
               if (response) {
                 this.getYarnCounts();
-                this.notificationService.success('Yarn Count deleted successfully!');
+                this.notificationService.success(
+                  'Yarn Count deleted successfully!'
+                );
               } else {
-                this.notificationService.success('Unable to delete the Yarn Count!');
+                this.notificationService.success(
+                  'Unable to delete the Yarn Count!'
+                );
               }
             },
             error: (error) =>
