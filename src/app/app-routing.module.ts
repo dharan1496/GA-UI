@@ -54,6 +54,22 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: 'employee',
+    loadChildren: () =>
+      import('./components/employee/employee.module').then(
+        (m) => m.EmployeeModule
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'payroll',
+    loadChildren: () =>
+      import('./components/payroll/payroll.module').then(
+        (m) => m.PayrollModule
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'change-password',
     loadChildren: () =>
       import('./components/change-password/change-password.module').then(

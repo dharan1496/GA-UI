@@ -1,0 +1,51 @@
+.container {
+  margin: 32px;
+}
+
+.header {
+  font-weight: 500;
+  margin: 40px 0;
+}
+
+mat-card {
+  max-width: 80%;
+  margin-bottom: 32px;
+}
+
+.upload-file {
+  width: 400px;
+}
+
+.form {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.form-fields {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.padding {
+  padding: 24px 24px 16px 24px;
+}
+
+.json-data {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  padding: 16px 24px;
+}
+
+.table {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.mat-mdc-header-row {
+  background: rgb(225, 225, 225);
+}
+
+.mat-mdc-paginator {
+  padding: 8px 0;
+}

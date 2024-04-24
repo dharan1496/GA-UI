@@ -30,7 +30,6 @@ export class FibreStockComponent implements OnInit, OnDestroy {
   subscription = new Subscription();
   dataSource = new MatTableDataSource<FibreStock>([]);
   displayedColumns = [
-    'sNo',
     'receivedDCNo',
     'poNo',
     'party',

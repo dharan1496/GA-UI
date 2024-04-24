@@ -6,4 +6,6 @@ export const Constants = {
   PARTY: 'party',
   WASTE: 'waste',
   HIDDEN: 'hidden',
+  PAYROLL: 'payroll',
+  EMPLOYEE: 'employee',
 };

@@ -7,7 +7,7 @@ import { AbstractControl } from '@angular/forms';
 export class AppSharedService {
   logout = false;
   username = localStorage.getItem('username') || '';
-  userId = 0;
+  userId = +(localStorage.getItem('userId') || 0);
 
   genUniqueId(): string {
     const dateStr = Date.now().toString(36).substring(5);

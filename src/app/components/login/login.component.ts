@@ -78,6 +78,7 @@ export class LoginComponent implements OnInit {
           this.appSharedService.username = this.username?.value;
           localStorage.setItem('loggedIn', 'true');
           localStorage.setItem('username', this.username?.value);
+          localStorage.setItem('userId', response);
         },
         error: (error) => {
           this.notificationService.error(error?.error);
