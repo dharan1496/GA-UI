@@ -1,10 +1,8 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
-import { NgxMaskPipe } from 'ngx-mask';
 import { Subscription } from 'rxjs';
 import { Constants } from 'src/app/constants/constants';
 import { EMPLOYEE } from 'src/app/constants/employee-menu-values.const';
@@ -13,13 +11,14 @@ import { EmployeeService } from 'src/app/services/employee.service';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
 import { NotificationService } from 'src/app/shared/notification.service';
+import { EmployeeDetailsComponent } from './employee-details/employee-details.component';
 
 @Component({
   selector: 'app-employee-list',
   templateUrl: './employee-list.component.html',
   styleUrls: ['./employee-list.component.scss'],
 })
-export class EmployeeListComponent {
+export class EmployeeListComponent implements OnInit, OnDestroy {
   subscription = new Subscription();
   dataSource = new MatTableDataSource<Employee>([]);
   displayedColumns = [
@@ -57,13 +56,36 @@ export class EmployeeListComponent {
     public appSharedService: AppSharedService,
     private navigationService: NavigationService,
     public employeeService: EmployeeService,
-    private router: Router,
     private dialog: MatDialog,
-    private notificationService: NotificationService,
-    private maskPipe: NgxMaskPipe
+    private notificationService: NotificationService
   ) {
     this.navigationService.isSidenavOpened = true;
     this.navigationService.setFocus(Constants.EMPLOYEE);
     this.navigationService.menu = EMPLOYEE;
+  }
+
+  ngOnInit() {
+    this.subscription.add(
+      this.employeeService.getActiveEmployees().subscribe({
+        next: (response) => {
+          this.dataSource.data = response;
+        },
+        error: (error) =>
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription?.unsubscribe();
+  }
+
+  openEmployeeDetails(employee: Employee) {
+    this.dialog.open(EmployeeDetailsComponent, {
+      data: employee,
+      minWidth: '75vw',
+    });
   }
 }

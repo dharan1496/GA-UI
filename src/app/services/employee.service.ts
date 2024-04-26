@@ -6,6 +6,7 @@ import { Employee } from '../models/employee';
 import { Observable } from 'rxjs';
 import { MonthlyAttendance } from '../models/monthlyAttendance';
 import { EmployeeSalaryDetails } from '../models/employeeSalaryDetails';
+import { EmployeeDepartment } from '../models/EmployeeDepartment';
 
 @Injectable({
   providedIn: 'root',
@@ -82,6 +83,18 @@ export class EmployeeService {
       {
         responseType: 'text',
       }
+    );
+  }
+
+  getEmployeeDepartmentMasters(): Observable<EmployeeDepartment[]> {
+    return this.http.get<EmployeeDepartment[]>(
+      `${environment.api}/Employee/GetEmployeeDepartmentMasters`
+    );
+  }
+
+  getActiveEmployees(): Observable<Employee[]> {
+    return this.http.get<Employee[]>(
+      `${environment.api}/Employee/GetActiveEmployees`
     );
   }
 }

@@ -10,6 +10,7 @@ import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { DatePipe } from '@angular/common';
+import { EmployeeDepartment } from 'src/app/models/EmployeeDepartment';
 
 @Component({
   selector: 'app-add-employee',
@@ -18,7 +19,7 @@ import { DatePipe } from '@angular/common';
 })
 export class AddEmployeeComponent implements OnInit, OnDestroy {
   form!: FormGroup;
-  departmentList!: any[];
+  departmentList!: EmployeeDepartment[];
   idProofTypes = [
     { value: 1, label: 'Aadhaar' },
     { value: 2, label: 'Driving License' },
@@ -43,12 +44,24 @@ export class AddEmployeeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.subscription.add(
+      this.employeeService.getEmployeeDepartmentMasters().subscribe({
+        next: (response) => {
+          this.departmentList = response;
+        },
+        error: (error) =>
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
+      })
+    );
+
     this.form = this.formBuilder.group({
       employeeId: ['', Validators.required],
       firstName: ['', Validators.required],
       lastName: '',
       departmentId: ['', Validators.required],
-      departmentType: '',
+      departmentName: '',
       address: ['', Validators.required],
       idProofTypeId: ['', Validators.required],
       idProofType: '',
@@ -63,7 +76,13 @@ export class AddEmployeeComponent implements OnInit, OnDestroy {
 
     this.subscription.add(
       this.form.get('departmentId')?.valueChanges.subscribe((departmentId) => {
-        this.form.get('departmentName')?.setValue(departmentId);
+        this.form
+          .get('departmentName')
+          ?.setValue(
+            this.departmentList.find(
+              (option) => option.departmentId === departmentId
+            )?.departmentName
+          );
       })
     );
 
@@ -119,7 +138,7 @@ export class AddEmployeeComponent implements OnInit, OnDestroy {
         'dd/MM/yyyy'
       ),
     };
-    this.employeeService.addEmployee(this.form.value).subscribe({
+    this.employeeService.addEmployee(employee).subscribe({
       next: (response) => {
         if (response) {
           this.notificationService

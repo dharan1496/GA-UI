@@ -10,6 +10,9 @@
     </button>
   </div>
 
+  <div *ngIf="dataSource.data.length" class="text-right mb-4">
+    &ast;Click the row to see the employee details
+  </div>
   <div class="table-container">
     <div *ngIf="loader" class="loader">
       <mat-spinner></mat-spinner>
@@ -19,7 +22,7 @@
         <ng-container matColumnDef="firstName">
           <th mat-header-cell *matHeaderCellDef>Name</th>
           <td mat-cell *matCellDef="let element">
-            {{ element.firstName }}
+            {{ element.firstName + " " + element.lastName | titlecase }}
           </td>
         </ng-container>
 
@@ -89,12 +92,12 @@
             {{ element.allowedLeaveDays }}
           </td>
         </ng-container>
-
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr
           mat-row
           class="row"
           *matRowDef="let row; columns: displayedColumns"
+          (click)="openEmployeeDetails(row)"
         ></tr>
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell no-rows" [attr.colspan]="displayedColumns.length">

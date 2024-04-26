@@ -24,7 +24,14 @@
         <div>
           <mat-form-field appearance="fill" class="w-100">
             <mat-label>Department</mat-label>
-            <mat-select formControlName="departmentId"> </mat-select>
+            <mat-select formControlName="departmentId">
+              <mat-option
+                *ngFor="let department of departmentList"
+                [value]="department.departmentId"
+              >
+                {{ department.departmentName }}
+              </mat-option>
+            </mat-select>
             <mat-error>This field is required.</mat-error>
           </mat-form-field>
         </div>

@@ -1,0 +1,71 @@
+<div class="header">
+  <h1 mat-dialog-title>
+    Employee -
+    {{ employeeDetails.firstName + " " + employeeDetails.lastName | titlecase }}
+  </h1>
+  <button mat-icon-button matTooltip="close" (click)="close()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<div mat-dialog-content class="container word-break-all">
+  <section class="details">
+    <div>
+      <div class="text-dark pb-2">Employee Id</div>
+      <div>{{ employeeDetails.employeeId }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Name</div>
+      <div>
+        {{
+          employeeDetails.firstName + " " + employeeDetails.lastName | titlecase
+        }}
+      </div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Department Name</div>
+      <div>{{ employeeDetails.departmentName }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Address</div>
+      <div>{{ employeeDetails.address }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Id Proof Type</div>
+      <div>{{ employeeDetails.idProofType }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Id Proof</div>
+      <div>{{ employeeDetails.idProof }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Salary Category</div>
+      <div>{{ employeeDetails.salaryCategoryName }}</div>
+    </div>
+    <div *ngIf="employeeDetails.salary">
+      <div class="text-dark pb-2">Salary</div>
+      <div>{{ employeeDetails.salary | currency : "INR" }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Date of Joining</div>
+      <div>{{ employeeDetails.dateOfJoining }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Allowed leave days</div>
+      <div>{{ employeeDetails.allowedLeaveDays }}</div>
+    </div>
+    <div>
+      <div class="text-dark pb-2">Contact No</div>
+      <div>{{ employeeDetails.contactNo }}</div>
+    </div>
+  </section>
+</div>
+<div mat-dialog-actions class="footer">
+  <button mat-raised-button color="primary" (click)="updateEmployee()">
+    <mat-icon aria-label="edit icon">edit</mat-icon>
+    Update
+  </button>
+  <button mat-raised-button color="warn" (click)="deleteEmployee()">
+    <mat-icon aria-label="delete icon">delete</mat-icon>
+    Delete
+  </button>
+</div>
