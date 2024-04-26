@@ -1,0 +1,72 @@
+<section class="container" [formGroup]="form">
+  <h1 class="header letter-spacing-1">Advance Payment</h1>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title> Advance Details </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form class="grid col-3 gap padding">
+        <mat-form-field appearance="fill" class="w-100">
+          <mat-label>Employee</mat-label>
+          <mat-select formControlName="employeeId">
+            <mat-option
+              *ngFor="let employee of employeelist"
+              [value]="employee.employeeId"
+            >
+              {{ employee.firstName + " " + employee.lastName }}
+            </mat-option>
+          </mat-select>
+          <mat-error>This field is required.</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Advance Date</mat-label>
+          <input
+            matInput
+            [matDatepicker]="advanceDatePicker"
+            formControlName="advanceDate"
+            (dateChange)="
+              appSharedService.formatDate($event, form.controls['advanceDate'])
+            "
+          />
+          <mat-hint>DD/MM/YYYY</mat-hint>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="advanceDatePicker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #advanceDatePicker></mat-datepicker>
+          <mat-error *ngIf="form.get('advanceDate')?.hasError('required')"
+            >Please enter valid date.</mat-error
+          >
+        </mat-form-field>
+        <div>
+          <mat-form-field appearance="fill" class="w-100">
+            <span matPrefix>&nbsp;&#x20B9;&nbsp;</span>
+            <mat-label>Advanced Amount</mat-label>
+            <input
+              type="number"
+              min="0.00"
+              step=".01"
+              matInput
+              formControlName="advanceAmount"
+              decimal="2"
+            />
+            <mat-error>This field is required.</mat-error>
+          </mat-form-field>
+        </div>
+        <mat-form-field appearance="fill">
+          <mat-label>Remarks</mat-label>
+          <textarea matInput formControlName="remarks"></textarea>
+          <mat-hint>Optional</mat-hint>
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  <div class="footer">
+    <button mat-raised-button (click)="resetData()" class="mr-16">
+      <mat-icon>refresh</mat-icon>Reset
+    </button>
+    <button mat-raised-button color="primary" (click)="submit()">
+      <mat-icon>save_alt</mat-icon>Submit
+    </button>
+  </div>
+</section>
