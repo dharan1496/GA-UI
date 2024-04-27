@@ -1,11 +1,11 @@
-<section class="container" [formGroup]="form">
+<section class="container">
   <h1 class="header letter-spacing-1">Add New Employee</h1>
   <mat-card>
     <mat-card-header>
       <mat-card-title> Employee Details </mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <form class="grid col-3 gap padding">
+      <form class="grid col-3 gap padding" [formGroup]="form">
         <mat-form-field appearance="fill">
           <mat-label>Employee Id</mat-label>
           <input matInput formControlName="employeeId" />

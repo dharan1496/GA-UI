@@ -8,7 +8,7 @@
 }
 
 mat-card {
-  max-width: 80%;
+  max-width: 90%;
   margin-bottom: 32px;
 }
 
@@ -48,4 +48,9 @@ mat-card {
 
 .mat-mdc-paginator {
   padding: 8px 0;
+}
+
+.no-rows {
+  padding: 16px 0;
+  text-align: center;
 }

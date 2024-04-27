@@ -1,11 +1,11 @@
-<section class="container" [formGroup]="form">
+<section class="container">
   <h1 class="header letter-spacing-1">Advance Payment</h1>
   <mat-card>
     <mat-card-header>
       <mat-card-title> Advance Details </mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <form class="grid col-3 gap padding">
+      <form class="grid col-3 gap padding" [formGroup]="form">
         <mat-form-field appearance="fill" class="w-100">
           <mat-label>Employee</mat-label>
           <mat-select formControlName="employeeId">
@@ -13,7 +13,7 @@
               *ngFor="let employee of employeelist"
               [value]="employee.employeeId"
             >
-              {{ employee.firstName + " " + employee.lastName }}
+              {{ employee.firstName + " " + employee.lastName | titlecase }}
             </mat-option>
           </mat-select>
           <mat-error>This field is required.</mat-error>

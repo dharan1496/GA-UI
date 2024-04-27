@@ -99,11 +99,18 @@ export class UploadAttendanceComponent {
   }
 
   submit() {
-    if (this.monthStartDate.invalid || this.uploadFile.invalid) {
-      this.monthStartDate.markAsTouched();
+    if (this.uploadFile.invalid) {
+      this.notificationService.notify(
+        'Please upload the attendance file!',
+        NotifyType.ERROR
+      );
+      return;
+    }
+
+    if (this.monthStartDate.invalid) {
       this.uploadFile.markAsTouched();
       this.notificationService.notify(
-        'Please fill the details to submit!',
+        'Please fill the start date!',
         NotifyType.ERROR
       );
       return;
@@ -115,10 +122,18 @@ export class UploadAttendanceComponent {
         data.firstCheckInTime || '',
         data.attendanceDate
       );
-      data.lastCheckOutTime = this.convertToDate(
-        data.lastCheckOutTime || '',
-        data.attendanceDate
-      );
+      if (data.firstCheckInTime) {
+        data.lastCheckOutTime = this.calculateLastCheckOut(
+          data.firstCheckInTime,
+          data.lastCheckOutTime,
+          data.workedHours
+        );
+      } else {
+        data.lastCheckOutTime = this.convertToDate(
+          data.lastCheckOutTime || '',
+          data.attendanceDate
+        );
+      }
     });
 
     this.employeeService
@@ -129,6 +144,7 @@ export class UploadAttendanceComponent {
       .subscribe({
         next: (response) => {
           this.notificationService.success(response);
+          this.resetData();
         },
         error: (error) =>
           this.notificationService.error(
@@ -137,14 +153,34 @@ export class UploadAttendanceComponent {
       });
   }
 
+  calculateLastCheckOut(
+    firstIn: string,
+    lastOut: string | null,
+    workedHours: string
+  ) {
+    if (!lastOut) {
+      return null;
+    }
+    const [hours, minutes] = workedHours.split(':').map(Number);
+    const firstInDate = new Date(this.getAttendaceDate(firstIn));
+    firstInDate.setHours(firstInDate.getHours() + hours);
+    firstInDate.setMinutes(firstInDate.getMinutes() + minutes);
+    return this.datePipe.transform(firstInDate, 'dd/MM/yyyy HH:mm') || '';
+  }
+
   convertToDate(timeString: string, attendanceDate: string) {
     if (!timeString) {
       return null;
     }
     const [hours, minutes] = timeString.split(':').map(Number);
-    const date = new Date(attendanceDate);
+    const date = new Date(this.getAttendaceDate(attendanceDate));
     date.setHours(hours);
     date.setMinutes(minutes);
     return this.datePipe.transform(date, 'dd/MM/yyyy HH:mm') || '';
+  }
+
+  getAttendaceDate(date: string) {
+    const splitDate = date.split('/');
+    return `${splitDate[1]}/${splitDate[0]}/${splitDate[2]}`;
   }
 }

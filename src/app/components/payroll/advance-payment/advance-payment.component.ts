@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Constants } from 'src/app/constants/constants';
@@ -16,7 +16,7 @@ import { NotificationService } from 'src/app/shared/notification.service';
   templateUrl: './advance-payment.component.html',
   styleUrls: ['./advance-payment.component.scss'],
 })
-export class AdvancePaymentComponent {
+export class AdvancePaymentComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   employeelist!: Employee[];
   subscription = new Subscription();

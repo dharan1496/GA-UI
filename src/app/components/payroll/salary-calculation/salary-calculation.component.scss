@@ -1,0 +1,75 @@
+.container {
+  margin: 32px;
+}
+
+.header {
+  font-weight: 500;
+  margin: 40px 0;
+}
+
+mat-card {
+  margin-bottom: 32px;
+}
+
+.padding {
+  padding: 32px 24px 16px 24px;
+}
+
+.footer {
+  margin-top: 50px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.table-container {
+  position: relative;
+  background-color: #fff;
+  margin-bottom: 40px;
+}
+
+.table {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.mat-mdc-header-row {
+  background: rgb(225, 225, 225);
+}
+
+.mat-mdc-paginator {
+  padding: 8px 0;
+}
+
+.loader {
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-rows {
+  padding: 16px 0;
+  text-align: center;
+}
+
+::ng-deep .month-picker .mat-calendar-period-button {
+  pointer-events: none !important;
+}
+
+::ng-deep .month-picker .mat-calendar-arrow {
+  display: none;
+}
+
+.amount-field {
+  padding-top: 8px;
+
+  ::ng-deep .mat-mdc-text-field-wrapper {
+    height: 40px !important;
+  }
+}

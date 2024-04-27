@@ -64,8 +64,8 @@ export class EmployeeService {
   getMonthlyAttendanceById(
     employeeId: number,
     monthStartDate: string
-  ): Observable<MonthlyAttendance> {
-    return this.http.get<MonthlyAttendance>(
+  ): Observable<MonthlyAttendance[]> {
+    return this.http.get<MonthlyAttendance[]>(
       `${environment.api}/Employee/GetMonthlyAttendanceById?employeeId=${employeeId}&monthStartDate=${monthStartDate}`
     );
   }
@@ -75,7 +75,7 @@ export class EmployeeService {
     salaryMonthStartDate: string,
     salaryAmount: number,
     deductionAmount: number,
-    employeeSalaryDetails: EmployeeSalaryDetails
+    employeeSalaryDetails: EmployeeSalaryDetails[]
   ) {
     return this.http.post(
       `${environment.api}/Employee/SaveSalary?employeeId=${employeeId}&salaryMonthStartDate=${salaryMonthStartDate}&salaryAmount=${salaryAmount}&deductionAmount=${deductionAmount}&createdByUserId=${this.appSharedService.userId}`,

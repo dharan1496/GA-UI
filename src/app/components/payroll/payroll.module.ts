@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from 'src/app/material.module';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { PayrollRoutingModule } from './payroll-routing.module';
 import { UploadAttendanceComponent } from './upload-attendance/upload-attendance.component';
@@ -19,6 +19,7 @@ import { AdvancePaymentComponent } from './advance-payment/advance-payment.compo
     PayrollRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
+    FormsModule,
     NgxMaskDirective,
   ],
   providers: [provideNgxMask(), NgxMaskPipe],

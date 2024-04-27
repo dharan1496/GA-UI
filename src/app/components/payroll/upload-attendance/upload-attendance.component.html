@@ -8,12 +8,14 @@
     <mat-card-content>
       <div class="padding form">
         <div class="form-fields">
-          <input
-            [formControl]="uploadFile"
-            type="file"
-            (change)="onFileChange($event)"
-            accept=".xlsx"
-          />
+          <div>
+            <input
+              [formControl]="uploadFile"
+              type="file"
+              (change)="onFileChange($event)"
+              accept=".xlsx"
+            />
+          </div>
           <mat-form-field appearance="fill">
             <mat-label>Attendance Start Date</mat-label>
             <input
