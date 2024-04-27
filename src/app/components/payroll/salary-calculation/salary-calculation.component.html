@@ -114,7 +114,9 @@
               </tr>
             </table>
             <mat-paginator
-              *ngIf="attendanceData?.data?.length"
+              *ngIf="
+                attendanceData?.data?.length && attendanceData.data.length > 10
+              "
               [pageSizeOptions]="[10, 25, 100]"
               aria-label="Select page of details"
             ></mat-paginator>
@@ -133,9 +135,9 @@
               decimal="2"
             />
           </mat-form-field>
-          <mat-form-field appearance="fill" class="w-25">
+          <mat-form-field appearance="fill" class="w-25 mr-24">
             <span matPrefix>&nbsp;&#x20B9;&nbsp;</span>
-            <mat-label>Total Salary Amount</mat-label>
+            <mat-label>Salary Before Deduction</mat-label>
             <input
               type="number"
               min="0.00"
@@ -146,6 +148,10 @@
             />
             <mat-error>This field is required.</mat-error>
           </mat-form-field>
+          <div class="w-25 salary-after-deduction">
+            <mat-label>Salary After deduction</mat-label>
+            <div>{{ getDeductedSalary() | currency : "INR" }}</div>
+          </div>
         </div>
       </div>
     </mat-card-content>

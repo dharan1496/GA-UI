@@ -67,14 +67,18 @@
             </ng-container>
 
             <ng-container matColumnDef="firstCheckInTime">
-              <th mat-header-cell *matHeaderCellDef>FirstCheckInTime</th>
+              <th mat-header-cell *matHeaderCellDef>
+                FirstCheckInTime (24 hr)
+              </th>
               <td mat-cell *matCellDef="let element">
                 {{ element.firstCheckInTime }}
               </td>
             </ng-container>
 
             <ng-container matColumnDef="lastCheckOutTime">
-              <th mat-header-cell *matHeaderCellDef>LastCheckOutTime</th>
+              <th mat-header-cell *matHeaderCellDef>
+                LastCheckOutTime (24 hr)
+              </th>
               <td mat-cell *matCellDef="let element">
                 {{ element.lastCheckOutTime }}
               </td>

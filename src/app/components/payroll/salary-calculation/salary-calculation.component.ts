@@ -67,6 +67,7 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
   private paginator!: MatPaginator;
   paymentMonth = new FormControl(moment(), Validators.required);
   employeeId = new FormControl('', Validators.required);
+  selectedEmployee!: Employee | null;
   deductionAmount = new FormControl('');
   totalSalaryAmount = new FormControl('', Validators.required);
 
@@ -104,14 +105,10 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
     );
 
     this.subscription.add(
-      this.deductionAmount.valueChanges.subscribe((amount) => {
-        const salary = this.totalSalaryAmount.value;
-        if (salary) {
-          const afterDeduction = +salary - +(amount || 0);
-          this.totalSalaryAmount.setValue(
-            afterDeduction > 0 ? `${afterDeduction}` : '0'
-          );
-        }
+      this.employeeId.valueChanges.subscribe((id) => {
+        this.selectedEmployee = this.employeelist.find(
+          (employee) => employee.employeeId === +(id || 0)
+        ) as Employee;
       })
     );
   }
@@ -137,6 +134,7 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
     this.paymentMonth.reset(moment());
     this.deductionAmount.reset();
     this.totalSalaryAmount.reset();
+    this.selectedEmployee = null;
   }
 
   calculateTotalAmount() {
@@ -172,7 +170,29 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           if (response?.length) {
+            const { salaryCategoryName, salary } = this
+              .selectedEmployee as Employee;
+            response?.forEach((data: any) => {
+              // Monthly
+              if (salaryCategoryName === 'Monthly') {
+                data['amount'] = Math.round(salary / response?.length);
+              } else {
+                // Daily wage
+                if (data.workedHours) {
+                  const [hours, minutes] = data.workedHours
+                    .split(':')
+                    .map(Number);
+                  if (hours < 12) {
+                    const oneHourSalary = Math.round(salary / 12);
+                    data['amount'] = Math.round(oneHourSalary * hours);
+                  } else {
+                    data['amount'] = salary;
+                  }
+                }
+              }
+            });
             this.attendanceData.data = response;
+            this.calculateTotalAmount();
           } else {
             this.notificationService.error('No records found!');
           }
@@ -220,7 +240,7 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (response) => {
-          this.notificationService.error(response);
+          this.notificationService.success(response);
           this.resetData();
         },
         error: (error) =>
@@ -228,5 +248,14 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
             typeof error?.error === 'string' ? error?.error : error?.message
           ),
       });
+  }
+
+  getDeductedSalary() {
+    const deduction = +(this.deductionAmount.value || 0);
+    const salary = +(this.totalSalaryAmount.value || 0);
+    if (deduction) {
+      return salary < deduction ? 0 : salary - deduction;
+    }
+    return salary;
   }
 }

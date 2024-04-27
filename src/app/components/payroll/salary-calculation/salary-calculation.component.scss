@@ -37,6 +37,7 @@ mat-card {
 
 .mat-mdc-paginator {
   padding: 8px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 .loader {
@@ -71,5 +72,15 @@ mat-card {
 
   ::ng-deep .mat-mdc-text-field-wrapper {
     height: 40px !important;
+  }
+}
+
+.salary-after-deduction {
+  display: inline-block;
+  margin-left: 40px;
+
+  div {
+    font-size: 18px;
+    margin-top: 4px;
   }
 }
