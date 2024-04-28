@@ -192,13 +192,16 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
             this.attendanceData.data = response;
             this.calculateTotalAmount();
           } else {
+            this.attendanceData.data = [];
             this.notificationService.error('No records found!');
           }
         },
-        error: (error) =>
+        error: (error) => {
+          this.attendanceData.data = [];
           this.notificationService.error(
             typeof error?.error === 'string' ? error?.error : error?.message
-          ),
+          );
+        },
       });
   }
 
