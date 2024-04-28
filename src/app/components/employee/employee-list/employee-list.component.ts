@@ -22,6 +22,7 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
   subscription = new Subscription();
   dataSource = new MatTableDataSource<Employee>([]);
   displayedColumns = [
+    'employeeId',
     'firstName',
     'departmentName',
     'address',
