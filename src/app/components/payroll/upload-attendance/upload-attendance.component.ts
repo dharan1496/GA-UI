@@ -85,7 +85,14 @@ export class UploadAttendanceComponent {
     if (!date) {
       return '';
     }
-    const splittedDate = date?.split('-');
+
+    let splittedDate;
+    if (date.includes('-')) {
+      splittedDate = date?.split('-');
+    } else {
+      splittedDate = date?.split('/');
+    }
+
     return this.datePipe.transform(
       new Date(
         `${splittedDate[1]}/${splittedDate[0]}/${splittedDate[2]}`
