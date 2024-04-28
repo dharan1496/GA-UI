@@ -141,9 +141,7 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
     const totalAmount = this.attendanceData.data.reduce((acc, cur: any) => {
       return acc + (cur?.amount || 0);
     }, 0);
-    const afterDeductionAmount =
-      totalAmount - +(this.deductionAmount.value || 0);
-    this.totalSalaryAmount.setValue(`${afterDeductionAmount || 0}`);
+    this.totalSalaryAmount.setValue(`${totalAmount}`);
   }
 
   fetchAttendance() {
