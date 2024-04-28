@@ -64,6 +64,8 @@ export class UploadAttendanceComponent {
       });
       if (excelData && excelData?.length) {
         this.formatExcelData(excelData);
+      } else {
+        this.attendanceData.data = [];
       }
     };
     reader.readAsBinaryString(file);
