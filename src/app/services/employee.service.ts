@@ -7,6 +7,8 @@ import { Observable } from 'rxjs';
 import { MonthlyAttendance } from '../models/monthlyAttendance';
 import { EmployeeSalaryDetails } from '../models/employeeSalaryDetails';
 import { EmployeeDepartment } from '../models/EmployeeDepartment';
+import { IDProof } from '../models/idProof';
+import { SalaryCategory } from '../models/salaryCategory';
 
 @Injectable({
   providedIn: 'root',
@@ -95,6 +97,18 @@ export class EmployeeService {
   getActiveEmployees(): Observable<Employee[]> {
     return this.http.get<Employee[]>(
       `${environment.api}/Employee/GetActiveEmployees`
+    );
+  }
+
+  getIDProofs(): Observable<IDProof[]> {
+    return this.http.get<IDProof[]>(
+      `${environment.api}/Employee/GetIDProofMasters`
+    );
+  }
+
+  getSalaryCategories(): Observable<SalaryCategory[]> {
+    return this.http.get<SalaryCategory[]>(
+      `${environment.api}/Employee/GetSalaryCategoryMasters`
     );
   }
 }

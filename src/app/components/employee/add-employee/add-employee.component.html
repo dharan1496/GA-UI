@@ -46,9 +46,9 @@
             <mat-select formControlName="idProofTypeId">
               <mat-option
                 *ngFor="let proof of idProofTypes"
-                [value]="proof.value"
+                [value]="proof.idProofTypeId"
               >
-                {{ proof.label }}
+                {{ proof.idProofType }}
               </mat-option>
             </mat-select>
             <mat-error>This field is required.</mat-error>
@@ -67,9 +67,9 @@
             <mat-select formControlName="salaryCategoryId">
               <mat-option
                 *ngFor="let category of salaryCategories"
-                [value]="category.value"
+                [value]="category.salaryCategoryId"
               >
-                {{ category.label }}
+                {{ category.salaryCategoryName }}
               </mat-option>
             </mat-select>
             <mat-error>This field is required.</mat-error>

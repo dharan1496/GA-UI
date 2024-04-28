@@ -11,6 +11,8 @@ import { NavigationService } from 'src/app/shared/navigation.service';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { DatePipe } from '@angular/common';
 import { EmployeeDepartment } from 'src/app/models/EmployeeDepartment';
+import { IDProof } from 'src/app/models/idProof';
+import { SalaryCategory } from 'src/app/models/salaryCategory';
 
 @Component({
   selector: 'app-add-employee',
@@ -20,14 +22,8 @@ import { EmployeeDepartment } from 'src/app/models/EmployeeDepartment';
 export class AddEmployeeComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   departmentList!: EmployeeDepartment[];
-  idProofTypes = [
-    { value: 1, label: 'Aadhaar' },
-    { value: 2, label: 'Driving License' },
-  ];
-  salaryCategories = [
-    { value: 1, label: 'DailyWages' },
-    { value: 2, label: 'Monthly' },
-  ];
+  idProofTypes!: IDProof[];
+  salaryCategories!: SalaryCategory[];
   subscription = new Subscription();
 
   constructor(
@@ -48,6 +44,30 @@ export class AddEmployeeComponent implements OnInit, OnDestroy {
       this.employeeService.getEmployeeDepartmentMasters().subscribe({
         next: (response) => {
           this.departmentList = response;
+        },
+        error: (error) =>
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
+      })
+    );
+
+    this.subscription.add(
+      this.employeeService.getIDProofs().subscribe({
+        next: (response) => {
+          this.idProofTypes = response;
+        },
+        error: (error) =>
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
+      })
+    );
+
+    this.subscription.add(
+      this.employeeService.getSalaryCategories().subscribe({
+        next: (response) => {
+          this.salaryCategories = response;
         },
         error: (error) =>
           this.notificationService.error(
@@ -93,8 +113,9 @@ export class AddEmployeeComponent implements OnInit, OnDestroy {
           this.form
             .get('idProofType')
             ?.setValue(
-              this.idProofTypes.find((proof) => proof.value === idProofTypeId)
-                ?.label
+              this.idProofTypes.find(
+                (proof) => proof.idProofTypeId === idProofTypeId
+              )?.idProofType
             );
         })
     );
@@ -107,8 +128,8 @@ export class AddEmployeeComponent implements OnInit, OnDestroy {
             .get('salaryCategoryName')
             ?.setValue(
               this.salaryCategories.find(
-                (category) => category.value === salaryCategoryId
-              )?.label
+                (category) => category.salaryCategoryId === salaryCategoryId
+              )?.salaryCategoryName
             );
         })
     );
