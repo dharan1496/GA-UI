@@ -203,16 +203,26 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
   }
 
   submit() {
+    if (!this.attendanceData.data?.length) {
+      this.notificationService.notify(
+        'There is no attendance details!',
+        NotifyType.ERROR
+      );
+      return;
+    }
+
     if (
       this.employeeId.invalid ||
       this.paymentMonth.invalid ||
-      !this.attendanceData.data?.length ||
       this.totalSalaryAmount.invalid
     ) {
       this.employeeId.markAsTouched();
       this.paymentMonth.markAsTouched();
       this.totalSalaryAmount.markAsTouched();
-      this.notificationService.error('Error occured in the salary details!');
+      this.notificationService.notify(
+        'Error occured in the salary details!',
+        NotifyType.ERROR
+      );
 
       return;
     }
