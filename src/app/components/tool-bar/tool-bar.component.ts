@@ -1,7 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Constants } from 'src/app/constants/constants';
+import { EMPLOYEE } from 'src/app/constants/employee-menu-values.const';
 import { PARTY } from 'src/app/constants/party-menu-values.const';
+import { PAYROLL } from 'src/app/constants/payroll-menu-values.const';
 import { PRODUCTION } from 'src/app/constants/production-menu-values.const';
 import { PURCHASE } from 'src/app/constants/purchase-menu-values.const';
 import { SALES } from 'src/app/constants/sales-menu-values.const';
@@ -45,6 +47,12 @@ export class ToolBarComponent {
         break;
       case Constants.PARTY:
         this.navigationService.menu = PARTY;
+        break;
+      case Constants.EMPLOYEE:
+        this.navigationService.menu = EMPLOYEE;
+        break;
+      case Constants.PAYROLL:
+        this.navigationService.menu = PAYROLL;
         break;
       default:
         this.navigationService.menu = null;
