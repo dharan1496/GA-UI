@@ -164,7 +164,7 @@ export class UploadAttendanceComponent {
       return null;
     }
     const [hours, minutes] = workedHours.split(':').map(Number);
-    const firstInDate = new Date(this.getAttendaceDate(firstIn));
+    const firstInDate = new Date(this.getAttendanceDate(firstIn));
     firstInDate.setHours(firstInDate.getHours() + hours);
     firstInDate.setMinutes(firstInDate.getMinutes() + minutes);
     return this.datePipe.transform(firstInDate, 'dd/MM/yyyy HH:mm') || '';
@@ -175,13 +175,13 @@ export class UploadAttendanceComponent {
       return null;
     }
     const [hours, minutes] = timeString.split(':').map(Number);
-    const date = new Date(this.getAttendaceDate(attendanceDate));
+    const date = new Date(this.getAttendanceDate(attendanceDate));
     date.setHours(hours);
     date.setMinutes(minutes);
     return this.datePipe.transform(date, 'dd/MM/yyyy HH:mm') || '';
   }
 
-  getAttendaceDate(date: string) {
+  getAttendanceDate(date: string) {
     const splitDate = date.split('/');
     return `${splitDate[1]}/${splitDate[0]}/${splitDate[2]}`;
   }
