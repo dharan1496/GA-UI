@@ -117,7 +117,7 @@ export class UploadAttendanceComponent {
     }
 
     if (this.monthStartDate.invalid) {
-      this.uploadFile.markAsTouched();
+      this.monthStartDate.markAsTouched();
       this.notificationService.notify(
         'Please fill the start date!',
         NotifyType.ERROR
@@ -183,8 +183,8 @@ export class UploadAttendanceComponent {
     }
     const [hours, minutes] = timeString.split(':').map(Number);
     const date = new Date(this.getAttendanceDate(attendanceDate));
-    date.setHours(hours);
-    date.setMinutes(minutes);
+    date.setHours(hours || 0);
+    date.setMinutes(minutes || 0);
     return this.datePipe.transform(date, 'dd/MM/yyyy HH:mm') || '';
   }
 
