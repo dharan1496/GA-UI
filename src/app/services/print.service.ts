@@ -4,6 +4,7 @@ import { YarnInvoice } from '../models/yarnInvoice';
 import { FibreStock } from '../models/fibreStock';
 import { ConversionProgram } from '../models/conversionProgram';
 import { ProgramWaste } from '../models/programWaste';
+import { MonthlySalarySummary } from '../models/monthlySalarySummary';
 
 export interface YarnRecoveryDetails {
   programDetails: ConversionProgram;
@@ -27,6 +28,8 @@ export class PrintService {
   yarnInvoicePrint = false;
   yarnRecoveryPrint = false;
   yarnRecoveryDetails!: YarnRecoveryDetails;
+  salarySummary!: MonthlySalarySummary[];
+  salarySummaryPrint = false;
 
   constructor() {
     window.onafterprint = () => {
@@ -34,6 +37,7 @@ export class PrintService {
       this.yarnDCPrint = false;
       this.fibreStockPrint = false;
       this.yarnRecoveryPrint = false;
+      this.salarySummaryPrint = false;
     };
   }
 }

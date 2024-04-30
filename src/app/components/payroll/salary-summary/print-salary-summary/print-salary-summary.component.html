@@ -1,0 +1,17 @@
+<div class="flex">
+  <div *ngFor="let salary of printService.salarySummary">
+    <div>Name & ID: {{ salary.employeeName }} - {{ salary.employeeId }}</div>
+    <div>Month: {{ salary.salaryMonthDate }}</div>
+    <div *ngIf="salary.deductionAmount">
+      <div>Amount: {{ salary.salaryAmount | currency : "INR" }}</div>
+      <div>Deduction: {{ salary.deductionAmount | currency : "INR" }}</div>
+      <div>
+        Payable:
+        {{ salary.salaryAmount - salary.deductionAmount | currency : "INR" }}
+      </div>
+    </div>
+    <div *ngIf="!salary.deductionAmount">
+      Payable: {{ salary.salaryAmount | currency : "INR" }}
+    </div>
+  </div>
+</div>

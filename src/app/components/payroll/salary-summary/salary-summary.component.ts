@@ -25,6 +25,7 @@ import { NotificationService } from 'src/app/shared/notification.service';
 import { MY_FORMATS } from '../salary-calculation/salary-calculation.component';
 import { MonthlySalarySummary } from 'src/app/models/monthlySalarySummary';
 import { MatSort } from '@angular/material/sort';
+import { PrintService } from 'src/app/services/print.service';
 
 @Component({
   selector: 'app-salary-summary',
@@ -75,7 +76,8 @@ export class SalarySummaryComponent {
     public appSharedService: AppSharedService,
     private navigationService: NavigationService,
     private employeeService: EmployeeService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private printService: PrintService
   ) {
     this.navigationService.setFocus(Constants.PAYROLL);
     this.navigationService.menu = PAYROLL;
@@ -133,6 +135,8 @@ export class SalarySummaryComponent {
   }
 
   print() {
-    //
+    this.printService.salarySummary = this.dataSource.data;
+    this.printService.salarySummaryPrint = true;
+    setTimeout(() => window.print());
   }
 }

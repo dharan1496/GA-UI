@@ -16,6 +16,7 @@ import { PrintDeliveryReceiptComponent } from './components/sales/print-delivery
 import { PrintDeliveryInvoiceComponent } from './components/sales/delivery-invoice/print-delivery-invoice/print-delivery-invoice.component';
 import { PrintFibreStockComponent } from './components/purchases/fibre/fibre-stock/print-fibre-stock/print-fibre-stock.component';
 import { PrintRecoveryDetailsComponent } from './components/production/yarn-recovery/print-recovery-details/print-recovery-details.component';
+import { PrintSalarySummaryComponent } from './components/payroll/salary-summary/print-salary-summary/print-salary-summary.component';
 
 @NgModule({
   declarations: [AppComponent, SideMenuComponent, ToolBarComponent],
@@ -34,6 +35,7 @@ import { PrintRecoveryDetailsComponent } from './components/production/yarn-reco
     PrintDeliveryInvoiceComponent,
     PrintFibreStockComponent,
     PrintRecoveryDetailsComponent,
+    PrintSalarySummaryComponent,
   ],
 })
 export class AppModule {}
