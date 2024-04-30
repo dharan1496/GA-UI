@@ -131,4 +131,8 @@ export class SalarySummaryComponent {
     this.paymentMonth.reset(moment());
     this.dataSource.data = [];
   }
+
+  print() {
+    //
+  }
 }
