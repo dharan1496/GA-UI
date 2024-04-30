@@ -9,6 +9,8 @@ import { EmployeeSalaryDetails } from '../models/employeeSalaryDetails';
 import { EmployeeDepartment } from '../models/EmployeeDepartment';
 import { IDProof } from '../models/idProof';
 import { SalaryCategory } from '../models/salaryCategory';
+import { EmployeeSalary } from '../models/employeeSalary';
+import { MonthlySalarySummary } from '../models/monthlySalarySummary';
 
 @Injectable({
   providedIn: 'root',
@@ -109,6 +111,23 @@ export class EmployeeService {
   getSalaryCategories(): Observable<SalaryCategory[]> {
     return this.http.get<SalaryCategory[]>(
       `${environment.api}/Employee/GetSalaryCategoryMasters`
+    );
+  }
+
+  getEmployeeMonthlySalaryDetails(
+    employeeId: number,
+    monthStartDate: string
+  ): Observable<EmployeeSalary> {
+    return this.http.get<EmployeeSalary>(
+      `${environment.api}/Employee/GetEmployeeMonthlySalaryDetails?employeeId=${employeeId}&monthStartDate=${monthStartDate}`
+    );
+  }
+
+  getMonthlySalarySummary(
+    salaryMonthDate: string
+  ): Observable<MonthlySalarySummary[]> {
+    return this.http.get<MonthlySalarySummary[]>(
+      `${environment.api}/Employee/GetMonthlySalarySummary?salaryMonthDate=${salaryMonthDate}`
     );
   }
 }

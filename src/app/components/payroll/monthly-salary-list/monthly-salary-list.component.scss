@@ -1,0 +1,76 @@
+.container {
+  margin: 32px;
+}
+
+.filter-content {
+  margin-bottom: 32px;
+}
+
+.form-container {
+  display: inline;
+}
+
+.search-btn {
+  display: inline-block;
+  padding-top: 16px;
+}
+
+.header {
+  font-weight: 500;
+  margin: 40px 0;
+}
+
+.no-rows {
+  padding: 16px 0;
+  text-align: center;
+}
+
+.mat-mdc-header-row {
+  background: rgb(225, 225, 225);
+}
+
+.mat-mdc-paginator {
+  padding: 8px 0;
+}
+
+.table-container {
+  position: relative;
+  background-color: #fff;
+}
+
+.loader {
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+mat-icon {
+  font-size: 20px;
+}
+
+.outer-table {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.salary-details {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.details {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  row-gap: 20px;
+  column-gap: 32px;
+  margin-top: 16px;
+  font-size: 15px;
+}
