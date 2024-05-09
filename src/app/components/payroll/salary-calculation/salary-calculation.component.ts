@@ -173,6 +173,9 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
           if (response) {
             const { salaryCategoryName, salary } = this
               .selectedEmployee as Employee;
+            if (response.deductionAmount) {
+              this.deductionAmount.setValue(`${response.deductionAmount}`);
+            }
             const attendance = response.salaryDetails;
             attendance?.forEach((data: any) => {
               if (!data.amount) {

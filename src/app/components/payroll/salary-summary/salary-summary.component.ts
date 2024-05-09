@@ -50,6 +50,7 @@ export class SalarySummaryComponent {
     'salaryMonthDate',
     'salaryAmount',
     'deductionAmount',
+    'salaryAfterDeduction',
   ];
   private paginator!: MatPaginator;
   paymentMonth = new FormControl(moment(), Validators.required);
