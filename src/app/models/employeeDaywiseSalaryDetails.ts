@@ -1,7 +1,7 @@
 export interface EmployeeDaywiseSalaryDetails {
   attendanceDate: string;
-  firstCheckInTime: string;
-  lastCheckOutTime: string;
+  firstCheckInTime: string | null;
+  lastCheckOutTime: string | null;
   workedHours: string;
   amount: number;
 }

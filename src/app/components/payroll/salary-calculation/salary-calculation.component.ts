@@ -18,8 +18,8 @@ import { Subscription, finalize } from 'rxjs';
 import { Constants } from 'src/app/constants/constants';
 import { PAYROLL } from 'src/app/constants/payroll-menu-values.const';
 import { Employee } from 'src/app/models/employee';
+import { EmployeeDaywiseSalaryDetails } from 'src/app/models/employeeDaywiseSalaryDetails';
 import { EmployeeSalaryDetails } from 'src/app/models/employeeSalaryDetails';
-import { MonthlyAttendance } from 'src/app/models/monthlyAttendance';
 import { NotifyType } from 'src/app/models/notify';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
@@ -56,7 +56,7 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
   loader = false;
   employeelist!: Employee[];
   subscription = new Subscription();
-  attendanceData = new MatTableDataSource<MonthlyAttendance>([]);
+  attendanceData = new MatTableDataSource<EmployeeDaywiseSalaryDetails>([]);
   displayedColumns = [
     'attendanceDate',
     'firstCheckInTime',
@@ -163,33 +163,39 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
       'dd/MM/yyyy'
     );
     this.employeeService
-      .getMonthlyAttendanceById(+(this.employeeId.value || 0), monthDate || '')
+      .getEmployeeMonthlySalaryDetails(
+        +(this.employeeId.value || 0),
+        monthDate || ''
+      )
       .pipe(finalize(() => (this.loader = false)))
       .subscribe({
         next: (response) => {
-          if (response?.length) {
+          if (response) {
             const { salaryCategoryName, salary } = this
               .selectedEmployee as Employee;
-            response?.forEach((data: any) => {
-              // Monthly
-              if (salaryCategoryName === 'Monthly') {
-                data['amount'] = Math.round(salary / response?.length);
-              } else {
-                // Daily wage
-                if (data.workedHours) {
-                  const [hours, minutes] = data.workedHours
-                    .split(':')
-                    .map(Number);
-                  if (hours < 12) {
-                    const oneHourSalary = Math.round(salary / 12);
-                    data['amount'] = Math.round(oneHourSalary * hours);
-                  } else {
-                    data['amount'] = salary;
+            const attendance = response.salaryDetails;
+            attendance?.forEach((data: any) => {
+              if (!data.amount) {
+                // Monthly
+                if (salaryCategoryName === 'Monthly') {
+                  data['amount'] = Math.round(salary / attendance?.length);
+                } else {
+                  // Daily wage
+                  if (data.workedHours) {
+                    const [hours, minutes] = data.workedHours
+                      .split(':')
+                      .map(Number);
+                    if (hours < 12) {
+                      const oneHourSalary = Math.round(salary / 12);
+                      data['amount'] = Math.round(oneHourSalary * hours);
+                    } else {
+                      data['amount'] = salary;
+                    }
                   }
                 }
               }
             });
-            this.attendanceData.data = response;
+            this.attendanceData.data = attendance;
             this.calculateTotalAmount();
           } else {
             this.attendanceData.data = [];
@@ -234,7 +240,7 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
 
     const employeeSalaryDetails: EmployeeSalaryDetails[] =
       this.attendanceData.data.map((data: any) => ({
-        attendanceDate: data.attendanceDate,
+        attendanceDate: data.attendanceDate?.split(' ')[0] || '',
         amount: data?.amount,
       }));
     const monthDate = this.datePipe.transform(
