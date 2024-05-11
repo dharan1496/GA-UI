@@ -3,5 +3,5 @@ export interface EmployeeDaywiseSalaryDetails {
   firstCheckInTime: string | null;
   lastCheckOutTime: string | null;
   workedHours: string;
-  amount: number;
+  confirmedAmount: number;
 }

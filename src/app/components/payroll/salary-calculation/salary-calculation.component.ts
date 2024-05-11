@@ -19,6 +19,7 @@ import { Constants } from 'src/app/constants/constants';
 import { PAYROLL } from 'src/app/constants/payroll-menu-values.const';
 import { Employee } from 'src/app/models/employee';
 import { EmployeeDaywiseSalaryDetails } from 'src/app/models/employeeDaywiseSalaryDetails';
+import { EmployeeSalary } from 'src/app/models/employeeSalary';
 import { EmployeeSalaryDetails } from 'src/app/models/employeeSalaryDetails';
 import { NotifyType } from 'src/app/models/notify';
 import { EmployeeService } from 'src/app/services/employee.service';
@@ -62,6 +63,7 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
     'firstCheckInTime',
     'lastCheckOutTime',
     'workedHours',
+    'confirmedAmount',
     'amount',
   ];
   private paginator!: MatPaginator;
@@ -70,6 +72,7 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
   selectedEmployee!: Employee | null;
   deductionAmount = new FormControl('');
   totalSalaryAmount = new FormControl('', Validators.required);
+  salaryDetails!: EmployeeSalary | null;
 
   @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
@@ -135,6 +138,7 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
     this.deductionAmount.reset();
     this.totalSalaryAmount.reset();
     this.selectedEmployee = null;
+    this.salaryDetails = null;
   }
 
   calculateTotalAmount() {
@@ -171,6 +175,7 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           if (response) {
+            this.salaryDetails = response;
             const { salaryCategoryName, salary } = this
               .selectedEmployee as Employee;
             if (response.deductionAmount) {
@@ -178,7 +183,7 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
             }
             const attendance = response.salaryDetails;
             attendance?.forEach((data: any) => {
-              if (!data.amount) {
+              if (!data.confirmedAmount) {
                 // Monthly
                 if (salaryCategoryName === 'Monthly') {
                   data['amount'] = Math.round(salary / attendance?.length);
@@ -196,18 +201,22 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
                     }
                   }
                 }
+              } else {
+                data['amount'] = data.confirmedAmount;
               }
             });
             this.attendanceData.data = attendance;
             this.calculateTotalAmount();
           } else {
             this.attendanceData.data = [];
+            this.salaryDetails = null;
             this.totalSalaryAmount.reset();
             this.notificationService.error('No records found!');
           }
         },
         error: (error) => {
           this.attendanceData.data = [];
+          this.salaryDetails = null;
           this.totalSalaryAmount.reset();
           this.notificationService.error(
             typeof error?.error === 'string' ? error?.error : error?.message
@@ -244,7 +253,7 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
     const employeeSalaryDetails: EmployeeSalaryDetails[] =
       this.attendanceData.data.map((data: any) => ({
         attendanceDate: data.attendanceDate?.split(' ')[0] || '',
-        amount: data?.amount,
+        amount: data['amount'],
       }));
     const monthDate = this.datePipe.transform(
       `${

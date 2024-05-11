@@ -84,3 +84,17 @@ mat-card {
     margin-top: 4px;
   }
 }
+
+.confirmed-salary {
+  width: 75%;
+  font-size: 17px;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  padding: 10px 0;
+
+  .label {
+    font-size: 15px;
+    margin-bottom: 4px;
+  }
+}

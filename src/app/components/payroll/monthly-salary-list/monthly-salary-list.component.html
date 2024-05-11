@@ -74,16 +74,13 @@
           </div>
           <div>
             <div class="text-dark pb-2">Salary Amount</div>
-            <div>{{ employeeSalary.salaryAmount | currency : "INR" }}</div>
+            <div>
+              {{ employeeSalary.salaryBeforeDeduction | currency : "INR" }}
+            </div>
           </div>
           <div>
             <div class="text-dark pb-2">Salary After deduction</div>
-            <div>
-              {{
-                employeeSalary.salaryAmount - employeeSalary.deductionAmount
-                  | currency : "INR"
-              }}
-            </div>
+            <div>{{ employeeSalary.salary | currency : "INR" }}</div>
           </div>
         </section>
       </mat-card-content>
