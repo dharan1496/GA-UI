@@ -175,38 +175,7 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           if (response) {
-            this.salaryDetails = response;
-            const { salaryCategoryName, salary } = this
-              .selectedEmployee as Employee;
-            if (response.deductionAmount) {
-              this.deductionAmount.setValue(`${response.deductionAmount}`);
-            }
-            const attendance = response.salaryDetails;
-            attendance?.forEach((data: any) => {
-              if (!data.confirmedAmount) {
-                // Monthly
-                if (salaryCategoryName === 'Monthly') {
-                  data['amount'] = Math.round(salary / attendance?.length);
-                } else {
-                  // Daily wage
-                  if (data.workedHours) {
-                    const [hours, minutes] = data.workedHours
-                      .split(':')
-                      .map(Number);
-                    if (hours < 12) {
-                      const oneHourSalary = Math.round(salary / 12);
-                      data['amount'] = Math.round(oneHourSalary * hours);
-                    } else {
-                      data['amount'] = salary;
-                    }
-                  }
-                }
-              } else {
-                data['amount'] = data.confirmedAmount;
-              }
-            });
-            this.attendanceData.data = attendance;
-            this.calculateTotalAmount();
+            this.calculateSalary(response);
           } else {
             this.attendanceData.data = [];
             this.salaryDetails = null;
@@ -223,6 +192,48 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
           );
         },
       });
+  }
+
+  calculateSalary(response: EmployeeSalary) {
+    this.salaryDetails = response;
+    const { salaryCategoryName, salary } = this.selectedEmployee as Employee;
+    if (response.deductionAmount) {
+      this.deductionAmount.setValue(`${response.deductionAmount}`);
+    }
+    const daysInMonth = this.getDaysInMonth(
+      this.salaryDetails?.monthStartDate || ''
+    );
+    const attendance = response.salaryDetails;
+    attendance?.forEach((data: any) => {
+      if (!data.confirmedAmount) {
+        // Monthly
+        if (salaryCategoryName === 'Monthly') {
+          data['amount'] = Math.round(salary / daysInMonth);
+        } else {
+          // Daily wage
+          if (data.workedHours) {
+            const [hours] = data.workedHours.split(':').map(Number);
+            if (hours < 12) {
+              const oneHourSalary = Math.round(salary / 12);
+              data['amount'] = Math.round(oneHourSalary * hours);
+            } else {
+              data['amount'] = salary;
+            }
+          }
+        }
+      } else {
+        data['amount'] = data.confirmedAmount;
+      }
+    });
+    this.attendanceData.data = attendance;
+    this.calculateTotalAmount();
+  }
+
+  getDaysInMonth(monthDate: string) {
+    const date = monthDate?.split('/');
+    const year = Number(date?.[2]);
+    const month = Number(date?.[1]);
+    return new Date(year, month, 0).getDate();
   }
 
   submit() {
