@@ -71,8 +71,11 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
   employeeId = new FormControl('', Validators.required);
   selectedEmployee!: Employee | null;
   deductionAmount = new FormControl('');
-  totalSalaryAmount = new FormControl('', Validators.required);
+  salaryeBeforeDeduction = new FormControl('', Validators.required);
   salaryDetails!: EmployeeSalary | null;
+  deductionType = new FormControl('advance');
+  advanceDeduction = new FormControl('');
+  deductionRemarks = new FormControl('');
 
   @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
@@ -136,7 +139,9 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
     this.employeeId.reset();
     this.paymentMonth.reset(moment());
     this.deductionAmount.reset();
-    this.totalSalaryAmount.reset();
+    this.salaryeBeforeDeduction.reset();
+    this.advanceDeduction.reset();
+    this.deductionRemarks.reset();
     this.selectedEmployee = null;
     this.salaryDetails = null;
   }
@@ -145,7 +150,7 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
     const totalAmount = this.attendanceData.data.reduce((acc, cur: any) => {
       return acc + (cur?.amount || 0);
     }, 0);
-    this.totalSalaryAmount.setValue(`${totalAmount}`);
+    this.salaryeBeforeDeduction.setValue(`${totalAmount}`);
   }
 
   fetchAttendance() {
@@ -179,14 +184,20 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
           } else {
             this.attendanceData.data = [];
             this.salaryDetails = null;
-            this.totalSalaryAmount.reset();
+            this.salaryeBeforeDeduction.reset();
+            this.deductionAmount.reset();
+            this.advanceDeduction.reset();
+            this.deductionRemarks.reset();
             this.notificationService.error('No records found!');
           }
         },
         error: (error) => {
           this.attendanceData.data = [];
           this.salaryDetails = null;
-          this.totalSalaryAmount.reset();
+          this.salaryeBeforeDeduction.reset();
+          this.deductionAmount.reset();
+          this.advanceDeduction.reset();
+          this.deductionRemarks.reset();
           this.notificationService.error(
             typeof error?.error === 'string' ? error?.error : error?.message
           );
@@ -197,9 +208,10 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
   calculateSalary(response: EmployeeSalary) {
     this.salaryDetails = response;
     const { salaryCategoryName, salary } = this.selectedEmployee as Employee;
-    if (response.deductionAmount) {
+    response.deductionAmount &&
       this.deductionAmount.setValue(`${response.deductionAmount}`);
-    }
+    response.advanceDeduction &&
+      this.advanceDeduction.setValue(`${response.advanceDeduction}`);
     const daysInMonth = this.getDaysInMonth(
       this.salaryDetails?.monthStartDate || ''
     );
@@ -248,11 +260,11 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
     if (
       this.employeeId.invalid ||
       this.paymentMonth.invalid ||
-      this.totalSalaryAmount.invalid
+      this.salaryeBeforeDeduction.invalid
     ) {
       this.employeeId.markAsTouched();
       this.paymentMonth.markAsTouched();
-      this.totalSalaryAmount.markAsTouched();
+      this.salaryeBeforeDeduction.markAsTouched();
       this.notificationService.notify(
         'Error occured in the salary details!',
         NotifyType.ERROR
@@ -276,8 +288,10 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
       .saveSalary(
         +(this.employeeId.value || 0),
         monthDate || '',
-        +(this.totalSalaryAmount.value || 0),
+        +(this.salaryeBeforeDeduction.value || 0),
+        +(this.advanceDeduction.value || 0),
         +(this.deductionAmount.value || 0),
+        this.deductionRemarks.value || '',
         employeeSalaryDetails
       )
       .subscribe({
@@ -293,10 +307,12 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
   }
 
   getDeductedSalary() {
-    const deduction = +(this.deductionAmount.value || 0);
-    const salary = +(this.totalSalaryAmount.value || 0);
-    if (deduction) {
-      return salary < deduction ? 0 : salary - deduction;
+    const deductionAmount = +(this.deductionAmount.value || 0);
+    const advanceDeduction = +(this.advanceDeduction.value || 0);
+    const salary = +(this.salaryeBeforeDeduction.value || 0);
+    const totalDeduction = advanceDeduction + deductionAmount;
+    if (totalDeduction) {
+      return salary < totalDeduction ? 0 : salary - totalDeduction;
     }
     return salary;
   }

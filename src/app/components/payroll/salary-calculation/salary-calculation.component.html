@@ -41,22 +41,35 @@
           </button>
         </div>
         <div class="mb-24 confirmed-salary" *ngIf="salaryDetails">
-          <span
-            ><div class="label">Salary Category</div>
-            {{ salaryDetails.salaryCategoryName }}</span
-          >
-          <span
-            ><div class="label">Salary Before Deduction</div>
-            {{ salaryDetails.salaryBeforeDeduction | currency : "INR" }}</span
-          >
-          <span
-            ><div class="label">Deduction</div>
-            {{ salaryDetails.deductionAmount | currency : "INR" }}</span
-          >
-          <span
-            ><div class="label">Confirmed Salary</div>
-            {{ salaryDetails.salary | currency : "INR" }}</span
-          >
+          <span>
+            <div class="label">Salary Category</div>
+            {{ salaryDetails.salaryCategoryName }}
+          </span>
+          <span>
+            <div class="label">Salary Before Deduction</div>
+            {{ salaryDetails.salaryBeforeDeduction | currency : "INR" }}
+          </span>
+          <span>
+            <div class="label">Advance Deduction</div>
+            {{ salaryDetails.advanceDeduction | currency : "INR" }}
+          </span>
+          <span>
+            <div class="label">Pending Advance</div>
+            {{
+              (salaryDetails.balanceAdvance < 0
+                ? 0
+                : salaryDetails.balanceAdvance
+              ) | currency : "INR"
+            }}
+          </span>
+          <span>
+            <div class="label">Other Deduction</div>
+            {{ salaryDetails.deductionAmount | currency : "INR" }}
+          </span>
+          <span>
+            <div class="label">Confirmed Salary</div>
+            {{ salaryDetails.salary | currency : "INR" }}
+          </span>
         </div>
         <mat-divider></mat-divider>
         <div class="table-container">
@@ -148,18 +161,36 @@
           </div>
         </div>
         <div>
-          <mat-form-field appearance="fill" class="w-25 mr-24">
-            <span matPrefix>&nbsp;&#x20B9;&nbsp;</span>
-            <mat-label>Deduction Amount</mat-label>
-            <input
-              type="number"
-              min="0.00"
-              step=".01"
-              matInput
-              [formControl]="deductionAmount"
-              decimal="2"
-            />
-          </mat-form-field>
+          <div class="deduction-control">
+            <mat-form-field appearance="fill" class="w-25 mr-24">
+              <span matPrefix>&nbsp;&#x20B9;&nbsp;</span>
+              <mat-label>Advance Deduction</mat-label>
+              <input
+                type="number"
+                min="0.00"
+                step=".01"
+                matInput
+                [formControl]="advanceDeduction"
+                decimal="2"
+              />
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="w-25 mr-24">
+              <span matPrefix>&nbsp;&#x20B9;&nbsp;</span>
+              <mat-label>Other Deduction</mat-label>
+              <input
+                type="number"
+                min="0.00"
+                step=".01"
+                matInput
+                [formControl]="deductionAmount"
+                decimal="2"
+              />
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="w-35">
+              <mat-label>Deduction Remarks</mat-label>
+              <textarea matInput [formControl]="deductionRemarks"></textarea>
+            </mat-form-field>
+          </div>
           <mat-form-field appearance="fill" class="w-25 mr-24">
             <span matPrefix>&nbsp;&#x20B9;&nbsp;</span>
             <mat-label>Salary Before Deduction</mat-label>
@@ -168,7 +199,7 @@
               min="0.00"
               step=".01"
               matInput
-              [formControl]="totalSalaryAmount"
+              [formControl]="salaryeBeforeDeduction"
               decimal="2"
             />
             <mat-error>This field is required.</mat-error>
