@@ -208,10 +208,10 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
   calculateSalary(response: EmployeeSalary) {
     this.salaryDetails = response;
     const { salaryCategoryName, salary } = this.selectedEmployee as Employee;
-    response.deductionAmount &&
-      this.deductionAmount.setValue(`${response.deductionAmount}`);
-    response.advanceDeduction &&
-      this.advanceDeduction.setValue(`${response.advanceDeduction}`);
+    // response.deductionAmount &&
+    //   this.deductionAmount.setValue(`${response.deductionAmount}`);
+    // response.advanceDeduction &&
+    //   this.advanceDeduction.setValue(`${response.advanceDeduction}`);
     const daysInMonth = this.getDaysInMonth(
       this.salaryDetails?.monthStartDate || ''
     );

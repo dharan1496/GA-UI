@@ -18,4 +18,5 @@ export interface FibrePO {
   eMailId: string;
   fibrePODts: FibrePODts[];
   isPOClosed: boolean;
+  deletedPOItemIds: number[];
 }

@@ -56,9 +56,9 @@
           <span>
             <div class="label">Pending Advance</div>
             {{
-              (salaryDetails.balanceAdvance < 0
+              (salaryDetails.advanceToDeduct < 0
                 ? 0
-                : salaryDetails.balanceAdvance
+                : salaryDetails.advanceToDeduct
               ) | currency : "INR"
             }}
           </span>

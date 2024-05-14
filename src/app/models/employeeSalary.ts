@@ -7,7 +7,7 @@ export interface EmployeeSalary {
   salaryCategoryName: string;
   deductionAmount: number;
   advanceDeduction: number;
-  balanceAdvance: number;
+  advanceToDeduct: number;
   deductionRemarks: string;
   salaryBeforeDeduction: number;
   salaryDetails: EmployeeDaywiseSalaryDetails[];
