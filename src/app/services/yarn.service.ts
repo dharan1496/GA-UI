@@ -58,13 +58,17 @@ export class YarnService {
   }
 
   closeYarnOrder(order: any): Observable<string> {
-    return this.http.put(`${environment.api}/YarnOrder/CloseYarnOrder`, order, {
-      responseType: 'text',
-    });
+    return this.http.post(
+      `${environment.api}/YarnOrder/CloseYarnOrder`,
+      order,
+      {
+        responseType: 'text',
+      }
+    );
   }
 
   reopenYarnOrder(order: any): Observable<string> {
-    return this.http.put(
+    return this.http.post(
       `${environment.api}/YarnOrder/ReOpenYarnOrder`,
       order,
       {
@@ -74,7 +78,7 @@ export class YarnService {
   }
 
   updateYarnOrder(order: YarnOrder): Observable<any> {
-    return this.http.put(
+    return this.http.post(
       `${environment.api}/YarnOrder/UpdateYarnOrder`,
       order,
       {
@@ -171,7 +175,7 @@ export class YarnService {
   }
 
   UpdateEInvoiceNo(invoiceNo: number, invoiceId: number): Observable<boolean> {
-    return this.http.put<boolean>(
+    return this.http.post<boolean>(
       `${environment.api}/YarnOrder/UpdateEInvoiceNo?eInvoiceNo=${invoiceNo}&invoiceId=${invoiceId}`,
       {}
     );

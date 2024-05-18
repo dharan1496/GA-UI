@@ -51,7 +51,7 @@ export class MasterService {
   }
 
   deleteYarnCounts(countsId: number): Observable<string> {
-    return this.http.put(
+    return this.http.post(
       `${environment.api}/Master/DeleteYarnCounts?countsId=${countsId}&deletedByUserId=${this.appSharedService.userId}`,
       {},
       {
@@ -73,7 +73,7 @@ export class MasterService {
   }
 
   deleteYarnBlend(blendId: number): Observable<string> {
-    return this.http.put(
+    return this.http.post(
       `${environment.api}/Master/DeleteYarnBlend?blendId=${blendId}&deletedByUserId=${this.appSharedService.userId}`,
       {},
       {

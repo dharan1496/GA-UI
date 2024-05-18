@@ -44,13 +44,13 @@ export class PartyService {
   }
 
   updateParty(party: Party): Observable<string> {
-    return this.http.put(`${environment.api}/Party/UpdateParty`, party, {
+    return this.http.post(`${environment.api}/Party/UpdateParty`, party, {
       responseType: 'text',
     });
   }
 
   deleteParty(partyId: number): Observable<string> {
-    return this.http.put(
+    return this.http.post(
       `${environment.api}/Party/DeleteParty`,
       {
         partyId,
