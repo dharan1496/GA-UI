@@ -2,17 +2,14 @@
 <div mat-dialog-content class="form-container">
   <div class="mb-24">
     <form class="search-fields" [formGroup]="form">
-      <mat-form-field appearance="fill" class="w-40">
-        <mat-label>Party</mat-label>
-        <mat-select formControlName="partyId">
-          <ng-container *ngFor="let party of partyService.parties">
-            <mat-option [value]="party?.partyId">{{
-              party?.partyName
-            }}</mat-option>
-          </ng-container>
-        </mat-select>
-        <mat-error>This field is required.</mat-error>
-      </mat-form-field>
+      <div class="w-40">
+        <app-party-combo-box
+          type="sales"
+          [partyFormControl]="form.get('partyId')"
+          [touched]="form.get('partyId')?.touched || false"
+        >
+        </app-party-combo-box>
+      </div>
       <mat-form-field appearance="fill" class="w-20">
         <mat-label>Shade</mat-label>
         <mat-select formControlName="shadeId">

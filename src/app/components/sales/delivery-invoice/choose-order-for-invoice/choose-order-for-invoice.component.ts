@@ -10,12 +10,18 @@ import { OrdersPendingDelivery } from 'src/app/models/ordersPendingDelivery';
 import { OrdersPendingInvoice } from 'src/app/models/ordersPendingInvoice';
 import { PartyService } from 'src/app/services/party.service';
 import { YarnService } from 'src/app/services/yarn.service';
+import { ComboBoxComponent } from 'src/app/shared/combo-box/combo-box.component';
 import { NotificationService } from 'src/app/shared/notification.service';
 
 @Component({
   selector: 'app-choose-order-for-invoice',
   standalone: true,
-  imports: [CommonModule, MaterialModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    MaterialModule,
+    ReactiveFormsModule,
+    ComboBoxComponent,
+  ],
   templateUrl: './choose-order-for-invoice.component.html',
   styleUrls: ['./choose-order-for-invoice.component.scss'],
 })
@@ -58,22 +64,24 @@ export class ChooseOrderForInvoiceComponent implements OnInit, OnDestroy {
 
     this.subscription.add(
       this.party.valueChanges.subscribe((partyId) => {
-        this.loader = true;
-        this.selection.clear();
-        this.subscription.add(
-          this.yarnService
-            .ordersPendingInvoiceByPartyId(partyId)
-            .pipe(finalize(() => (this.loader = false)))
-            .subscribe({
-              next: (data) => (this.orders = data),
-              error: (error) =>
-                this.notificationService.error(
-                  typeof error?.error === 'string'
-                    ? error?.error
-                    : error?.message
-                ),
-            })
-        );
+        if (partyId) {
+          this.loader = true;
+          this.selection.clear();
+          this.subscription.add(
+            this.yarnService
+              .ordersPendingInvoiceByPartyId(partyId)
+              .pipe(finalize(() => (this.loader = false)))
+              .subscribe({
+                next: (data) => (this.orders = data),
+                error: (error) =>
+                  this.notificationService.error(
+                    typeof error?.error === 'string'
+                      ? error?.error
+                      : error?.message
+                  ),
+              })
+          );
+        }
       })
     );
   }

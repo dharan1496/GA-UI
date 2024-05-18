@@ -14,18 +14,15 @@
         <mat-error>Please enter valid date.</mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="fill" class="w-25 ml-24">
-        <mat-label>Party</mat-label>
-        <mat-select formControlName="partyId">
-          <mat-option [value]="0">All</mat-option>
-          <ng-container *ngFor="let party of partyService.parties">
-            <mat-option [value]="party.partyId">{{
-              party.partyName
-            }}</mat-option>
-          </ng-container>
-        </mat-select>
-        <mat-hint>Optional</mat-hint>
-      </mat-form-field>
+      <div class="w-25 ml-24 d-inline-block">
+        <app-party-combo-box
+          [partyFormControl]="form.get('partyId')"
+          [touched]="form.get('partyId')?.touched || false"
+          [required]="false"
+          [optional]="true"
+        >
+        </app-party-combo-box>
+      </div>
 
       <mat-form-field appearance="fill" class="w-20 ml-24 mr-24">
         <mat-label>Fibre Type</mat-label>

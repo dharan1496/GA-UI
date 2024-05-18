@@ -19,12 +19,18 @@ import { YarnShade } from 'src/app/models/yarnShade';
 import { MasterService } from 'src/app/services/master.service';
 import { PartyService } from 'src/app/services/party.service';
 import { YarnService } from 'src/app/services/yarn.service';
+import { ComboBoxComponent } from 'src/app/shared/combo-box/combo-box.component';
 import { NotificationService } from 'src/app/shared/notification.service';
 
 @Component({
   selector: 'app-choose-delivery-for-return',
   standalone: true,
-  imports: [CommonModule, MaterialModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    MaterialModule,
+    ReactiveFormsModule,
+    ComboBoxComponent,
+  ],
   templateUrl: './choose-delivery-for-return.component.html',
   styleUrls: ['./choose-delivery-for-return.component.scss'],
 })

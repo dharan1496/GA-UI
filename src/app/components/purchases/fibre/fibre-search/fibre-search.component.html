@@ -2,17 +2,14 @@
   <h1 class="header letter-spacing-1">Search Fibre PO</h1>
   <section>
     <form class="form-container" [formGroup]="form" #formDirective="ngForm">
-      <mat-form-field appearance="fill" class="w-35">
-        <mat-label>Party</mat-label>
-        <mat-select formControlName="partyId">
-          <ng-container *ngFor="let party of partyService.parties">
-            <mat-option [value]="party.partyId">{{
-              party.partyName
-            }}</mat-option>
-          </ng-container>
-        </mat-select>
-        <mat-error>This field is required.</mat-error>
-      </mat-form-field>
+      <div class="w-35">
+        <app-party-combo-box
+          [patch]="form.get('partyId')?.value"
+          [partyFormControl]="form.get('partyId')"
+          [touched]="form.get('partyId')?.touched || false"
+        >
+        </app-party-combo-box>
+      </div>
 
       <mat-form-field appearance="fill">
         <mat-label>PO Date Range</mat-label>

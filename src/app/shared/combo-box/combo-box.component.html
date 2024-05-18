@@ -1,0 +1,18 @@
+<mat-form-field appearance="fill" class="w-100">
+  <mat-label>Party</mat-label>
+  <input
+    type="text"
+    matInput
+    [formControl]="partyControl"
+    [matAutocomplete]="auto"
+    (blur)="onBlur()"
+  />
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+    <ng-container *ngFor="let party of filteredParties">
+      <mat-option [value]="party">{{ party.partyName }}</mat-option>
+    </ng-container>
+  </mat-autocomplete>
+  <mat-hint *ngIf="disabled">Disabled</mat-hint>
+  <mat-hint *ngIf="optional">Optional</mat-hint>
+  <mat-error>This field is required.</mat-error>
+</mat-form-field>

@@ -13,6 +13,7 @@ import { FibreShadeComponent } from './fibre/fibre-master/fibre-shade/fibre-shad
 import { FibreStockComponent } from './fibre/fibre-stock/fibre-stock.component';
 import { FibreReceiveConversionOrderComponent } from './fibre/fibre-receive-conversion-order/fibre-receive-conversion-order.component';
 import { FibreReceivedOrderSearchComponent } from './fibre/fibre-received-order-search/fibre-received-order-search.component';
+import { ComboBoxComponent } from 'src/app/shared/combo-box/combo-box.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { FibreReceivedOrderSearchComponent } from './fibre/fibre-received-order-
     PurchasesRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
+    ComboBoxComponent,
   ],
 })
 export class PurchasesModule {}

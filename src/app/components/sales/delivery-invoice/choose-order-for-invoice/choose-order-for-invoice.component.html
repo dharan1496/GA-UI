@@ -1,14 +1,14 @@
 <h1 mat-dialog-title>Choose Order</h1>
 <div mat-dialog-content class="form-container">
-  <mat-form-field appearance="fill" class="w-50 mb-16">
-    <mat-label>Party</mat-label>
-    <mat-select [formControl]="party" required>
-      <ng-container *ngFor="let party of partyService.parties">
-        <mat-option [value]="party?.partyId">{{ party?.partyName }}</mat-option>
-      </ng-container>
-    </mat-select>
-    <mat-error>This field is required.</mat-error>
-  </mat-form-field>
+  <div class="w-50 mb-16">
+    <app-party-combo-box
+      type="sales"
+      [required]="false"
+      [partyFormControl]="party"
+      [touched]="party.touched"
+    >
+    </app-party-combo-box>
+  </div>
 
   <div class="table-container">
     <div *ngIf="loader" class="loader">

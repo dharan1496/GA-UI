@@ -13,6 +13,7 @@ import { DeliveryInvoiceComponent } from './delivery-invoice/delivery-invoice.co
 import { ReceiveYarnReturnComponent } from './receive-yarn-return/receive-yarn-return.component';
 import { WasteOrderDeliveryComponent } from './waste-order-delivery/waste-order-delivery.component';
 import { SearchWasteDeliveryComponent } from './search-waste-delivery/search-waste-delivery.component';
+import { ComboBoxComponent } from 'src/app/shared/combo-box/combo-box.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { SearchWasteDeliveryComponent } from './search-waste-delivery/search-was
     DecimalDirective,
     SalesRoutingModule,
     FormsModule,
+    ComboBoxComponent,
   ],
 })
 export class SalesModule {}

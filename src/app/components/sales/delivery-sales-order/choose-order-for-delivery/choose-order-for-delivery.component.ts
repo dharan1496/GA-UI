@@ -9,12 +9,18 @@ import { NotifyType } from 'src/app/models/notify';
 import { OrdersPendingDelivery } from 'src/app/models/ordersPendingDelivery';
 import { PartyService } from 'src/app/services/party.service';
 import { YarnService } from 'src/app/services/yarn.service';
+import { ComboBoxComponent } from 'src/app/shared/combo-box/combo-box.component';
 import { NotificationService } from 'src/app/shared/notification.service';
 
 @Component({
   selector: 'app-choose-order-for-delivery',
   standalone: true,
-  imports: [CommonModule, MaterialModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    MaterialModule,
+    ReactiveFormsModule,
+    ComboBoxComponent,
+  ],
   templateUrl: './choose-order-for-delivery.component.html',
   styleUrls: ['./choose-order-for-delivery.component.scss'],
 })
@@ -56,22 +62,24 @@ export class ChooseOrderForDeliveryComponent implements OnInit, OnDestroy {
 
     this.subscription.add(
       this.party.valueChanges.subscribe((partyId) => {
-        this.loader = true;
-        this.selection.clear();
-        this.subscription.add(
-          this.yarnService
-            .getOrdersPendingDelivery(partyId)
-            .pipe(finalize(() => (this.loader = false)))
-            .subscribe({
-              next: (data) => (this.orders = data),
-              error: (error) =>
-                this.notificationService.error(
-                  typeof error?.error === 'string'
-                    ? error?.error
-                    : error?.message
-                ),
-            })
-        );
+        if (partyId) {
+          this.loader = true;
+          this.selection.clear();
+          this.subscription.add(
+            this.yarnService
+              .getOrdersPendingDelivery(partyId)
+              .pipe(finalize(() => (this.loader = false)))
+              .subscribe({
+                next: (data) => (this.orders = data),
+                error: (error) =>
+                  this.notificationService.error(
+                    typeof error?.error === 'string'
+                      ? error?.error
+                      : error?.message
+                  ),
+              })
+          );
+        }
       })
     );
   }

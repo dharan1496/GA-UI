@@ -24,18 +24,15 @@
           </div>
         </div>
 
-        <mat-form-field appearance="fill" class="w-40">
-          <mat-label>Party</mat-label>
-          <mat-select formControlName="partyId">
-            <ng-container *ngFor="let party of partyService.parties">
-              <mat-option [value]="party.partyId">{{
-                party.partyName
-              }}</mat-option>
-            </ng-container>
-          </mat-select>
-          <mat-hint *ngIf="updatePoDetails">Disabled</mat-hint>
-          <mat-error>This field is required.</mat-error>
-        </mat-form-field>
+        <div class="w-40">
+          <app-party-combo-box
+            [disabled]="!!updatePoDetails"
+            [patch]="updatePoDetails?.partyId || ''"
+            [partyFormControl]="form.get('partyId')"
+            [touched]="form.get('partyId')?.touched || false"
+          >
+          </app-party-combo-box>
+        </div>
 
         <mat-form-field appearance="fill" class="w-25">
           <mat-label>PODate</mat-label>
