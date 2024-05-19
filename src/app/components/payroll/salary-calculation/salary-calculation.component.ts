@@ -75,7 +75,7 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
   salaryDetails!: EmployeeSalary | null;
   deductionType = new FormControl('advance');
   advanceDeduction = new FormControl('');
-  deductionRemarks = new FormControl('');
+  deductionRemarks = new FormControl('', Validators.required);
 
   @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
