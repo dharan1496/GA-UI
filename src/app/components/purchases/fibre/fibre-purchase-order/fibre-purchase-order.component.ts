@@ -41,6 +41,7 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
   subscription = new Subscription();
   updatePoDetails?: FibrePO;
   clearSearch = true;
+  deletedItem: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -196,23 +197,20 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
 
   updateOrder() {
     if (!this.hasError() && this.updatePoDetails) {
-      this.updatePoDetails.fibrePODts = this.dataSource.map((data) => {
-        const updateDts = this.updatePoDetails?.fibrePODts?.find(
-          (dts) => dts.poDtsId === data.poDtsId
+      this.updatePoDetails.fibrePODts = this.dataSource.map(this.formatData);
+
+      if (this.deletedItem && this.deletedItem?.length) {
+        this.updatePoDetails.fibrePODts = [
+          ...this.updatePoDetails.fibrePODts,
+          ...this.deletedItem.map(this.formatData),
+        ];
+        this.updatePoDetails.deletedPOItemIds = this.deletedItem.map(
+          (data: any) => data.poDtsId
         );
-        return {
-          ...updateDts,
-          fibreTypeId: data.fibreTypeId,
-          fibreType: data.fibreType,
-          shadeId: data.shadeId,
-          shadeName: data.shadeName,
-          weight: data.weight,
-          rate: data.rate,
-          gstPercent: data.gstPercent,
-          counts: updateDts?.counts || 0,
-          length: updateDts?.length || 0,
-        };
-      }) as FibrePODts[];
+      } else {
+        this.updatePoDetails.deletedPOItemIds = [];
+      }
+
       this.fibreService.updateFibrePO(this.updatePoDetails).subscribe({
         next: () => {
           this.notificationService
@@ -228,6 +226,28 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
       });
     }
   }
+
+  formatData = (data: any) => {
+    const updateDts = this.updatePoDetails?.fibrePODts?.find(
+      (dts) => dts.poDtsId === data.poDtsId
+    );
+    return {
+      poDtsId: updateDts?.poDtsId || 0,
+      poId: updateDts?.poId || 0,
+      fibreTypeId: data.fibreTypeId,
+      fibreType: data.fibreType,
+      shadeId: data.shadeId,
+      shadeName: data.shadeName,
+      weight: data.weight,
+      rate: data.rate,
+      gstPercent: data.gstPercent,
+      counts: updateDts?.counts || 0,
+      counts_Unit: updateDts?.counts_Unit || null,
+      length: updateDts?.length || 0,
+      length_Unit: updateDts?.length_Unit || null,
+      isPOItemClosed: updateDts?.isPOItemClosed || false,
+    } as FibrePODts;
+  };
 
   hasError() {
     if (this.form.invalid) {
@@ -252,6 +272,7 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
     this.form.reset();
     this.getPoNo();
     this.dataSource = [];
+    this.deletedItem = [];
     this.table.renderRows();
   }
 
@@ -294,6 +315,9 @@ export class FibrePurchaseOrderComponent implements OnInit, OnDestroy {
           this.dataSource.forEach((data: any) => {
             if (data != selectedRow) {
               newList.push(data);
+            } else if (data.poDtsId) {
+              data.isPOClosed = true;
+              this.deletedItem.push(data);
             }
           });
           this.dataSource = newList;
