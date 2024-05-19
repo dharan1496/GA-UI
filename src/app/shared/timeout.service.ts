@@ -14,6 +14,7 @@ export class TimeoutService {
   interval: any;
   dialogRef!: MatDialogRef<TimeoutDialogComponent>;
   sleepMode = new Subject<void>();
+  intervalTime = 2000;
 
   constructor(
     private idle: Idle,
@@ -34,19 +35,17 @@ export class TimeoutService {
   }
 
   checkSleepMode() {
-    let lastTime = new Date().getTime();
+    let lastTime = Date.now();
     this.interval = setInterval(() => {
-      const currentTime = new Date().getTime();
-      if (
-        currentTime >
-        lastTime + (environment.idleTime + environment.timeout) * 1000
-      ) {
+      const now = Date.now();
+      const diff = now - lastTime;
+      if (diff > this.intervalTime + 2000) {
         this.dialogRef?.close();
         this.sleepMode.next();
         this.logout();
       }
-      lastTime = currentTime;
-    }, 2000);
+      lastTime = now;
+    }, this.intervalTime);
   }
 
   logout() {
