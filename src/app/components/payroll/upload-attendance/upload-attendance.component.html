@@ -91,6 +91,23 @@
               </td>
             </ng-container>
 
+            <ng-container matColumnDef="todaysDepartment">
+              <th mat-header-cell *matHeaderCellDef>Department</th>
+              <td mat-cell *matCellDef="let element">
+                <mat-form-field appearance="fill">
+                  <mat-label>Choose</mat-label>
+                  <mat-select [(ngModel)]="element.todaysDepartment">
+                    <mat-option
+                      *ngFor="let department of departmentList"
+                      [value]="department.departmentName"
+                    >
+                      {{ department.departmentName | titlecase }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </td>
+            </ng-container>
+
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr
               mat-row

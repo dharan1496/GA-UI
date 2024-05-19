@@ -12,6 +12,8 @@ import { MonthlyAttendance } from 'src/app/models/monthlyAttendance';
 import { DatePipe } from '@angular/common';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { Subscription } from 'rxjs';
+import { EmployeeDepartment } from 'src/app/models/EmployeeDepartment';
 
 @Component({
   selector: 'app-upload-attendance',
@@ -28,8 +30,11 @@ export class UploadAttendanceComponent {
     'firstCheckInTime',
     'lastCheckOutTime',
     'workedHours',
+    'todaysDepartment',
   ];
   private paginator!: MatPaginator;
+  subscription = new Subscription();
+  departmentList!: EmployeeDepartment[];
 
   @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
@@ -49,6 +54,24 @@ export class UploadAttendanceComponent {
   ) {
     this.navigationService.setFocus(Constants.PAYROLL);
     this.navigationService.menu = PAYROLL;
+  }
+
+  ngOnInit() {
+    this.subscription.add(
+      this.employeeService.getEmployeeDepartmentMasters().subscribe({
+        next: (response) => {
+          this.departmentList = response;
+        },
+        error: (error) =>
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription?.unsubscribe();
   }
 
   onFileChange(event: any): void {
@@ -78,6 +101,7 @@ export class UploadAttendanceComponent {
       firstCheckInTime: data['First Check In'] || '',
       lastCheckOutTime: data['Last Check Out'] || '',
       workedHours: data['Total Time'] || '',
+      todaysDepartment: data['Department'] || '',
     })) as MonthlyAttendance[];
   }
 
