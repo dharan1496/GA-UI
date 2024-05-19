@@ -40,9 +40,6 @@ export class DeliverySalesOrderComponent implements OnInit {
     'stockQuantity',
     'issueQuantity',
     'hsnCode',
-    'rate',
-    'amount',
-    'gstpercent',
     'totalAmount',
     'action',
   ];
@@ -125,6 +122,7 @@ export class DeliverySalesOrderComponent implements OnInit {
           shadeId: stock.shadeId,
           blendId: stock.blendId,
           countsId: stock.countsId,
+          lot: stock.lot,
           productionDtsId: stock.productionYarnDtsId,
           deliveryQuantity: +stock.issueQuantity,
           hsnCode: +stock.hsnCode,

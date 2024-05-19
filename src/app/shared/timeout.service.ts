@@ -39,7 +39,8 @@ export class TimeoutService {
     this.interval = setInterval(() => {
       const now = Date.now();
       const diff = now - lastTime;
-      if (diff > this.intervalTime + 2000) {
+      const time = (environment.idleTime + environment.timeout) * 1000;
+      if (diff > time + this.intervalTime) {
         this.dialogRef?.close();
         this.sleepMode.next();
         this.logout();

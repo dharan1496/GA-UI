@@ -4,6 +4,7 @@ export interface YarnDeliveryDts {
   shadeId: number;
   blendId: number;
   countsId: number;
+  lot: string;
   productionDtsId: number;
   yarnReturnDtsId: number;
   deliveryQuantity: number;
