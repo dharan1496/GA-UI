@@ -13,32 +13,38 @@
       <mat-form-field appearance="fill" class="w-20">
         <mat-label>Shade</mat-label>
         <mat-select formControlName="shadeId">
+          <mat-option [value]="0">All</mat-option>
           <ng-container *ngFor="let shade of shadeList">
             <mat-option [value]="shade.shadeId">{{
               shade.shadeName
             }}</mat-option>
           </ng-container>
         </mat-select>
+        <mat-hint>Optional</mat-hint>
       </mat-form-field>
       <mat-form-field appearance="fill" class="w-20">
         <mat-label>Blend</mat-label>
         <mat-select formControlName="blendId">
+          <mat-option [value]="0">All</mat-option>
           <ng-container *ngFor="let blend of blendList">
             <mat-option [value]="blend.blendId">{{
               blend.blendName
             }}</mat-option>
           </ng-container>
         </mat-select>
+        <mat-hint>Optional</mat-hint>
       </mat-form-field>
       <mat-form-field appearance="fill" class="w-20">
         <mat-label>Counts</mat-label>
         <mat-select formControlName="countsId">
+          <mat-option [value]="0">All</mat-option>
           <ng-container *ngFor="let counts of countsList">
             <mat-option [value]="counts.countsId">{{
               counts.counts
             }}</mat-option>
           </ng-container>
         </mat-select>
+        <mat-hint>Optional</mat-hint>
       </mat-form-field>
     </form>
     <div class="btns">
