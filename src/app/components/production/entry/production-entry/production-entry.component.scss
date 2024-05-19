@@ -21,9 +21,10 @@
 .form-container {
   padding: 16px 32px;
   display: flex;
-  column-gap: 24px;
+  gap: 48px;
+  row-gap: 16px;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: start;
 }
 
 .prog-details-container {

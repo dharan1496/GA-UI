@@ -64,7 +64,7 @@
     <mat-form-field appearance="fill" class="w-30">
       <mat-label>Lot</mat-label>
       <input type="text" matInput formControlName="lot" />
-      <mat-error>This field is required.</mat-error>
+      <mat-hint>Optional</mat-hint>
     </mat-form-field>
     <mat-form-field appearance="fill" class="w-30">
       <mat-label>Shade</mat-label>
@@ -73,6 +73,7 @@
           <mat-option [value]="shade.shadeId">{{ shade.shadeName }}</mat-option>
         </ng-container>
       </mat-select>
+      <mat-hint>Optional</mat-hint>
     </mat-form-field>
     <mat-form-field appearance="fill" class="w-30">
       <mat-label>Blend</mat-label>
@@ -81,6 +82,7 @@
           <mat-option [value]="blend.blendId">{{ blend.blendName }}</mat-option>
         </ng-container>
       </mat-select>
+      <mat-hint>Optional</mat-hint>
     </mat-form-field>
     <div>
       <button mat-raised-button (click)="onReset()">

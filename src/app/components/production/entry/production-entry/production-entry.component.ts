@@ -32,14 +32,7 @@ export class ProductionEntryComponent implements OnInit, OnDestroy {
   yarnDetails: ConversionYarn[] = [];
   entryDetails: any[] = [];
   yarnDisplayedColumns = ['yarnCount', 'kgs', 'prodQty'];
-  entryDisplayedColumns = [
-    'counts',
-    'lot',
-    'progQty',
-    'prodQty',
-    'winding',
-    'action',
-  ];
+  entryDisplayedColumns = ['counts', 'lot', 'prodQty', 'winding', 'action'];
   @ViewChild('entry') table!: MatTable<any>;
   subscription = new Subscription();
   productionDate = new FormControl('', Validators.required);
