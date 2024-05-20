@@ -35,6 +35,7 @@ export class UploadAttendanceComponent {
   private paginator!: MatPaginator;
   subscription = new Subscription();
   departmentList!: EmployeeDepartment[];
+  isFileValid!: boolean;
 
   @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
@@ -89,13 +90,17 @@ export class UploadAttendanceComponent {
         this.formatExcelData(excelData);
       } else {
         this.attendanceData.data = [];
+        this.notificationService.notify(
+          'Something went wrong! Please check the file.',
+          NotifyType.ERROR
+        );
       }
     };
     reader.readAsBinaryString(file);
   }
 
   formatExcelData(excelData: any[]) {
-    this.attendanceData.data = excelData?.map((data) => ({
+    const formatedData = excelData?.map((data) => ({
       employeeId: data['Employee ID'],
       attendanceDate: this.formatDate(data['Date']) || '',
       firstCheckInTime: data['First Check In'] || '',
@@ -103,6 +108,16 @@ export class UploadAttendanceComponent {
       workedHours: data['Total Time'] || '',
       todaysDepartment: data['Department'] || '',
     })) as MonthlyAttendance[];
+    this.isFileValid = formatedData.every((data) => !!data.employeeId);
+    if (this.isFileValid && formatedData?.length) {
+      this.attendanceData.data = formatedData;
+    } else {
+      this.attendanceData.data = [];
+      this.notificationService.notify(
+        'Something went wrong! Please check the file.',
+        NotifyType.ERROR
+      );
+    }
   }
 
   formatDate(date: string) {
@@ -132,9 +147,9 @@ export class UploadAttendanceComponent {
   }
 
   submit() {
-    if (this.uploadFile.invalid) {
+    if (this.uploadFile.invalid || !this.isFileValid) {
       this.notificationService.notify(
-        'Please upload the attendance file!',
+        'Please upload the valid attendance file!',
         NotifyType.ERROR
       );
       return;
