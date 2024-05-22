@@ -47,3 +47,14 @@
     background-color: whitesmoke;
   }
 }
+
+.search-fields {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+
+.btns {
+  display: flex;
+  justify-content: flex-end;
+}
