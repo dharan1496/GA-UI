@@ -99,6 +99,17 @@ export class YarnService {
     );
   }
 
+  searchYarnStock(fields: any): Observable<YarnStockByOrderId[]> {
+    let endpoint = '';
+    const { countsId, blendId, shadeId, lot } = fields;
+    countsId && (endpoint = endpoint + `&countsId=${countsId}`);
+    blendId && (endpoint = endpoint + `&blendId=${blendId}`);
+    shadeId && (endpoint = endpoint + `&shadeId=${shadeId}`);
+    return this.http.get<YarnStockByOrderId[]>(
+      `${environment.api}/YarnOrder/SearchYarnStock?lot=${lot}${endpoint}`
+    );
+  }
+
   createYarnDelivery(order: YarnDelivery): Observable<YarnDC> {
     return this.http.post<YarnDC>(
       `${environment.api}/YarnOrder/CreateYarnDelivery`,
