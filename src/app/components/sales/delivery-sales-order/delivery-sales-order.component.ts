@@ -64,6 +64,7 @@ export class DeliverySalesOrderComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getPartiesForAddress();
     this.form = this.formBuilder.group({
       vehicleNo: ['', Validators.required],
       deliveryDate: ['', Validators.required],
@@ -90,7 +91,6 @@ export class DeliverySalesOrderComponent implements OnInit {
         if (order) {
           this.stockDetails = [];
           this.orderSelected = order;
-          this.getPartiesForAddress();
           this.form
             .get('deliveryAddressId')
             ?.setValue(this.orderSelected.partyId);
