@@ -14,6 +14,7 @@ import { FibreStockComponent } from './fibre/fibre-stock/fibre-stock.component';
 import { FibreReceiveConversionOrderComponent } from './fibre/fibre-receive-conversion-order/fibre-receive-conversion-order.component';
 import { FibreReceivedOrderSearchComponent } from './fibre/fibre-received-order-search/fibre-received-order-search.component';
 import { ComboBoxComponent } from 'src/app/shared/combo-box/combo-box.component';
+import { FibreOpenStockComponent } from './fibre/fibre-open-stock/fibre-open-stock.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { ComboBoxComponent } from 'src/app/shared/combo-box/combo-box.component'
     FibreStockComponent,
     FibreReceiveConversionOrderComponent,
     FibreReceivedOrderSearchComponent,
+    FibreOpenStockComponent,
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,85 @@
+.container {
+  margin: 32px;
+}
+
+.party-card {
+  margin-bottom: 32px;
+}
+
+.padding {
+  padding: 16px 32px 8px 32px;
+}
+
+.form-container {
+  display: flex;
+  column-gap: 48px;
+  row-gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.header {
+  font-weight: 500;
+  margin: 40px 0;
+}
+
+.table {
+  width: 100%;
+}
+
+.button-container {
+  padding-bottom: 16px;
+}
+
+.button + .button {
+  margin-left: 8px;
+}
+
+.summary-card {
+  margin-top: 32px;
+  width: 50%;
+
+  .summary-content {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.mat-mdc-table-sticky {
+  border-top: 1px solid #e0e0e0;
+}
+
+.no-rows {
+  padding: 16px 0;
+  text-align: center;
+}
+
+.mat-mdc-header-row {
+  background: rgb(225, 225, 225);
+}
+
+.footer {
+  margin-top: 50px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.po-no {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  mat-icon {
+    scale: 0.8;
+    border-radius: 50%;
+    transition: all 0.15s;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    &:active {
+      transform: rotate(180deg) scale(1.1);
+    }
+  }
+}

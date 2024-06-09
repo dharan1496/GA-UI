@@ -1,0 +1,194 @@
+<section class="container">
+  <h1 class="header letter-spacing-1">Receive Fibre Stock</h1>
+  <mat-card class="party-card">
+    <mat-card-header>
+      <mat-card-title>Stock Details</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="form" class="form-container padding">
+        <div class="w-40">
+          <app-party-combo-box
+            [patch]="form.get('partyId')?.value"
+            [partyFormControl]="form.get('partyId')"
+            [touched]="form.get('partyId')?.touched || false"
+          >
+          </app-party-combo-box>
+        </div>
+        <mat-form-field appearance="fill" class="w-25">
+          <mat-label>Received Date</mat-label>
+          <input
+            matInput
+            [matDatepicker]="receivedDatePicker"
+            formControlName="recdDate"
+            (dateChange)="
+              appSharedService.formatDate($event, form.controls['recdDate'])
+            "
+            [max]="maxDate"
+          />
+          <mat-hint>DD/MM/YYYY</mat-hint>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="receivedDatePicker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #receivedDatePicker></mat-datepicker>
+          <mat-error *ngIf="form.get('recdDate')?.hasError('required')"
+            >Please enter valid date.</mat-error
+          >
+          <mat-error *ngIf="form.get('recdDate')?.hasError('matDatepickerMax')"
+            >Should not be future Date.</mat-error
+          >
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="w-25">
+          <mat-label>Received DCNo</mat-label>
+          <input matInput formControlName="recdDCNo" />
+          <mat-error>This field is required.</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="w-25">
+          <mat-label>DC Date</mat-label>
+          <input
+            matInput
+            [matDatepicker]="dcDatePicker"
+            formControlName="dcDate"
+            (dateChange)="
+              appSharedService.formatDate($event, form.controls['dcDate'])
+            "
+            [max]="dcMaxDate"
+          />
+          <mat-hint>DD/MM/YYYY</mat-hint>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="dcDatePicker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #dcDatePicker></mat-datepicker>
+          <mat-error *ngIf="form.get('dcDate')?.hasError('required')"
+            >Please enter valid date.</mat-error
+          >
+          <mat-error
+            *ngIf="
+              form.get('dcDate')?.hasError('matDatepickerMax') &&
+              form.get('recdDate')?.valid
+            "
+            >Should not be greater than received date.</mat-error
+          >
+          <mat-error
+            *ngIf="
+              form.get('dcDate')?.hasError('matDatepickerMax') &&
+              form.get('recdDate')?.invalid
+            "
+            >Should not be future Date.</mat-error
+          >
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="button-container">
+    <button mat-raised-button (click)="addData()" class="button">
+      <mat-icon>add_circle_outline</mat-icon>Add item
+    </button>
+  </div>
+
+  <div class="overflow-auto mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" class="table">
+      <ng-container matColumnDef="fibreType">
+        <th mat-header-cell *matHeaderCellDef>Fibre</th>
+        <td mat-cell *matCellDef="let element">{{ element.fibreType }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <ng-container matColumnDef="shade">
+        <th mat-header-cell *matHeaderCellDef>Shade</th>
+        <td mat-cell *matCellDef="let element">{{ element.shadeName }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <ng-container matColumnDef="receivedQty">
+        <th mat-header-cell *matHeaderCellDef class="text-right">
+          Received Qty
+        </th>
+        <td mat-cell *matCellDef="let element" class="text-right">
+          {{ element.receivedQty | number : "1.0-3" }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <ng-container matColumnDef="receivedBales">
+        <th mat-header-cell *matHeaderCellDef class="text-right">
+          Received Bales
+        </th>
+        <td mat-cell *matCellDef="let element" class="text-right">
+          {{ element.receivedBales }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <ng-container matColumnDef="lot">
+        <th mat-header-cell *matHeaderCellDef class="text-right">Lot</th>
+        <td mat-cell *matCellDef="let element" class="text-right">
+          {{ element.lot }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <ng-container matColumnDef="hsnCode">
+        <th mat-header-cell *matHeaderCellDef class="text-right">HSN Code</th>
+        <td mat-cell *matCellDef="let element" class="text-right">
+          {{ element.hsnCode || "_" }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <ng-container matColumnDef="button">
+        <th mat-header-cell *matHeaderCellDef class="text-center">Actions</th>
+        <td mat-cell *matCellDef="let element" class="text-center">
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="menu"
+            aria-label="Actions menu"
+          >
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button
+              mat-menu-item
+              aria-label="button with a edit icon"
+              (click)="updateData(element)"
+            >
+              <mat-icon>edit</mat-icon> Edit
+            </button>
+            <button
+              mat-menu-item
+              (click)="removeData(element)"
+              aria-label="button with a delete icon"
+            >
+              <mat-icon>delete</mat-icon> Delete
+            </button>
+          </mat-menu>
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell no-rows" [attr.colspan]="displayedColumns.length">
+          No rows to display
+        </td>
+      </tr>
+      <tr
+        [hidden]="!dataSource.length"
+        mat-footer-row
+        *matFooterRowDef="displayedColumns; sticky: true"
+      ></tr>
+    </table>
+  </div>
+
+  <div class="footer">
+    <button mat-raised-button class="mr-16" (click)="resetData()">
+      <mat-icon>refresh</mat-icon>Reset
+    </button>
+    <button mat-raised-button color="primary" (click)="submitOrder()">
+      <mat-icon>save_alt</mat-icon>Submit
+    </button>
+  </div>
+</section>
