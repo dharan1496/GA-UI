@@ -25,6 +25,7 @@ export class AddEmployeeComponent implements OnInit, OnDestroy {
   idProofTypes!: IDProof[];
   salaryCategories!: SalaryCategory[];
   subscription = new Subscription();
+  edit = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -133,10 +134,27 @@ export class AddEmployeeComponent implements OnInit, OnDestroy {
             );
         })
     );
+
+    if (this.employeeService.editEmployeeDetails) {
+      setTimeout(() => {
+        this.handleUpdate();
+        document.querySelector('.container')?.scrollIntoView();
+      }, 200);
+    }
   }
 
   ngOnDestroy() {
     this.subscription?.unsubscribe();
+  }
+
+  handleUpdate() {
+    this.edit = true;
+    const doj =
+      this.employeeService.editEmployeeDetails.dateOfJoining?.split('/');
+    this.form.patchValue({
+      ...this.employeeService.editEmployeeDetails,
+      dateOfJoining: new Date(`${doj[1]}/${doj[0]}/${doj[2]}`),
+    });
   }
 
   resetData() {
@@ -159,21 +177,23 @@ export class AddEmployeeComponent implements OnInit, OnDestroy {
         'dd/MM/yyyy'
       ),
     };
-    this.employeeService.addEmployee(employee).subscribe({
-      next: (response) => {
-        if (response) {
-          this.notificationService
-            .success('Added employee successfully!')
-            .afterClosed()
-            .subscribe(() => this.router.navigateByUrl('/employee'));
-        } else {
-          this.notificationService.error('Unable to add the employee!');
-        }
-      },
-      error: (error) =>
-        this.notificationService.error(
-          typeof error?.error === 'string' ? error?.error : error?.message
-        ),
-    });
+    if (!this.edit) {
+      this.employeeService.addEmployee(employee).subscribe({
+        next: (response) => {
+          if (response) {
+            this.notificationService
+              .success('Added employee successfully!')
+              .afterClosed()
+              .subscribe(() => this.router.navigateByUrl('/employee'));
+          } else {
+            this.notificationService.error('Unable to add the employee!');
+          }
+        },
+        error: (error) =>
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
+      });
+    }
   }
 }

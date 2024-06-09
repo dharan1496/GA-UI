@@ -1,5 +1,7 @@
 <section class="container">
-  <h1 class="header letter-spacing-1">Add New Employee</h1>
+  <h1 class="header letter-spacing-1">
+    {{ edit ? "Update" : "Add New" }} Employee
+  </h1>
   <mat-card>
     <mat-card-header>
       <mat-card-title> Employee Details </mat-card-title>
@@ -129,11 +131,11 @@
       <mat-icon>arrow_back</mat-icon>Go to Employee List
     </button>
     <div>
-      <button mat-raised-button (click)="resetData()" class="mr-16">
+      <button *ngIf="!edit" (click)="resetData()" class="mr-16">
         <mat-icon>refresh</mat-icon>Reset
       </button>
       <button mat-raised-button color="primary" (click)="submitEmployee()">
-        <mat-icon>save_alt</mat-icon>Submit
+        <mat-icon>save_alt</mat-icon>{{ edit ? "Update" : "Submit" }}
       </button>
     </div>
   </div>

@@ -16,6 +16,8 @@ import { MonthlySalarySummary } from '../models/monthlySalarySummary';
   providedIn: 'root',
 })
 export class EmployeeService {
+  editEmployeeDetails!: Employee;
+
   constructor(
     private http: HttpClient,
     private appSharedService: AppSharedService

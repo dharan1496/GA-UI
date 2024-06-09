@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { MaterialModule } from 'src/app/material.module';
 import { Employee } from 'src/app/models/employee';
+import { EmployeeService } from 'src/app/services/employee.service';
 
 @Component({
   selector: 'app-employee-details',
@@ -14,7 +16,9 @@ import { Employee } from 'src/app/models/employee';
 export class EmployeeDetailsComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA) public employeeDetails: Employee,
-    private matDialogRef: MatDialogRef<any>
+    private matDialogRef: MatDialogRef<any>,
+    private employeeService: EmployeeService,
+    private router: Router
   ) {}
 
   close() {
@@ -22,7 +26,9 @@ export class EmployeeDetailsComponent {
   }
 
   updateEmployee() {
-    // update
+    this.employeeService.editEmployeeDetails = this.employeeDetails;
+    this.close();
+    this.router.navigateByUrl('/employee/update');
   }
 
   deleteEmployee() {

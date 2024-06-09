@@ -189,7 +189,12 @@
       <mat-icon>arrow_back</mat-icon>Go to Party List
     </button>
     <div>
-      <button mat-raised-button (click)="resetData()" class="mr-16">
+      <button
+        *ngIf="!edit"
+        mat-raised-button
+        (click)="resetData()"
+        class="mr-16"
+      >
         <mat-icon>refresh</mat-icon>Reset
       </button>
       <button mat-raised-button color="primary" (click)="submitParty()">
