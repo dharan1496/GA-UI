@@ -120,6 +120,9 @@ export class FibreStockComponent implements OnInit, OnDestroy {
             this.dataSource.data = data;
             this.dataSourceBackup.data = data;
             this.showFilterCheckbox = data?.length > 0;
+            if (this.showFilterCheckbox) {
+              this.filterStocks();
+            }
           },
           error: (error) => {
             this.notificationService.error(

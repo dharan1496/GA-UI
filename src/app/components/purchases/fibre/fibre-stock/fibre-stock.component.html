@@ -1,5 +1,5 @@
 <section class="container">
-  <h1 class="font-weight-bold">Fibre Stock</h1>
+  <h1 class="font-weight-bold">Search Fibre Stock</h1>
   <section class="filter-section">
     <form class="form-container" [formGroup]="form">
       <mat-form-field>
@@ -70,7 +70,12 @@
         &ast;Click the row to see the details
       </div>
     </div>
-    <button mat-button (click)="printStocks()" class="ml-40">
+    <button
+      *ngIf="dataSource.data.length"
+      mat-button
+      (click)="printStocks()"
+      class="ml-40"
+    >
       <mat-icon>print</mat-icon>Print
     </button>
   </section>
