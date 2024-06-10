@@ -194,6 +194,23 @@ export class AddEmployeeComponent implements OnInit, OnDestroy {
             typeof error?.error === 'string' ? error?.error : error?.message
           ),
       });
+    } else {
+      this.employeeService.updateEmployee(employee).subscribe({
+        next: (response) => {
+          if (response) {
+            this.notificationService
+              .success(response)
+              .afterClosed()
+              .subscribe(() => this.router.navigateByUrl('/employee'));
+          } else {
+            this.notificationService.error('Unable to update the employee!');
+          }
+        },
+        error: (error) =>
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
+      });
     }
   }
 }

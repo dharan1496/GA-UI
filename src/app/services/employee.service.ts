@@ -33,6 +33,16 @@ export class EmployeeService {
     );
   }
 
+  updateEmployee(employee: Employee) {
+    return this.http.post(
+      `${environment.api}/Employee/UpdateEmployee?updatedByUserId=${this.appSharedService.userId}`,
+      employee,
+      {
+        responseType: 'text',
+      }
+    );
+  }
+
   getEmployeeById(employeeId: number): Observable<Employee> {
     return this.http.get<Employee>(
       `${environment.api}/Employee/GetEmployeeById?employeeId=${employeeId}`
