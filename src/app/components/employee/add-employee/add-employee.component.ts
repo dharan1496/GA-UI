@@ -139,7 +139,7 @@ export class AddEmployeeComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.handleUpdate();
         document.querySelector('.container')?.scrollIntoView();
-      }, 300);
+      }, 250);
     }
   }
 

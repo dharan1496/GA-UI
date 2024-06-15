@@ -1,0 +1,139 @@
+<section class="container">
+  <h1 class="header letter-spacing-1">Timesheet (Manual)</h1>
+  <mat-form-field appearance="fill" class="w-50 mb-16">
+    <mat-label>Employee</mat-label>
+    <mat-select [formControl]="employeeId">
+      <mat-option
+        *ngFor="let employee of employeelist"
+        [value]="employee.employeeId"
+      >
+        {{ employee.firstName + " " + employee.lastName | titlecase }}
+      </mat-option>
+    </mat-select>
+    <mat-error>This field is required.</mat-error>
+  </mat-form-field>
+  <mat-card *ngIf="employeeId?.value">
+    <mat-card-header class="mb-16">
+      <mat-card-title> Entry </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="entry mb-24" [formGroup]="form">
+        <mat-form-field appearance="fill">
+          <mat-label>Date</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="date"
+            name="date"
+            required
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-hint>dd/mm/yyyy</mat-hint>
+          <mat-error *ngIf="form.get('date')?.hasError('required')"
+            >Please enter valid date.</mat-error
+          >
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="ml-24">
+          <mat-label>Time In</mat-label>
+          <input
+            matInput
+            type="time"
+            formControlName="timeIn"
+            name="timeIn"
+            required
+          />
+          <mat-error>This field is required.</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="ml-24">
+          <mat-label>Time Out</mat-label>
+          <input
+            matInput
+            type="time"
+            formControlName="timeOut"
+            name="timeOut"
+            required
+          />
+          <mat-error>This field is required.</mat-error>
+        </mat-form-field>
+        <button
+          class="ml-24"
+          mat-raised-button
+          color="primary"
+          (click)="addEntry()"
+        >
+          <mat-icon>add_alt</mat-icon> Add Entry
+        </button>
+      </div>
+      <div>
+        <table #entry mat-table [dataSource]="timesheetEntries">
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>Date</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.date | date }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="timeIn">
+            <th mat-header-cell *matHeaderCellDef>Time In (24 hr)</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.timeIn }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="timeOut">
+            <th mat-header-cell *matHeaderCellDef>Time Out (24 hr)</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.timeOut }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="hours">
+            <th mat-header-cell *matHeaderCellDef>Worked Hours</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.hours }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element">
+              <button
+                mat-icon-button
+                color="warn"
+                matTooltip="Remove"
+                aria-label="button with a delete icon"
+                (click)="removeEntry(element)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td
+              class="mat-cell no-rows"
+              [attr.colspan]="displayedColumns.length"
+            >
+              No entry to display
+            </td>
+          </tr>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="footer" *ngIf="employeeId?.value">
+    <button mat-raised-button (click)="resetData()" class="mr-16">
+      <mat-icon>refresh</mat-icon>Reset
+    </button>
+    <button mat-raised-button color="primary">
+      <mat-icon>save_alt</mat-icon>Submit
+    </button>
+  </div>
+</section>
