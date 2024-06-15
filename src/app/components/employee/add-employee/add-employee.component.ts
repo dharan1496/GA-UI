@@ -114,7 +114,7 @@ export class AddEmployeeComponent implements OnInit, OnDestroy {
           this.form
             .get('idProofType')
             ?.setValue(
-              this.idProofTypes.find(
+              this.idProofTypes?.find(
                 (proof) => proof.idProofTypeId === idProofTypeId
               )?.idProofType
             );
@@ -139,21 +139,30 @@ export class AddEmployeeComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.handleUpdate();
         document.querySelector('.container')?.scrollIntoView();
-      }, 200);
+      }, 300);
     }
   }
 
   ngOnDestroy() {
     this.subscription?.unsubscribe();
+    this.employeeService.editEmployeeDetails = null;
   }
 
   handleUpdate() {
     this.edit = true;
     const doj =
-      this.employeeService.editEmployeeDetails.dateOfJoining?.split('/');
+      this.employeeService.editEmployeeDetails?.dateOfJoining?.split('/');
+    let updatedDoj;
+    if (doj && doj?.length) {
+      updatedDoj = { dateOfJoining: new Date(`${doj[1]}/${doj[0]}/${doj[2]}`) };
+    }
     this.form.patchValue({
       ...this.employeeService.editEmployeeDetails,
-      dateOfJoining: new Date(`${doj[1]}/${doj[0]}/${doj[2]}`),
+      ...updatedDoj,
+      idProofTypeId:
+        this.employeeService.editEmployeeDetails?.idProofTypeId || '',
+      salaryCategoryId:
+        this.employeeService.editEmployeeDetails?.salaryCategoryId || '',
     });
   }
 

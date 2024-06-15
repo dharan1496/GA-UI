@@ -131,7 +131,12 @@
       <mat-icon>arrow_back</mat-icon>Go to Employee List
     </button>
     <div>
-      <button *ngIf="!edit" (click)="resetData()" class="mr-16">
+      <button
+        mat-raised-button
+        *ngIf="!edit"
+        (click)="resetData()"
+        class="mr-16"
+      >
         <mat-icon>refresh</mat-icon>Reset
       </button>
       <button mat-raised-button color="primary" (click)="submitEmployee()">
