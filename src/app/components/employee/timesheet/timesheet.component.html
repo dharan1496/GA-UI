@@ -99,7 +99,7 @@
           <ng-container matColumnDef="timeIn">
             <th mat-header-cell *matHeaderCellDef>Time In (24 hr format)</th>
             <td mat-cell *matCellDef="let element">
-              {{ element.timeInDate | date : "dd/MM/yyyy" }} -
+              {{ element.timeInDate | date : "dd/MM/yyyy" }},
               {{ element.timeIn }}
             </td>
           </ng-container>
@@ -107,14 +107,18 @@
           <ng-container matColumnDef="timeOut">
             <th mat-header-cell *matHeaderCellDef>Time Out (24 hr format)</th>
             <td mat-cell *matCellDef="let element">
-              {{ element.timeOutDate | date : "dd/MM/yyyy" }} -
+              {{ element.timeOutDate | date : "dd/MM/yyyy" }},
               {{ element.timeOut }}
             </td>
           </ng-container>
 
           <ng-container matColumnDef="hours">
             <th mat-header-cell *matHeaderCellDef>Worked Hours</th>
-            <td mat-cell *matCellDef="let element">
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [ngClass]="{ warning: element.hours?.includes('-') }"
+            >
               {{ element.hours }}
             </td>
           </ng-container>
