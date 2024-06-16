@@ -18,26 +18,26 @@
     </mat-card-header>
     <mat-card-content>
       <div class="entry mb-24" [formGroup]="form">
-        <mat-form-field appearance="fill">
-          <mat-label>Date</mat-label>
+        <mat-form-field appearance="fill" class="w-15">
+          <mat-label>In Date</mat-label>
           <input
             matInput
-            [matDatepicker]="picker"
-            formControlName="date"
-            name="date"
+            [matDatepicker]="timeInpicker"
+            formControlName="timeInDate"
+            name="timeInDate"
             required
           />
           <mat-datepicker-toggle
             matSuffix
-            [for]="picker"
+            [for]="timeInpicker"
           ></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
+          <mat-datepicker #timeInpicker></mat-datepicker>
           <mat-hint>dd/mm/yyyy</mat-hint>
-          <mat-error *ngIf="form.get('date')?.hasError('required')"
+          <mat-error *ngIf="form.get('timeInDate')?.hasError('required')"
             >Please enter valid date.</mat-error
           >
         </mat-form-field>
-        <mat-form-field appearance="fill" class="ml-24">
+        <mat-form-field appearance="fill" class="ml-24 w-15">
           <mat-label>Time In</mat-label>
           <input
             matInput
@@ -46,9 +46,34 @@
             name="timeIn"
             required
           />
+          <mat-hint>hh:mm AM/PM</mat-hint>
           <mat-error>This field is required.</mat-error>
         </mat-form-field>
-        <mat-form-field appearance="fill" class="ml-24">
+        <mat-form-field appearance="fill" class="ml-40 w-15">
+          <mat-label>Out Date</mat-label>
+          <input
+            matInput
+            [matDatepicker]="timeOutpicker"
+            formControlName="timeOutDate"
+            name="timeOutDate"
+            [min]="form.get('timeInDate')?.value"
+            required
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="timeOutpicker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #timeOutpicker></mat-datepicker>
+          <mat-hint>dd/mm/yyyy</mat-hint>
+          <mat-error *ngIf="form.get('timeOutDate')?.hasError('required')"
+            >Please enter valid date.</mat-error
+          >
+          <mat-error
+            *ngIf="form.get('timeOutDate')?.hasError('matDatepickerMin')"
+            >Time out date should be greater then Time In.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="ml-24 w-15">
           <mat-label>Time Out</mat-label>
           <input
             matInput
@@ -57,10 +82,11 @@
             name="timeOut"
             required
           />
+          <mat-hint>hh:mm AM/PM</mat-hint>
           <mat-error>This field is required.</mat-error>
         </mat-form-field>
         <button
-          class="ml-24"
+          class="ml-40"
           mat-raised-button
           color="primary"
           (click)="addEntry()"
@@ -70,23 +96,18 @@
       </div>
       <div>
         <table #entry mat-table [dataSource]="timesheetEntries">
-          <ng-container matColumnDef="date">
-            <th mat-header-cell *matHeaderCellDef>Date</th>
-            <td mat-cell *matCellDef="let element">
-              {{ element.date | date }}
-            </td>
-          </ng-container>
-
           <ng-container matColumnDef="timeIn">
-            <th mat-header-cell *matHeaderCellDef>Time In (24 hr)</th>
+            <th mat-header-cell *matHeaderCellDef>Time In (24 hr format)</th>
             <td mat-cell *matCellDef="let element">
+              {{ element.timeInDate | date : "dd/MM/yyyy" }} -
               {{ element.timeIn }}
             </td>
           </ng-container>
 
           <ng-container matColumnDef="timeOut">
-            <th mat-header-cell *matHeaderCellDef>Time Out (24 hr)</th>
+            <th mat-header-cell *matHeaderCellDef>Time Out (24 hr format)</th>
             <td mat-cell *matCellDef="let element">
+              {{ element.timeOutDate | date : "dd/MM/yyyy" }} -
               {{ element.timeOut }}
             </td>
           </ng-container>

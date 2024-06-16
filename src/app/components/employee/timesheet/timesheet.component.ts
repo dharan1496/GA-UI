@@ -28,7 +28,7 @@ export class TimesheetComponent {
   employeelist!: Employee[];
   subscription = new Subscription();
   employeeId = new FormControl('', Validators.required);
-  displayedColumns = ['date', 'timeIn', 'timeOut', 'hours', 'action'];
+  displayedColumns = ['timeIn', 'timeOut', 'hours', 'action'];
   form!: FormGroup;
   timesheetEntries: any = [];
   @ViewChild('entry') table!: MatTable<any>;
@@ -67,8 +67,9 @@ export class TimesheetComponent {
     });
 
     this.form = this.formBuilder.group({
-      date: '',
+      timeInDate: '',
       timeIn: '',
+      timeOutDate: '',
       timeOut: '',
       hours: '',
     });
@@ -77,10 +78,7 @@ export class TimesheetComponent {
   addEntry() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.notificationService.notify(
-        'Fill all entry fields!',
-        NotifyType.ERROR
-      );
+      this.notificationService.notify('Fill valid entry!', NotifyType.ERROR);
       return;
     }
     this.timeDifference();
@@ -90,12 +88,14 @@ export class TimesheetComponent {
   }
 
   timeDifference() {
+    const timeInDate = this.form.get('timeInDate')?.value;
+    const timeOutDate = this.form.get('timeOutDate')?.value;
     const startTime = this.form.get('timeIn')?.value;
     const endTime = this.form.get('timeOut')?.value;
 
     if (startTime && endTime) {
-      const start = this.parseTime(startTime);
-      const end = this.parseTime(endTime);
+      const start = this.parseTime(startTime, timeInDate);
+      const end = this.parseTime(endTime, timeOutDate);
 
       const diffInMilliseconds = end.getTime() - start.getTime();
       const diffInMinutes = Math.floor(diffInMilliseconds / (1000 * 60));
@@ -105,22 +105,17 @@ export class TimesheetComponent {
       this.form
         .get('hours')
         ?.setValue(
-          `${
-            hours < 0
-              ? 12 - Math.abs(hours) + 12
-              : this.decimalPipe.transform(hours, '2.0-0')
-          }:${
-            minutes < 0
-              ? 60 - Math.abs(minutes)
-              : this.decimalPipe.transform(minutes, '2.0-0')
-          }`
+          `${this.decimalPipe.transform(
+            hours,
+            '2.0-0'
+          )}:${this.decimalPipe.transform(minutes, '2.0-0')}`
         );
     }
   }
 
-  parseTime(time: string): Date {
+  parseTime(time: string, sdate: string): Date {
     const [hours, minutes] = time.split(':').map(Number);
-    const date = new Date();
+    const date = new Date(sdate);
     date.setHours(hours, minutes, 0, 0);
     return date;
   }
