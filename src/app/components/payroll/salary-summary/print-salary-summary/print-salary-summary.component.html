@@ -1,4 +1,4 @@
-<div class="flex">
+<div class="flex" *ngIf="printService.salarySummaryPrint">
   <div *ngFor="let salary of printService.salarySummary">
     <div>Name: {{ salary.employeeName }} ({{ salary.employeeId }})</div>
     <div>Month: {{ salary.salaryMonthDate }}</div>
