@@ -17,7 +17,8 @@ import { MatTable } from '@angular/material/table';
 import { NotifyType } from 'src/app/models/notify';
 import { MatDialog } from '@angular/material/dialog';
 import { UserActionConfirmationComponent } from '../../user-action-confirmation/user-action-confirmation.component';
-import { DecimalPipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
+import { EmployeeDepartment } from 'src/app/models/EmployeeDepartment';
 
 @Component({
   selector: 'app-timesheet',
@@ -28,10 +29,17 @@ export class TimesheetComponent {
   employeelist!: Employee[];
   subscription = new Subscription();
   employeeId = new FormControl('', Validators.required);
-  displayedColumns = ['timeIn', 'timeOut', 'hours', 'action'];
+  displayedColumns = [
+    'timeIn',
+    'timeOut',
+    'hours',
+    'todaysDepartment',
+    'action',
+  ];
   form!: FormGroup;
   timesheetEntries: any = [];
   @ViewChild('entry') table!: MatTable<any>;
+  departmentList!: EmployeeDepartment[];
 
   constructor(
     public appSharedService: AppSharedService,
@@ -40,7 +48,8 @@ export class TimesheetComponent {
     private notificationService: NotificationService,
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
-    private decimalPipe: DecimalPipe
+    private decimalPipe: DecimalPipe,
+    private datePipe: DatePipe
   ) {
     this.navigationService.isSidenavOpened = true;
     this.navigationService.setFocus(Constants.EMPLOYEE);
@@ -60,10 +69,22 @@ export class TimesheetComponent {
       })
     );
 
+    this.subscription.add(
+      this.employeeService.getEmployeeDepartmentMasters().subscribe({
+        next: (response) => {
+          this.departmentList = response;
+        },
+        error: (error) =>
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
+      })
+    );
+
     this.employeeId.valueChanges.subscribe(() => {
       this.form.reset();
       this.timesheetEntries = [];
-      this.table.renderRows();
+      this.table?.renderRows();
     });
 
     this.form = this.formBuilder.group({
@@ -75,6 +96,10 @@ export class TimesheetComponent {
     });
   }
 
+  ngOnDestroy() {
+    this.subscription?.unsubscribe();
+  }
+
   addEntry() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -83,7 +108,7 @@ export class TimesheetComponent {
     }
     this.timeDifference();
     this.timesheetEntries.push(this.form.value);
-    this.table.renderRows();
+    this.table?.renderRows();
     this.form.reset();
   }
 
@@ -133,15 +158,53 @@ export class TimesheetComponent {
             }
           });
           this.timesheetEntries = newList;
-          this.table.renderRows();
+          this.table?.renderRows();
         }
       });
+  }
+
+  save() {
+    if (!this.timesheetEntries?.length) {
+      this.notificationService.notify(
+        'Add atleast one entry!',
+        NotifyType.ERROR
+      );
+      return;
+    }
+
+    const request = this.timesheetEntries?.map((data: any) => {
+      return {
+        employeeId: this.employeeId.value,
+        workedHours: data?.hours,
+        todaysDepartment: data?.todaysDepartment,
+        attendanceDate: this.datePipe.transform(data?.timeInDate, 'dd/MM/yyyy'),
+        firstCheckInTime: `${this.datePipe.transform(
+          data?.timeInDate,
+          'dd/MM/yyyy'
+        )} ${data?.timeIn}`,
+        lastCheckOutTime: `${this.datePipe.transform(
+          data?.timeOutDate,
+          'dd/MM/yyyy'
+        )} ${data?.timeOut}`,
+      };
+    });
+
+    this.employeeService.saveMonthlyAttendance(request, '').subscribe({
+      next: (response) => {
+        this.notificationService.success(response);
+        this.resetData();
+      },
+      error: (error) =>
+        this.notificationService.error(
+          typeof error?.error === 'string' ? error?.error : error?.message
+        ),
+    });
   }
 
   resetData() {
     this.form.reset();
     this.timesheetEntries = [];
-    this.table.renderRows();
+    this.table?.renderRows();
     this.employeeId.reset();
   }
 }
