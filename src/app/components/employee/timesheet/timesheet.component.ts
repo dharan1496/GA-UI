@@ -226,5 +226,6 @@ export class TimesheetComponent {
     this.timesheetEntries = [];
     this.table?.renderRows();
     this.employeeId.reset();
+    this.monthStartDate.reset();
   }
 }
