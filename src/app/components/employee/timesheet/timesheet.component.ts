@@ -4,7 +4,7 @@ import { EMPLOYEE } from 'src/app/constants/employee-menu-values.const';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
-import { Subscription, min } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Employee } from 'src/app/models/employee';
 import { NotificationService } from 'src/app/shared/notification.service';
 import {
@@ -29,6 +29,7 @@ export class TimesheetComponent {
   employeelist!: Employee[];
   subscription = new Subscription();
   employeeId = new FormControl('', Validators.required);
+  monthStartDate = new FormControl('', Validators.required);
   displayedColumns = [
     'timeIn',
     'timeOut',
@@ -40,6 +41,8 @@ export class TimesheetComponent {
   timesheetEntries: any = [];
   @ViewChild('entry') table!: MatTable<any>;
   departmentList!: EmployeeDepartment[];
+  minDate!: Date;
+  maxDate!: Date;
 
   constructor(
     public appSharedService: AppSharedService,
@@ -80,6 +83,18 @@ export class TimesheetComponent {
           ),
       })
     );
+
+    this.monthStartDate.valueChanges.subscribe((value: any) => {
+      if (value) {
+        const date = new Date(value);
+        this.minDate = new Date(date);
+        this.minDate.setDate(1);
+
+        this.maxDate = new Date(date);
+        this.maxDate.setMonth(this.maxDate.getMonth() + 1);
+        this.maxDate.setDate(0);
+      }
+    });
 
     this.employeeId.valueChanges.subscribe(() => {
       this.form.reset();
@@ -189,16 +204,21 @@ export class TimesheetComponent {
       };
     });
 
-    this.employeeService.saveMonthlyAttendance(request, '').subscribe({
-      next: (response) => {
-        this.notificationService.success(response);
-        this.resetData();
-      },
-      error: (error) =>
-        this.notificationService.error(
-          typeof error?.error === 'string' ? error?.error : error?.message
-        ),
-    });
+    this.employeeService
+      .saveMonthlyAttendance(
+        request,
+        this.datePipe.transform(this.monthStartDate.value, 'dd/MM/yyyy') || ''
+      )
+      .subscribe({
+        next: (response) => {
+          this.notificationService.success(response);
+          this.resetData();
+        },
+        error: (error) =>
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
+      });
   }
 
   resetData() {
