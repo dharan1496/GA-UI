@@ -221,6 +221,10 @@ export class TimesheetComponent {
       });
   }
 
+  getMinMonth() {
+    return this.minDate?.toLocaleString('default', { month: 'long' });
+  }
+
   resetData() {
     this.form.reset();
     this.timesheetEntries = [];

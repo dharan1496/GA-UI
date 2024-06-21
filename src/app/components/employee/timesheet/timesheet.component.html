@@ -64,8 +64,7 @@
               form.get('timeInDate')?.hasError('matDatepickerMin') ||
               form.get('timeInDate')?.hasError('matDatepickerMax')
             "
-            >Allowed only
-            {{ minDate?.toLocaleString("default", { month: "long" }) }} month
+            >Allowed only {{ getMinMonth() }} month
           </mat-error>
         </mat-form-field>
         <mat-form-field appearance="fill" class="ml-24 w-15">
