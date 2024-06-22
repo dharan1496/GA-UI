@@ -99,7 +99,7 @@
           <ng-container matColumnDef="receivedDCNo">
             <th mat-header-cell *matHeaderCellDef>ReceivedDC No</th>
             <td mat-cell *matCellDef="let element">
-              {{ element.receivedDCNo }}
+              {{ element.receivedDCNo || "_" }}
             </td>
           </ng-container>
 

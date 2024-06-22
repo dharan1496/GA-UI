@@ -9,7 +9,7 @@ export const PURCHASE = [
       },
       { title: 'Search Fibre PO', route: 'purchases/fibre/search' },
       {
-        title: 'Receive PO Fibre',
+        title: 'Receive Fibre PO',
         route: 'purchases/fibre/receive-po-fibre',
       },
       {
