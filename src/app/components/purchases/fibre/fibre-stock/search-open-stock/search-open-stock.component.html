@@ -1,0 +1,148 @@
+<section>
+  <section class="filter-section">
+    <form class="form-container" [formGroup]="form">
+      <mat-form-field appearance="fill">
+        <mat-label>Lot</mat-label>
+        <input type="text" matInput formControlName="lot" />
+        <mat-error>This field is required.</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="w-20 ml-24">
+        <mat-label>Fibre</mat-label>
+        <mat-select formControlName="fibreId">
+          <ng-container *ngFor="let fibre of fibreTypes">
+            <mat-option [value]="fibre.fibreTypeId">{{
+              fibre.fibreType
+            }}</mat-option>
+          </ng-container>
+        </mat-select>
+        <mat-hint>Optional</mat-hint>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="w-20 ml-24 mr-24">
+        <mat-label>Shade Name</mat-label>
+        <mat-select formControlName="shadeId">
+          <ng-container *ngFor="let shade of shades">
+            <mat-option [value]="shade.shadeId">{{
+              shade.shadeName
+            }}</mat-option>
+          </ng-container>
+        </mat-select>
+        <mat-hint>Optional</mat-hint>
+      </mat-form-field>
+    </form>
+    <div class="search-btn">
+      <button mat-raised-button (click)="onReset()">
+        <mat-icon>refresh</mat-icon>Reset
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="onSearch()"
+        class="ml-16"
+      >
+        <mat-icon>search</mat-icon>Search
+      </button>
+    </div>
+  </section>
+  <div class="table-container">
+    <div *ngIf="loader" class="loader">
+      <mat-spinner></mat-spinner>
+    </div>
+    <div class="overflow-auto mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource" class="table">
+        <ng-container matColumnDef="stockAddedDate">
+          <th mat-header-cell *matHeaderCellDef>Stock Added Date</th>
+          <td mat-cell *matCellDef="let element">
+            {{ formatDate(element.stockAddedDate) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fiberTypeName">
+          <th mat-header-cell *matHeaderCellDef>Fibre Type</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.fiberTypeName }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fiberShadeName">
+          <th mat-header-cell *matHeaderCellDef>Fibre Shade</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.fiberShadeName }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="lot">
+          <th mat-header-cell *matHeaderCellDef>Lot</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.lot }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="hsnCode">
+          <th mat-header-cell *matHeaderCellDef>HSNCode</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.hsnCode }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="receivedQty">
+          <th mat-header-cell *matHeaderCellDef class="text-right">
+            Received Qty
+          </th>
+          <td mat-cell *matCellDef="let element" class="text-right">
+            {{ element.receivedQty }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="stockWeight">
+          <th mat-header-cell *matHeaderCellDef class="text-right">Weight</th>
+          <td mat-cell *matCellDef="let element" class="text-right">
+            {{ element.stockWeight }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="stockBales">
+          <th mat-header-cell *matHeaderCellDef class="text-right">Bales</th>
+          <td mat-cell *matCellDef="let element" class="text-right">
+            {{ element.stockBales }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="availableBalance">
+          <th mat-header-cell *matHeaderCellDef class="text-right">
+            Available Balance
+          </th>
+          <td mat-cell *matCellDef="let element" class="text-right">
+            {{ element.availableBalance }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>Action</th>
+          <td mat-cell *matCellDef="let element">
+            <button
+              mat-icon-button
+              matTooltip="edit"
+              aria-label="button with a edit icon"
+              (click)="editStock(element)"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell no-rows" [attr.colspan]="displayedColumns.length">
+            No rows to display
+          </td>
+        </tr>
+      </table>
+      <mat-paginator
+        *ngIf="dataSource.data.length"
+        [pageSizeOptions]="[10, 25, 100]"
+        aria-label="Select page of details"
+      ></mat-paginator>
+    </div>
+  </div>
+</section>

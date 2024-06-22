@@ -52,6 +52,7 @@ export class FibreStockComponent implements OnInit, OnDestroy {
   conversionOrderCheckbox = new FormControl();
   openedStockCheckbox = new FormControl();
   showFilterCheckbox = false;
+  searchOpenedStock = new FormControl();
 
   @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
     this.paginator = mp;

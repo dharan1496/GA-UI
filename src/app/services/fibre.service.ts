@@ -249,4 +249,17 @@ export class FibreService {
       }
     );
   }
+
+  searchFiberOpeningStock(
+    lot: string,
+    fibreId: number,
+    shadeId: number
+  ): Observable<OpeningStockFibreDts[]> {
+    let endpoint = `/Fiber/SearchFiberOpeningStock?lot=${lot}`;
+    fibreId && (endpoint += `&fiberTypeId=${fibreId}`);
+    shadeId && (endpoint += `&fiberShadeId=${shadeId}`);
+    return this.http.get<OpeningStockFibreDts[]>(
+      `${environment.api}${endpoint}`
+    );
+  }
 }

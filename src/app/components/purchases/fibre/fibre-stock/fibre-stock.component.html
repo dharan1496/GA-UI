@@ -1,197 +1,210 @@
 <section class="container">
   <h1 class="font-weight-bold">Search Fibre Stock</h1>
-  <section class="filter-section">
-    <form class="form-container" [formGroup]="form">
-      <mat-form-field>
-        <mat-label>Date</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="asOnDate" />
-        <mat-hint>DD/MM/YYYY</mat-hint>
-        <mat-datepicker-toggle
-          matIconSuffix
-          [for]="picker"
-        ></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-        <mat-error>Please enter valid date.</mat-error>
-      </mat-form-field>
+  <mat-slide-toggle class="mb-24" [formControl]="searchOpenedStock">
+    Search Opened stock
+  </mat-slide-toggle>
 
-      <div class="w-25 ml-24 d-inline-block">
-        <app-party-combo-box
-          [partyFormControl]="form.get('partyId')"
-          [touched]="form.get('partyId')?.touched || false"
-          [required]="false"
-          [optional]="true"
+  <ng-container *ngIf="!searchOpenedStock.value">
+    <section class="filter-section">
+      <form class="form-container" [formGroup]="form">
+        <mat-form-field>
+          <mat-label>Date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="asOnDate" />
+          <mat-hint>DD/MM/YYYY</mat-hint>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error>Please enter valid date.</mat-error>
+        </mat-form-field>
+
+        <div class="w-25 ml-24 d-inline-block">
+          <app-party-combo-box
+            [partyFormControl]="form.get('partyId')"
+            [touched]="form.get('partyId')?.touched || false"
+            [required]="false"
+            [optional]="true"
+          >
+          </app-party-combo-box>
+        </div>
+
+        <mat-form-field appearance="fill" class="w-20 ml-24 mr-24">
+          <mat-label>Fibre Type</mat-label>
+          <mat-select formControlName="fibreTypeId">
+            <mat-option [value]="0">All</mat-option>
+            <ng-container *ngFor="let fibre of fibreTypes">
+              <mat-option [value]="fibre.fibreTypeId">{{
+                fibre.fibreType
+              }}</mat-option>
+            </ng-container>
+          </mat-select>
+          <mat-hint>Optional</mat-hint>
+        </mat-form-field>
+      </form>
+      <div class="search-btn">
+        <button mat-raised-button (click)="onReset()">
+          <mat-icon>refresh</mat-icon>Reset
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="onSearch()"
+          class="ml-16"
         >
-        </app-party-combo-box>
+          <mat-icon>search</mat-icon>Search
+        </button>
       </div>
-
-      <mat-form-field appearance="fill" class="w-20 ml-24 mr-24">
-        <mat-label>Fibre Type</mat-label>
-        <mat-select formControlName="fibreTypeId">
-          <mat-option [value]="0">All</mat-option>
-          <ng-container *ngFor="let fibre of fibreTypes">
-            <mat-option [value]="fibre.fibreTypeId">{{
-              fibre.fibreType
-            }}</mat-option>
-          </ng-container>
-        </mat-select>
-        <mat-hint>Optional</mat-hint>
-      </mat-form-field>
-    </form>
-    <div class="search-btn">
-      <button mat-raised-button (click)="onReset()">
-        <mat-icon>refresh</mat-icon>Reset
-      </button>
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="onSearch()"
-        class="ml-16"
-      >
-        <mat-icon>search</mat-icon>Search
-      </button>
-    </div>
-  </section>
-  <section class="stocks-btn" *ngIf="showFilterCheckbox">
-    <div>
+    </section>
+    <section class="stocks-btn" *ngIf="showFilterCheckbox">
       <div>
-        <mat-checkbox
-          [formControl]="stockAbove0Checkbox"
-          (change)="filterStocks()"
-          >Stocks above 0 only</mat-checkbox
-        >
-        <mat-checkbox
-          [formControl]="conversionOrderCheckbox"
-          class="ml-24"
-          (change)="filterStocks()"
-          >Conversion orders only</mat-checkbox
-        >
-        <mat-checkbox
-          [formControl]="openedStockCheckbox"
-          class="ml-24"
-          (change)="filterStocks()"
-          >Opened stock only</mat-checkbox
-        >
+        <div>
+          <mat-checkbox
+            [formControl]="stockAbove0Checkbox"
+            (change)="filterStocks()"
+            >Stocks above 0 only</mat-checkbox
+          >
+          <mat-checkbox
+            [formControl]="conversionOrderCheckbox"
+            class="ml-24"
+            (change)="filterStocks()"
+            >Conversion orders only</mat-checkbox
+          >
+          <mat-checkbox
+            [formControl]="openedStockCheckbox"
+            class="ml-24"
+            (change)="filterStocks()"
+            >Opened stock only</mat-checkbox
+          >
+        </div>
+        <div *ngIf="dataSource.data.length" class="mt-8 ml-8 mb-4">
+          &ast;Click the row to see the details
+        </div>
       </div>
-      <div *ngIf="dataSource.data.length" class="mt-8 ml-8 mb-4">
-        &ast;Click the row to see the details
-      </div>
-    </div>
-    <button
-      *ngIf="dataSource.data.length"
-      mat-button
-      (click)="printStocks()"
-      class="ml-40"
-    >
-      <mat-icon>print</mat-icon>Print
-    </button>
-  </section>
-  <div class="table-container">
-    <div *ngIf="loader" class="loader">
-      <mat-spinner></mat-spinner>
-    </div>
-    <div class="overflow-auto mat-elevation-z8">
-      <table mat-table [dataSource]="dataSource" class="table">
-        <ng-container matColumnDef="receivedDCNo">
-          <th mat-header-cell *matHeaderCellDef>ReceivedDC No</th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.receivedDCNo }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="poNo">
-          <th mat-header-cell *matHeaderCellDef>PONo</th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.poNo || "_" }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="party">
-          <th mat-header-cell *matHeaderCellDef>Party</th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.partyName }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="fibreType">
-          <th mat-header-cell *matHeaderCellDef>Fibre Type</th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.fibreType }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="shadeName">
-          <th mat-header-cell *matHeaderCellDef>Fibre Shade</th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.shadeName }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="lot">
-          <th mat-header-cell *matHeaderCellDef>Lot</th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.lot }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="receivedQty">
-          <th mat-header-cell *matHeaderCellDef class="text-right">
-            Received Qty
-          </th>
-          <td mat-cell *matCellDef="let element" class="text-right">
-            {{ element.receivedQty }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="issuedQty">
-          <th mat-header-cell *matHeaderCellDef class="text-right">
-            Issued Qty
-          </th>
-          <td mat-cell *matCellDef="let element" class="text-right">
-            {{ element.issuedQty }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="stock">
-          <th mat-header-cell *matHeaderCellDef class="text-right">
-            Stock Qty
-          </th>
-          <td mat-cell *matCellDef="let element" class="text-right">
-            {{ element.stock }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="rate">
-          <th mat-header-cell *matHeaderCellDef class="text-right">Rate</th>
-          <td mat-cell *matCellDef="let element" class="text-right">
-            {{ element.rate | currency : "INR" }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="amount">
-          <th mat-header-cell *matHeaderCellDef class="text-right">Amount</th>
-          <td mat-cell *matCellDef="let element" class="text-right">
-            {{ element.rate * element.stock | currency : "INR" }}
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr
-          mat-row
-          class="row"
-          (click)="openStockDetails(row)"
-          *matRowDef="let row; columns: displayedColumns"
-        ></tr>
-        <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell no-rows" [attr.colspan]="displayedColumns.length">
-            No rows to display
-          </td>
-        </tr>
-      </table>
-      <mat-paginator
+      <button
         *ngIf="dataSource.data.length"
-        [pageSizeOptions]="[10, 25, 100]"
-        aria-label="Select page of details"
-      ></mat-paginator>
+        mat-button
+        (click)="printStocks()"
+        class="ml-40"
+      >
+        <mat-icon>print</mat-icon>Print
+      </button>
+    </section>
+    <div class="table-container">
+      <div *ngIf="loader" class="loader">
+        <mat-spinner></mat-spinner>
+      </div>
+      <div class="overflow-auto mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" class="table">
+          <ng-container matColumnDef="receivedDCNo">
+            <th mat-header-cell *matHeaderCellDef>ReceivedDC No</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.receivedDCNo }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="poNo">
+            <th mat-header-cell *matHeaderCellDef>PONo</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.poNo || "_" }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="party">
+            <th mat-header-cell *matHeaderCellDef>Party</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.partyName || "_" }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="fibreType">
+            <th mat-header-cell *matHeaderCellDef>Fibre Type</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.fibreType }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="shadeName">
+            <th mat-header-cell *matHeaderCellDef>Fibre Shade</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.shadeName }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="lot">
+            <th mat-header-cell *matHeaderCellDef>Lot</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.lot }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="receivedQty">
+            <th mat-header-cell *matHeaderCellDef class="text-right">
+              Received Qty
+            </th>
+            <td mat-cell *matCellDef="let element" class="text-right">
+              {{ element.receivedQty }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="issuedQty">
+            <th mat-header-cell *matHeaderCellDef class="text-right">
+              Issued Qty
+            </th>
+            <td mat-cell *matCellDef="let element" class="text-right">
+              {{ element.issuedQty }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="stock">
+            <th mat-header-cell *matHeaderCellDef class="text-right">
+              Stock Qty
+            </th>
+            <td mat-cell *matCellDef="let element" class="text-right">
+              {{ element.stock }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="rate">
+            <th mat-header-cell *matHeaderCellDef class="text-right">Rate</th>
+            <td mat-cell *matCellDef="let element" class="text-right">
+              {{ element.rate | currency : "INR" }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef class="text-right">Amount</th>
+            <td mat-cell *matCellDef="let element" class="text-right">
+              {{ element.rate * element.stock | currency : "INR" }}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr
+            mat-row
+            class="row"
+            (click)="openStockDetails(row)"
+            *matRowDef="let row; columns: displayedColumns"
+          ></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td
+              class="mat-cell no-rows"
+              [attr.colspan]="displayedColumns.length"
+            >
+              No rows to display
+            </td>
+          </tr>
+        </table>
+        <mat-paginator
+          *ngIf="dataSource.data.length"
+          [pageSizeOptions]="[10, 25, 100]"
+          aria-label="Select page of details"
+        ></mat-paginator>
+      </div>
     </div>
-  </div>
+  </ng-container>
+
+  <ng-container *ngIf="searchOpenedStock.value">
+    <app-search-open-stock></app-search-open-stock>
+  </ng-container>
 </section>

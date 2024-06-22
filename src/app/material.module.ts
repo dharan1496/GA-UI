@@ -26,6 +26,7 @@ import { MomentDateModule } from '@angular/material-moment-adapter';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 const MY_DATE_FORMATS = {
   parse: {
@@ -67,6 +68,7 @@ const modules = [
   MatTabsModule,
   MatRadioModule,
   MatAutocompleteModule,
+  MatSlideToggleModule,
 ];
 
 @NgModule({

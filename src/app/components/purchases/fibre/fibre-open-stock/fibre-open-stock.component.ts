@@ -1,9 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Validators, FormControl } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { MatTable } from '@angular/material/table';
 import { Subscription } from 'rxjs';
-import { UserActionConfirmationComponent } from 'src/app/components/user-action-confirmation/user-action-confirmation.component';
 import { Constants } from 'src/app/constants/constants';
 import { PURCHASE } from 'src/app/constants/purchase-menu-values.const';
 import { NotifyType } from 'src/app/models/notify';
@@ -12,9 +8,10 @@ import { PartyService } from 'src/app/services/party.service';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
 import { NotificationService } from 'src/app/shared/notification.service';
-import { DatePipe } from '@angular/common';
-import { ReceiveStockComponent } from './receive-stock/receive-stock.component';
 import { OpeningStockFibreDts } from 'src/app/models/openingStockFibreDts';
+import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FibreShade } from 'src/app/models/fibreShade';
 
 @Component({
   selector: 'app-fibre-open-stock',
@@ -22,29 +19,19 @@ import { OpeningStockFibreDts } from 'src/app/models/openingStockFibreDts';
   styleUrls: ['./fibre-open-stock.component.scss'],
 })
 export class FibreOpenStockComponent implements OnInit, OnDestroy {
-  displayedColumns: string[] = [
-    'fibreType',
-    'shade',
-    'receivedQty',
-    'receivedBales',
-    'lot',
-    'hsnCode',
-    'button',
-  ];
-  dataSource = [];
-  @ViewChild(MatTable) table!: MatTable<any>;
   subscription = new Subscription();
-  maxDate = new Date();
-  stockAddedDate = new FormControl('', Validators.required);
+  editStockDetails!: OpeningStockFibreDts;
+  form!: FormGroup;
+  fibreShadeList!: FibreShade[];
 
   constructor(
-    private dialog: MatDialog,
     private notificationService: NotificationService,
     public appSharedService: AppSharedService,
     private navigationService: NavigationService,
     public partyService: PartyService,
-    private fibreService: FibreService,
-    private datePipe: DatePipe
+    public fibreService: FibreService,
+    private router: Router,
+    private formBuilder: FormBuilder
   ) {
     this.navigationService.setFocus(Constants.PURCHASES);
     this.navigationService.menu = PURCHASE;
@@ -53,6 +40,48 @@ export class FibreOpenStockComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getPartyList();
     this.getFibreList();
+    this.getShade();
+
+    this.form = this.formBuilder.group({
+      receivedDCId: '',
+      stockAddedDate: '',
+      receivedDtsId: '',
+      availableBalance: '',
+      fiberTypeId: ['', Validators.required],
+      fiberTypeName: '',
+      fiberShadeName: '',
+      fiberShadeId: ['', Validators.required],
+      hsnCode: '',
+      stockWeight: ['', Validators.required],
+      stockBales: ['', Validators.required],
+      lot: ['', Validators.required],
+    });
+
+    this.subscription.add(
+      this.form.get('fiberTypeId')?.valueChanges.subscribe((fibreTypeId) => {
+        const filteredFibre = this.fibreService.fibres?.filter(
+          (fibre) => fibre.fibreTypeId === fibreTypeId
+        );
+        this.form
+          .get('fiberTypeName')
+          ?.setValue(filteredFibre.reduce((p, c) => c.fibreType, ''));
+      })
+    );
+
+    if (this.router.url.includes('edit-stock')) {
+      this.patchData();
+    }
+  }
+
+  patchData() {
+    const stockDetails = sessionStorage.getItem('editStock');
+    if (stockDetails) {
+      this.editStockDetails = JSON.parse(stockDetails);
+      this.form.patchValue(this.editStockDetails);
+      sessionStorage.removeItem('editStock');
+    } else {
+      this.router.navigateByUrl('/purchases/fibre/open-stock');
+    }
   }
 
   ngOnDestroy() {
@@ -83,46 +112,42 @@ export class FibreOpenStockComponent implements OnInit, OnDestroy {
     );
   }
 
+  getShade() {
+    this.subscription.add(
+      this.fibreService.getFibreShade().subscribe({
+        next: (data) => {
+          this.fibreShadeList = data;
+          this.subscription.add(
+            this.form.get('fiberShadeId')?.valueChanges.subscribe((shadeId) => {
+              const filteredShade = this.fibreShadeList?.filter(
+                (shade) => shade.shadeId === shadeId
+              );
+              this.form
+                .get('fiberShadeName')
+                ?.setValue(filteredShade.reduce((p, c) => c.shadeName, ''));
+            })
+          );
+        },
+        error: (error) =>
+          this.notificationService.error(
+            typeof error?.error === 'string' ? error?.error : error?.message
+          ),
+      })
+    );
+  }
+
   submitOrder() {
-    if (this.stockAddedDate.invalid) {
-      this.stockAddedDate.markAsTouched();
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
       this.notificationService.notify(
-        'Enter the correct stock added date!',
+        'Please fix the error to submit!',
         NotifyType.ERROR
       );
       return;
     }
-
-    if (!this.dataSource.length) {
-      this.notificationService.notify(
-        'Please add the stock details!',
-        NotifyType.ERROR
-      );
-      return;
-    }
-
-    const request = this.dataSource.map((data: any) => {
-      return {
-        receivedDCId: data?.receivedDCId || 0,
-        receivedDtsId: data?.receivedDtsId || 0,
-        lot: data?.lot,
-        hsnCode: data?.hsnCode,
-        stockWeight: data?.receivedQty,
-        stockBales: data?.receivedBales,
-        fiberShadeId: data?.shadeId,
-        fiberShadeName: data?.shadeName,
-        fiberTypeId: data?.fibreTypeId,
-        fiberTypeName: data?.fibreType,
-        availableBalance: data?.availableBalance || 0,
-        stockAddedDate: this.datePipe.transform(
-          this.stockAddedDate.value,
-          'dd/MM/yyyy'
-        ),
-      } as OpeningStockFibreDts;
-    });
 
     this.subscription.add(
-      this.fibreService.receiveFiberOpeningStock(request).subscribe({
+      this.fibreService.receiveFiberOpeningStock([this.form.value]).subscribe({
         next: (response) => {
           this.notificationService.success(response);
           this.resetData();
@@ -135,55 +160,6 @@ export class FibreOpenStockComponent implements OnInit, OnDestroy {
   }
 
   resetData() {
-    this.stockAddedDate.reset();
-    this.dataSource = [];
-    this.table.renderRows();
-  }
-
-  addData(): void {
-    const dialogRef = this.dialog.open(ReceiveStockComponent, {
-      data: this.dataSource.length,
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.dataSource.push(result as never);
-        this.table.renderRows();
-      }
-    });
-  }
-
-  updateData(selectedRow: any) {
-    const dialogRef = this.dialog.open(ReceiveStockComponent, {
-      data: selectedRow,
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.dataSource.forEach((data: any, index: number) => {
-          if (data?.orderNo === result?.orderNo) {
-            this.dataSource[index] = result as never;
-          }
-        });
-      }
-      this.table.renderRows();
-    });
-  }
-
-  removeData(selectedRow: any) {
-    this.dialog
-      .open(UserActionConfirmationComponent)
-      .afterClosed()
-      .subscribe((result: boolean) => {
-        if (result) {
-          const newList: any = [];
-          this.dataSource.forEach((data: any) => {
-            if (data != selectedRow) {
-              newList.push(data);
-            }
-          });
-          this.dataSource = newList;
-          this.table.renderRows();
-        }
-      });
+    this.form.reset();
   }
 }

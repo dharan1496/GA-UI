@@ -56,6 +56,10 @@ const routes: Routes = [
     component: FibreOpenStockComponent,
   },
   {
+    path: 'fibre/edit-stock',
+    component: FibreOpenStockComponent,
+  },
+  {
     path: 'fibre/master',
     component: FibreMasterComponent,
   },

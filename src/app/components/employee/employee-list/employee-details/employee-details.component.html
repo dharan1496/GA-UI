@@ -23,23 +23,23 @@
     </div>
     <div>
       <div class="text-dark pb-2">Department Name</div>
-      <div>{{ employeeDetails.departmentName }}</div>
+      <div>{{ employeeDetails.departmentName || "_" }}</div>
     </div>
     <div>
       <div class="text-dark pb-2">Address</div>
-      <div>{{ employeeDetails.address }}</div>
+      <div>{{ employeeDetails.address || "_" }}</div>
     </div>
     <div>
       <div class="text-dark pb-2">Id Proof Type</div>
-      <div>{{ employeeDetails.idProofType }}</div>
+      <div>{{ employeeDetails.idProofType || "_" }}</div>
     </div>
     <div>
       <div class="text-dark pb-2">Id Proof</div>
-      <div>{{ employeeDetails.idProof }}</div>
+      <div>{{ employeeDetails.idProof || "_" }}</div>
     </div>
     <div>
       <div class="text-dark pb-2">Salary Category</div>
-      <div>{{ employeeDetails.salaryCategoryName }}</div>
+      <div>{{ employeeDetails.salaryCategoryName || "_" }}</div>
     </div>
     <div *ngIf="employeeDetails.salary">
       <div class="text-dark pb-2">Salary</div>
@@ -47,15 +47,15 @@
     </div>
     <div>
       <div class="text-dark pb-2">Date of Joining</div>
-      <div>{{ employeeDetails.dateOfJoining }}</div>
+      <div>{{ employeeDetails.dateOfJoining || "_" }}</div>
     </div>
     <div>
       <div class="text-dark pb-2">Allowed leave days</div>
-      <div>{{ employeeDetails.allowedLeaveDays }}</div>
+      <div>{{ employeeDetails.allowedLeaveDays || "_" }}</div>
     </div>
     <div>
       <div class="text-dark pb-2">Contact No</div>
-      <div>{{ employeeDetails.contactNo }}</div>
+      <div>{{ employeeDetails.contactNo || "_" }}</div>
     </div>
   </section>
 </div>
