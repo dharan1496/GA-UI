@@ -65,6 +65,12 @@
           (change)="filterStocks()"
           >Conversion orders only</mat-checkbox
         >
+        <mat-checkbox
+          [formControl]="openedStockCheckbox"
+          class="ml-24"
+          (change)="filterStocks()"
+          >Opened stock only</mat-checkbox
+        >
       </div>
       <div *ngIf="dataSource.data.length" class="mt-8 ml-8 mb-4">
         &ast;Click the row to see the details

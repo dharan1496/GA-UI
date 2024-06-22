@@ -18,6 +18,7 @@ import { CreateFibreWaste } from '../models/createFibreWaste';
 import { FibreWasteStock } from '../models/fibreWasteStock';
 import { FibreSalesDC } from '../models/fibreSalesDC';
 import { AppSharedService } from '../shared/app-shared.service';
+import { OpeningStockFibreDts } from '../models/openingStockFibreDts';
 
 @Injectable({
   providedIn: 'root',
@@ -233,6 +234,16 @@ export class FibreService {
     return this.http.post(
       `${environment.api}/Fiber/ReOpenFiberPO?fiberPODtsId=${fiberPODtsId}&remarks=${remarks}&updatedByUserId=${this.appSharedService.userId}`,
       {},
+      {
+        responseType: 'text',
+      }
+    );
+  }
+
+  receiveFiberOpeningStock(fibreStock: OpeningStockFibreDts[]) {
+    return this.http.post(
+      `${environment.api}/Fiber/ReceiveFiberOpeningStock?userId=${this.appSharedService.userId}`,
+      fibreStock,
       {
         responseType: 'text',
       }

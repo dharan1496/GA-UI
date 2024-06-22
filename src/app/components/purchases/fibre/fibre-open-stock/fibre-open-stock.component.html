@@ -1,86 +1,27 @@
 <section class="container">
-  <h1 class="header letter-spacing-1">Receive Fibre Stock</h1>
-  <mat-card class="party-card">
-    <mat-card-header>
-      <mat-card-title>Stock Details</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <form [formGroup]="form" class="form-container padding">
-        <div class="w-40">
-          <app-party-combo-box
-            [patch]="form.get('partyId')?.value"
-            [partyFormControl]="form.get('partyId')"
-            [touched]="form.get('partyId')?.touched || false"
-          >
-          </app-party-combo-box>
-        </div>
-        <mat-form-field appearance="fill" class="w-25">
-          <mat-label>Received Date</mat-label>
-          <input
-            matInput
-            [matDatepicker]="receivedDatePicker"
-            formControlName="recdDate"
-            (dateChange)="
-              appSharedService.formatDate($event, form.controls['recdDate'])
-            "
-            [max]="maxDate"
-          />
-          <mat-hint>DD/MM/YYYY</mat-hint>
-          <mat-datepicker-toggle
-            matIconSuffix
-            [for]="receivedDatePicker"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #receivedDatePicker></mat-datepicker>
-          <mat-error *ngIf="form.get('recdDate')?.hasError('required')"
-            >Please enter valid date.</mat-error
-          >
-          <mat-error *ngIf="form.get('recdDate')?.hasError('matDatepickerMax')"
-            >Should not be future Date.</mat-error
-          >
-        </mat-form-field>
-        <mat-form-field appearance="fill" class="w-25">
-          <mat-label>Received DCNo</mat-label>
-          <input matInput formControlName="recdDCNo" />
-          <mat-error>This field is required.</mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="fill" class="w-25">
-          <mat-label>DC Date</mat-label>
-          <input
-            matInput
-            [matDatepicker]="dcDatePicker"
-            formControlName="dcDate"
-            (dateChange)="
-              appSharedService.formatDate($event, form.controls['dcDate'])
-            "
-            [max]="dcMaxDate"
-          />
-          <mat-hint>DD/MM/YYYY</mat-hint>
-          <mat-datepicker-toggle
-            matIconSuffix
-            [for]="dcDatePicker"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #dcDatePicker></mat-datepicker>
-          <mat-error *ngIf="form.get('dcDate')?.hasError('required')"
-            >Please enter valid date.</mat-error
-          >
-          <mat-error
-            *ngIf="
-              form.get('dcDate')?.hasError('matDatepickerMax') &&
-              form.get('recdDate')?.valid
-            "
-            >Should not be greater than received date.</mat-error
-          >
-          <mat-error
-            *ngIf="
-              form.get('dcDate')?.hasError('matDatepickerMax') &&
-              form.get('recdDate')?.invalid
-            "
-            >Should not be future Date.</mat-error
-          >
-        </mat-form-field>
-      </form>
-    </mat-card-content>
-  </mat-card>
+  <h1 class="header letter-spacing-1">Open Fibre Stock</h1>
+  <mat-form-field appearance="fill" class="w-25 mb-24">
+    <mat-label>Stock Added Date</mat-label>
+    <input
+      matInput
+      [matDatepicker]="receivedDatePicker"
+      [formControl]="stockAddedDate"
+      (dateChange)="appSharedService.formatDate($event, stockAddedDate)"
+      [max]="maxDate"
+    />
+    <mat-hint>DD/MM/YYYY</mat-hint>
+    <mat-datepicker-toggle
+      matIconSuffix
+      [for]="receivedDatePicker"
+    ></mat-datepicker-toggle>
+    <mat-datepicker #receivedDatePicker></mat-datepicker>
+    <mat-error *ngIf="stockAddedDate?.hasError('required')"
+      >Please enter valid date.</mat-error
+    >
+    <mat-error *ngIf="stockAddedDate?.hasError('matDatepickerMax')"
+      >Should not be future Date.</mat-error
+    >
+  </mat-form-field>
 
   <div class="button-container">
     <button mat-raised-button (click)="addData()" class="button">

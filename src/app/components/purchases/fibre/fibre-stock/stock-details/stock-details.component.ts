@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Subscription, finalize } from 'rxjs';
@@ -25,7 +25,8 @@ export class StockDetailsComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public fibreStock: FibreStock,
     private matDialogRef: MatDialogRef<any>,
     private notificationService: NotificationService,
-    private fibreService: FibreService
+    private fibreService: FibreService,
+    private datePipe: DatePipe
   ) {}
 
   ngOnInit() {
@@ -41,6 +42,16 @@ export class StockDetailsComponent implements OnInit, OnDestroy {
             ),
         })
     );
+  }
+
+  formatDate(date: string) {
+    if (!date) {
+      return '';
+    }
+
+    const splittedDate = date?.split(' ')[0]?.split('/');
+
+    return `${splittedDate[1]}/${splittedDate[0]}/${splittedDate[2]}`;
   }
 
   ngOnDestroy() {
