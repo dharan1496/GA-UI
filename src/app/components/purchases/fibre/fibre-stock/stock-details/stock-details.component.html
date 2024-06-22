@@ -34,7 +34,7 @@
       <div class="text-dark pb-2">Stock Qty</div>
       <div>{{ fibreStock.stock }} kg</div>
     </div>
-    <div>
+    <div *ngIf="fibreStock.partyName">
       <div class="text-dark pb-2">Party</div>
       <div>{{ fibreStock.partyName }}</div>
     </div>
