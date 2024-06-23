@@ -9,11 +9,11 @@ export const PURCHASE = [
       },
       { title: 'Search Fibre PO', route: 'purchases/fibre/search' },
       {
-        title: 'Receive Fibre PO',
+        title: 'Receive Fibre for PO',
         route: 'purchases/fibre/receive-po-fibre',
       },
       {
-        title: 'Receive Fibre CO',
+        title: 'Receive Fibre for Conversion',
         route: 'purchases/fibre/receive-conversion-order',
       },
       {
@@ -21,7 +21,7 @@ export const PURCHASE = [
         route: 'purchases/fibre/search-received-po',
       },
       {
-        title: 'Open Fibre Stock',
+        title: 'Fibre Opening Stock',
         route: 'purchases/fibre/open-stock',
       },
       {
