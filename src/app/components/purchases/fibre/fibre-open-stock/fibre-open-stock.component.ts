@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Constants } from 'src/app/constants/constants';
 import { PURCHASE } from 'src/app/constants/purchase-menu-values.const';
@@ -20,7 +20,7 @@ import { FibreShade } from 'src/app/models/fibreShade';
 })
 export class FibreOpenStockComponent implements OnInit, OnDestroy {
   subscription = new Subscription();
-  editStockDetails!: OpeningStockFibreDts;
+  editStockDetails!: OpeningStockFibreDts | null;
   form!: FormGroup;
   fibreShadeList!: FibreShade[];
 
@@ -77,7 +77,10 @@ export class FibreOpenStockComponent implements OnInit, OnDestroy {
     const stockDetails = sessionStorage.getItem('editStock');
     if (stockDetails) {
       this.editStockDetails = JSON.parse(stockDetails);
-      this.form.patchValue(this.editStockDetails);
+      this.form.patchValue(this.editStockDetails || {});
+      this.form.get('fiberTypeId')?.disable();
+      this.form.get('fiberShadeId')?.disable();
+      this.form.updateValueAndValidity();
       sessionStorage.removeItem('editStock');
     } else {
       this.router.navigateByUrl('/purchases/fibre/open-stock');
@@ -159,7 +162,52 @@ export class FibreOpenStockComponent implements OnInit, OnDestroy {
     );
   }
 
+  formatDate(date: string) {
+    if (!date) {
+      return '';
+    }
+
+    const splittedDate = date?.split(' ')[0]?.split('/');
+
+    return `${splittedDate[1]}/${splittedDate[0]}/${splittedDate[2]}`;
+  }
+
+  updateOrder() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.notificationService.notify(
+        'Please fix the error to submit!',
+        NotifyType.ERROR
+      );
+      return;
+    }
+
+    const stockDetails = this.form.value as OpeningStockFibreDts;
+
+    this.subscription.add(
+      this.fibreService
+        .updateFiberOpeningStock([stockDetails], stockDetails.receivedDCId)
+        .subscribe({
+          next: (response) => {
+            if (response === 'true') {
+              this.resetData();
+              this.notificationService.success('Updated successfully!');
+            } else {
+              this.notificationService.error('Unable to update the details!');
+            }
+          },
+          error: (error) =>
+            this.notificationService.error(
+              typeof error?.error === 'string' ? error?.error : error?.message
+            ),
+        })
+    );
+  }
+
   resetData() {
     this.form.reset();
+    this.editStockDetails = null;
+    this.form.get('fiberTypeId')?.enable();
+    this.form.get('fiberShadeId')?.enable();
   }
 }

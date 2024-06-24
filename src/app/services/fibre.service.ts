@@ -262,4 +262,14 @@ export class FibreService {
       `${environment.api}${endpoint}`
     );
   }
+
+  updateFiberOpeningStock(fibreStock: OpeningStockFibreDts[], stockId: number) {
+    return this.http.post(
+      `${environment.api}/Fiber/UpdateFiberOpeningStock?openingStockId=${stockId}&updatedByUserId=${this.appSharedService.userId}`,
+      fibreStock,
+      {
+        responseType: 'text',
+      }
+    );
+  }
 }

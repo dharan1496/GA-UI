@@ -20,6 +20,7 @@
                 }}</mat-option>
               </ng-container>
             </mat-select>
+            <mat-hint *ngIf="!!editStockDetails">Disabled</mat-hint>
             <mat-error>This field is required.</mat-error>
           </mat-form-field>
 
@@ -32,6 +33,7 @@
                 }}</mat-option>
               </ng-container>
             </mat-select>
+            <mat-hint *ngIf="!!editStockDetails">Disabled</mat-hint>
             <mat-error>This field is required.</mat-error>
           </mat-form-field>
 
@@ -101,7 +103,7 @@
       *ngIf="editStockDetails"
       mat-raised-button
       color="primary"
-      (click)="submitOrder()"
+      (click)="updateOrder()"
     >
       <mat-icon>save_alt</mat-icon>Update
     </button>
