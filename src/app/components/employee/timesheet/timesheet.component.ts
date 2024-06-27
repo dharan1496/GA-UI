@@ -28,7 +28,7 @@ export class TimesheetComponent {
     'timeIn',
     'timeOut',
     'hours',
-    'todaysDepartment',
+    'todaysDepartmentId',
   ];
   timesheetEntries = new MatTableDataSource<any>([]);
   @ViewChild('entry') table!: MatTable<any>;
@@ -81,7 +81,7 @@ export class TimesheetComponent {
         this.maxDate = new Date(date);
         this.maxDate.setMonth(this.maxDate.getMonth() + 1);
         this.maxDate.setDate(0);
-        this.getMonthlyAttendance();
+        this.getdailyAttendance();
       }
     });
   }
@@ -90,11 +90,11 @@ export class TimesheetComponent {
     this.subscription?.unsubscribe();
   }
 
-  getMonthlyAttendance() {
+  getdailyAttendance() {
     this.loader = true;
     this.subscription.add(
       this.employeeService
-        .getMonthlyAttendance(
+        .getDailyAttendance(
           this.datePipe.transform(this.attendanceDate?.value, 'dd/MM/yyyy') ||
             ''
         )
@@ -190,7 +190,11 @@ export class TimesheetComponent {
         firstCheckInTime: this.getDateTime(data?.timeInDate, data?.timeIn),
         lastCheckOutTime: this.getDateTime(data?.timeOutDate, data?.timeOut),
         workedHours: data?.workedHours,
-        todaysDepartment: data?.todaysDepartment || '',
+        todaysDepartment:
+          this.departmentList.find(
+            (dep) => dep.departmentId === data?.todaysDepartmentId
+          )?.departmentName || '',
+        todaysDepartmentId: data?.todaysDepartmentId || 0,
       };
     });
 

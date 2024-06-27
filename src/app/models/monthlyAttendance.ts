@@ -6,5 +6,6 @@ export interface MonthlyAttendance {
   firstCheckInTime: string | null;
   lastCheckOutTime: string | null;
   workedHours: string;
+  todaysDepartmentId: number;
   todaysDepartment: string;
 }
