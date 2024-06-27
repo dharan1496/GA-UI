@@ -13,6 +13,7 @@
   <mat-form-field appearance="fill" class="w-50">
     <mat-label>Filter</mat-label>
     <input matInput (keyup)="applyFilter($event)" #input />
+    <mat-hint>Applies to all fields</mat-hint>
   </mat-form-field>
 
   <div *ngIf="dataSource.data.length" class="text-right mb-4">
