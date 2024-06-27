@@ -21,6 +21,7 @@ import { PartyDepartment } from 'src/app/models/partyDepartment';
 })
 export class PartyListComponent implements OnInit {
   subscription = new Subscription();
+  parties!: Party[];
 
   constructor(
     public appSharedService: AppSharedService,
@@ -43,7 +44,10 @@ export class PartyListComponent implements OnInit {
   getParty() {
     this.subscription.add(
       this.partyService.getParties().subscribe({
-        next: (data) => (this.partyService.parties = data),
+        next: (data) => {
+          this.partyService.parties = data;
+          this.parties = data;
+        },
         error: (error) =>
           this.notificationService.error(
             typeof error?.error === 'string' ? error?.error : error?.message
@@ -107,6 +111,15 @@ export class PartyListComponent implements OnInit {
   getDepartments(departments: PartyDepartment[]) {
     return (
       departments?.map((data) => data.partyDepartmentName)?.join(', ') || ''
+    );
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value?.toLowerCase();
+    this.parties = this.partyService.parties.filter(
+      (data) =>
+        data.partyName?.toLowerCase()?.includes(filterValue) ||
+        data.cityName?.toLowerCase()?.includes(filterValue)
     );
   }
 }

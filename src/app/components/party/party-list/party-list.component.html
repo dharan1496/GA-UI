@@ -10,11 +10,19 @@
         <mat-icon>add_circle_outline</mat-icon> Add Party
       </button>
     </div>
-    <mat-card *ngIf="!partyService.parties?.length">
+
+    <mat-form-field appearance="fill" class="w-50 mb-16">
+      <mat-label>Filter</mat-label>
+      <input matInput (keyup)="applyFilter($event)" #input />
+      <mat-hint>Party Name or City</mat-hint>
+    </mat-form-field>
+
+    <mat-card *ngIf="!parties?.length">
       <div class="no-party">No Party to display!</div>
     </mat-card>
+
     <mat-expansion-panel
-      *ngFor="let party of partyService.parties; let index = index"
+      *ngFor="let party of parties; let index = index"
       #panel
       (afterExpand)="open(panel)"
     >
