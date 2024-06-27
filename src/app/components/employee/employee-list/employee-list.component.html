@@ -10,6 +10,11 @@
     </button>
   </div>
 
+  <mat-form-field appearance="fill" class="w-50">
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="applyFilter($event)" #input />
+  </mat-form-field>
+
   <div *ngIf="dataSource.data.length" class="text-right mb-4">
     &ast;Click the row to see the employee details
   </div>

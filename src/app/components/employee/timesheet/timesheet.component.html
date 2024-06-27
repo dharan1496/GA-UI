@@ -1,19 +1,7 @@
 <section class="container">
   <h1 class="header letter-spacing-1">Timesheet (Manual)</h1>
   <ng-container>
-    <mat-form-field appearance="fill" class="w-50 mb-16">
-      <mat-label>Employee</mat-label>
-      <mat-select [formControl]="employeeId">
-        <mat-option
-          *ngFor="let employee of employeelist"
-          [value]="employee.employeeId"
-        >
-          {{ employee.firstName + " " + employee.lastName | titlecase }}
-        </mat-option>
-      </mat-select>
-      <mat-error>This field is required.</mat-error>
-    </mat-form-field>
-    <mat-form-field appearance="fill" class="ml-24">
+    <mat-form-field appearance="fill" class="mb-24">
       <mat-label>Month Start Date</mat-label>
       <input
         matInput
@@ -33,130 +21,132 @@
     </mat-form-field>
   </ng-container>
 
-  <mat-card *ngIf="employeeId?.value && monthStartDate?.valid">
-    <mat-card-header class="mb-16">
-      <mat-card-title> Entry </mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <div class="entry mb-24" [formGroup]="form">
-        <mat-form-field appearance="fill" class="w-15">
-          <mat-label>In Date</mat-label>
-          <input
-            matInput
-            [matDatepicker]="timeInpicker"
-            formControlName="timeInDate"
-            name="timeInDate"
-            [min]="minDate"
-            [max]="maxDate"
-            required
-          />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="timeInpicker"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #timeInpicker></mat-datepicker>
-          <mat-hint>dd/mm/yyyy</mat-hint>
-          <mat-error *ngIf="form.get('timeInDate')?.hasError('required')"
-            >Please enter valid date.</mat-error
-          >
-          <mat-error
-            *ngIf="
-              form.get('timeInDate')?.hasError('matDatepickerMin') ||
-              form.get('timeInDate')?.hasError('matDatepickerMax')
-            "
-            >Allowed only {{ getMinMonth() }} month
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="fill" class="ml-24 w-15">
-          <mat-label>Time In</mat-label>
-          <input
-            matInput
-            type="time"
-            formControlName="timeIn"
-            name="timeIn"
-            required
-          />
-          <mat-hint>hh:mm</mat-hint>
-          <mat-error>This field is required.</mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="fill" class="ml-40 w-15">
-          <mat-label>Out Date</mat-label>
-          <input
-            matInput
-            [matDatepicker]="timeOutpicker"
-            formControlName="timeOutDate"
-            name="timeOutDate"
-            [min]="form.get('timeInDate')?.value"
-            required
-          />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="timeOutpicker"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #timeOutpicker></mat-datepicker>
-          <mat-hint>dd/mm/yyyy</mat-hint>
-          <mat-error *ngIf="form.get('timeOutDate')?.hasError('required')"
-            >Please enter valid date.</mat-error
-          >
-          <mat-error
-            *ngIf="form.get('timeOutDate')?.hasError('matDatepickerMin')"
-            >Time out date should be greater then Time In.
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="fill" class="ml-24 w-15">
-          <mat-label>Time Out</mat-label>
-          <input
-            matInput
-            type="time"
-            formControlName="timeOut"
-            name="timeOut"
-            required
-          />
-          <mat-hint>hh:mm</mat-hint>
-          <mat-error>This field is required.</mat-error>
-        </mat-form-field>
-        <button
-          class="ml-40"
-          mat-raised-button
-          color="primary"
-          (click)="addEntry()"
-        >
-          <mat-icon>add_alt</mat-icon> Add Entry
-        </button>
+  <mat-card>
+    <mat-card-content
+      class="p-0"
+      [ngClass]="{ 'pb-16': timesheetEntries.data.length }"
+    >
+      <div *ngIf="loader" class="loader">
+        <mat-spinner></mat-spinner>
       </div>
-      <div>
+      <div class="overflow-auto">
         <table #entry mat-table [dataSource]="timesheetEntries">
-          <ng-container matColumnDef="timeIn">
-            <th mat-header-cell *matHeaderCellDef>Time In (24 hr format)</th>
+          <ng-container matColumnDef="employee">
+            <th mat-header-cell *matHeaderCellDef>Employee</th>
             <td mat-cell *matCellDef="let element">
-              {{ element.timeInDate | date : "dd/MM/yyyy" }},
-              {{ element.timeIn }}
+              {{ element.firstName }} - {{ element.employeeId }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="timeIn">
+            <th mat-header-cell *matHeaderCellDef>Time In</th>
+            <td mat-cell *matCellDef="let element">
+              <mat-form-field appearance="fill" class="w-60">
+                <mat-label>In Date</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="timeInpicker"
+                  #timeInDate="ngModel"
+                  [(ngModel)]="element.timeInDate"
+                  (ngModelChange)="timeDifference(element)"
+                  name="timeInDate"
+                  [min]="minDate"
+                  [max]="maxDate"
+                  required
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="timeInpicker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #timeInpicker></mat-datepicker>
+                <mat-hint>DD/MM/YYYY</mat-hint>
+                <mat-error *ngIf="timeInDate?.hasError('required')">
+                  Enter valid date.</mat-error
+                >
+                <mat-error
+                  *ngIf="
+                    timeInDate?.hasError('matDatepickerMin') ||
+                    timeInDate?.hasError('matDatepickerMax')
+                  "
+                  >Select {{ getMinMonth() }} month
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="fill" class="w-35 ml-4">
+                <mat-label>Time In</mat-label>
+                <input
+                  matInput
+                  type="time"
+                  [(ngModel)]="element.timeIn"
+                  (ngModelChange)="timeDifference(element)"
+                  name="timeIn"
+                  required
+                />
+                <mat-hint>hh:mm</mat-hint>
+                <mat-error>This field is required.</mat-error>
+              </mat-form-field>
             </td>
           </ng-container>
 
           <ng-container matColumnDef="timeOut">
-            <th mat-header-cell *matHeaderCellDef>Time Out (24 hr format)</th>
+            <th mat-header-cell *matHeaderCellDef>Time Out</th>
             <td mat-cell *matCellDef="let element">
-              {{ element.timeOutDate | date : "dd/MM/yyyy" }},
-              {{ element.timeOut }}
+              <mat-form-field appearance="fill" class="w-60">
+                <mat-label>Out Date</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="timeOutpicker"
+                  #timeOutDate="ngModel"
+                  [(ngModel)]="element.timeOutDate"
+                  (ngModelChange)="timeDifference(element)"
+                  name="timeOutDate"
+                  [min]="element.timeInDate"
+                  required
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="timeOutpicker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #timeOutpicker></mat-datepicker>
+                <mat-hint>DD/MM/YYYY</mat-hint>
+                <mat-error *ngIf="timeOutDate?.hasError('required')">
+                  Enter valid date.</mat-error
+                >
+                <mat-error *ngIf="timeOutDate?.hasError('matDatepickerMin')"
+                  >Greater than Time In.
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="fill" class="ml-4 w-35">
+                <mat-label>Time Out</mat-label>
+                <input
+                  matInput
+                  type="time"
+                  [(ngModel)]="element.timeOut"
+                  (ngModelChange)="timeDifference(element)"
+                  name="timeOut"
+                  required
+                />
+                <mat-hint>hh:mm</mat-hint>
+                <mat-error>This field is required.</mat-error>
+              </mat-form-field>
             </td>
           </ng-container>
 
           <ng-container matColumnDef="hours">
-            <th mat-header-cell *matHeaderCellDef>Worked Hours</th>
+            <th mat-header-cell *matHeaderCellDef>Hours</th>
             <td
               mat-cell
               *matCellDef="let element"
-              [ngClass]="{ warning: element.hours?.includes('-') }"
+              class="worked-hours"
+              [ngClass]="{ warning: element.workedHours?.includes('-') }"
             >
-              {{ element.hours }}
+              {{ element.workedHours || "0:00" }}
             </td>
           </ng-container>
 
           <ng-container matColumnDef="todaysDepartment">
             <th mat-header-cell *matHeaderCellDef>Department</th>
             <td mat-cell *matCellDef="let element">
-              <mat-form-field appearance="fill">
+              <mat-form-field appearance="fill" class="w-100">
                 <mat-label>Choose</mat-label>
                 <mat-select [(ngModel)]="element.todaysDepartment">
                   <mat-option
@@ -167,21 +157,6 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="action">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let element">
-              <button
-                mat-icon-button
-                color="warn"
-                matTooltip="Remove"
-                aria-label="button with a delete icon"
-                (click)="removeEntry(element)"
-              >
-                <mat-icon>delete</mat-icon>
-              </button>
             </td>
           </ng-container>
 
@@ -196,11 +171,16 @@
             </td>
           </tr>
         </table>
+        <mat-paginator
+          *ngIf="timesheetEntries.data.length"
+          [pageSizeOptions]="[25, 50, 100, 250]"
+          aria-label="Select page of records"
+        ></mat-paginator>
       </div>
     </mat-card-content>
   </mat-card>
 
-  <div class="footer" *ngIf="employeeId?.value && monthStartDate?.valid">
+  <div class="footer" *ngIf="monthStartDate?.valid">
     <button mat-raised-button (click)="resetData()" class="mr-16">
       <mat-icon>refresh</mat-icon>Reset
     </button>

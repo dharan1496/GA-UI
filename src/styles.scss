@@ -135,6 +135,10 @@ app-print-delivery-invoice {
 
 //padding
 
+.p-0 {
+  padding: 0 !important;
+}
+
 .px-16 {
   padding-right: 16px;
   padding-left: 16px;
@@ -166,7 +170,7 @@ app-print-delivery-invoice {
 }
 
 .pb-16 {
-  padding-bottom: 16px;
+  padding-bottom: 16px !important;
 }
 
 .py-12 {

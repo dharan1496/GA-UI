@@ -86,6 +86,14 @@ export class EmployeeService {
     );
   }
 
+  getMonthlyAttendance(
+    monthStartDate: string
+  ): Observable<MonthlyAttendance[]> {
+    return this.http.get<MonthlyAttendance[]>(
+      `${environment.api}/Employee/GetMonthlyAttendance?monthStartDate=${monthStartDate}`
+    );
+  }
+
   saveSalary(
     employeeId: number,
     salaryMonthDate: string,

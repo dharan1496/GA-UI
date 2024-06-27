@@ -4,21 +4,16 @@ import { EMPLOYEE } from 'src/app/constants/employee-menu-values.const';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
-import { Subscription } from 'rxjs';
-import { Employee } from 'src/app/models/employee';
+import { Observable, Subscription, finalize } from 'rxjs';
 import { NotificationService } from 'src/app/shared/notification.service';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { MatTable } from '@angular/material/table';
+import { FormControl, Validators } from '@angular/forms';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { NotifyType } from 'src/app/models/notify';
 import { MatDialog } from '@angular/material/dialog';
-import { UserActionConfirmationComponent } from '../../user-action-confirmation/user-action-confirmation.component';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { EmployeeDepartment } from 'src/app/models/EmployeeDepartment';
+import { MatPaginator } from '@angular/material/paginator';
+import { MonthlyAttendance } from 'src/app/models/monthlyAttendance';
 
 @Component({
   selector: 'app-timesheet',
@@ -26,30 +21,34 @@ import { EmployeeDepartment } from 'src/app/models/EmployeeDepartment';
   styleUrls: ['./timesheet.component.scss'],
 })
 export class TimesheetComponent {
-  employeelist!: Employee[];
   subscription = new Subscription();
-  employeeId = new FormControl('', Validators.required);
   monthStartDate = new FormControl('', Validators.required);
   displayedColumns = [
+    'employee',
     'timeIn',
     'timeOut',
     'hours',
     'todaysDepartment',
-    'action',
   ];
-  form!: FormGroup;
-  timesheetEntries: any = [];
+  timesheetEntries = new MatTableDataSource<any>([]);
   @ViewChild('entry') table!: MatTable<any>;
   departmentList!: EmployeeDepartment[];
   minDate!: Date;
   maxDate!: Date;
+  private paginator!: MatPaginator;
+  loader = false;
+  observable!: Observable<MonthlyAttendance[]>;
+
+  @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
+    this.paginator = mp;
+    this.timesheetEntries.paginator = this.paginator;
+  }
 
   constructor(
     public appSharedService: AppSharedService,
     private navigationService: NavigationService,
     public employeeService: EmployeeService,
     private notificationService: NotificationService,
-    private formBuilder: FormBuilder,
     private dialog: MatDialog,
     private decimalPipe: DecimalPipe,
     private datePipe: DatePipe
@@ -60,18 +59,6 @@ export class TimesheetComponent {
   }
 
   ngOnInit(): void {
-    this.subscription.add(
-      this.employeeService.getActiveEmployees().subscribe({
-        next: (response) => {
-          this.employeelist = response;
-        },
-        error: (error) =>
-          this.notificationService.error(
-            typeof error?.error === 'string' ? error?.error : error?.message
-          ),
-      })
-    );
-
     this.subscription.add(
       this.employeeService.getEmployeeDepartmentMasters().subscribe({
         next: (response) => {
@@ -85,7 +72,7 @@ export class TimesheetComponent {
     );
 
     this.monthStartDate.valueChanges.subscribe((value: any) => {
-      if (value) {
+      if (value && value instanceof Date) {
         const date = new Date(value);
         this.minDate = new Date(date);
         this.minDate.setDate(1);
@@ -93,21 +80,8 @@ export class TimesheetComponent {
         this.maxDate = new Date(date);
         this.maxDate.setMonth(this.maxDate.getMonth() + 1);
         this.maxDate.setDate(0);
+        this.getMonthlyAttendance();
       }
-    });
-
-    this.employeeId.valueChanges.subscribe(() => {
-      this.form.reset();
-      this.timesheetEntries = [];
-      this.table?.renderRows();
-    });
-
-    this.form = this.formBuilder.group({
-      timeInDate: '',
-      timeIn: '',
-      timeOutDate: '',
-      timeOut: '',
-      hours: '',
     });
   }
 
@@ -115,25 +89,56 @@ export class TimesheetComponent {
     this.subscription?.unsubscribe();
   }
 
-  addEntry() {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      this.notificationService.notify('Fill valid entry!', NotifyType.ERROR);
-      return;
-    }
-    this.timeDifference();
-    this.timesheetEntries.push(this.form.value);
-    this.table?.renderRows();
-    this.form.reset();
+  getMonthlyAttendance() {
+    this.loader = true;
+    this.subscription.add(
+      this.employeeService
+        .getMonthlyAttendance(
+          this.datePipe.transform(this.monthStartDate?.value, 'dd/MM/yyyy') ||
+            ''
+        )
+        .pipe(finalize(() => (this.loader = false)))
+        .subscribe({
+          next: (response) => {
+            this.timesheetEntries.data = response.map((record) => {
+              const inDate = record.firstCheckInTime?.split(' ');
+              const outDate = record.lastCheckOutTime?.split(' ');
+              return {
+                ...record,
+                timeInDate: this.formatDate(inDate?.[0] || ''),
+                timeIn: inDate?.[1] || '',
+                timeOutDate: this.formatDate(outDate?.[0] || ''),
+                timeOut: outDate?.[1] || '',
+              };
+            });
+          },
+          error: (error) =>
+            this.notificationService.error(
+              typeof error?.error === 'string' ? error?.error : error?.message
+            ),
+        })
+    );
   }
 
-  timeDifference() {
-    const timeInDate = this.form.get('timeInDate')?.value;
-    const timeOutDate = this.form.get('timeOutDate')?.value;
-    const startTime = this.form.get('timeIn')?.value;
-    const endTime = this.form.get('timeOut')?.value;
+  formatDate(date: string) {
+    if (!date) {
+      return '';
+    }
+    const splitted = date?.split('/');
+    return new Date(
+      `${splitted[1]?.padStart(2, '0')}/${splitted[0]?.padStart(2, '0')}/${
+        splitted[2]
+      }`
+    );
+  }
 
-    if (startTime && endTime) {
+  timeDifference(element: any) {
+    const timeInDate = element.timeInDate;
+    const timeOutDate = element.timeOutDate;
+    const startTime = element.timeIn;
+    const endTime = element.timeOut;
+
+    if (startTime && endTime && timeOutDate && timeInDate) {
       const start = this.parseTime(startTime, timeInDate);
       const end = this.parseTime(endTime, timeOutDate);
 
@@ -142,14 +147,10 @@ export class TimesheetComponent {
       const hours = Math.floor(diffInMinutes / 60);
       const minutes = diffInMinutes % 60;
 
-      this.form
-        .get('hours')
-        ?.setValue(
-          `${this.decimalPipe.transform(
-            hours,
-            '2.0-0'
-          )}:${this.decimalPipe.transform(minutes, '2.0-0')}`
-        );
+      element.workedHours = `${this.decimalPipe.transform(
+        hours,
+        '2.0-0'
+      )}:${this.decimalPipe.transform(minutes, '2.0-0')}`;
     }
   }
 
@@ -160,26 +161,8 @@ export class TimesheetComponent {
     return date;
   }
 
-  removeEntry(entry: any) {
-    this.dialog
-      .open(UserActionConfirmationComponent)
-      .afterClosed()
-      .subscribe((result: boolean) => {
-        if (result) {
-          const newList: any = [];
-          this.timesheetEntries.forEach((data: any) => {
-            if (data != entry) {
-              newList.push(data);
-            }
-          });
-          this.timesheetEntries = newList;
-          this.table?.renderRows();
-        }
-      });
-  }
-
   save() {
-    if (!this.timesheetEntries?.length) {
+    if (!this.timesheetEntries.data?.length) {
       this.notificationService.notify(
         'Add atleast one entry!',
         NotifyType.ERROR
@@ -187,20 +170,18 @@ export class TimesheetComponent {
       return;
     }
 
-    const request = this.timesheetEntries?.map((data: any) => {
+    const request = this.timesheetEntries.data?.map((data: any) => {
       return {
-        employeeId: this.employeeId.value,
-        workedHours: data?.hours,
-        todaysDepartment: data?.todaysDepartment,
-        attendanceDate: this.datePipe.transform(data?.timeInDate, 'dd/MM/yyyy'),
-        firstCheckInTime: `${this.datePipe.transform(
-          data?.timeInDate,
-          'dd/MM/yyyy'
-        )} ${data?.timeIn}`,
-        lastCheckOutTime: `${this.datePipe.transform(
-          data?.timeOutDate,
-          'dd/MM/yyyy'
-        )} ${data?.timeOut}`,
+        employeeId: data?.employeeId,
+        firstName: data?.firstName,
+        lastName: data?.lastName,
+        attendanceDate:
+          this.datePipe.transform(this.monthStartDate.value, 'dd/MM/yyyy') ||
+          '',
+        firstCheckInTime: this.getDateTime(data?.timeInDate, data?.timeIn),
+        lastCheckOutTime: this.getDateTime(data?.timeOutDate, data?.timeOut),
+        workedHours: data?.workedHours,
+        todaysDepartment: data?.todaysDepartment || '',
       };
     });
 
@@ -221,15 +202,20 @@ export class TimesheetComponent {
       });
   }
 
+  getDateTime(date: string, time: string) {
+    if (date && time) {
+      return `${this.datePipe.transform(date, 'dd/MM/yyyy')} ${time}`;
+    }
+    return null;
+  }
+
   getMinMonth() {
     return this.minDate?.toLocaleString('default', { month: 'long' });
   }
 
   resetData() {
-    this.form.reset();
-    this.timesheetEntries = [];
+    this.timesheetEntries.data = [];
     this.table?.renderRows();
-    this.employeeId.reset();
     this.monthStartDate.reset();
   }
 }

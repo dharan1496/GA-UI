@@ -32,5 +32,31 @@ mat-card {
 
 .warning {
   color: red;
-  font-size: 20px;
+  font-weight: 600;
+}
+
+.mat-column-timeIn,
+.mat-column-timeOut {
+  min-width: 350px;
+}
+
+.mat-column-todaysDepartment {
+  max-width: 200px;
+}
+
+.loader {
+  width: 10%;
+  height: 10%;
+  z-index: 10;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.worked-hours {
+  font-size: 16px;
 }
