@@ -22,7 +22,7 @@ import { MonthlyAttendance } from 'src/app/models/monthlyAttendance';
 })
 export class TimesheetComponent {
   subscription = new Subscription();
-  monthStartDate = new FormControl('', Validators.required);
+  attendanceDate = new FormControl('', Validators.required);
   displayedColumns = [
     'employee',
     'timeIn',
@@ -72,7 +72,7 @@ export class TimesheetComponent {
       })
     );
 
-    this.monthStartDate.valueChanges.subscribe((value: any) => {
+    this.attendanceDate.valueChanges.subscribe((value: any) => {
       if (value && value instanceof Date) {
         const date = new Date(value);
         this.minDate = new Date(date);
@@ -95,7 +95,7 @@ export class TimesheetComponent {
     this.subscription.add(
       this.employeeService
         .getMonthlyAttendance(
-          this.datePipe.transform(this.monthStartDate?.value, 'dd/MM/yyyy') ||
+          this.datePipe.transform(this.attendanceDate?.value, 'dd/MM/yyyy') ||
             ''
         )
         .pipe(finalize(() => (this.loader = false)))
@@ -106,7 +106,7 @@ export class TimesheetComponent {
               const outDate = record.lastCheckOutTime?.split(' ');
               return {
                 ...record,
-                timeInDate: this.formatDate(inDate?.[0] || ''),
+                timeInDate: this.attendanceDate.value,
                 timeIn: inDate?.[1] || '',
                 timeOutDate: this.formatDate(outDate?.[0] || ''),
                 timeOut: outDate?.[1] || '',
@@ -185,7 +185,7 @@ export class TimesheetComponent {
         firstName: data?.firstName,
         lastName: data?.lastName,
         attendanceDate:
-          this.datePipe.transform(this.monthStartDate.value, 'dd/MM/yyyy') ||
+          this.datePipe.transform(this.attendanceDate.value, 'dd/MM/yyyy') ||
           '',
         firstCheckInTime: this.getDateTime(data?.timeInDate, data?.timeIn),
         lastCheckOutTime: this.getDateTime(data?.timeOutDate, data?.timeOut),
@@ -197,7 +197,7 @@ export class TimesheetComponent {
     this.employeeService
       .saveMonthlyAttendance(
         request,
-        this.datePipe.transform(this.monthStartDate.value, 'dd/MM/yyyy') || ''
+        this.datePipe.transform(this.attendanceDate.value, 'dd/MM/yyyy') || ''
       )
       .subscribe({
         next: (response) => {
@@ -225,6 +225,6 @@ export class TimesheetComponent {
   resetData() {
     this.timesheetEntries.data = [];
     this.table?.renderRows();
-    this.monthStartDate.reset();
+    this.attendanceDate.reset();
   }
 }

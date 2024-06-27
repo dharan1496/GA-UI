@@ -2,12 +2,12 @@
   <h1 class="header letter-spacing-1">Timesheet (Manual)</h1>
   <ng-container>
     <mat-form-field appearance="fill" class="mb-24">
-      <mat-label>Month Start Date</mat-label>
+      <mat-label>Attendance Date</mat-label>
       <input
         matInput
         [matDatepicker]="startDatePicker"
-        [formControl]="monthStartDate"
-        (dateChange)="appSharedService.formatDate($event, monthStartDate)"
+        [formControl]="attendanceDate"
+        (dateChange)="appSharedService.formatDate($event, attendanceDate)"
       />
       <mat-hint>DD/MM/YYYY</mat-hint>
       <mat-datepicker-toggle
@@ -15,7 +15,7 @@
         [for]="startDatePicker"
       ></mat-datepicker-toggle>
       <mat-datepicker #startDatePicker></mat-datepicker>
-      <mat-error *ngIf="monthStartDate?.hasError('required')"
+      <mat-error *ngIf="attendanceDate?.hasError('required')"
         >Please enter valid date.</mat-error
       >
     </mat-form-field>
@@ -41,36 +41,10 @@
           <ng-container matColumnDef="timeIn">
             <th mat-header-cell *matHeaderCellDef>Time In</th>
             <td mat-cell *matCellDef="let element">
-              <mat-form-field appearance="fill" class="w-60">
-                <mat-label>In Date</mat-label>
-                <input
-                  matInput
-                  [matDatepicker]="timeInpicker"
-                  name="timeInDate-{{ element.employeeId }}"
-                  [(ngModel)]="element.timeInDate"
-                  (ngModelChange)="timeDifference(element)"
-                  #timeInDate="ngModel"
-                  [min]="minDate"
-                  [max]="maxDate"
-                />
-                <mat-datepicker-toggle
-                  matSuffix
-                  [for]="timeInpicker"
-                ></mat-datepicker-toggle>
-                <mat-datepicker #timeInpicker></mat-datepicker>
-                <mat-hint>DD/MM/YYYY</mat-hint>
-                <mat-error *ngIf="timeInDate?.hasError('matDatepickerParse')">
-                  Please enter valid date.</mat-error
-                >
-                <mat-error
-                  *ngIf="
-                    timeInDate?.hasError('matDatepickerMin') ||
-                    timeInDate?.hasError('matDatepickerMax')
-                  "
-                  >Select <strong>{{ getMinMonth() }}</strong> month only
-                </mat-error>
-              </mat-form-field>
-              <mat-form-field appearance="fill" class="w-35 ml-4">
+              <span class="w-45 d-inline-block">{{
+                element.timeInDate | date : "dd/MM/yyyy"
+              }}</span>
+              <mat-form-field appearance="fill" class="w-50 ml-16">
                 <mat-label>Time In</mat-label>
                 <input
                   matInput
@@ -183,7 +157,7 @@
     </mat-card-content>
   </mat-card>
 
-  <div class="footer" *ngIf="monthStartDate?.valid">
+  <div class="footer" *ngIf="attendanceDate?.valid">
     <button mat-raised-button (click)="resetData()" class="mr-16">
       <mat-icon>refresh</mat-icon>Reset
     </button>
