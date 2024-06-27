@@ -29,7 +29,7 @@
       <div *ngIf="loader" class="loader">
         <mat-spinner></mat-spinner>
       </div>
-      <div class="overflow-auto">
+      <form class="overflow-auto" #form="ngForm">
         <table #entry mat-table [dataSource]="timesheetEntries">
           <ng-container matColumnDef="employee">
             <th mat-header-cell *matHeaderCellDef>Employee</th>
@@ -46,13 +46,12 @@
                 <input
                   matInput
                   [matDatepicker]="timeInpicker"
-                  #timeInDate="ngModel"
+                  name="timeInDate-{{ element.employeeId }}"
                   [(ngModel)]="element.timeInDate"
                   (ngModelChange)="timeDifference(element)"
-                  name="timeInDate"
+                  #timeInDate="ngModel"
                   [min]="minDate"
                   [max]="maxDate"
-                  required
                 />
                 <mat-datepicker-toggle
                   matSuffix
@@ -60,7 +59,7 @@
                 ></mat-datepicker-toggle>
                 <mat-datepicker #timeInpicker></mat-datepicker>
                 <mat-hint>DD/MM/YYYY</mat-hint>
-                <mat-error *ngIf="timeInDate?.hasError('required')">
+                <mat-error *ngIf="timeInDate?.hasError('matDatepickerParse')">
                   Please enter valid date.</mat-error
                 >
                 <mat-error
@@ -76,13 +75,12 @@
                 <input
                   matInput
                   type="time"
+                  name="timeIn-{{ element.employeeId }}"
                   [(ngModel)]="element.timeIn"
                   (ngModelChange)="timeDifference(element)"
-                  name="timeIn"
-                  required
+                  #timeIn="ngModel"
                 />
                 <mat-hint>hh:mm</mat-hint>
-                <mat-error>This field is required.</mat-error>
               </mat-form-field>
             </td>
           </ng-container>
@@ -95,12 +93,11 @@
                 <input
                   matInput
                   [matDatepicker]="timeOutpicker"
-                  #timeOutDate="ngModel"
+                  name="timeOutDate-{{ element.employeeId }}"
                   [(ngModel)]="element.timeOutDate"
+                  #timeOutDate="ngModel"
                   (ngModelChange)="timeDifference(element)"
-                  name="timeOutDate"
                   [min]="element.timeInDate"
-                  required
                 />
                 <mat-datepicker-toggle
                   matSuffix
@@ -108,7 +105,7 @@
                 ></mat-datepicker-toggle>
                 <mat-datepicker #timeOutpicker></mat-datepicker>
                 <mat-hint>DD/MM/YYYY</mat-hint>
-                <mat-error *ngIf="timeOutDate?.hasError('required')">
+                <mat-error *ngIf="timeOutDate?.hasError('matDatepickerParse')">
                   Please enter valid date.</mat-error
                 >
                 <mat-error *ngIf="timeOutDate?.hasError('matDatepickerMin')"
@@ -120,13 +117,12 @@
                 <input
                   matInput
                   type="time"
+                  name="timeOut-{{ element.employeeId }}"
                   [(ngModel)]="element.timeOut"
                   (ngModelChange)="timeDifference(element)"
-                  name="timeOut"
-                  required
+                  #timeOut="ngModel"
                 />
                 <mat-hint>hh:mm</mat-hint>
-                <mat-error>This field is required.</mat-error>
               </mat-form-field>
             </td>
           </ng-container>
@@ -148,7 +144,10 @@
             <td mat-cell *matCellDef="let element">
               <mat-form-field appearance="fill" class="w-100">
                 <mat-label>Choose</mat-label>
-                <mat-select [(ngModel)]="element.todaysDepartment">
+                <mat-select
+                  [(ngModel)]="element.todaysDepartment"
+                  name="department-{{ element.employeeId }}"
+                >
                   <mat-option
                     *ngFor="let department of departmentList"
                     [value]="department.departmentName"
@@ -180,7 +179,7 @@
           [pageSizeOptions]="[25, 50, 100, 250]"
           aria-label="Select page of records"
         ></mat-paginator>
-      </div>
+      </form>
     </mat-card-content>
   </mat-card>
 

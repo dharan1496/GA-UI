@@ -6,7 +6,7 @@ import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
 import { Observable, Subscription, finalize } from 'rxjs';
 import { NotificationService } from 'src/app/shared/notification.service';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, NgForm, Validators } from '@angular/forms';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { NotifyType } from 'src/app/models/notify';
 import { MatDialog } from '@angular/material/dialog';
@@ -38,6 +38,7 @@ export class TimesheetComponent {
   private paginator!: MatPaginator;
   loader = false;
   observable!: Observable<MonthlyAttendance[]>;
+  @ViewChild('form') form!: NgForm;
 
   @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
@@ -165,6 +166,14 @@ export class TimesheetComponent {
     if (!this.timesheetEntries.data?.length) {
       this.notificationService.notify(
         'Add atleast one entry!',
+        NotifyType.ERROR
+      );
+      return;
+    }
+
+    if (this.form.invalid) {
+      this.notificationService.notify(
+        'Please fix the errors in the records!',
         NotifyType.ERROR
       );
       return;
