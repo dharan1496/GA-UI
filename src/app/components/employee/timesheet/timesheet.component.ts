@@ -206,7 +206,7 @@ export class TimesheetComponent {
       .subscribe({
         next: (response) => {
           this.notificationService.success(response);
-          this.resetData();
+          this.getdailyAttendance();
         },
         error: (error) =>
           this.notificationService.error(
