@@ -21,9 +21,13 @@
     </mat-form-field>
   </ng-container>
 
-  <div class="mt-4 mb-8" *ngIf="timesheetEntries.data.length">
-    Total records: {{ timesheetEntries.data.length }}
-  </div>
+  <span class="ml-16" *ngIf="attendanceDate?.valid">
+    <mat-form-field appearance="fill" class="w-40">
+      <mat-label>Filter</mat-label>
+      <input matInput (keyup)="applyFilter($event)" #input />
+      <mat-hint>Applies to all fields</mat-hint>
+    </mat-form-field>
+  </span>
 
   <mat-card>
     <mat-card-content

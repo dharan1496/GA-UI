@@ -231,4 +231,13 @@ export class TimesheetComponent {
     this.table?.renderRows();
     this.attendanceDate.reset();
   }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.timesheetEntries.filter = filterValue.trim().toLowerCase();
+
+    if (this.timesheetEntries.paginator) {
+      this.timesheetEntries.paginator.firstPage();
+    }
+  }
 }
