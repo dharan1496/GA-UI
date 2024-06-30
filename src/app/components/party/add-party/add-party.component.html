@@ -6,7 +6,7 @@
     </mat-card-header>
     <mat-card-content>
       <form class="grid col-2 gap padding">
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" class="name">
           <mat-label>Name</mat-label>
           <input matInput formControlName="partyName" />
           <mat-error>This field is required.</mat-error>
@@ -111,9 +111,6 @@
         <mat-form-field appearance="fill">
           <mat-label>Email</mat-label>
           <input matInput formControlName="eMailId" />
-          <mat-error *ngIf="form.get('eMailId')?.hasError('required')"
-            >This field is required.</mat-error
-          >
           <mat-error *ngIf="form.get('eMailId')?.hasError('pattern')"
             >Invalid email</mat-error
           >
