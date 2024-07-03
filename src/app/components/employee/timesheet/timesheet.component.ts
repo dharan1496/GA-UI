@@ -4,12 +4,11 @@ import { EMPLOYEE } from 'src/app/constants/employee-menu-values.const';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
-import { Observable, Subscription, finalize } from 'rxjs';
+import { Observable, Subscription, combineLatest, finalize } from 'rxjs';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { FormControl, NgForm, Validators } from '@angular/forms';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { NotifyType } from 'src/app/models/notify';
-import { MatDialog } from '@angular/material/dialog';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { EmployeeDepartment } from 'src/app/models/EmployeeDepartment';
 import { MatPaginator } from '@angular/material/paginator';
@@ -25,6 +24,7 @@ export class TimesheetComponent {
   attendanceDate = new FormControl('', Validators.required);
   displayedColumns = [
     'employee',
+    'category',
     'timeIn',
     'timeOut',
     'hours',
@@ -38,6 +38,7 @@ export class TimesheetComponent {
   private paginator!: MatPaginator;
   loader = false;
   observable!: Observable<MonthlyAttendance[]>;
+  departmentId = new FormControl('', Validators.required);
   @ViewChild('form') form!: NgForm;
 
   @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
@@ -50,7 +51,6 @@ export class TimesheetComponent {
     private navigationService: NavigationService,
     public employeeService: EmployeeService,
     private notificationService: NotificationService,
-    private dialog: MatDialog,
     private decimalPipe: DecimalPipe,
     private datePipe: DatePipe
   ) {
@@ -72,18 +72,26 @@ export class TimesheetComponent {
       })
     );
 
-    this.attendanceDate.valueChanges.subscribe((value: any) => {
-      if (value && value instanceof Date) {
-        const date = new Date(value);
-        this.minDate = new Date(date);
-        this.minDate.setDate(1);
+    const record = {
+      attendance: this.attendanceDate.valueChanges,
+      department: this.departmentId.valueChanges,
+    };
 
-        this.maxDate = new Date(date);
-        this.maxDate.setMonth(this.maxDate.getMonth() + 1);
-        this.maxDate.setDate(0);
-        this.getdailyAttendance();
-      }
-    });
+    this.subscription.add(
+      combineLatest(record).subscribe((value: any) => {
+        const { attendance, department } = value;
+        if (attendance && attendance instanceof Date && department) {
+          const date = new Date(value);
+          this.minDate = new Date(date);
+          this.minDate.setDate(1);
+
+          this.maxDate = new Date(date);
+          this.maxDate.setMonth(this.maxDate.getMonth() + 1);
+          this.maxDate.setDate(0);
+          this.getdailyAttendance();
+        }
+      })
+    );
   }
 
   ngOnDestroy() {
@@ -96,7 +104,8 @@ export class TimesheetComponent {
       this.employeeService
         .getDailyAttendance(
           this.datePipe.transform(this.attendanceDate?.value, 'dd/MM/yyyy') ||
-            ''
+            '',
+          +(this.departmentId.value || 0)
         )
         .pipe(finalize(() => (this.loader = false)))
         .subscribe({
@@ -104,12 +113,16 @@ export class TimesheetComponent {
             this.timesheetEntries.data = response.map((record) => {
               const inDate = record.firstCheckInTime?.split(' ');
               const outDate = record.lastCheckOutTime?.split(' ');
+              const isDaily = record.salaryCategoryId === 1;
               return {
                 ...record,
                 timeInDate: this.attendanceDate.value,
                 timeIn: inDate?.[1] || '',
                 timeOutDate: this.formatDate(outDate?.[0] || ''),
                 timeOut: outDate?.[1] || '',
+                isDaily,
+                isMorningPresent: record.isMorningPresent || false,
+                isAfterNoonPresent: record.isAfterNoonPresent || false,
               };
             });
           },
@@ -180,6 +193,7 @@ export class TimesheetComponent {
     }
 
     const request = this.timesheetEntries.data?.map((data: any) => {
+      const isDaily = data.salaryCategoryId === 1;
       return {
         employeeId: data?.employeeId,
         firstName: data?.firstName,
@@ -187,15 +201,23 @@ export class TimesheetComponent {
         attendanceDate:
           this.datePipe.transform(this.attendanceDate.value, 'dd/MM/yyyy') ||
           '',
-        firstCheckInTime: this.getDateTime(data?.timeInDate, data?.timeIn),
-        lastCheckOutTime: this.getDateTime(data?.timeOutDate, data?.timeOut),
-        workedHours: data?.workedHours,
+        firstCheckInTime: isDaily
+          ? this.getDateTime(data?.timeInDate, data?.timeIn)
+          : null,
+        lastCheckOutTime: isDaily
+          ? this.getDateTime(data?.timeOutDate, data?.timeOut)
+          : null,
+        workedHours: isDaily ? data?.workedHours : null,
         todaysDepartment:
           this.departmentList.find(
             (dep) => dep.departmentId === data?.todaysDepartmentId
           )?.departmentName || '',
         todaysDepartmentId: data?.todaysDepartmentId || 0,
-      };
+        salaryCategoryId: data?.salaryCategoryId,
+        salaryCategoryName: data?.salaryCategoryName,
+        isAfterNoonPresent: data?.isAfterNoonPresent || false,
+        isMorningPresent: data?.isMorningPresent || false,
+      } as MonthlyAttendance;
     });
 
     this.employeeService

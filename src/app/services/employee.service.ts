@@ -94,9 +94,12 @@ export class EmployeeService {
     );
   }
 
-  getDailyAttendance(attendanceDate: string): Observable<MonthlyAttendance[]> {
+  getDailyAttendance(
+    attendanceDate: string,
+    departmentId: number
+  ): Observable<MonthlyAttendance[]> {
     return this.http.get<MonthlyAttendance[]>(
-      `${environment.api}/Employee/GetDailyAttendance?attendanceDate=${attendanceDate}`
+      `${environment.api}/Employee/GetDailyAttendance?attendanceDate=${attendanceDate}&departmentId=${departmentId}`
     );
   }
 
