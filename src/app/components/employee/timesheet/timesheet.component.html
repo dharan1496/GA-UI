@@ -92,7 +92,7 @@
                 <mat-checkbox
                   id="morning-{{ element.employeeId }}"
                   [(ngModel)]="element.isMorningPresent"
-                  name="isMorningPresent"
+                  name="isMorningPresent-{{ element.employeeId }}"
                   >Morning Present</mat-checkbox
                 >
               </ng-container>
@@ -150,7 +150,7 @@
                 <mat-checkbox
                   id="afternoon-{{ element.employeeId }}"
                   [(ngModel)]="element.isAfterNoonPresent"
-                  name="isAfterNoonPresent"
+                  name="isAfterNoonPresent-{{ element.employeeId }}"
                   >Afternoon Present</mat-checkbox
                 >
               </ng-container>
