@@ -9,7 +9,7 @@
         <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
         <mat-datepicker
           #dp
-          startView="multi-year"
+          startView="year"
           (monthSelected)="setMonthAndYear($event, dp)"
           panelClass="month-picker"
         >

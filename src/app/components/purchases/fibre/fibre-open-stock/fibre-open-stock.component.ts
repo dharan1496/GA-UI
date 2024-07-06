@@ -43,10 +43,10 @@ export class FibreOpenStockComponent implements OnInit, OnDestroy {
     this.getShade();
 
     this.form = this.formBuilder.group({
-      receivedDCId: '',
+      receivedDCId: 0,
       stockAddedDate: '',
-      receivedDtsId: '',
-      availableBalance: '',
+      receivedDtsId: 0,
+      availableBalance: 0,
       fiberTypeId: ['', Validators.required],
       fiberTypeName: '',
       fiberShadeName: '',
