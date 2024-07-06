@@ -51,7 +51,7 @@ export class FibreOpenStockComponent implements OnInit, OnDestroy {
       fiberTypeName: '',
       fiberShadeName: '',
       fiberShadeId: ['', Validators.required],
-      hsnCode: '',
+      hsnCode: ['', Validators.required],
       stockWeight: ['', Validators.required],
       stockBales: ['', Validators.required],
       lot: ['', Validators.required],

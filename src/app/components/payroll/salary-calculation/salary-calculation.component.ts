@@ -219,18 +219,14 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
   calculateSalary(response: EmployeeSalary) {
     this.salaryDetails = response;
     const { salaryCategoryName, salary } = this.selectedEmployee as Employee;
-    // response.deductionAmount &&
-    //   this.deductionAmount.setValue(`${response.deductionAmount}`);
-    // response.advanceDeduction &&
-    //   this.advanceDeduction.setValue(`${response.advanceDeduction}`);
     const daysInMonth = this.getDaysInMonth(
       this.salaryDetails?.monthStartDate || ''
     );
     const attendance = response.salaryDetails;
     attendance?.forEach((data: any) => {
       if (!data.confirmedAmount) {
-        // Monthly
         if (salaryCategoryName === 'Monthly') {
+          // Monthly wage
           data['amount'] = Math.round(salary / daysInMonth);
         } else {
           // Daily wage
