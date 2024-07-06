@@ -102,11 +102,16 @@ export class UploadAttendanceComponent {
   formatExcelData(excelData: any[]) {
     const formatedData = excelData?.map((data) => ({
       employeeId: data['Employee ID'],
+      firstName: data['First Name'],
+      lastName: data['Last Name'] || '',
       attendanceDate: this.formatDate(data['Date']) || '',
       firstCheckInTime: data['First Check In'] || '',
       lastCheckOutTime: data['Last Check Out'] || '',
       workedHours: data['Total Time'] || '',
       todaysDepartment: data['Department'] || '',
+      todaysDepartmentId: this.getDepartmentID(data['Department'] || ''),
+      salaryCategoryId: 0,
+      salaryCategoryName: '',
     })) as MonthlyAttendance[];
     this.isFileValid = formatedData.every((data) => !!data.employeeId);
     if (this.isFileValid && formatedData?.length) {
@@ -118,6 +123,13 @@ export class UploadAttendanceComponent {
         NotifyType.ERROR
       );
     }
+  }
+
+  getDepartmentID(name: string) {
+    return (
+      this.departmentList.find((dep) => dep.departmentName === name)
+        ?.departmentId || 0
+    );
   }
 
   formatDate(date: string) {

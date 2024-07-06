@@ -76,6 +76,7 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
   deductionType = new FormControl('advance');
   advanceDeduction = new FormControl('');
   deductionRemarks = new FormControl('', Validators.required);
+  isDaily = true;
 
   @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
@@ -180,6 +181,16 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           if (response) {
+            this.isDaily = this.selectedEmployee?.salaryCategoryId === 1;
+            if (!this.isDaily) {
+              this.displayedColumns = [
+                'attendanceDate',
+                'firstCheckInTime',
+                'lastCheckOutTime',
+                'confirmedAmount',
+                'amount',
+              ];
+            }
             this.calculateSalary(response);
           } else {
             this.attendanceData.data = [];
@@ -260,11 +271,13 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
     if (
       this.employeeId.invalid ||
       this.paymentMonth.invalid ||
-      this.salaryeBeforeDeduction.invalid
+      this.salaryeBeforeDeduction.invalid ||
+      this.deductionRemarks.invalid
     ) {
       this.employeeId.markAsTouched();
       this.paymentMonth.markAsTouched();
       this.salaryeBeforeDeduction.markAsTouched();
+      this.deductionRemarks.markAsTouched();
       this.notificationService.notify(
         'Error occured in the salary details!',
         NotifyType.ERROR

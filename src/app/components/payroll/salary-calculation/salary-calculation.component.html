@@ -29,7 +29,7 @@
             ></mat-datepicker-toggle>
             <mat-datepicker
               #dp
-              startView="multi-year"
+              startView="year"
               (monthSelected)="setMonthAndYear($event, dp)"
               panelClass="month-picker"
             >
@@ -89,20 +89,32 @@
               </ng-container>
 
               <ng-container matColumnDef="firstCheckInTime">
-                <th mat-header-cell *matHeaderCellDef>FirstCheckInTime</th>
+                <th mat-header-cell *matHeaderCellDef>
+                  <span *ngIf="isDaily">FirstCheckInTime</span>
+                  <span *ngIf="!isDaily">Morning</span>
+                </th>
                 <td mat-cell *matCellDef="let element">
-                  {{ element.firstCheckInTime }}
+                  <span *ngIf="isDaily">{{ element.firstCheckInTime }}</span>
+                  <span *ngIf="!isDaily">{{
+                    element.isMorningPresent ? "Present" : "Absent"
+                  }}</span>
                 </td>
               </ng-container>
 
               <ng-container matColumnDef="lastCheckOutTime">
-                <th mat-header-cell *matHeaderCellDef>LastCheckOutTime</th>
+                <th mat-header-cell *matHeaderCellDef>
+                  <span *ngIf="isDaily">LastCheckOutTime</span>
+                  <span *ngIf="!isDaily">Afternoon</span>
+                </th>
                 <td mat-cell *matCellDef="let element">
-                  {{ element.lastCheckOutTime }}
+                  <span *ngIf="isDaily">{{ element.lastCheckOutTime }}</span>
+                  <span *ngIf="!isDaily">{{
+                    element.isAfterNoonPresent ? "Present" : "Absent"
+                  }}</span>
                 </td>
               </ng-container>
 
-              <ng-container matColumnDef="workedHours">
+              <ng-container matColumnDef="workedHours" *ngIf="isDaily">
                 <th mat-header-cell *matHeaderCellDef>Worked Hours</th>
                 <td mat-cell *matCellDef="let element">
                   {{ element.workedHours }}
