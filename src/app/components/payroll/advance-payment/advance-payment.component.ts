@@ -50,7 +50,7 @@ export class AdvancePaymentComponent implements OnInit, OnDestroy {
       employeeId: ['', Validators.required],
       advanceDate: ['', Validators.required],
       advanceAmount: ['', Validators.required],
-      remarks: '',
+      remarks: ['', Validators.required],
     });
   }
 
