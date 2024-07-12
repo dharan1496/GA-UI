@@ -103,18 +103,10 @@ export class EmployeeService {
     );
   }
 
-  saveSalary(
-    employeeId: number,
-    salaryMonthDate: string,
-    salaryBeforeDeduction: number,
-    advanceDeduction: number,
-    deductionAmount: number,
-    deductionRemarks: string,
-    employeeSalaryDetails: EmployeeSalaryDetails[]
-  ) {
+  saveSalary(employeeSalary: EmployeeSalary) {
     return this.http.post(
-      `${environment.api}/Employee/SaveSalary?employeeId=${employeeId}&salaryMonthDate=${salaryMonthDate}&salaryBeforeDeduction=${salaryBeforeDeduction}&advanceDeduction=${advanceDeduction}&deductionAmount=${deductionAmount}&deductionRemarks=${deductionRemarks}&createdByUserId=${this.appSharedService.userId}`,
-      employeeSalaryDetails,
+      `${environment.api}/Employee/SaveSalary?createdByUserId=${this.appSharedService.userId}`,
+      employeeSalary,
       {
         responseType: 'text',
       }

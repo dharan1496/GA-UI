@@ -4,4 +4,8 @@ export interface EmployeeDaywiseSalaryDetails {
   lastCheckOutTime: string | null;
   workedHours: string;
   confirmedAmount: number;
+  salaryCategoryId: number;
+  salaryCategoryName: string;
+  isMorningPresent: boolean;
+  isAfterNoonPresent: boolean;
 }

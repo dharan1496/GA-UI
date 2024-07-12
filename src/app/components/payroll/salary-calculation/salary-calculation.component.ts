@@ -75,8 +75,9 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
   salaryDetails!: EmployeeSalary | null;
   deductionType = new FormControl('advance');
   advanceDeduction = new FormControl('');
-  deductionRemarks = new FormControl('', Validators.required);
+  deductionRemarks = new FormControl('');
   isDaily = true;
+  employeeSalaryResponse!: EmployeeSalary | null;
 
   @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
@@ -136,15 +137,20 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
   }
 
   resetData() {
-    this.attendanceData.data = [];
+    this.resetToDefault();
     this.employeeId.reset();
     this.paymentMonth.reset(moment());
-    this.deductionAmount.reset();
+    this.selectedEmployee = null;
+  }
+
+  resetToDefault() {
+    this.employeeSalaryResponse = null;
+    this.attendanceData.data = [];
+    this.salaryDetails = null;
     this.salaryeBeforeDeduction.reset();
+    this.deductionAmount.reset();
     this.advanceDeduction.reset();
     this.deductionRemarks.reset();
-    this.selectedEmployee = null;
-    this.salaryDetails = null;
   }
 
   calculateTotalAmount() {
@@ -181,6 +187,7 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           if (response) {
+            this.employeeSalaryResponse = response;
             this.isDaily = this.selectedEmployee?.salaryCategoryId === 1;
             if (!this.isDaily) {
               this.displayedColumns = [
@@ -193,22 +200,12 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
             }
             this.calculateSalary(response);
           } else {
-            this.attendanceData.data = [];
-            this.salaryDetails = null;
-            this.salaryeBeforeDeduction.reset();
-            this.deductionAmount.reset();
-            this.advanceDeduction.reset();
-            this.deductionRemarks.reset();
+            this.resetToDefault();
             this.notificationService.error('No records found!');
           }
         },
         error: (error) => {
-          this.attendanceData.data = [];
-          this.salaryDetails = null;
-          this.salaryeBeforeDeduction.reset();
-          this.deductionAmount.reset();
-          this.advanceDeduction.reset();
-          this.deductionRemarks.reset();
+          this.resetToDefault();
           this.notificationService.error(
             typeof error?.error === 'string' ? error?.error : error?.message
           );
@@ -267,13 +264,11 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
     if (
       this.employeeId.invalid ||
       this.paymentMonth.invalid ||
-      this.salaryeBeforeDeduction.invalid ||
-      this.deductionRemarks.invalid
+      this.salaryeBeforeDeduction.invalid
     ) {
       this.employeeId.markAsTouched();
       this.paymentMonth.markAsTouched();
       this.salaryeBeforeDeduction.markAsTouched();
-      this.deductionRemarks.markAsTouched();
       this.notificationService.notify(
         'Error occured in the salary details!',
         NotifyType.ERROR
@@ -282,37 +277,42 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const employeeSalaryDetails: EmployeeSalaryDetails[] =
-      this.attendanceData.data.map((data: any) => ({
-        attendanceDate: data.attendanceDate?.split(' ')[0] || '',
-        amount: data['amount'],
-      }));
     const monthDate = this.datePipe.transform(
       `${
         (this.paymentMonth.value?.month() || 0) + 1
       }/01/${this.paymentMonth.value?.year()}`,
       'dd/MM/yyyy'
     );
-    this.employeeService
-      .saveSalary(
-        +(this.employeeId.value || 0),
-        monthDate || '',
-        +(this.salaryeBeforeDeduction.value || 0),
-        +(this.advanceDeduction.value || 0),
-        +(this.deductionAmount.value || 0),
-        this.deductionRemarks.value || '',
-        employeeSalaryDetails
-      )
-      .subscribe({
-        next: (response) => {
-          this.notificationService.success(response);
-          this.resetData();
-        },
-        error: (error) =>
-          this.notificationService.error(
-            typeof error?.error === 'string' ? error?.error : error?.message
-          ),
-      });
+    const salaryDetails = [...this.attendanceData.data];
+    salaryDetails.forEach((details: any) => {
+      details.salaryCategoryName =
+        this.selectedEmployee?.salaryCategoryName || '';
+      details.salaryCategoryId = this.selectedEmployee?.salaryCategoryId || 0;
+      details.confirmedAmount = details?.amount || 0;
+      delete details.amount;
+    });
+    const employeeSalary = {
+      employeeId: +(this.employeeId.value || 0),
+      salary: this.getDeductedSalary(),
+      monthStartDate: monthDate || '',
+      salaryCategoryName: this.selectedEmployee?.salaryCategoryName,
+      salaryBeforeDeduction: +(this.salaryeBeforeDeduction.value || 0),
+      advanceToDeduct: this.employeeSalaryResponse?.advanceToDeduct,
+      advanceDeduction: +(this.advanceDeduction.value || 0),
+      deductionAmount: +(this.deductionAmount.value || 0),
+      deductionRemarks: this.deductionRemarks.value || '',
+      salaryDetails: this.attendanceData.data,
+    } as EmployeeSalary;
+    this.employeeService.saveSalary(employeeSalary).subscribe({
+      next: (response) => {
+        this.notificationService.success(response);
+        this.resetData();
+      },
+      error: (error) =>
+        this.notificationService.error(
+          typeof error?.error === 'string' ? error?.error : error?.message
+        ),
+    });
   }
 
   getDeductedSalary() {
