@@ -14,7 +14,8 @@
                 *ngFor="let employee of employeelist"
                 [value]="employee.employeeId"
               >
-                {{ employee.firstName + " " + employee.lastName | titlecase }}
+                {{ employee.firstName + " " + employee.lastName | titlecase }} -
+                {{ employee.employeeId }}
               </mat-option>
             </mat-select>
             <mat-error>This field is required.</mat-error>
