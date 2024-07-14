@@ -13,6 +13,7 @@ import { PARTY } from 'src/app/constants/party-menu-values.const';
 import { City } from 'src/app/models/city';
 import { District } from 'src/app/models/district';
 import { NotifyType } from 'src/app/models/notify';
+import { Party } from 'src/app/models/party';
 import { PartyDepartment } from 'src/app/models/partyDepartment';
 import { State } from 'src/app/models/state';
 import { PartyService } from 'src/app/services/party.service';
@@ -33,6 +34,7 @@ export class AddPartyComponent implements OnInit, OnDestroy {
   edit = false;
   subscription = new Subscription();
   phoneLimit = false;
+  addressLimit = false;
   departmentList!: PartyDepartment[];
 
   constructor(
@@ -53,13 +55,17 @@ export class AddPartyComponent implements OnInit, OnDestroy {
       partyName: ['', Validators.required],
       branchName: ['', Validators.required],
       gstNo: ['', Validators.required],
-      address1: ['', Validators.required],
-      address2: '',
-      address3: '',
-      districtId: ['', Validators.required],
-      cityId: ['', Validators.required],
-      stateId: ['', Validators.required],
-      pinCode: ['', Validators.required],
+      address: this.formBuilder.array([
+        this.formBuilder.group({
+          address1: ['', Validators.required],
+          address2: '',
+          address3: '',
+          districtId: ['', Validators.required],
+          cityId: ['', Validators.required],
+          stateId: ['', Validators.required],
+          pinCode: ['', Validators.required],
+        }),
+      ]),
       eMailId: [
         '',
         [Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')],
@@ -90,6 +96,19 @@ export class AddPartyComponent implements OnInit, OnDestroy {
         .map((phone) => {
           return { mobile: phone };
         }) || [];
+    const {
+      address1,
+      address2,
+      address3,
+      districtName,
+      districtId,
+      cityName,
+      cityId,
+      pinCode,
+      stateName,
+      stateId,
+      stateCode,
+    } = this.partyService.editPartyDetails as Party;
     this.form.patchValue({
       ...this.partyService.editPartyDetails,
       partyDepartments:
@@ -98,6 +117,21 @@ export class AddPartyComponent implements OnInit, OnDestroy {
         ),
       phones: [phones.shift()] || [],
       landline: landlineNo,
+      address: [
+        {
+          address1,
+          address2,
+          address3,
+          districtName,
+          districtId,
+          cityName,
+          cityId,
+          pinCode,
+          stateName,
+          stateId,
+          stateCode,
+        },
+      ],
     });
 
     phones.forEach((phone) => {
@@ -110,6 +144,36 @@ export class AddPartyComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.partyService.editPartyDetails = undefined;
     this.subscription.unsubscribe();
+  }
+
+  addAddress(): void {
+    (this.form.get('address') as FormArray).push(
+      this.formBuilder.group({
+        address1: ['', Validators.required],
+        address2: '',
+        address3: '',
+        districtId: ['', Validators.required],
+        cityId: ['', Validators.required],
+        stateId: ['', Validators.required],
+        pinCode: ['', Validators.required],
+      })
+    );
+    this.checkAddressLimit();
+  }
+
+  removeAddress(index: any) {
+    (this.form.get('address') as FormArray).removeAt(index);
+    this.checkAddressLimit();
+  }
+
+  getAddressFormControls(): AbstractControl[] {
+    return (<FormArray>this.form.get('address')).controls;
+  }
+
+  checkAddressLimit() {
+    this.getAddressFormControls()?.length > 2
+      ? (this.addressLimit = true)
+      : (this.addressLimit = false);
   }
 
   addPhone(): void {
@@ -200,9 +264,15 @@ export class AddPartyComponent implements OnInit, OnDestroy {
       partyDepartments: this.form.value?.partyDepartments?.map((id: number) =>
         this.departmentList.find((data) => data.partyDepartmentId === id)
       ),
+      // temp code - start
+      ...this.form.value?.address[0],
+      // end
     };
     delete partyRequest?.phones;
     delete partyRequest?.landline;
+    // temp code - start
+    delete partyRequest?.address;
+    // end
 
     if (this.edit) {
       this.partyService

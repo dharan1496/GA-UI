@@ -37,11 +37,33 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card>
+  <mat-card
+    formArrayName="address"
+    *ngFor="let address of getAddressFormControls(); let i = index"
+  >
     <mat-card-header>
-      <mat-card-title> Address </mat-card-title>
+      <mat-card-title>
+        Address {{ getAddressFormControls().length === 1 ? "" : " " + (i + 1) }}
+      </mat-card-title>
+      <!-- Temporarily hidden the multi address -->
+      <div class="ml-16 mt-4" hidden>
+        <mat-icon
+          *ngIf="i !== 0"
+          matSuffix
+          (click)="removeAddress(i)"
+          matTooltip="Delete address"
+          >delete</mat-icon
+        >
+        <mat-icon
+          *ngIf="getAddressFormControls()[0]?.valid && i === 0 && !addressLimit"
+          matSuffix
+          matTooltip="Add another address"
+          (click)="addAddress()"
+          >add_circle_outline</mat-icon
+        >
+      </div>
     </mat-card-header>
-    <mat-card-content>
+    <mat-card-content [formGroupName]="i">
       <form class="grid col-2 gap padding">
         <mat-form-field appearance="fill">
           <mat-label>Address Line 1</mat-label>
@@ -91,10 +113,10 @@
         <mat-form-field appearance="fill">
           <mat-label>Pincode</mat-label>
           <input matInput formControlName="pinCode" mask="000000" />
-          <mat-error *ngIf="form.get('pinCode')?.hasError('required')"
+          <mat-error *ngIf="address.get('pinCode')?.hasError('required')"
             >This field is required.</mat-error
           >
-          <mat-error *ngIf="form.get('pinCode')?.hasError('mask')"
+          <mat-error *ngIf="address.get('pinCode')?.hasError('mask')"
             >Invalid pincode</mat-error
           >
         </mat-form-field>
