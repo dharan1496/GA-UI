@@ -96,6 +96,7 @@ export class AddPartyComponent implements OnInit, OnDestroy {
         .map((phone) => {
           return { mobile: phone };
         }) || [];
+    // temp - start
     const {
       address1,
       address2,
@@ -109,6 +110,7 @@ export class AddPartyComponent implements OnInit, OnDestroy {
       stateId,
       stateCode,
     } = this.partyService.editPartyDetails as Party;
+    // end
     this.form.patchValue({
       ...this.partyService.editPartyDetails,
       partyDepartments:
@@ -117,6 +119,7 @@ export class AddPartyComponent implements OnInit, OnDestroy {
         ),
       phones: [phones.shift()] || [],
       landline: landlineNo,
+      // temp - start
       address: [
         {
           address1,
@@ -132,6 +135,7 @@ export class AddPartyComponent implements OnInit, OnDestroy {
           stateCode,
         },
       ],
+      // end
     });
 
     phones.forEach((phone) => {
