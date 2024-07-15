@@ -9,7 +9,7 @@ import { NotifyType } from 'src/app/models/notify';
 import { OrdersPendingDelivery } from 'src/app/models/ordersPendingDelivery';
 import { PartyService } from 'src/app/services/party.service';
 import { YarnService } from 'src/app/services/yarn.service';
-import { ComboBoxComponent } from 'src/app/shared/combo-box/combo-box.component';
+import { PartyComboBoxComponent } from 'src/app/shared/party-combo-box/party-combo-box.component';
 import { NotificationService } from 'src/app/shared/notification.service';
 
 @Component({
@@ -19,7 +19,7 @@ import { NotificationService } from 'src/app/shared/notification.service';
     CommonModule,
     MaterialModule,
     ReactiveFormsModule,
-    ComboBoxComponent,
+    PartyComboBoxComponent,
   ],
   templateUrl: './choose-order-for-delivery.component.html',
   styleUrls: ['./choose-order-for-delivery.component.scss'],

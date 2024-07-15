@@ -16,10 +16,10 @@ import { MaterialModule } from 'src/app/material.module';
   selector: 'app-party-combo-box',
   standalone: true,
   imports: [CommonModule, MaterialModule, ReactiveFormsModule],
-  templateUrl: './combo-box.component.html',
-  styleUrls: ['./combo-box.component.scss'],
+  templateUrl: './party-combo-box.component.html',
+  styleUrls: ['./party-combo-box.component.scss'],
 })
-export class ComboBoxComponent {
+export class PartyComboBoxComponent {
   filteredParties!: Party[];
   subscription = new Subscription();
 
@@ -86,13 +86,15 @@ export class ComboBoxComponent {
   }
 
   onBlur() {
-    const value = this.partyControl.value;
-    if (value && !(value instanceof Object)) {
-      this.partyControl.reset();
-      this.setParty('');
-    }
-    this.partyFormControl?.markAsTouched();
-    this.partyControl.markAsTouched();
+    setTimeout(() => {
+      const value = this.partyControl.value;
+      if (value && !(value instanceof Object)) {
+        this.partyControl.reset();
+        this.setParty('');
+      }
+      this.partyFormControl?.markAsTouched();
+      this.partyControl.markAsTouched();
+    }, 250);
   }
 
   getPartyList() {

@@ -13,7 +13,7 @@ import { FibreShadeComponent } from './fibre/fibre-master/fibre-shade/fibre-shad
 import { FibreStockComponent } from './fibre/fibre-stock/fibre-stock.component';
 import { FibreReceiveConversionOrderComponent } from './fibre/fibre-receive-conversion-order/fibre-receive-conversion-order.component';
 import { FibreReceivedOrderSearchComponent } from './fibre/fibre-received-order-search/fibre-received-order-search.component';
-import { ComboBoxComponent } from 'src/app/shared/combo-box/combo-box.component';
+import { PartyComboBoxComponent } from 'src/app/shared/party-combo-box/party-combo-box.component';
 import { FibreOpenStockComponent } from './fibre/fibre-open-stock/fibre-open-stock.component';
 import { SearchOpenStockComponent } from './fibre/fibre-stock/search-open-stock/search-open-stock.component';
 
@@ -37,7 +37,7 @@ import { SearchOpenStockComponent } from './fibre/fibre-stock/search-open-stock/
     PurchasesRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
-    ComboBoxComponent,
+    PartyComboBoxComponent,
   ],
 })
 export class PurchasesModule {}

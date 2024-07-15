@@ -19,7 +19,7 @@ import { YarnShade } from 'src/app/models/yarnShade';
 import { MasterService } from 'src/app/services/master.service';
 import { PartyService } from 'src/app/services/party.service';
 import { YarnService } from 'src/app/services/yarn.service';
-import { ComboBoxComponent } from 'src/app/shared/combo-box/combo-box.component';
+import { PartyComboBoxComponent } from 'src/app/shared/party-combo-box/party-combo-box.component';
 import { NotificationService } from 'src/app/shared/notification.service';
 
 @Component({
@@ -29,7 +29,7 @@ import { NotificationService } from 'src/app/shared/notification.service';
     CommonModule,
     MaterialModule,
     ReactiveFormsModule,
-    ComboBoxComponent,
+    PartyComboBoxComponent,
   ],
   templateUrl: './choose-delivery-for-return.component.html',
   styleUrls: ['./choose-delivery-for-return.component.scss'],
