@@ -6,18 +6,14 @@
     </mat-card-header>
     <mat-card-content>
       <form class="grid col-3 gap padding" [formGroup]="form">
-        <mat-form-field appearance="fill" class="w-100">
-          <mat-label>Employee</mat-label>
-          <mat-select formControlName="employeeId">
-            <mat-option
-              *ngFor="let employee of employeelist"
-              [value]="employee.employeeId"
-            >
-              {{ employee.firstName + " " + employee.lastName | titlecase }}
-            </mat-option>
-          </mat-select>
-          <mat-error>This field is required.</mat-error>
-        </mat-form-field>
+        <div class="w-100">
+          <app-employee-combo-box
+            [patch]="form.get('employeeId')?.value"
+            [employeeFormControl]="form.get('employeeId')"
+            [touched]="form.get('employeeId')?.touched || false"
+          >
+          </app-employee-combo-box>
+        </div>
         <mat-form-field appearance="fill">
           <mat-label>Advance Date</mat-label>
           <input

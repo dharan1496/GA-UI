@@ -1,0 +1,21 @@
+<mat-form-field appearance="fill" class="w-100">
+  <mat-label>Employee</mat-label>
+  <input
+    type="text"
+    matInput
+    [formControl]="employeeControl"
+    [matAutocomplete]="auto"
+    (blur)="onBlur()"
+  />
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+    <ng-container *ngFor="let employee of filteredEmployee">
+      <mat-option *ngFor="let employee of filteredEmployee" [value]="employee">
+        {{ employee.firstName + " " + employee.lastName | titlecase }} -
+        {{ employee.employeeId }}
+      </mat-option>
+    </ng-container>
+  </mat-autocomplete>
+  <mat-hint *ngIf="disabled">Disabled</mat-hint>
+  <mat-hint *ngIf="optional">Optional</mat-hint>
+  <mat-error>This field is required.</mat-error>
+</mat-form-field>

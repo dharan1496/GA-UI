@@ -9,6 +9,7 @@ import { SalaryCalculationComponent } from './salary-calculation/salary-calculat
 import { AdvancePaymentComponent } from './advance-payment/advance-payment.component';
 import { MonthlySalaryListComponent } from './monthly-salary-list/monthly-salary-list.component';
 import { SalarySummaryComponent } from './salary-summary/salary-summary.component';
+import { EmployeeComboBoxComponent } from 'src/app/shared/employee-combo-box/employee-combo-box.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { SalarySummaryComponent } from './salary-summary/salary-summary.componen
     ReactiveFormsModule,
     FormsModule,
     NgxMaskDirective,
+    EmployeeComboBoxComponent,
   ],
   providers: [provideNgxMask(), NgxMaskPipe],
 })

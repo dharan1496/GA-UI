@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -19,7 +19,7 @@ import { MaterialModule } from 'src/app/material.module';
   templateUrl: './party-combo-box.component.html',
   styleUrls: ['./party-combo-box.component.scss'],
 })
-export class PartyComboBoxComponent {
+export class PartyComboBoxComponent implements OnInit {
   filteredParties!: Party[];
   subscription = new Subscription();
 
@@ -94,7 +94,7 @@ export class PartyComboBoxComponent {
       }
       this.partyFormControl?.markAsTouched();
       this.partyControl.markAsTouched();
-    }, 250);
+    }, 150);
   }
 
   getPartyList() {
