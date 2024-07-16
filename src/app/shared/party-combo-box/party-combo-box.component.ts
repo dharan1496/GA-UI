@@ -94,7 +94,7 @@ export class PartyComboBoxComponent implements OnInit {
       }
       this.partyFormControl?.markAsTouched();
       this.partyControl.markAsTouched();
-    }, 150);
+    }, 200);
   }
 
   getPartyList() {

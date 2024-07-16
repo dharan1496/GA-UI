@@ -102,7 +102,7 @@ export class EmployeeComboBoxComponent implements OnInit {
       }
       this.employeeFormControl?.markAsTouched();
       this.employeeControl.markAsTouched();
-    }, 150);
+    }, 200);
   }
 
   getEmployeeList() {
