@@ -88,7 +88,7 @@ export class PartyComboBoxComponent implements OnInit {
   onBlur() {
     setTimeout(() => {
       const value = this.partyControl.value;
-      if (value && !(value instanceof Object)) {
+      if ((value && !(value instanceof Object)) || !value) {
         this.partyControl.reset();
         this.setParty('');
       }

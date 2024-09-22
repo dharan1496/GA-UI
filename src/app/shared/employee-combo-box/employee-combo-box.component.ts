@@ -96,7 +96,7 @@ export class EmployeeComboBoxComponent implements OnInit {
   onBlur() {
     setTimeout(() => {
       const value = this.employeeControl.value;
-      if (value && !(value instanceof Object)) {
+      if ((value && !(value instanceof Object)) || !value) {
         this.employeeControl.reset();
         this.setEmployee('');
       }
