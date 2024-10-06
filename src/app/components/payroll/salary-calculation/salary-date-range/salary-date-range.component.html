@@ -1,0 +1,26 @@
+<mat-form-field appearance="fill" class="w-30 mr-24">
+  <mat-label>Date Range</mat-label>
+  <mat-date-range-input [rangePicker]="picker">
+    <input
+      matStartDate
+      [formControl]="monthStartDate"
+      placeholder="Start date"
+      (dateChange)="appSharedService.formatDate($event, monthStartDate)"
+    />
+    <input
+      matEndDate
+      [formControl]="monthEndDate"
+      placeholder="End date"
+      (dateChange)="appSharedService.formatDate($event, monthEndDate)"
+    />
+  </mat-date-range-input>
+  <mat-error *ngIf="monthStartDate?.errors"
+    >Please enter valid start date.</mat-error
+  >
+  <mat-error *ngIf="monthEndDate?.errors"
+    >Please enter valid end date.</mat-error
+  >
+  <mat-hint>DD/MM/YYYY – DD/MM/YYYY</mat-hint>
+  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-date-range-picker #picker></mat-date-range-picker>
+</mat-form-field>

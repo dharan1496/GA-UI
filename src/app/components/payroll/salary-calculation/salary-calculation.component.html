@@ -16,7 +16,11 @@
             </app-employee-combo-box>
           </div>
 
-          <mat-form-field appearance="fill" class="w-25 mr-24">
+          <mat-form-field
+            appearance="fill"
+            class="w-25 mr-24"
+            *ngIf="selectedEmployee?.salaryCategoryName === 'Monthly'"
+          >
             <mat-label>Payment Month</mat-label>
             <input matInput [matDatepicker]="dp" [formControl]="paymentMonth" />
             <mat-hint>MM/YYYY</mat-hint>
@@ -33,6 +37,16 @@
             </mat-datepicker>
             <mat-error>Please enter valid month & year.</mat-error>
           </mat-form-field>
+
+          <ng-container
+            *ngIf="selectedEmployee?.salaryCategoryName === 'DailyWages'"
+          >
+            <app-salary-date-range
+              [monthStartDate]="monthStartDate"
+              [monthEndDate]="monthEndDate"
+            ></app-salary-date-range>
+          </ng-container>
+
           <button mat-raised-button color="primary" (click)="fetchAttendance()">
             <mat-icon>get_app</mat-icon>Fetch Attendance
           </button>

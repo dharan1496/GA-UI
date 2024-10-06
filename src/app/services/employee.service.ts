@@ -153,4 +153,40 @@ export class EmployeeService {
       `${environment.api}/Employee/GetMonthlySalarySummary?salaryMonthDate=${salaryMonthDate}`
     );
   }
+
+  getEmployeeSalaryByDate(
+    employeeId: number,
+    salaryStartDate: string,
+    salaryEndDate: string
+  ): Observable<EmployeeSalary> {
+    return this.http.get<EmployeeSalary>(
+      `${environment.api}/Employee/GetEmployeeSalaryByDate?employeeId=${employeeId}&salaryStartDate=${salaryStartDate}&salaryEndDate=${salaryEndDate}`
+    );
+  }
+
+  saveSalaryByDate(
+    employeeSalary: EmployeeSalary,
+    startDate: string,
+    endDate: string
+  ) {
+    let endpoint = `employeeId=${
+      employeeSalary.employeeId
+    }&salaryMonthDate=${startDate}&salaryEndDate=${endDate}&salaryBeforeDeduction=${
+      employeeSalary.salaryBeforeDeduction || 0
+    }&advanceDeduction=${
+      employeeSalary.advanceDeduction || 0
+    }&deductionAmount=${employeeSalary.deductionAmount || 0}&createdByUserId=${
+      this.appSharedService.userId
+    }`;
+    if (employeeSalary.deductionRemarks) {
+      endpoint += `&deductionRemarks=${employeeSalary.deductionRemarks}`;
+    }
+    return this.http.post(
+      `${environment.api}/Employee/SaveSalaryByDate?${endpoint}`,
+      employeeSalary.salaryDetails,
+      {
+        responseType: 'text',
+      }
+    );
+  }
 }

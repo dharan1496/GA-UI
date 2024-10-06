@@ -14,13 +14,12 @@ import { MatDatepicker } from '@angular/material/datepicker';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import * as moment from 'moment';
-import { Subscription, finalize } from 'rxjs';
+import { Observable, Subscription, finalize } from 'rxjs';
 import { Constants } from 'src/app/constants/constants';
 import { PAYROLL } from 'src/app/constants/payroll-menu-values.const';
 import { Employee } from 'src/app/models/employee';
 import { EmployeeDaywiseSalaryDetails } from 'src/app/models/employeeDaywiseSalaryDetails';
 import { EmployeeSalary } from 'src/app/models/employeeSalary';
-import { EmployeeSalaryDetails } from 'src/app/models/employeeSalaryDetails';
 import { NotifyType } from 'src/app/models/notify';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { AppSharedService } from 'src/app/shared/app-shared.service';
@@ -78,6 +77,8 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
   deductionRemarks = new FormControl('');
   isDaily = true;
   employeeSalaryResponse!: EmployeeSalary | null;
+  monthStartDate = new FormControl('', Validators.required);
+  monthEndDate = new FormControl('', Validators.required);
 
   @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
@@ -172,45 +173,59 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
     }
 
     this.loader = true;
-    const monthDate = this.datePipe.transform(
-      `${
-        (this.paymentMonth.value?.month() || 0) + 1
-      }/01/${this.paymentMonth.value?.year()}`,
-      'dd/MM/yyyy'
-    );
-    this.employeeService
-      .getEmployeeMonthlySalaryDetails(
+
+    let observable: Observable<any>;
+
+    if (this.selectedEmployee?.salaryCategoryName === 'DailyWages') {
+      const monthStartDate =
+        this.datePipe.transform(this.monthStartDate.value, 'dd/MM/yyyy') || '';
+      const monthEndDate =
+        this.datePipe.transform(this.monthEndDate.value, 'dd/MM/yyyy') || '';
+      observable = this.employeeService.getEmployeeSalaryByDate(
+        +(this.employeeId.value || 0),
+        monthStartDate,
+        monthEndDate
+      );
+    } else {
+      const monthDate = this.datePipe.transform(
+        `${
+          (this.paymentMonth.value?.month() || 0) + 1
+        }/01/${this.paymentMonth.value?.year()}`,
+        'dd/MM/yyyy'
+      );
+
+      observable = this.employeeService.getEmployeeMonthlySalaryDetails(
         +(this.employeeId.value || 0),
         monthDate || ''
-      )
-      .pipe(finalize(() => (this.loader = false)))
-      .subscribe({
-        next: (response) => {
-          if (response) {
-            this.employeeSalaryResponse = response;
-            this.isDaily = this.selectedEmployee?.salaryCategoryId === 1;
-            if (!this.isDaily) {
-              this.displayedColumns = [
-                'attendanceDate',
-                'firstCheckInTime',
-                'lastCheckOutTime',
-                'confirmedAmount',
-                'amount',
-              ];
-            }
-            this.calculateSalary(response);
-          } else {
-            this.resetToDefault();
-            this.notificationService.error('No records found!');
+      );
+    }
+    observable.pipe(finalize(() => (this.loader = false))).subscribe({
+      next: (response) => {
+        if (response) {
+          this.employeeSalaryResponse = response;
+          this.isDaily = this.selectedEmployee?.salaryCategoryId === 1;
+          if (!this.isDaily) {
+            this.displayedColumns = [
+              'attendanceDate',
+              'firstCheckInTime',
+              'lastCheckOutTime',
+              'confirmedAmount',
+              'amount',
+            ];
           }
-        },
-        error: (error) => {
+          this.calculateSalary(response);
+        } else {
           this.resetToDefault();
-          this.notificationService.error(
-            typeof error?.error === 'string' ? error?.error : error?.message
-          );
-        },
-      });
+          this.notificationService.error('No records found!');
+        }
+      },
+      error: (error) => {
+        this.resetToDefault();
+        this.notificationService.error(
+          typeof error?.error === 'string' ? error?.error : error?.message
+        );
+      },
+    });
   }
 
   calculateSalary(response: EmployeeSalary) {
@@ -303,7 +318,22 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
       deductionRemarks: this.deductionRemarks.value || '',
       salaryDetails: this.attendanceData.data,
     } as EmployeeSalary;
-    this.employeeService.saveSalary(employeeSalary).subscribe({
+
+    let observable: Observable<any>;
+    if (this.selectedEmployee?.salaryCategoryName === 'DailyWages') {
+      const monthStartDate =
+        this.datePipe.transform(this.monthStartDate.value, 'dd/MM/yyyy') || '';
+      const monthEndDate =
+        this.datePipe.transform(this.monthEndDate.value, 'dd/MM/yyyy') || '';
+      observable = this.employeeService.saveSalaryByDate(
+        employeeSalary,
+        monthStartDate,
+        monthEndDate
+      );
+    } else {
+      observable = this.employeeService.saveSalary(employeeSalary);
+    }
+    observable.subscribe({
       next: (response) => {
         this.notificationService.success(response);
         this.resetData();
