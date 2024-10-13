@@ -304,7 +304,6 @@ export class SalaryCalculationComponent implements OnInit, OnDestroy {
         this.selectedEmployee?.salaryCategoryName || '';
       details.salaryCategoryId = this.selectedEmployee?.salaryCategoryId || 0;
       details.confirmedAmount = details?.amount || 0;
-      delete details.amount;
     });
     const employeeSalary = {
       employeeId: +(this.employeeId.value || 0),

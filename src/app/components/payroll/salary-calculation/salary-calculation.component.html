@@ -78,7 +78,12 @@
             {{ salaryDetails.deductionAmount | currency : "INR" }}
           </span>
           <span>
-            <div class="label">Confirmed Salary</div>
+            <div class="label">
+              Salary per
+              {{
+                salaryDetails.salaryCategoryName === "Monthly" ? "Month" : "Day"
+              }}
+            </div>
             {{ salaryDetails.salary | currency : "INR" }}
           </span>
         </div>
